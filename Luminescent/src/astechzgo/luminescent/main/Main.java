@@ -3,7 +3,8 @@ package astechzgo.luminescent.main;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.DisplayMode;
+
+import static astechzgo.luminescent.utils.DisplayUtils.*;
 
 public class Main
 {
@@ -28,7 +29,7 @@ public class Main
 	{
 		try
 		{
-			Display.setDisplayMode(new DisplayMode(800, 480));
+			setDisplayMode(START_DISPLAY.getWidth(), START_DISPLAY.getHeight(), true);
 			Display.create();
 		}
 		catch (LWJGLException e)
@@ -53,6 +54,15 @@ public class Main
 		{
 			Display.destroy();
 			System.exit(0);
+		}
+		if(Keyboard.isKeyDown(Keyboard.KEY_F11))
+		{
+			if(Display.isFullscreen()) {
+				setDisplayMode(800, 480, false);
+			}
+			else {
+				setDisplayMode(START_DISPLAY.getWidth(), START_DISPLAY.getHeight(), true);
+			}
 		}
 	}
 	
