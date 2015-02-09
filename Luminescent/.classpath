@@ -6,7 +6,7 @@
 	<classpathentry kind="lib" path="libs/lwjgl/lwjgl_util.jar"/>
 	<classpathentry kind="lib" path="libs/lwjgl/lwjgl.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="Luminescent/libs/lwjgl/natives/Windows"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="Luminescent/libs/lwjgl/natives/windows"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
