@@ -1,5 +1,7 @@
 package astechzgo.luminescent.main;
 
+import java.awt.Toolkit;
+
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
@@ -30,7 +32,8 @@ public class Main
 	{
 		try
 		{
-			setDisplayMode(START_DISPLAY.getWidth(), START_DISPLAY.getHeight(), true);
+			setDisplayMode((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth(),
+					(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight(), true);
 			DisplayUtils.setIcons(
 				new String[] {"icon_16x16","icon_32x32","icon_64x64","icon_128x128"}, this
 			);
@@ -65,7 +68,8 @@ public class Main
 				setDisplayMode(800, 480, false);
 			}
 			else {
-				setDisplayMode(START_DISPLAY.getWidth(), START_DISPLAY.getHeight(), true);
+				setDisplayMode((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth(), 
+						(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight(), true);
 			}
 		}
 	}
