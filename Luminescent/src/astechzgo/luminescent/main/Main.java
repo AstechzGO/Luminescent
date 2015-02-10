@@ -73,7 +73,7 @@ public class Main
 		if(Keyboard.isKeyDown(Keyboard.KEY_F11))
 		{
 			if(Display.isFullscreen()) {
-				setDisplayMode(800, 480, false);
+				setDisplayMode(854, 480, false);
 			}
 			else {
 				setDisplayMode((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth(), 
