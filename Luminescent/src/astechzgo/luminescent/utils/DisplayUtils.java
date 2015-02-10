@@ -15,8 +15,6 @@ import org.lwjgl.opengl.DisplayMode;
 
 public class DisplayUtils {
 
-	public static final DisplayMode START_DISPLAY = Display.getDisplayMode();
-
 	/**
 	 * Set the display mode to be used
 	 * 
