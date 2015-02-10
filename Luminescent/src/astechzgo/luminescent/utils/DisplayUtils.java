@@ -82,7 +82,7 @@ public class DisplayUtils {
 
 			Display.setDisplayMode(targetDisplayMode);
 			Display.setFullscreen(fullscreen);
-
+			
 		} catch (LWJGLException e) {
 			System.out.println("Unable to setup mode " + width + "x" + height
 					+ " fullscreen=" + fullscreen + e);

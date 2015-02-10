@@ -6,6 +6,7 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 
+import astechzgo.luminescent.rendering.OpenGL;
 import astechzgo.luminescent.utils.DisplayUtils;
 import static astechzgo.luminescent.utils.DisplayUtils.*;
 
@@ -46,6 +47,8 @@ public class Main
 		}
 		
 		Display.setTitle("Luminescent");
+		
+		OpenGL.InitOpenGL();
 	}
 	
 	public void Shutdown()
@@ -53,9 +56,14 @@ public class Main
 		Display.destroy();
 	}
 	
+	/**
+	 * Render everything before handling input
+	 */
 	public void Tick()
 	{
 		Display.update();
+		
+		OpenGL.Tick();
 		
 		if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE))
 		{
