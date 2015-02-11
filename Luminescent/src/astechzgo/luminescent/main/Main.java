@@ -1,5 +1,7 @@
 package astechzgo.luminescent.main;
 
+import static astechzgo.luminescent.utils.DisplayUtils.setDisplayMode;
+
 import java.awt.Toolkit;
 
 import org.lwjgl.LWJGLException;
@@ -8,7 +10,6 @@ import org.lwjgl.opengl.Display;
 
 import astechzgo.luminescent.rendering.OpenGL;
 import astechzgo.luminescent.utils.DisplayUtils;
-import static astechzgo.luminescent.utils.DisplayUtils.*;
 
 public class Main
 {
@@ -49,10 +50,15 @@ public class Main
 		Display.setTitle("Luminescent");
 		
 		OpenGL.InitOpenGL();
+		OpenGL.ChangeResolution(1920, 1080);	// Personal
+		
+		Luminescent.Init();
 	}
 	
 	public void Shutdown()
 	{
+		Luminescent.Shutdown();
+		
 		Display.destroy();
 	}
 	
@@ -65,21 +71,7 @@ public class Main
 		
 		OpenGL.Tick();
 		
-		if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE))
-		{
-			Display.destroy();
-			System.exit(0);
-		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_F11))
-		{
-			if(Display.isFullscreen()) {
-				setDisplayMode(800, 480, false);
-			}
-			else {
-				setDisplayMode((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth(), 
-						(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight(), true);
-			}
-		}
+		Luminescent.Tick();	// Add in delta time at some point
 	}
 	
 }
