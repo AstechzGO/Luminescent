@@ -5,7 +5,6 @@ import static astechzgo.luminescent.utils.DisplayUtils.setDisplayMode;
 import java.awt.Toolkit;
 
 import org.lwjgl.LWJGLException;
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 
 import astechzgo.luminescent.rendering.OpenGL;
@@ -50,7 +49,8 @@ public class Main
 		Display.setTitle("Luminescent");
 		
 		OpenGL.InitOpenGL();
-		OpenGL.ChangeResolution(1920, 1080);	// Personal
+		OpenGL.ChangeResolution((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth(),
+				(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight());	// Personal
 		
 		Luminescent.Init();
 	}

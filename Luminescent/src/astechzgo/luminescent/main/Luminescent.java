@@ -1,20 +1,14 @@
 package astechzgo.luminescent.main;
 
-import static astechzgo.luminescent.utils.DisplayUtils.setDisplayMode;
-
-import java.awt.Toolkit;
-
+import static astechzgo.luminescent.utils.DisplayUtils.*;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
-
 import astechzgo.luminescent.rendering.Player;
 
 public class Luminescent
 {
 	
 	public static Player thePlayer = new Player();
-	public static int playerX = 500;
-	public static int playerY = 500;
 	public static int moveSpeed = 2;
 	
 	public static void Init()
@@ -29,41 +23,41 @@ public class Luminescent
 	
 	public static void Tick()
 	{
-		thePlayer.Render(playerX, playerY);
+		thePlayer.Render();
 		
-		if(playerX < 0)
+		if(thePlayer.getPosX() < 0)
 		{
-			playerX = (int)Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+			thePlayer.setPosX(SCREEN_WIDTH);
 		}
-		if(playerX > (int)Toolkit.getDefaultToolkit().getScreenSize().getWidth())
+		if(thePlayer.getPosX() > SCREEN_WIDTH)
 		{
-			playerX = 0;
+			thePlayer.setPosX(0);
 		}
 		
-		if(playerY < 0)
+		if(thePlayer.getPosY() < 0)
 		{
-			playerY = (int)Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+			thePlayer.setPosY(SCREEN_HEIGHT);
 		}
-		if(playerY > (int)Toolkit.getDefaultToolkit().getScreenSize().getHeight())
+		if(thePlayer.getPosY() > SCREEN_HEIGHT)
 		{
-			playerY = 0;
+			thePlayer.setPosY(0);
 		}
 		
 		if(Keyboard.isKeyDown(Keyboard.KEY_W))
 		{
-			playerY += moveSpeed;
+			thePlayer.setPosY(thePlayer.getPosY() + moveSpeed);
 		}
 		if(Keyboard.isKeyDown(Keyboard.KEY_S))
 		{
-			playerY -= moveSpeed;
+			thePlayer.setPosY(thePlayer.getPosY() - moveSpeed);
 		}
 		if(Keyboard.isKeyDown(Keyboard.KEY_D))
 		{
-			playerX += moveSpeed;
+			thePlayer.setPosX(thePlayer.getPosX() + moveSpeed);
 		}
 		if(Keyboard.isKeyDown(Keyboard.KEY_A))
 		{
-			playerX -= moveSpeed;
+			thePlayer.setPosX(thePlayer.getPosX() - moveSpeed);
 		}
 		
 		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
@@ -83,11 +77,10 @@ public class Luminescent
 		if(Keyboard.isKeyDown(Keyboard.KEY_F11))
 		{
 			if(Display.isFullscreen()) {
-				setDisplayMode(800, 480, false);
+				setDisplayMode(SCREEN_WIDTH, SCREEN_HEIGHT, false);
 			}
 			else {
-				setDisplayMode((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth(), 
-						(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight(), true);
+				setDisplayMode(SCREEN_WIDTH, SCREEN_HEIGHT, true);
 			}
 		}
 	}
