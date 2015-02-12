@@ -10,6 +10,10 @@ import org.lwjgl.opengl.GL11;
  */
 public class OpenGL
 {
+	private static float red = 0.15f;
+	private static float green = 0.15f;
+	private static float blue = 0.15f;
+	private static float alpha = 1.0f;
 	
 	public static void InitOpenGL()
 	{
@@ -21,7 +25,7 @@ public class OpenGL
 	
 	public static void Tick()
 	{
-		GL11.glClearColor(0.15f, 0.15f, 0.15f, 1.0f);
+		GL11.glClearColor(red, green, blue, alpha);
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 	}
 	
@@ -31,6 +35,14 @@ public class OpenGL
 		GL11.glLoadIdentity();
 		GL11.glOrtho(0, x, 0, y, 1, -1);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
+	}
+	
+	public static void SetClearColor(float redVal, float greenVal, float blueVal, float alphaVal)
+	{
+		red = redVal;
+		green = greenVal;
+		blue = blueVal;
+		alpha = alphaVal;
 	}
 	
 }
