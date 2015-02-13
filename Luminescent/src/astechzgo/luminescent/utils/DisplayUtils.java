@@ -2,7 +2,6 @@ package astechzgo.luminescent.utils;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -16,8 +15,8 @@ import org.lwjgl.opengl.DisplayMode;
 
 public class DisplayUtils {
 
-	public static final int SCREEN_WIDTH = (int)Toolkit.getDefaultToolkit().getScreenSize().getWidth();
-	public static final int SCREEN_HEIGHT = (int)Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+	public static final int SCREEN_WIDTH = 1920;
+	public static final int SCREEN_HEIGHT = 1080;
 	
 	/**
 	 * Set the display mode to be used
