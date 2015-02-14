@@ -72,19 +72,19 @@ public class Luminescent
 			thePlayer.setPosY(0);
 		}
 		
-		if(Keyboard.isKeyDown(Keyboard.KEY_W))
+		if(Keyboard.isKeyDown(Keyboard.KEY_W) || Keyboard.isKeyDown(Keyboard.KEY_UP))
 		{
 			thePlayer.setPosY(thePlayer.getPosY() + speed);
 		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_S))
+		if(Keyboard.isKeyDown(Keyboard.KEY_S) || Keyboard.isKeyDown(Keyboard.KEY_DOWN))
 		{
 			thePlayer.setPosY(thePlayer.getPosY() - speed);
 		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_D))
+		if(Keyboard.isKeyDown(Keyboard.KEY_D) || Keyboard.isKeyDown(Keyboard.KEY_RIGHT))
 		{
 			thePlayer.setPosX(thePlayer.getPosX() + speed);
 		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_A))
+		if(Keyboard.isKeyDown(Keyboard.KEY_A) || Keyboard.isKeyDown(Keyboard.KEY_LEFT))
 		{
 			thePlayer.setPosX(thePlayer.getPosX() - speed);
 		}
