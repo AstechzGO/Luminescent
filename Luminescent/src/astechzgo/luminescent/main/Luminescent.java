@@ -11,6 +11,8 @@ public class Luminescent
 	public static Player thePlayer = new Player();
 	public static double moveSpeed = 0.5;
 	
+	public static long lastMove = System.currentTimeMillis();
+	
 	public static void Init()
 	{
 		
@@ -24,6 +26,20 @@ public class Luminescent
 	public static void Tick()
 	{
 		thePlayer.Render();
+		
+		int multiplier = (int) (System.currentTimeMillis() - lastMove);
+		lastMove = System.currentTimeMillis();
+		
+		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
+		{
+			Luminescent.moveSpeed = 0.88;
+		}
+		else
+		{
+			Luminescent.moveSpeed = 0.5;
+		}
+		
+		double moveSpeed = Luminescent.moveSpeed * multiplier;
 		
 		if(thePlayer.getPosX() < 0)
 		{
@@ -59,16 +75,6 @@ public class Luminescent
 		{
 			thePlayer.setPosX(thePlayer.getPosX() - moveSpeed);
 		}
-		
-		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
-		{
-			moveSpeed = 0.88;
-		}
-		else
-		{
-			moveSpeed = 0.5;
-		}
-		
 		if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE))
 		{
 			Display.destroy();
