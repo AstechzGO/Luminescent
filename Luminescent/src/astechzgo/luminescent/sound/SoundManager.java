@@ -1,10 +1,10 @@
 package astechzgo.luminescent.sound;
 
+import de.cuina.fireandfuel.CodecJLayerMP3;
 import paulscode.sound.Library;
 import paulscode.sound.SoundSystem;
 import paulscode.sound.SoundSystemConfig;
 import paulscode.sound.SoundSystemException;
-import paulscode.sound.codecs.CodecWav;
 import paulscode.sound.libraries.LibraryLWJGLOpenAL;
 
 public class SoundManager {
@@ -33,7 +33,7 @@ public class SoundManager {
 
 		try {
 			SoundSystemConfig.setSoundFilesPackage("");
-			SoundSystemConfig.setCodec("wav", CodecWav.class);
+			SoundSystemConfig.setCodec("mp3", CodecJLayerMP3.class);
 		} catch (SoundSystemException e) {
 			System.err.println("error linking with the CodecWav plug-in");
 		}
@@ -52,7 +52,7 @@ public class SoundManager {
 	
 	public void loadSound(String s, boolean loop) {
 		String oldS = s;
-		s = "resources/sounds/" + s + ".wav";
+		s = "resources/sounds/" + s + ".mp3";
 		
 		boolean priority = false;
 		String filename = s;
