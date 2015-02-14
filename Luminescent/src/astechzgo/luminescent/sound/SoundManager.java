@@ -51,6 +51,7 @@ public class SoundManager {
 	}
 	
 	public void loadSound(String s, boolean loop) {
+		String oldS = s;
 		s = "resources/sounds/" + s + ".wav";
 		
 		boolean priority = false;
@@ -60,6 +61,6 @@ public class SoundManager {
 		float z = 0;
 		int aModel = SoundSystemConfig.ATTENUATION_ROLLOFF;
 		float rFactor = SoundSystemConfig.getDefaultRolloff();
-		mySoundSystem.quickPlay( priority, filename, loop, x, y, z, aModel, rFactor ); 
+		mySoundSystem.newSource(priority, oldS, filename, loop, x, y, z, aModel, rFactor);
 	}
 }
