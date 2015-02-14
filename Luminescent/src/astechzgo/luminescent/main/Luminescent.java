@@ -39,7 +39,7 @@ public class Luminescent
 			Luminescent.moveSpeed = 0.5;
 		}
 		
-		double moveSpeed = Luminescent.moveSpeed * multiplier;
+		double speed = Luminescent.moveSpeed * multiplier;
 		
 		if(thePlayer.getPosX() < 0)
 		{
@@ -61,19 +61,19 @@ public class Luminescent
 		
 		if(Keyboard.isKeyDown(Keyboard.KEY_W))
 		{
-			thePlayer.setPosY(thePlayer.getPosY() + moveSpeed);
+			thePlayer.setPosY(thePlayer.getPosY() + speed);
 		}
 		if(Keyboard.isKeyDown(Keyboard.KEY_S))
 		{
-			thePlayer.setPosY(thePlayer.getPosY() - moveSpeed);
+			thePlayer.setPosY(thePlayer.getPosY() - speed);
 		}
 		if(Keyboard.isKeyDown(Keyboard.KEY_D))
 		{
-			thePlayer.setPosX(thePlayer.getPosX() + moveSpeed);
+			thePlayer.setPosX(thePlayer.getPosX() + speed);
 		}
 		if(Keyboard.isKeyDown(Keyboard.KEY_A))
 		{
-			thePlayer.setPosX(thePlayer.getPosX() - moveSpeed);
+			thePlayer.setPosX(thePlayer.getPosX() - speed);
 		}
 		if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE))
 		{
