@@ -8,6 +8,7 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 
 import astechzgo.luminescent.rendering.OpenGL;
+import astechzgo.luminescent.sound.SoundList;
 import astechzgo.luminescent.sound.SoundManager;
 import astechzgo.luminescent.utils.DisplayUtils;
 
@@ -76,9 +77,9 @@ public class Main
 		Luminescent.Tick();	// Add in delta time at some point
 	}
 	
-	public void initSound() {
+	public void initSound() {	
 		SoundManager manager = new SoundManager();
-		manager.loadSound("Beethoven's 5th Symphony", false); //test TODO: Replace sound
+		SoundList.initSoundList(manager);
 	}
 	
 }
