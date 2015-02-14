@@ -1,8 +1,16 @@
 package astechzgo.luminescent.main;
 
-import static astechzgo.luminescent.utils.DisplayUtils.*;
+import static astechzgo.luminescent.utils.DisplayUtils.SCREEN_HEIGHT;
+import static astechzgo.luminescent.utils.DisplayUtils.SCREEN_WIDTH;
+import static astechzgo.luminescent.utils.DisplayUtils.setDisplayMode;
+
+import org.lwjgl.BufferUtils;
+import org.lwjgl.LWJGLException;
+import org.lwjgl.input.Cursor;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
+
 import astechzgo.luminescent.rendering.Player;
 
 public class Luminescent
@@ -15,7 +23,12 @@ public class Luminescent
 	
 	public static void Init()
 	{
-		
+		try {
+			Cursor emptyCursor = new Cursor(1, 1, 0, 0, 1, BufferUtils.createIntBuffer(1), null);
+			Mouse.setNativeCursor(emptyCursor);
+		} catch (LWJGLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public static void Shutdown()
