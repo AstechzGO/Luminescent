@@ -9,7 +9,7 @@ public class Luminescent
 {
 	
 	public static Player thePlayer = new Player();
-	public static int moveSpeed = 2;
+	public static double moveSpeed = 0.5;
 	
 	public static void Init()
 	{
@@ -62,11 +62,11 @@ public class Luminescent
 		
 		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
 		{
-			moveSpeed = 3;
+			moveSpeed = 0.88;
 		}
 		else
 		{
-			moveSpeed = 2;
+			moveSpeed = 0.5;
 		}
 		
 		if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE))

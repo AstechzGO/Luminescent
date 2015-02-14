@@ -8,6 +8,7 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 
 import astechzgo.luminescent.rendering.OpenGL;
+import astechzgo.luminescent.sound.SoundManager;
 import astechzgo.luminescent.utils.DisplayUtils;
 
 public class Main
@@ -33,6 +34,8 @@ public class Main
 	{
 		try
 		{
+			initSound();
+			
 			setDisplayMode((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth(),
 					(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight(), true);
 			DisplayUtils.setIcons(
@@ -49,8 +52,7 @@ public class Main
 		Display.setTitle("Luminescent");
 		
 		OpenGL.InitOpenGL();
-		OpenGL.ChangeResolution((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth(),
-				(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight());	// Personal
+		OpenGL.ChangeResolution(DisplayUtils.SCREEN_WIDTH, DisplayUtils.SCREEN_HEIGHT);	// Personal
 		
 		Luminescent.Init();
 	}
@@ -72,6 +74,11 @@ public class Main
 		OpenGL.Tick();
 		
 		Luminescent.Tick();	// Add in delta time at some point
+	}
+	
+	public void initSound() {
+		SoundManager manager = new SoundManager();
+		manager.loadSound("Beethoven's 5th Symphony", false); //test TODO: Replace sound
 	}
 	
 }

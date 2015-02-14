@@ -2,10 +2,12 @@ package astechzgo.luminescent.rendering;
 
 import org.lwjgl.opengl.GL11;
 
+import astechzgo.luminescent.utils.DisplayUtils;
+
 public class Player extends GameRenderedObject
 {
-	private int posX = 0;
-	private int posY = 0;
+	private double posX = DisplayUtils.SCREEN_WIDTH / 2;
+	private double posY = DisplayUtils.SCREEN_HEIGHT / 2;
 	
 	public void Render()
 	{
@@ -13,22 +15,22 @@ public class Player extends GameRenderedObject
 		super.RenderCircle(posX, posY, 40);
 	}
 	
-	public int getPosX()
+	public double getPosX()
 	{
 		return posX;
 	}
 	
-	public int getPosY()
+	public double getPosY()
 	{
 		return posY;
 	}
 	
-	public void setPosX(int position)
+	public void setPosX(double position)
 	{
 		posX = position;
 	}
 	
-	public void setPosY(int position)
+	public void setPosY(double position)
 	{
 		posY = position;
 	}

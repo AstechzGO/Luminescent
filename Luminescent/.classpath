@@ -9,5 +9,8 @@
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="Luminescent/libs/lwjgl/natives/windows"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="libs/paulscode/CodecWav.jar"/>
+	<classpathentry kind="lib" path="libs/paulscode/LibraryLWJGLOpenAL.jar"/>
+	<classpathentry kind="lib" path="libs/paulscode/SoundSystem.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
