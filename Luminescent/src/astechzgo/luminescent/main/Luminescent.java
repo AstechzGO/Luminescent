@@ -4,6 +4,9 @@ import static astechzgo.luminescent.utils.DisplayUtils.SCREEN_HEIGHT;
 import static astechzgo.luminescent.utils.DisplayUtils.SCREEN_WIDTH;
 import static astechzgo.luminescent.utils.DisplayUtils.setDisplayMode;
 
+import java.awt.Toolkit;
+import java.io.File;
+
 import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Cursor;
@@ -12,6 +15,7 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 
 import astechzgo.luminescent.rendering.Player;
+import astechzgo.luminescent.utils.DisplayUtils;
 
 public class Luminescent
 {
@@ -96,11 +100,16 @@ public class Luminescent
 		if(Keyboard.isKeyDown(Keyboard.KEY_F11))
 		{
 			if(Display.isFullscreen()) {
-				setDisplayMode(SCREEN_WIDTH, SCREEN_HEIGHT, false);
+				setDisplayMode(854, 480, false);
 			}
 			else {
-				setDisplayMode(SCREEN_WIDTH, SCREEN_HEIGHT, true);
+				setDisplayMode((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth(),
+						(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight(), true);
 			}
+		}
+		if(Keyboard.isKeyDown(Keyboard.KEY_F2))
+		{
+			DisplayUtils.takeScreenshot(new File("C:/Users/Ryan/Desktop/File.png"));
 		}
 	}
 	
