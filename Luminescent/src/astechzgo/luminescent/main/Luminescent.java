@@ -6,6 +6,8 @@ import static astechzgo.luminescent.utils.DisplayUtils.setDisplayMode;
 
 import java.awt.Toolkit;
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
@@ -109,7 +111,16 @@ public class Luminescent
 		}
 		if(Keyboard.isKeyDown(Keyboard.KEY_F2))
 		{
-			DisplayUtils.takeScreenshot(new File("C:/Users/Ryan/Desktop/File.png"));
+			File dir = new File("screenshots");
+			if(!dir.exists() || !dir.isDirectory()) {
+				dir.mkdir();
+			}
+			
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
+			Date dt = new Date();
+			String S = sdf.format(dt); // formats to 09/23/2009 13:53:28.238
+
+			DisplayUtils.takeScreenshot(new File("screenshots/" + S + ".png"));
 		}
 	}
 	
