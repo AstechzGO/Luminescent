@@ -180,9 +180,9 @@ public class DisplayUtils {
 		GL11.glReadBuffer(GL11.GL_FRONT);
 		int width = Display.getDisplayMode().getWidth();
 		int height= Display.getDisplayMode().getHeight();
-		int bpp = Display.getDisplayMode().getBitsPerPixel() / 4;
+		int bpp = Display.getDisplayMode().getBitsPerPixel() / 8;
 		ByteBuffer buffer = BufferUtils.createByteBuffer(width * height * bpp);
-		GL11.glReadPixels(0, 0, width, height, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer );
+		GL11.glReadPixels(0, 0, width, height, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
 		String format = "png"; // Example: "PNG" or "JPG"
 		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		   
