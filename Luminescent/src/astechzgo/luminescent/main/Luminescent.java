@@ -118,9 +118,13 @@ public class Luminescent
 			
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
 			Date dt = new Date();
-			String S = sdf.format(dt); // formats to 09/23/2009 13:53:28.238
+			String S = sdf.format(dt);
 
-			DisplayUtils.takeScreenshot(new File("screenshots/" + S + ".png"));
+			try {
+				DisplayUtils.takeScreenshot(new File("screenshots/" + S + ".png"));
+			} catch (LWJGLException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
