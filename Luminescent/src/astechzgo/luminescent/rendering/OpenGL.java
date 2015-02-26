@@ -2,6 +2,8 @@ package astechzgo.luminescent.rendering;
 
 import org.lwjgl.opengl.GL11;
 
+import astechzgo.luminescent.utils.DisplayUtils;
+
 /**
  * 
  * @author Tylar
@@ -17,10 +19,7 @@ public class OpenGL
 	
 	public static void InitOpenGL()
 	{
-		GL11.glMatrixMode(GL11.GL_PROJECTION);
-		GL11.glLoadIdentity();
-		GL11.glOrtho(0, 800, 0, 480, 1, -1);
-		GL11.glMatrixMode(GL11.GL_MODELVIEW);
+		ChangeResolution(DisplayUtils.SCREEN_WIDTH, DisplayUtils.SCREEN_HEIGHT);
 	}
 	
 	public static void Tick()

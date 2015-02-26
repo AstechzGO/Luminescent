@@ -176,14 +176,18 @@ public class DisplayUtils {
 		return var4;
 	}
 	
-	public static void takeScreenshot(File file) {
+	public static void takeScreenshot(File file) throws LWJGLException {
+		if(!Display.isFullscreen()) {
+			throw new LWJGLException("Must be fullscreen to take screenshot");
+		}
+		
 		GL11.glReadBuffer(GL11.GL_FRONT);
 		int width = Display.getDisplayMode().getWidth();
 		int height= Display.getDisplayMode().getHeight();
 		int bpp = Display.getDisplayMode().getBitsPerPixel() / 8;
 		ByteBuffer buffer = BufferUtils.createByteBuffer(width * height * bpp);
 		GL11.glReadPixels(0, 0, width, height, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
-		String format = "png"; // Example: "PNG" or "JPG"
+		String format = "png";
 		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		   
 		for(int x = 0; x < width; x++) 
