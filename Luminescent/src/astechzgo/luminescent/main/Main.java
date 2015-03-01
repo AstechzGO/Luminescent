@@ -2,8 +2,6 @@ package astechzgo.luminescent.main;
 
 import static astechzgo.luminescent.utils.DisplayUtils.setDisplayMode;
 
-import java.awt.Toolkit;
-
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 
@@ -35,10 +33,7 @@ public class Main
 	{
 		try
 		{
-			initSound();
-			
-			setDisplayMode((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth(),
-					(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight(), true);
+			setDisplayMode(DisplayUtils.SCREEN_WIDTH, DisplayUtils.SCREEN_HEIGHT, true);
 			DisplayUtils.setIcons(
 				new String[] {"icon_16x16","icon_32x32","icon_64x64","icon_128x128"}, this
 			);
@@ -77,9 +72,6 @@ public class Main
 		Luminescent.Tick();	// Add in delta time at some point
 	}
 	
-	public void initSound() {	
-		SoundManager manager = new SoundManager();
-		SoundList.initSoundList(manager);
-	}
+	// 2994
 	
 }
