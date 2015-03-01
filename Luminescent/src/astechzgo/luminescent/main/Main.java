@@ -6,8 +6,6 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 
 import astechzgo.luminescent.rendering.OpenGL;
-import astechzgo.luminescent.sound.SoundList;
-import astechzgo.luminescent.sound.SoundManager;
 import astechzgo.luminescent.utils.DisplayUtils;
 
 public class Main
@@ -57,6 +55,7 @@ public class Main
 		Luminescent.Shutdown();
 		
 		Display.destroy();
+		System.exit(0);
 	}
 	
 	/**
