@@ -26,8 +26,8 @@ import de.matthiasmann.twl.utils.PNGDecoder.Format;
 
 public class DisplayUtils {
 
-	public static final int SCREEN_WIDTH = 1920;
-	public static final int SCREEN_HEIGHT = 1080;
+	public static final int SCREEN_WIDTH = Display.getDisplayMode().getWidth();
+	public static final int SCREEN_HEIGHT = Display.getDisplayMode().getHeight();
 	
 	/**
 	 * Set the display mode to be used

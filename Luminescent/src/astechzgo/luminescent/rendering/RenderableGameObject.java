@@ -2,16 +2,16 @@ package astechzgo.luminescent.rendering;
 
 import org.lwjgl.opengl.GL11;
 
-public abstract class GameRenderedObject implements IRenderedObject
+public abstract class RenderableGameObject implements IRenderedObject
 {
 	public static final double RADIAN = 0.01745329251994329576923690768489d;
 	
-	public void RenderCircle(double x, double y, double radius)
+	public void renderCircle(double x, double y, double radius)
 	{
-		RenderCircle(x, y, radius, 1);
+		renderCircle(x, y, radius, 1);
 	}
 	
-	public void RenderCircle(double x, double y, double radius, int pointSeperation)
+	public void renderCircle(double x, double y, double radius, int pointSeperation)
 	{
 		GL11.glBegin(GL11.GL_TRIANGLE_FAN);
 		
