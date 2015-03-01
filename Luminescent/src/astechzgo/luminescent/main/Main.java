@@ -62,6 +62,7 @@ public class Main
 		Luminescent.Shutdown();
 		
 		Display.destroy();
+		System.exit(0);
 	}
 	
 	/**

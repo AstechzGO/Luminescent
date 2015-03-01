@@ -1,19 +1,13 @@
 package astechzgo.luminescent.utils;
 
-import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
@@ -21,8 +15,7 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 
-import de.matthiasmann.twl.utils.PNGDecoder;
-import de.matthiasmann.twl.utils.PNGDecoder.Format;
+import astechzgo.luminescent.textures.Texture;
 
 public class DisplayUtils {
 
@@ -112,86 +105,14 @@ public class DisplayUtils {
 	 *            A random object
 	 */
 	public static void setIcons(String[] nIcon, Object c) {
-		List<Image> icons = new ArrayList<Image>();
-		for (String path : nIcon) {
-			Image img = new ImageIcon(c.getClass().getResource(
-					"/resources/icons/" + path + ".png")).getImage();
-			icons.add(img);
+		List<ByteBuffer> icons = new ArrayList<ByteBuffer>();
+		for (String name : nIcon) {
+			icons.add(new Texture(name, "icons").getAsByteBuffer());
 		}
 
-		Display.setIcon(iconsToByteBuffers(icons));
+		Display.setIcon(icons.toArray(new ByteBuffer[icons.size()]));
 	}
 
-	private static ByteBuffer[] iconsToByteBuffers(List<Image> icons) {
-		ByteBuffer[] b = new ByteBuffer[icons.size()];
-
-		int i = 0;
-		for (Image icon : icons) {
-			b[i] = readImage(toBufferedImage(icon));
-			i++;
-		}
-
-		return b;
-	}
-
-	/**
-	 * Converts a given Image into a BufferedImage
-	 *
-	 * @param img
-	 *            The Image to be converted
-	 * @return The converted BufferedImage
-	 */
-	private static BufferedImage toBufferedImage(Image img) {
-		if (img instanceof BufferedImage) {
-			return (BufferedImage) img;
-		}
-
-		// Create a buffered image with transparency
-		BufferedImage bimage = new BufferedImage(img.getWidth(null),
-				img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
-
-		// Draw the image on to the buffered image
-		Graphics2D bGr = bimage.createGraphics();
-		bGr.drawImage(img, 0, 0, null);
-		bGr.dispose();
-
-		// Return the buffered image
-		return bimage;
-	}
-
-	/**
-	 * Convert BufferedImage to ByteBuffer
-	 * 
-	 * @param image
-	 *            The BufferedImage to convert
-	 * @return The converted image
-	 */
-	private static ByteBuffer readImage(BufferedImage image) {
-		ByteBuffer buf = null;
-		
-		try {
-			ByteArrayOutputStream os = new ByteArrayOutputStream();
-			ImageIO.write(image,"png", os); 
-			InputStream fis = new ByteArrayInputStream(os.toByteArray());
-			// Link the PNG decoder to this stream
-		    PNGDecoder decoder = new PNGDecoder(fis);
-		      
-		    // Decode the PNG file in a ByteBuffer
-		    buf = ByteBuffer.allocateDirect(
-		            4 * decoder.getWidth() * decoder.getHeight());
-		    decoder.decode(buf, decoder.getWidth() * 4, Format.RGBA);
-		    buf.flip();
-		     
-		    fis.close();
-		    
-		}
-		catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return buf;
-	}
-	
 	public static void takeScreenshot(File file) throws LWJGLException {
 		if(!Display.isFullscreen()) {
 			throw new LWJGLException("Must be fullscreen to take screenshot");
