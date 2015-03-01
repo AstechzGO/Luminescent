@@ -3,8 +3,11 @@ package astechzgo.luminescent.utils;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +20,9 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
+
+import de.matthiasmann.twl.utils.PNGDecoder;
+import de.matthiasmann.twl.utils.PNGDecoder.Format;
 
 public class DisplayUtils {
 
@@ -161,19 +167,29 @@ public class DisplayUtils {
 	 * @return The converted image
 	 */
 	private static ByteBuffer readImage(BufferedImage image) {
-		int[] var3 = image.getRGB(0, 0, image.getWidth(), image.getHeight(),
-				(int[]) null, 0, image.getWidth());
-		ByteBuffer var4 = ByteBuffer.allocate(4 * var3.length);
-		int[] var5 = var3;
-		int var6 = var3.length;
-
-		for (int var7 = 0; var7 < var6; ++var7) {
-			int var8 = var5[var7];
-			var4.putInt(var8 << 8 | var8 >> 24 & 255);
+		ByteBuffer buf = null;
+		
+		try {
+			ByteArrayOutputStream os = new ByteArrayOutputStream();
+			ImageIO.write(image,"png", os); 
+			InputStream fis = new ByteArrayInputStream(os.toByteArray());
+			// Link the PNG decoder to this stream
+		    PNGDecoder decoder = new PNGDecoder(fis);
+		      
+		    // Decode the PNG file in a ByteBuffer
+		    buf = ByteBuffer.allocateDirect(
+		            4 * decoder.getWidth() * decoder.getHeight());
+		    decoder.decode(buf, decoder.getWidth() * 4, Format.RGBA);
+		    buf.flip();
+		     
+		    fis.close();
+		    
 		}
-
-		var4.flip();
-		return var4;
+		catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return buf;
 	}
 	
 	public static void takeScreenshot(File file) throws LWJGLException {
