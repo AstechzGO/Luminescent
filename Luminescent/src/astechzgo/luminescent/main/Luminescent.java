@@ -15,9 +15,13 @@ import org.lwjgl.input.Cursor;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.GL11;
 
 import astechzgo.luminescent.rendering.Player;
+import astechzgo.luminescent.sound.SoundList;
+import astechzgo.luminescent.sound.SoundManager;
 import astechzgo.luminescent.utils.DisplayUtils;
+import astechzgo.luminescent.utils.RenderingUtils;
 
 public class Luminescent
 {
@@ -35,16 +39,26 @@ public class Luminescent
 		} catch (LWJGLException e) {
 			e.printStackTrace();
 		}
+		
+		SoundManager manager = new SoundManager();
+		SoundList.initSoundList(manager);
 	}
 	
 	public static void Shutdown()
 	{
-		
+		Display.destroy();
+		System.exit(0);
 	}
 	
 	public static void Tick()
 	{
-		thePlayer.Render();
+		thePlayer.render();
+		
+		GL11.glColor3f(0.0f, 0.4f, 0.6f);
+		RenderingUtils.RenderQuad(0, 0, SCREEN_WIDTH / 45, SCREEN_HEIGHT);
+		RenderingUtils.RenderQuad(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT / 25);
+		RenderingUtils.RenderQuad(SCREEN_WIDTH - (SCREEN_WIDTH / 45), 0, SCREEN_WIDTH / 45, SCREEN_HEIGHT);
+		RenderingUtils.RenderQuad(0, SCREEN_HEIGHT - (SCREEN_HEIGHT / 25), SCREEN_WIDTH, SCREEN_HEIGHT / 25);
 		
 		int multiplier = (int) (System.currentTimeMillis() - lastMove);
 		lastMove = System.currentTimeMillis();
@@ -94,10 +108,9 @@ public class Luminescent
 		{
 			thePlayer.setPosX(thePlayer.getPosX() - speed);
 		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE))
+		if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE) && Keyboard.isKeyDown(Keyboard.KEY_TAB))
 		{
-			Display.destroy();
-			System.exit(0);
+			Shutdown();
 		}
 		if(Keyboard.isKeyDown(Keyboard.KEY_F11))
 		{

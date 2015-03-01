@@ -8,8 +8,6 @@ public class RenderingUtils
 	{
 		GL11.glBegin(GL11.GL_QUADS);
 		
-		GL11.glColor3f(0.0f, 0.4f, 0.5f);
-		
 		GL11.glVertex2d(x, y);
 		GL11.glVertex2d(x + width, y);
 		GL11.glVertex2d(x + width, y + height);
