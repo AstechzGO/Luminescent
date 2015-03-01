@@ -46,7 +46,8 @@ public class Luminescent
 	
 	public static void Shutdown()
 	{
-		
+		Display.destroy();
+		System.exit(0);
 	}
 	
 	public static void Tick()
@@ -109,8 +110,6 @@ public class Luminescent
 		}
 		if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE) && Keyboard.isKeyDown(Keyboard.KEY_TAB))
 		{
-			Display.destroy();
-			System.exit(0);
 			Shutdown();
 		}
 		if(Keyboard.isKeyDown(Keyboard.KEY_F11))
