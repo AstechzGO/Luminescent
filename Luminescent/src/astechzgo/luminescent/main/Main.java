@@ -48,7 +48,6 @@ public class Main
 		Display.setTitle("Luminescent");
 		
 		OpenGL.InitOpenGL();
-		OpenGL.ChangeResolution(DisplayUtils.SCREEN_WIDTH, DisplayUtils.SCREEN_HEIGHT);	// Personal
 		
 		Luminescent.Init();
 	}
