@@ -28,7 +28,8 @@ public class RenderingUtils
 	 */
 	public static void RenderQuad(int x, int y, Texture texture)
 	{
-		if(texture.getAsSlickTexture() != null) {
+		if(texture.getAsSlickTexture() != null) 
+		{
 			
 			Color.white.bind();
 			texture.getAsSlickTexture().bind();		

@@ -33,10 +33,13 @@ public class Luminescent
 	
 	public static void Init()
 	{
-		try {
+		try 
+		{
 			Cursor emptyCursor = new Cursor(1, 1, 0, 0, 1, BufferUtils.createIntBuffer(1), null);
 			Mouse.setNativeCursor(emptyCursor);
-		} catch (LWJGLException e) {
+		} 
+		catch (LWJGLException e)
+		{
 			e.printStackTrace();
 		}
 		
@@ -114,10 +117,12 @@ public class Luminescent
 		}
 		if(Keyboard.isKeyDown(Keyboard.KEY_F11))
 		{
-			if(Display.isFullscreen()) {
+			if(Display.isFullscreen()) 
+			{
 				setDisplayMode(854, 480, false);
 			}
-			else {
+			else 
+			{
 				setDisplayMode((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth(),
 						(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight(), true);
 			}
@@ -125,7 +130,8 @@ public class Luminescent
 		if(Keyboard.isKeyDown(Keyboard.KEY_F2))
 		{
 			File dir = new File("screenshots");
-			if(!dir.exists() || !dir.isDirectory()) {
+			if(!dir.exists() || !dir.isDirectory()) 
+			{
 				dir.mkdir();
 			}
 			
@@ -133,9 +139,12 @@ public class Luminescent
 			Date dt = new Date();
 			String S = sdf.format(dt);
 
-			try {
+			try 
+			{
 				DisplayUtils.takeScreenshot(new File("screenshots/" + S + ".png"));
-			} catch (LWJGLException e) {
+			} 
+			catch (LWJGLException e) 
+			{
 				e.printStackTrace();
 			}
 		}
