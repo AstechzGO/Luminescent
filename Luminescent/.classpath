@@ -12,6 +12,6 @@
 	<classpathentry kind="lib" path="libs/paulscode/LibraryLWJGLOpenAL.jar"/>
 	<classpathentry kind="lib" path="libs/paulscode/SoundSystem.jar"/>
 	<classpathentry kind="lib" path="libs/paulscode/CodecMP3.jar"/>
-	<classpathentry kind="lib" path="libs/util/PNGDecoder.jar"/>
+	<classpathentry kind="lib" path="libs/util/slick-util.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

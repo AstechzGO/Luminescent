@@ -12,22 +12,33 @@ import java.nio.ByteBuffer;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
-import de.matthiasmann.twl.utils.PNGDecoder;
-import de.matthiasmann.twl.utils.PNGDecoder.Format;
+import org.newdawn.slick.opengl.PNGDecoder;
+import org.newdawn.slick.opengl.TextureLoader;
 
 public class Texture {
 	
 	private final BufferedImage asBufferedImage;
 	private final ByteBuffer asByteBuffer;
+	private final org.newdawn.slick.opengl.Texture slickTexture;
 	
-	public Texture(String textureName) {
+	public Texture(String textureName, boolean slick) {
 		asBufferedImage = toBufferedImage(textureName);
 		asByteBuffer = toByteBuffer(asBufferedImage);
+		
+		if(slick)
+			slickTexture = loadSlickTexture();
+		else
+			slickTexture = null;
 	}
 	
-	public Texture(String textureName, String dirName) {
+	public Texture(String textureName, String dirName, boolean slick) {
 		asBufferedImage = toBufferedImage(textureName, dirName);
 		asByteBuffer = toByteBuffer(asBufferedImage);
+		
+		if(slick)
+			slickTexture = loadSlickTexture();
+		else
+			slickTexture = null;
 	}
 	
 	/**
@@ -50,7 +61,7 @@ public class Texture {
 		    // Decode the PNG file in a ByteBuffer
 		    buf = ByteBuffer.allocateDirect(
 		            4 * decoder.getWidth() * decoder.getHeight());
-		    decoder.decode(buf, decoder.getWidth() * 4, Format.RGBA);
+		    decoder.decode(buf, decoder.getWidth() * 4, PNGDecoder.RGBA);
 		    buf.flip();
 		     
 		    fis.close();
@@ -113,5 +124,32 @@ public class Texture {
 
 		// Return the buffered image
 		return bimage;
+	}
+	
+	private org.newdawn.slick.opengl.Texture loadSlickTexture() {
+		try {
+			ByteArrayOutputStream os = new ByteArrayOutputStream();
+			ImageIO.write(asBufferedImage,"png", os); 
+			InputStream fis = new ByteArrayInputStream(os.toByteArray());
+			
+			org.newdawn.slick.opengl.Texture texture = TextureLoader.getTexture("PNG", fis);
+			
+			System.out.println("Texture loaded: "+texture);
+			System.out.println(">> Image width: "+texture.getImageWidth());
+			System.out.println(">> Image height: "+texture.getImageHeight());
+			System.out.println(">> Texture width: "+texture.getTextureWidth());
+			System.out.println(">> Texture height: "+texture.getTextureHeight());
+			System.out.println(">> Texture ID: "+texture.getTextureID());
+			
+			return texture;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public org.newdawn.slick.opengl.Texture getAsSlickTexture() {
+		return slickTexture;
 	}
 }
