@@ -24,9 +24,6 @@ public class RenderingUtils
 		GL11.glEnd();
 	}
 	
-	/**
-	 * Messes up some textures
-	 */
 	public static void RenderQuad(int x, int y, Texture texture)
 	{
 		if(texture.getAsSlickTexture() != null) 
