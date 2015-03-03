@@ -33,16 +33,6 @@ public class Texture {
 			slickTexture = null;
 	}
 	
-	public Texture(String textureName, String dirName, boolean slick) {
-		asBufferedImage = toBufferedImage(textureName, dirName);
-		asByteBuffer = toByteBuffer(asBufferedImage);
-		
-		if(slick)
-			slickTexture = loadSlickTexture();
-		else
-			slickTexture = null;
-	}
-	
 	/**
 	 * Convert BufferedImage to ByteBuffer
 	 * 
@@ -77,21 +67,9 @@ public class Texture {
 	}
 	
 	private BufferedImage toBufferedImage(String imageLoc) {
+		imageLoc = imageLoc.replace(".", "/");
 		Image img = new ImageIcon(this.getClass().getResource(
 				"/resources/textures/" + imageLoc + ".png")).getImage();
-		return toBufferedImage(img);
-	}
-	
-	/**
-	 * Converts a given Image into a BufferedImage
-	 *
-	 * @param img
-	 *            The Image to be converted
-	 * @return The converted BufferedImage
-	 */
-	private BufferedImage toBufferedImage(String imageLoc, String dirName) {
-		Image img = new ImageIcon(this.getClass().getResource(
-				"/resources/textures/"+ dirName + "/" + imageLoc + ".png")).getImage();
 		return toBufferedImage(img);
 	}
 	
@@ -135,13 +113,6 @@ public class Texture {
 			InputStream fis = new ByteArrayInputStream(os.toByteArray());
 			
 			org.newdawn.slick.opengl.Texture texture = TextureLoader.getTexture("PNG", fis);
-			
-			System.out.println("Texture loaded: "+texture);
-			System.out.println(">> Image width: "+texture.getImageWidth());
-			System.out.println(">> Image height: "+texture.getImageHeight());
-			System.out.println(">> Texture width: "+texture.getTextureWidth());
-			System.out.println(">> Texture height: "+texture.getTextureHeight());
-			System.out.println(">> Texture ID: "+texture.getTextureID());
 			
 			return texture;
 		} catch (IOException e) {
