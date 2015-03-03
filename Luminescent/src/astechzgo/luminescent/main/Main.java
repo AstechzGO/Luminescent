@@ -6,6 +6,7 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 
 import astechzgo.luminescent.rendering.OpenGL;
+import astechzgo.luminescent.textures.TextureList;
 import astechzgo.luminescent.utils.DisplayUtils;
 
 public class Main
@@ -29,11 +30,13 @@ public class Main
 	
 	public void Init()
 	{
+		TextureList.initTextureList();
+		
 		try
 		{
 			setDisplayMode(DisplayUtils.SCREEN_WIDTH, DisplayUtils.SCREEN_HEIGHT, true);
 			DisplayUtils.setIcons(
-				new String[] {"icon_16x16","icon_32x32","icon_64x64","icon_128x128"}, this
+				new String[] {"icons.icon_16x16","icons.icon_32x32","icons.icon_64x64","icons.icon_128x128"}, this
 			);
 			Display.create();
 		}

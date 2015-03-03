@@ -23,7 +23,11 @@ public class Texture {
 	private final ByteBuffer asByteBuffer;
 	private final org.newdawn.slick.opengl.Texture slickTexture;
 	
+	private final String name;
+	
 	public Texture(String textureName, boolean slick) {
+		name = textureName;
+		
 		asBufferedImage = toBufferedImage(textureName);
 		asByteBuffer = toByteBuffer(asBufferedImage);
 		
@@ -67,7 +71,7 @@ public class Texture {
 	}
 	
 	private BufferedImage toBufferedImage(String imageLoc) {
-		imageLoc = imageLoc.replace(".", "/");
+		imageLoc = imageLoc.replaceAll("\\.", "/");
 		Image img = new ImageIcon(this.getClass().getResource(
 				"/resources/textures/" + imageLoc + ".png")).getImage();
 		return toBufferedImage(img);
@@ -128,5 +132,9 @@ public class Texture {
 	
 	public void renderAsQuad(int x, int y) {
 		RenderingUtils.RenderQuad(x, y, this);
+	}
+	
+	public String getName() {
+		return name;
 	}
 }
