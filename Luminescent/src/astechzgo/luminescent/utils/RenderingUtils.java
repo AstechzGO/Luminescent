@@ -17,7 +17,7 @@ public class RenderingUtils
 		GL11.glVertex2d(x + width, y);
 		GL11.glTexCoord2f(1,1);
 		GL11.glVertex2d(x + width, y + height);
-		GL11.glTexCoord2f(1,0);
+		GL11.glTexCoord2f(0, 1);
 		GL11.glVertex2d(x, y + height);
 		
 		GL11.glEnd();
@@ -30,22 +30,9 @@ public class RenderingUtils
 	{
 		if(texture.getAsSlickTexture() != null) 
 		{
-			
 			Color.white.bind();
-			texture.getAsSlickTexture().bind();		
-		
-			GL11.glBegin(GL11.GL_QUADS);
-			
-				GL11.glTexCoord2f(0,1);
-				GL11.glVertex2d(x, y);
-				GL11.glTexCoord2f(1,1);
-				GL11.glVertex2d(x + texture.getAsSlickTexture().getTextureWidth(), y);
-				GL11.glTexCoord2f(1,0);
-				GL11.glVertex2d(x + texture.getAsSlickTexture().getTextureWidth(), y + texture.getAsSlickTexture().getTextureHeight());
-				GL11.glTexCoord2f(0,0);
-				GL11.glVertex2d(x, y + texture.getAsSlickTexture().getTextureHeight());
-		
-			GL11.glEnd();
+			texture.getAsSlickTexture().bind();	
+			RenderQuad(x, y, texture.getAsSlickTexture().getImageWidth(), texture.getAsSlickTexture().getImageHeight());
 		}
 	}
 }
