@@ -24,7 +24,7 @@ public class RenderingUtils
 	}
 	
 	/**
-	 * Does not load texture
+	 * Messes up some textures
 	 */
 	public static void RenderQuad(int x, int y, Texture texture)
 	{
@@ -36,13 +36,13 @@ public class RenderingUtils
 		
 			GL11.glBegin(GL11.GL_QUADS);
 			
-				GL11.glTexCoord2f(0,0);
-				GL11.glVertex2d(x, y);
-				GL11.glTexCoord2f(1,0);
-				GL11.glVertex2d(x + texture.getAsSlickTexture().getTextureWidth(), y);
-				GL11.glTexCoord2f(1,1);
-				GL11.glVertex2d(x + texture.getAsSlickTexture().getTextureWidth(), y + texture.getAsSlickTexture().getTextureHeight());
 				GL11.glTexCoord2f(0,1);
+				GL11.glVertex2d(x, y);
+				GL11.glTexCoord2f(1,1);
+				GL11.glVertex2d(x + texture.getAsSlickTexture().getTextureWidth(), y);
+				GL11.glTexCoord2f(1,0);
+				GL11.glVertex2d(x + texture.getAsSlickTexture().getTextureWidth(), y + texture.getAsSlickTexture().getTextureHeight());
+				GL11.glTexCoord2f(0,0);
 				GL11.glVertex2d(x, y + texture.getAsSlickTexture().getTextureHeight());
 		
 			GL11.glEnd();

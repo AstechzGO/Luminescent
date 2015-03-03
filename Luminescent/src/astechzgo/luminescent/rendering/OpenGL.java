@@ -26,6 +26,8 @@ public class OpenGL
 	{
 		GL11.glClearColor(red, green, blue, alpha);
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+		
+	    GL11.glEnable(GL11.GL_TEXTURE_2D);
 	}
 	
 	public static void ChangeResolution(int x, int y)
