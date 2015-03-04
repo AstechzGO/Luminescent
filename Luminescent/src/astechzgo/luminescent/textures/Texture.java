@@ -23,18 +23,12 @@ public class Texture {
 	private final ByteBuffer asByteBuffer;
 	private final org.newdawn.slick.opengl.Texture slickTexture;
 	
-	public Texture(String textureName, boolean slick) {
-		asBufferedImage = toBufferedImage(textureName);
-		asByteBuffer = toByteBuffer(asBufferedImage);
-		
-		if(slick)
-			slickTexture = loadSlickTexture();
-		else
-			slickTexture = null;
-	}
+	private final String name;
 	
-	public Texture(String textureName, String dirName, boolean slick) {
-		asBufferedImage = toBufferedImage(textureName, dirName);
+	public Texture(String textureName, boolean slick) {
+		name = textureName;
+		
+		asBufferedImage = toBufferedImage(textureName);
 		asByteBuffer = toByteBuffer(asBufferedImage);
 		
 		if(slick)
@@ -77,21 +71,9 @@ public class Texture {
 	}
 	
 	private BufferedImage toBufferedImage(String imageLoc) {
+		imageLoc = imageLoc.replaceAll("\\.", "/");
 		Image img = new ImageIcon(this.getClass().getResource(
 				"/resources/textures/" + imageLoc + ".png")).getImage();
-		return toBufferedImage(img);
-	}
-	
-	/**
-	 * Converts a given Image into a BufferedImage
-	 *
-	 * @param img
-	 *            The Image to be converted
-	 * @return The converted BufferedImage
-	 */
-	private BufferedImage toBufferedImage(String imageLoc, String dirName) {
-		Image img = new ImageIcon(this.getClass().getResource(
-				"/resources/textures/"+ dirName + "/" + imageLoc + ".png")).getImage();
 		return toBufferedImage(img);
 	}
 	
@@ -136,13 +118,6 @@ public class Texture {
 			
 			org.newdawn.slick.opengl.Texture texture = TextureLoader.getTexture("PNG", fis);
 			
-			System.out.println("Texture loaded: "+texture);
-			System.out.println(">> Image width: "+texture.getImageWidth());
-			System.out.println(">> Image height: "+texture.getImageHeight());
-			System.out.println(">> Texture width: "+texture.getTextureWidth());
-			System.out.println(">> Texture height: "+texture.getTextureHeight());
-			System.out.println(">> Texture ID: "+texture.getTextureID());
-			
 			return texture;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -157,5 +132,9 @@ public class Texture {
 	
 	public void renderAsQuad(int x, int y) {
 		RenderingUtils.RenderQuad(x, y, this);
+	}
+	
+	public String getName() {
+		return name;
 	}
 }

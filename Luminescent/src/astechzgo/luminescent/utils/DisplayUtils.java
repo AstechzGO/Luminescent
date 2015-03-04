@@ -15,7 +15,7 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 
-import astechzgo.luminescent.textures.Texture;
+import astechzgo.luminescent.textures.TextureList;
 
 public class DisplayUtils {
 
@@ -107,7 +107,7 @@ public class DisplayUtils {
 	public static void setIcons(String[] nIcon, Object c) {
 		List<ByteBuffer> icons = new ArrayList<ByteBuffer>();
 		for (String name : nIcon) {
-			icons.add(new Texture(name, "icons", false).getAsByteBuffer());
+			icons.add(TextureList.findTexture(name).getAsByteBuffer());
 		}
 
 		Display.setIcon(icons.toArray(new ByteBuffer[icons.size()]));
