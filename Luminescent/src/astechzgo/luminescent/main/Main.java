@@ -69,7 +69,7 @@ public class Main
 		
 		OpenGL.Tick();
 		
-		Luminescent.Tick();	// Add in delta time at some point
+		Luminescent.Tick();
 	}
 	
 	// 2994

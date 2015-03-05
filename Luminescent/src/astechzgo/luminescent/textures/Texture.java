@@ -15,8 +15,6 @@ import javax.swing.ImageIcon;
 import org.newdawn.slick.opengl.PNGDecoder;
 import org.newdawn.slick.opengl.TextureLoader;
 
-import astechzgo.luminescent.utils.RenderingUtils;
-
 public class Texture {
 	
 	private final BufferedImage asBufferedImage;
@@ -128,10 +126,6 @@ public class Texture {
 	
 	public org.newdawn.slick.opengl.Texture getAsSlickTexture() {
 		return slickTexture;
-	}
-	
-	public void renderAsQuad(int x, int y) {
-		RenderingUtils.RenderQuad(x, y, this);
 	}
 	
 	public String getName() {

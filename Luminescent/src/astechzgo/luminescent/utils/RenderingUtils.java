@@ -7,6 +7,9 @@ import astechzgo.luminescent.textures.Texture;
 
 public class RenderingUtils
 {
+	
+	public static final double RADIAN = 0.01745329251994329576923690768489d;
+	
 	public static void RenderQuad(int x, int y, int width, int height)
 	{
 		GL11.glBegin(GL11.GL_QUADS);
@@ -24,15 +27,32 @@ public class RenderingUtils
 		GL11.glEnd();
 	}
 	
-	public static void RenderQuad(int x, int y, Texture texture)
+	public static void RenderQuad(int x, int y, int width, int height, Texture texture)
 	{
 		if(texture.getAsSlickTexture() != null) 
 		{
+			GL11.glEnable(GL11.GL_TEXTURE_2D);
+			
 			Color.white.bind();
 			
 			GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getAsSlickTexture().getTextureID());
-			RenderQuad(x, y, texture.getAsSlickTexture().getImageWidth(), texture.getAsSlickTexture().getImageHeight());
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
+			RenderQuad(x, y, width, height);
+			
+			GL11.glDisable(GL11.GL_TEXTURE_2D);
 		}
+	}
+	
+	public static void RenderCircle(double x, double y, double radius, double pointSeperation) {	
+		GL11.glBegin(GL11.GL_TRIANGLE_FAN);
+		
+		GL11.glVertex2d(x, y);
+		
+		for (int degrees = 0; degrees < 360 + pointSeperation; degrees += pointSeperation)
+		{
+			double degreeInRadians = degrees * RADIAN;
+			GL11.glVertex2d(x + Math.sin(degreeInRadians) * radius, y + Math.cos(degreeInRadians) * radius);
+		}
+		
+		GL11.glEnd();
 	}
 }

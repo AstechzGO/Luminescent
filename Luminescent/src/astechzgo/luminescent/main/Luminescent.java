@@ -18,11 +18,11 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
 import astechzgo.luminescent.rendering.Player;
+import astechzgo.luminescent.rendering.Room;
 import astechzgo.luminescent.sound.SoundList;
 import astechzgo.luminescent.sound.SoundManager;
 import astechzgo.luminescent.textures.TextureList;
 import astechzgo.luminescent.utils.DisplayUtils;
-import astechzgo.luminescent.utils.RenderingUtils;
 
 public class Luminescent
 {
@@ -31,6 +31,8 @@ public class Luminescent
 	public static double moveSpeed = 0.5;
 	
 	public static long lastMove = System.currentTimeMillis();
+	
+	public static Room room = new Room();
 	
 	public static void Init()
 	{	
@@ -58,13 +60,12 @@ public class Luminescent
 	
 	public static void Tick()
 	{
-		thePlayer.render();
 		
-		GL11.glColor3f(0.0f, 0.4f, 0.6f);
-		RenderingUtils.RenderQuad(0, 0, SCREEN_WIDTH / 45, SCREEN_HEIGHT);
-		RenderingUtils.RenderQuad(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT / 25);
-		RenderingUtils.RenderQuad(SCREEN_WIDTH - (SCREEN_WIDTH / 45), 0, SCREEN_WIDTH / 45, SCREEN_HEIGHT);
-		RenderingUtils.RenderQuad(0, SCREEN_HEIGHT - (SCREEN_HEIGHT / 25), SCREEN_WIDTH, SCREEN_HEIGHT / 25);
+
+		GL11.glColor3f(0.15f, 0.15f, 0.15f);
+		room.render();
+		
+		thePlayer.render();
 		
 		int multiplier = (int) (System.currentTimeMillis() - lastMove);
 		lastMove = System.currentTimeMillis();
