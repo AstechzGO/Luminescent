@@ -11,20 +11,9 @@ public class TextureList {
 	private static List<String> nonSlickTextures = new ArrayList<String>();
 	private static List<String> slickTextures = new ArrayList<String>();
 	
-	public static final List<Texture> TEXTURES = new ArrayList<Texture>();
+	private static List<Texture> textures = new ArrayList<Texture>();
 	
-	public static void initTextureList() {
-		getAllTextures();
-		for(String f : slickTextures) {
-			TEXTURES.add(new Texture(f, true));
-		}
-		
-		for(String f : nonSlickTextures) {
-			TEXTURES.add(new Texture(f, false));
-		}
-	}
-	
-	private static void getAllTextures() {
+	public static void getAllTextures() {
 		List<String> nonSlick = new ArrayList<String>();
 		List<String> slick = new ArrayList<String>();
 		
@@ -50,11 +39,49 @@ public class TextureList {
 	}
 	
 	public static Texture findTexture(String textureName) {
-		for(Texture t : TEXTURES) {
+		for(Texture t : textures) {
 			if(t.getName().equals(textureName)) {
 				return t;
 			}
 		}
 		return null;
+	}
+	
+	public static List<String> getSlickTextureNames() {
+		return slickTextures;
+	}
+	
+	public static List<String> getNonSlickTextureNames() {
+		return nonSlickTextures;
+	}
+	
+	public static void setTextures(List<Texture> textures) {
+		TextureList.textures = textures;
+	}
+	
+	public static void addTextures(List<Texture> textures) {
+		TextureList.textures.addAll(textures);
+	}
+	
+	public static void loadNonSlickTextures() {
+		TextureList.getAllTextures();
+		
+		List<Texture> textures = new ArrayList<Texture>();
+		
+		for(String f : TextureList.getNonSlickTextureNames()) {
+			textures.add(new Texture(f, false));
+		}
+		
+		TextureList.setTextures(textures);
+	}
+	
+	public static void loadSlickTextures() {
+		List<Texture> textures = new ArrayList<Texture>();
+		
+		for(String f : getSlickTextureNames()) {
+			textures.add(new Texture(f, true));
+		}
+		
+		TextureList.addTextures(textures);
 	}
 }

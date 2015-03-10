@@ -30,8 +30,7 @@ public class Main
 	
 	public void Init()
 	{
-		TextureList.initTextureList();
-		
+		TextureList.loadNonSlickTextures();
 		try
 		{
 			setDisplayMode(DisplayUtils.SCREEN_WIDTH, DisplayUtils.SCREEN_HEIGHT, true);
@@ -74,5 +73,4 @@ public class Main
 	}
 	
 	// 2994
-	
 }

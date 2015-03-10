@@ -20,6 +20,7 @@ import org.lwjgl.opengl.GL11;
 import astechzgo.luminescent.rendering.Player;
 import astechzgo.luminescent.sound.SoundList;
 import astechzgo.luminescent.sound.SoundManager;
+import astechzgo.luminescent.textures.TextureList;
 import astechzgo.luminescent.utils.DisplayUtils;
 import astechzgo.luminescent.utils.RenderingUtils;
 
@@ -32,7 +33,9 @@ public class Luminescent
 	public static long lastMove = System.currentTimeMillis();
 	
 	public static void Init()
-	{
+	{	
+		TextureList.loadSlickTextures();
+		
 		try 
 		{
 			Cursor emptyCursor = new Cursor(1, 1, 0, 0, 1, BufferUtils.createIntBuffer(1), null);
