@@ -4,35 +4,35 @@ import org.lwjgl.opengl.GL11;
 
 import astechzgo.luminescent.utils.DisplayUtils;
 
-public class Player extends RenderableGameObject
+public class Player extends RenderableCircularGameObject
 {
-	private double posX = DisplayUtils.SCREEN_WIDTH / 2;
-	private double posY = DisplayUtils.SCREEN_HEIGHT / 2;
-	
-	public void render()
-	{
-		GL11.glColor3f(0.0f, 0.0f, 0.0f);
-		super.renderCircle(posX, posY, 40);
+	public Player() {
+		super(DisplayUtils.SCREEN_WIDTH / 2, DisplayUtils.SCREEN_HEIGHT / 2, 40, 1);	
 	}
 	
 	public double getPosX()
 	{
-		return posX;
+		return super.x;
 	}
 	
 	public double getPosY()
 	{
-		return posY;
+		return super.y;
 	}
 	
 	public void setPosX(double position)
 	{
-		posX = position;
+		super.x = position;
 	}
 	
 	public void setPosY(double position)
 	{
-		posY = position;
+		super.y = position;
 	}
 	
+	@Override
+	public void render() {
+		GL11.glColor3f(0.0f, 0.0f, 0.0f);
+		super.render();
+	}
 }

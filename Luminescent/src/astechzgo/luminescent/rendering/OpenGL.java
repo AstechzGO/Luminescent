@@ -12,9 +12,9 @@ import astechzgo.luminescent.utils.DisplayUtils;
  */
 public class OpenGL
 {
-	private static float red = 0.15f;
-	private static float green = 0.15f;
-	private static float blue = 0.15f;
+	private static float red = 0.0f;
+	private static float green = 0.4f;
+	private static float blue = 0.6f;
 	private static float alpha = 1.0f;
 	
 	public static void InitOpenGL()
@@ -26,7 +26,6 @@ public class OpenGL
 	{
 		GL11.glClearColor(red, green, blue, alpha);
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
 	}
 	
 	public static void ChangeResolution(int x, int y)
