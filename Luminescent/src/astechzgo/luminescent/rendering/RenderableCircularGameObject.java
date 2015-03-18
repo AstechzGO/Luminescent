@@ -2,8 +2,7 @@ package astechzgo.luminescent.rendering;
 
 import astechzgo.luminescent.utils.RenderingUtils;
 
-public abstract class RenderableCircularGameObject implements IRenderedObject
-{
+public abstract class RenderableCircularGameObject implements IRenderedObject {
 	protected int pointSeperation;
 	protected double radius;
 	

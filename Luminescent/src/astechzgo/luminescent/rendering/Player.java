@@ -6,7 +6,8 @@ import astechzgo.luminescent.utils.DisplayUtils;
 
 public class Player extends RenderableCircularGameObject
 {
-	public Player() {
+	public Player()
+	{
 		super(DisplayUtils.SCREEN_WIDTH / 2, DisplayUtils.SCREEN_HEIGHT / 2, 40, 1);	
 	}
 	
@@ -31,7 +32,8 @@ public class Player extends RenderableCircularGameObject
 	}
 	
 	@Override
-	public void render() {
+	public void render()
+	{
 		GL11.glColor3f(0.0f, 0.0f, 0.0f);
 		super.render();
 	}
