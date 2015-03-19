@@ -8,27 +8,13 @@ import org.lwjgl.opengl.Display;
 import astechzgo.luminescent.rendering.OpenGL;
 import astechzgo.luminescent.textures.TextureList;
 import astechzgo.luminescent.utils.DisplayUtils;
+import astechzgo.luminescent.utils.SystemUtils;
 
 public class Main
 {
 	public static void main(String[] args)
 	{
-		
-		/*
-		 * When not deployed, this game only supports windows in the Eclipse IDE
-		 * 
-		 * When deployed, this game can be run as an executable JAR file in
-		 * Windows, Linux, or OS X
-		 */
-		if(!(System.getProperty("os.name").toLowerCase().contains("win")
-				|| System.getProperty("os.name").toLowerCase().contains("unix")
-				|| System.getProperty("os.name").toLowerCase().contains("linux")
-				|| System.getProperty("os.name").toLowerCase().contains("mac")
-				))
-		{
-			System.err.println("The current platform is not supported");
-			System.exit(-1);
-		}
+		SystemUtils.doOSSetUp();
 		
 		new Main().Run();
 	}
