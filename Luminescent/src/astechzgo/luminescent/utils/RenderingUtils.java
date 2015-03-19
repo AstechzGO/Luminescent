@@ -42,7 +42,8 @@ public class RenderingUtils
 		}
 	}
 	
-	public static void RenderCircle(double x, double y, double radius, double pointSeperation) {	
+	public static void RenderCircle(double x, double y, double radius, double pointSeperation)
+	{	
 		GL11.glBegin(GL11.GL_TRIANGLE_FAN);
 		
 		GL11.glVertex2d(x, y);
