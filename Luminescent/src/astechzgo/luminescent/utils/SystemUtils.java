@@ -79,7 +79,7 @@ public class SystemUtils {
 	    	s = s.replace(" ", "");
 	    	String[] unparsed = s.split(",");
 	    	for(String uNum : unparsed) {
-	    		Integer w = Integer.parseInt(uNum);
+	    		Integer w = Keyboard.getKeyIndex(uNum.toUpperCase());
 	    		keys.get(i).add(w);
 	    	}
 	    }

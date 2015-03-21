@@ -30,15 +30,15 @@ public class Constants
 	static {
 		defaults.put(LOG_CONFIG, "false");
 		
-		defaults.put(KEYS_MOVEMENT_FASTER, 				"{42}");
-		defaults.put(KEYS_MOVEMENT_UP, 					"{17}, {200}");
-		defaults.put(KEYS_MOVEMENT_LEFT, 				"{30}, {203}");
-		defaults.put(KEYS_MOVEMENT_DOWN, 				"{31}, {208}");
-		defaults.put(KEYS_MOVEMENT_RIGHT, 				"{32}, {205}");
+		defaults.put(KEYS_MOVEMENT_FASTER,				"{LSHIFT}");
+		defaults.put(KEYS_MOVEMENT_UP, 					"{W}, {UP}");
+		defaults.put(KEYS_MOVEMENT_LEFT, 				"{A}, {LEFT}");
+		defaults.put(KEYS_MOVEMENT_DOWN, 				"{S}, {DOWN}");
+		defaults.put(KEYS_MOVEMENT_RIGHT, 				"{D}, {RIGHT}");
 		
-		defaults.put(KEYS_UTIL_SCREENSHOT, 				"{60}");
-		defaults.put(KEYS_UTIL_FULLSCREEN, 				"{87}");
-		defaults.put(KEYS_UTIL_EXIT, 					"{1, 15}");
+		defaults.put(KEYS_UTIL_SCREENSHOT, 				"{F2}");
+		defaults.put(KEYS_UTIL_FULLSCREEN, 				"{F11}");
+		defaults.put(KEYS_UTIL_EXIT, 					"{ESCAPE, TAB}");
 
 		constants.putAll(defaults);
 	}
