@@ -37,8 +37,6 @@ public class Main
 	{
 		Constants.readConstantPropertiesFromFile();
 		LoggingUtils.configureRobotLogger();
-		
-		LoggingUtils.LOGGER.config("Debug");
 
 		TextureList.loadNonSlickTextures();
 		try

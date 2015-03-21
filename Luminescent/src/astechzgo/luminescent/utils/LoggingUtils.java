@@ -1,7 +1,9 @@
 package astechzgo.luminescent.utils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.FileHandler;
@@ -54,15 +56,19 @@ public class LoggingUtils {
 			newFile("logs").mkdir();
 		
 		try {
+			LOGGER.setUseParentHandlers(false);			
 			final FileHandler fh = new FileHandler(LOG_FILE.getAbsolutePath(), true);
+			final EConsoleHandler ch = new EConsoleHandler();
+			ch.setFormatter(FORMATTER);
+			
+			
 			fh.setFormatter(FORMATTER);
-			LOGGER.getParent().getHandlers()[0].setFormatter(FORMATTER);
+			
 			LOGGER.addHandler(fh);
+			LOGGER.addHandler(ch);
 			
 			if(Constants.getConstantAsBoolean(Constants.LOG_CONFIG)) {
 				LOGGER.setLevel(Level.CONFIG);
-				LOGGER.getParent().setLevel(Level.CONFIG);
-				LOGGER.getParent().getHandlers()[0].setLevel(Level.CONFIG);
 			}
 			
 			Runtime.getRuntime().addShutdownHook(new Thread()
@@ -73,6 +79,9 @@ public class LoggingUtils {
 			    	fh.flush();
 			    	fh.close();
 
+			    	ch.flush();
+			    	ch.close();
+			    	
 			    	cleanupLogFilename();
 			    }
 			});
@@ -81,6 +90,37 @@ public class LoggingUtils {
 			//Utils.logException(LOGGER, e);
 			e.printStackTrace();
 		}
+
+		System.setOut(new PrintStream(new ByteArrayOutputStream()) {
+		    public void println(String str) {
+		        process(str + "\n");
+		    }
+
+		    public void print(String str) {
+		        process(str);
+		    }
+
+		    private void process(String str) {
+		    	
+		    	if(!str.trim().isEmpty())
+		    		LOGGER.info(str);
+		    }
+		});
+		
+		System.setErr(new PrintStream(new ByteArrayOutputStream()) {
+		    public void println(String str) {
+		        process(str + "\n");
+		    }
+
+		    public void print(String str) {
+		        process(str);
+		    }
+
+		    private void process(String str) {
+		    	if(!str.trim().isEmpty())
+		    		LOGGER.severe(str);
+		    }
+		});
 	}
 	
 	private static void cleanupLogFilename() {
@@ -112,3 +152,4 @@ public class LoggingUtils {
         }
 	}
 }
+
