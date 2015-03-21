@@ -33,7 +33,7 @@ public class Luminescent
 	
 	public static long lastMove = System.currentTimeMillis();
 	
-	public static Room room = new Room();
+		public static Room room = new Room();
 	
 	public static void Init()
 	{	
@@ -145,7 +145,7 @@ public class Luminescent
 
 			try 
 			{
-				DisplayUtils.takeScreenshot(new File(new File("screenshots/" + S + ".png").getAbsolutePath()));
+				DisplayUtils.takeScreenshot(newFile("screenshots/" + S + ".png"));
 			} 
 			catch (LWJGLException e) 
 			{
