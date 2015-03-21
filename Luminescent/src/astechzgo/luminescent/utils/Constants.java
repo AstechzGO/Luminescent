@@ -15,11 +15,30 @@ public class Constants
 	private static Properties constants = new Properties();
 	
 	public static final String LOG_CONFIG =				"Log-Config-Messages";
+	
+	public static final String KEYS_MOVEMENT_FASTER =	"keys.movement.faster";			
+	public static final String KEYS_MOVEMENT_UP =		"keys.movement.up";
+	public static final String KEYS_MOVEMENT_LEFT = 	"keys.movement.left";
+	public static final String KEYS_MOVEMENT_DOWN =		"keys.movement.down";
+	public static final String KEYS_MOVEMENT_RIGHT = 	"keys.movement.right";
+	
+	public static final String KEYS_UTIL_SCREENSHOT =	"keys.util.screenshot";
+	public static final String KEYS_UTIL_FULLSCREEN = 	"keys.util.fullscreen";
+	public static final String KEYS_UTIL_EXIT = 		"keys.util.exit";
 
 
 	static {
-		// PWM
 		defaults.put(LOG_CONFIG, "false");
+		
+		defaults.put(KEYS_MOVEMENT_FASTER, "{42}");
+		defaults.put(KEYS_MOVEMENT_UP, "{17}, {200}");
+		defaults.put(KEYS_MOVEMENT_LEFT, "{30}, {203}");
+		defaults.put(KEYS_MOVEMENT_DOWN, "{31}, {208}");
+		defaults.put(KEYS_MOVEMENT_RIGHT, "{32}, {205}");
+		
+		defaults.put(KEYS_UTIL_SCREENSHOT, "{60}");
+		defaults.put(KEYS_UTIL_FULLSCREEN, "{87}");
+		defaults.put(KEYS_UTIL_EXIT, "{1, 15}");
 
 		constants.putAll(defaults);
 	}
@@ -68,7 +87,7 @@ public class Constants
 			return false;
 		}
 	}
-
+	
 	public static void readConstantPropertiesFromFile() {
 		if(!newFile(CONSTANTS_FILE_NAME).exists()) {
 			try {

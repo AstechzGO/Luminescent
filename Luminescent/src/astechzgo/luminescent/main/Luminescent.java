@@ -12,7 +12,6 @@ import java.util.Date;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Cursor;
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 
@@ -21,8 +20,10 @@ import astechzgo.luminescent.rendering.Room;
 import astechzgo.luminescent.sound.SoundList;
 import astechzgo.luminescent.sound.SoundManager;
 import astechzgo.luminescent.textures.TextureList;
+import astechzgo.luminescent.utils.Constants;
 import astechzgo.luminescent.utils.DisplayUtils;
 import astechzgo.luminescent.utils.LoggingUtils;
+import astechzgo.luminescent.utils.SystemUtils;
 import static astechzgo.luminescent.utils.SystemUtils.newFile;
 
 public class Luminescent
@@ -68,7 +69,7 @@ public class Luminescent
 		int multiplier = (int) (System.currentTimeMillis() - lastMove);
 		lastMove = System.currentTimeMillis();
 		
-		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
+		if(SystemUtils.isKeyDown(Constants.KEYS_MOVEMENT_FASTER))
 		{
 			Luminescent.moveSpeed = 0.88;
 		}
@@ -97,27 +98,27 @@ public class Luminescent
 			thePlayer.setPosY(0);
 		}
 		
-		if(Keyboard.isKeyDown(Keyboard.KEY_W) || Keyboard.isKeyDown(Keyboard.KEY_UP))
+		if(SystemUtils.isKeyDown(Constants.KEYS_MOVEMENT_UP))
 		{
 			thePlayer.setPosY(thePlayer.getPosY() + speed);
 		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_S) || Keyboard.isKeyDown(Keyboard.KEY_DOWN))
+		if(SystemUtils.isKeyDown(Constants.KEYS_MOVEMENT_DOWN))
 		{
 			thePlayer.setPosY(thePlayer.getPosY() - speed);
 		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_D) || Keyboard.isKeyDown(Keyboard.KEY_RIGHT))
+		if(SystemUtils.isKeyDown(Constants.KEYS_MOVEMENT_RIGHT))
 		{
 			thePlayer.setPosX(thePlayer.getPosX() + speed);
 		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_A) || Keyboard.isKeyDown(Keyboard.KEY_LEFT))
+		if(SystemUtils.isKeyDown(Constants.KEYS_MOVEMENT_LEFT))
 		{
 			thePlayer.setPosX(thePlayer.getPosX() - speed);
 		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE) && Keyboard.isKeyDown(Keyboard.KEY_TAB))
+		if(SystemUtils.isKeyDown(Constants.KEYS_UTIL_EXIT))
 		{
 			Shutdown();
 		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_F11))
+		if(SystemUtils.isKeyDown(Constants.KEYS_UTIL_FULLSCREEN))
 		{
 			if(Display.isFullscreen()) 
 			{
@@ -129,7 +130,7 @@ public class Luminescent
 						(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight(), true);
 			}
 		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_F2))
+		if(SystemUtils.isKeyDown(Constants.KEYS_UTIL_SCREENSHOT))
 		{
 			File dir = newFile("screenshots/");
 			dir = new File(dir.getAbsolutePath());
