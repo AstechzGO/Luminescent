@@ -15,6 +15,8 @@ import javax.swing.ImageIcon;
 import org.newdawn.slick.opengl.PNGDecoder;
 import org.newdawn.slick.opengl.TextureLoader;
 
+import astechzgo.luminescent.utils.LoggingUtils;
+
 public class Texture {
 	
 	private final BufferedImage asBufferedImage;
@@ -63,7 +65,7 @@ public class Texture {
 		}
 		catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LoggingUtils.logException(LoggingUtils.LOGGER, e);
 		}
 		return buf;
 	}
@@ -119,7 +121,7 @@ public class Texture {
 			return texture;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LoggingUtils.logException(LoggingUtils.LOGGER, e);
 		}
 		return null;
 	}

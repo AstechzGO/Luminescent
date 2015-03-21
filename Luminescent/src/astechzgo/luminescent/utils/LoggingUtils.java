@@ -4,6 +4,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.FileHandler;
@@ -87,8 +89,7 @@ public class LoggingUtils {
 			});
 			
 		} catch (SecurityException | IOException e) {
-			//Utils.logException(LOGGER, e);
-			e.printStackTrace();
+			LoggingUtils.logException(LoggingUtils.LOGGER, e);
 		}
 
 		System.setOut(new PrintStream(new ByteArrayOutputStream()) {
@@ -150,6 +151,19 @@ public class LoggingUtils {
         if (!success) {
             System.err.println("Unknown Error");
         }
+	}
+	
+	/**
+	 * Logs exception stack-traces
+	 * @param log The Java Logger to log with
+	 * @param e The exception to log
+	 */
+	public static void logException(Logger log, Exception e) {
+		StringWriter errors = new StringWriter();
+		e.printStackTrace(new PrintWriter(errors));
+		String exception = errors.toString();
+		
+		log.severe(exception);
 	}
 }
 

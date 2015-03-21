@@ -7,6 +7,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import astechzgo.luminescent.utils.LoggingUtils;
+
 public class SoundList {
 	private static List<String> sounds;
 	
@@ -33,7 +35,7 @@ public class SoundList {
 			
 			return names;
 		} catch (IOException e) {
-			e.printStackTrace();
+			LoggingUtils.logException(LoggingUtils.LOGGER, e);
 		}
 		return names;
 	}

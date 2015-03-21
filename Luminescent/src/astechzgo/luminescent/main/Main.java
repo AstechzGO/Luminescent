@@ -49,7 +49,7 @@ public class Main
 		}
 		catch (LWJGLException e)
 		{
-			e.printStackTrace();
+			LoggingUtils.logException(LoggingUtils.LOGGER, e);
 			System.exit(0);
 		}
 		

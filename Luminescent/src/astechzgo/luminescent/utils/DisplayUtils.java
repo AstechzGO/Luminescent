@@ -141,6 +141,6 @@ public class DisplayUtils {
 		   
 		try {
 		    ImageIO.write(image, format, file);
-		} catch (IOException e) { e.printStackTrace(); }
+		} catch (IOException e) { LoggingUtils.logException(LoggingUtils.LOGGER, e); }
 	}
 }

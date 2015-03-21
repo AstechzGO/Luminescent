@@ -22,7 +22,7 @@ import astechzgo.luminescent.sound.SoundList;
 import astechzgo.luminescent.sound.SoundManager;
 import astechzgo.luminescent.textures.TextureList;
 import astechzgo.luminescent.utils.DisplayUtils;
-
+import astechzgo.luminescent.utils.LoggingUtils;
 import static astechzgo.luminescent.utils.SystemUtils.newFile;
 
 public class Luminescent
@@ -46,7 +46,7 @@ public class Luminescent
 		} 
 		catch (LWJGLException e)
 		{
-			e.printStackTrace();
+			LoggingUtils.logException(LoggingUtils.LOGGER, e);
 		}
 		
 		SoundManager manager = new SoundManager();
@@ -149,7 +149,7 @@ public class Luminescent
 			} 
 			catch (LWJGLException e) 
 			{
-				e.printStackTrace();
+				LoggingUtils.logException(LoggingUtils.LOGGER, e);
 			}
 		}
 	}
