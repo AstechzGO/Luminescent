@@ -9,12 +9,12 @@ import static astechzgo.luminescent.utils.SystemUtils.newFile;
 
 public class Constants
 {
-	private static final String CONSTANTS_FILE_NAME = 			"conf.properties";
+	private static final String CONSTANTS_FILE_NAME = 	"conf.properties";
 	
 	private static Properties defaults = new Properties();
 	private static Properties constants = new Properties();
 	
-	public static final String LOG_CONFIG =				"Log-Config-Messages";
+	public static final String LOG_CONFIG =				"Log-Debug-Messages";
 	
 	public static final String KEYS_MOVEMENT_FASTER =	"keys.movement.faster";			
 	public static final String KEYS_MOVEMENT_UP =		"keys.movement.up";
@@ -30,15 +30,15 @@ public class Constants
 	static {
 		defaults.put(LOG_CONFIG, "false");
 		
-		defaults.put(KEYS_MOVEMENT_FASTER, "{42}");
-		defaults.put(KEYS_MOVEMENT_UP, "{17}, {200}");
-		defaults.put(KEYS_MOVEMENT_LEFT, "{30}, {203}");
-		defaults.put(KEYS_MOVEMENT_DOWN, "{31}, {208}");
-		defaults.put(KEYS_MOVEMENT_RIGHT, "{32}, {205}");
+		defaults.put(KEYS_MOVEMENT_FASTER, 				"{42}");
+		defaults.put(KEYS_MOVEMENT_UP, 					"{17}, {200}");
+		defaults.put(KEYS_MOVEMENT_LEFT, 				"{30}, {203}");
+		defaults.put(KEYS_MOVEMENT_DOWN, 				"{31}, {208}");
+		defaults.put(KEYS_MOVEMENT_RIGHT, 				"{32}, {205}");
 		
-		defaults.put(KEYS_UTIL_SCREENSHOT, "{60}");
-		defaults.put(KEYS_UTIL_FULLSCREEN, "{87}");
-		defaults.put(KEYS_UTIL_EXIT, "{1, 15}");
+		defaults.put(KEYS_UTIL_SCREENSHOT, 				"{60}");
+		defaults.put(KEYS_UTIL_FULLSCREEN, 				"{87}");
+		defaults.put(KEYS_UTIL_EXIT, 					"{1, 15}");
 
 		constants.putAll(defaults);
 	}
