@@ -9,17 +9,36 @@ import static astechzgo.luminescent.utils.SystemUtils.newFile;
 
 public class Constants
 {
-	private static final String CONSTANTS_FILE_NAME = 			"conf.properties";
+	private static final String CONSTANTS_FILE_NAME = 	"conf.properties";
 	
 	private static Properties defaults = new Properties();
 	private static Properties constants = new Properties();
 	
-	public static final String LOG_CONFIG =				"Log-Config-Messages";
+	public static final String LOG_CONFIG =				"Log-Debug-Messages";
+	
+	public static final String KEYS_MOVEMENT_FASTER =	"keys.movement.faster";			
+	public static final String KEYS_MOVEMENT_UP =		"keys.movement.up";
+	public static final String KEYS_MOVEMENT_LEFT = 	"keys.movement.left";
+	public static final String KEYS_MOVEMENT_DOWN =		"keys.movement.down";
+	public static final String KEYS_MOVEMENT_RIGHT = 	"keys.movement.right";
+	
+	public static final String KEYS_UTIL_SCREENSHOT =	"keys.util.screenshot";
+	public static final String KEYS_UTIL_FULLSCREEN = 	"keys.util.fullscreen";
+	public static final String KEYS_UTIL_EXIT = 		"keys.util.exit";
 
 
 	static {
-		// PWM
 		defaults.put(LOG_CONFIG, "false");
+		
+		defaults.put(KEYS_MOVEMENT_FASTER,				"{LSHIFT}");
+		defaults.put(KEYS_MOVEMENT_UP, 					"{W}, {UP}");
+		defaults.put(KEYS_MOVEMENT_LEFT, 				"{A}, {LEFT}");
+		defaults.put(KEYS_MOVEMENT_DOWN, 				"{S}, {DOWN}");
+		defaults.put(KEYS_MOVEMENT_RIGHT, 				"{D}, {RIGHT}");
+		
+		defaults.put(KEYS_UTIL_SCREENSHOT, 				"{F2}");
+		defaults.put(KEYS_UTIL_FULLSCREEN, 				"{F11}");
+		defaults.put(KEYS_UTIL_EXIT, 					"{ESCAPE, TAB}");
 
 		constants.putAll(defaults);
 	}
@@ -68,7 +87,7 @@ public class Constants
 			return false;
 		}
 	}
-
+	
 	public static void readConstantPropertiesFromFile() {
 		if(!newFile(CONSTANTS_FILE_NAME).exists()) {
 			try {

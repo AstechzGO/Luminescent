@@ -1,6 +1,11 @@
 package astechzgo.luminescent.utils;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+import org.lwjgl.input.Keyboard;
 
 public class SystemUtils {
 
@@ -61,5 +66,42 @@ public class SystemUtils {
 	
 	public static File newFile(String relativeLoc) {
 		return new File(new File(relativeLoc).getAbsolutePath());
+	}
+	
+	private static List<List<Integer>> getKeyCodes(String key) {
+		List<List<Integer>> keys = new ArrayList<List<Integer>>();
+		
+	    @SuppressWarnings("resource")
+		Scanner sc = new Scanner(Constants.getConstant(key));
+	    int i = 0;
+	    for (String s; (s = sc.findWithinHorizon("(?<=\\{).*?(?=\\})", 0)) != null; i++) {
+	    	keys.add(i, new ArrayList<Integer>());
+	    	s = s.replace(" ", "");
+	    	String[] unparsed = s.split(",");
+	    	for(String uNum : unparsed) {
+	    		Integer w = Keyboard.getKeyIndex(uNum.toUpperCase());
+	    		keys.get(i).add(w);
+	    	}
+	    }
+	    
+		return keys;
+	}
+	
+	public static boolean isKeyDown(String name) {
+		List<List <Integer>> keys = getKeyCodes(name);
+
+		for(List<Integer> rKeys : keys) {
+			boolean areAllDown = true;
+			for(Integer key : rKeys) {
+				if(!Keyboard.isKeyDown(key)) {
+					areAllDown = false;
+				}
+			}
+			if(areAllDown) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 }
