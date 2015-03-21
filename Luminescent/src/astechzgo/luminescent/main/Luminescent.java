@@ -133,7 +133,9 @@ public class Luminescent
 		}
 		if(Keyboard.isKeyDown(Keyboard.KEY_F2))
 		{
-			File dir = new File("screenshots");
+			File dir = new File("screenshots/");
+			dir = new File(dir.getAbsolutePath());
+			
 			if(!dir.exists() || !dir.isDirectory()) 
 			{
 				dir.mkdir();
@@ -145,7 +147,7 @@ public class Luminescent
 
 			try 
 			{
-				DisplayUtils.takeScreenshot(new File("screenshots/" + S + ".png"));
+				DisplayUtils.takeScreenshot(new File(new File("screenshots/" + S + ".png").getAbsolutePath()));
 			} 
 			catch (LWJGLException e) 
 			{
