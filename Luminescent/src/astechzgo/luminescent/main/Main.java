@@ -8,6 +8,7 @@ import org.lwjgl.opengl.Display;
 import astechzgo.luminescent.rendering.OpenGL;
 import astechzgo.luminescent.textures.TextureList;
 import astechzgo.luminescent.utils.DisplayUtils;
+import astechzgo.luminescent.utils.LoggingUtils;
 import astechzgo.luminescent.utils.SystemUtils;
 
 public class Main
@@ -33,6 +34,8 @@ public class Main
 	
 	public void Init()
 	{
+		LoggingUtils.configureRobotLogger();
+		LoggingUtils.LOGGER.info("Hey!");
 		TextureList.loadNonSlickTextures();
 		try
 		{
