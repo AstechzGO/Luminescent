@@ -15,7 +15,6 @@ import org.lwjgl.input.Cursor;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.GL11;
 
 import astechzgo.luminescent.rendering.Player;
 import astechzgo.luminescent.rendering.Room;
@@ -23,6 +22,8 @@ import astechzgo.luminescent.sound.SoundList;
 import astechzgo.luminescent.sound.SoundManager;
 import astechzgo.luminescent.textures.TextureList;
 import astechzgo.luminescent.utils.DisplayUtils;
+import astechzgo.luminescent.utils.LoggingUtils;
+import static astechzgo.luminescent.utils.SystemUtils.newFile;
 
 public class Luminescent
 {
@@ -32,7 +33,7 @@ public class Luminescent
 	
 	public static long lastMove = System.currentTimeMillis();
 	
-	public static Room room = new Room();
+		public static Room room = new Room();
 	
 	public static void Init()
 	{	
@@ -45,7 +46,7 @@ public class Luminescent
 		} 
 		catch (LWJGLException e)
 		{
-			e.printStackTrace();
+			LoggingUtils.logException(LoggingUtils.LOGGER, e);
 		}
 		
 		SoundManager manager = new SoundManager();
@@ -60,9 +61,6 @@ public class Luminescent
 	
 	public static void Tick()
 	{
-		
-
-		GL11.glColor3f(0.15f, 0.15f, 0.15f);
 		room.render();
 		
 		thePlayer.render();
@@ -133,7 +131,7 @@ public class Luminescent
 		}
 		if(Keyboard.isKeyDown(Keyboard.KEY_F2))
 		{
-			File dir = new File("screenshots/");
+			File dir = newFile("screenshots/");
 			dir = new File(dir.getAbsolutePath());
 			
 			if(!dir.exists() || !dir.isDirectory()) 
@@ -147,11 +145,11 @@ public class Luminescent
 
 			try 
 			{
-				DisplayUtils.takeScreenshot(new File(new File("screenshots/" + S + ".png").getAbsolutePath()));
+				DisplayUtils.takeScreenshot(newFile("screenshots/" + S + ".png"));
 			} 
 			catch (LWJGLException e) 
 			{
-				e.printStackTrace();
+				LoggingUtils.logException(LoggingUtils.LOGGER, e);
 			}
 		}
 	}

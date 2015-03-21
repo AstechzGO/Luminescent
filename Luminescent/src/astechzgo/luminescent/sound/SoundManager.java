@@ -1,5 +1,6 @@
 package astechzgo.luminescent.sound;
 
+import astechzgo.luminescent.utils.LoggingUtils;
 import de.cuina.fireandfuel.CodecJLayerMP3;
 import paulscode.sound.Library;
 import paulscode.sound.SoundSystem;
@@ -27,7 +28,7 @@ public class SoundManager {
 		} catch (SoundSystemException sse) {
 
 			// Shouldn’t happen, but it is best to prepare for anything
-			sse.printStackTrace();
+			LoggingUtils.logException(LoggingUtils.LOGGER, sse);
 			return;
 		}
 

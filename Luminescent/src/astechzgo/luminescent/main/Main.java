@@ -5,9 +5,11 @@ import static astechzgo.luminescent.utils.DisplayUtils.setDisplayMode;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 
+import astechzgo.luminescent.utils.Constants;
 import astechzgo.luminescent.rendering.OpenGL;
 import astechzgo.luminescent.textures.TextureList;
 import astechzgo.luminescent.utils.DisplayUtils;
+import astechzgo.luminescent.utils.LoggingUtils;
 import astechzgo.luminescent.utils.SystemUtils;
 
 public class Main
@@ -33,6 +35,9 @@ public class Main
 	
 	public void Init()
 	{
+		Constants.readConstantPropertiesFromFile();
+		LoggingUtils.configureRobotLogger();
+
 		TextureList.loadNonSlickTextures();
 		try
 		{
@@ -44,7 +49,7 @@ public class Main
 		}
 		catch (LWJGLException e)
 		{
-			e.printStackTrace();
+			LoggingUtils.logException(LoggingUtils.LOGGER, e);
 			System.exit(0);
 		}
 		

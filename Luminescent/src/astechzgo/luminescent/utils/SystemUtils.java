@@ -58,4 +58,8 @@ public class SystemUtils {
 
         return result;
     }
+	
+	public static File newFile(String relativeLoc) {
+		return new File(new File(relativeLoc).getAbsolutePath());
+	}
 }
