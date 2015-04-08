@@ -43,7 +43,7 @@ public class LoggingUtils {
 					threadName = t.getName();
 				}
 			}
-			String msg = S + " [" + threadName + " thread/" + (debug ? "DEBUG" : record.getLevel().getName()) + "]: " + record.getMessage();
+			String msg = S + " [" + threadName + "/" + (debug ? "DEBUG" : record.getLevel().getName()) + "]: " + record.getMessage();
 			
 			return msg;
 		}
