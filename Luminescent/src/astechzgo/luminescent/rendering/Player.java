@@ -1,7 +1,5 @@
 package astechzgo.luminescent.rendering;
 
-import org.lwjgl.opengl.GL11;
-
 import astechzgo.luminescent.utils.DisplayUtils;
 
 public class Player extends RenderableCircularGameObject
@@ -34,7 +32,6 @@ public class Player extends RenderableCircularGameObject
 	@Override
 	public void render()
 	{
-		GL11.glColor3f(0.0f, 0.0f, 0.0f);
 		super.render();
 	}
 }

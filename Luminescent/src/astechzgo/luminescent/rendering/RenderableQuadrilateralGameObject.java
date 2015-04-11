@@ -1,10 +1,17 @@
 package astechzgo.luminescent.rendering;
 
+
+
+import org.lwjgl.opengl.GL11;
+import org.newdawn.slick.Color;
+
 import astechzgo.luminescent.textures.Texture;
 import astechzgo.luminescent.utils.RenderingUtils;
 
 public class RenderableQuadrilateralGameObject implements IRenderedObject {
 
+	private Color colour = new Color(0, 0, 0);
+	
 	protected Texture texture;
 	
 	protected int x;
@@ -29,6 +36,7 @@ public class RenderableQuadrilateralGameObject implements IRenderedObject {
 	
 	@Override
 	public void render() {
+		GL11.glColor3f(colour.r, colour.g, colour.b);
 		if(texture != null) {
 			RenderingUtils.RenderQuad(x, y, width, height, texture);
 		}
@@ -43,5 +51,15 @@ public class RenderableQuadrilateralGameObject implements IRenderedObject {
 
 	public Texture getTexture() {
 		return texture;
+	}
+	
+	@Override
+	public void setColour(Color colour) {
+		this.colour = colour;
+	}
+
+	@Override
+	public Color getColour() {
+		return colour;
 	}
 }

@@ -1,9 +1,8 @@
 package astechzgo.luminescent.main;
 
-import static astechzgo.luminescent.utils.DisplayUtils.SCREEN_HEIGHT;
-import static astechzgo.luminescent.utils.DisplayUtils.SCREEN_WIDTH;
 import static astechzgo.luminescent.utils.DisplayUtils.setDisplayMode;
 
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -17,6 +16,7 @@ import org.lwjgl.opengl.Display;
 
 import astechzgo.luminescent.rendering.Player;
 import astechzgo.luminescent.rendering.Room;
+import astechzgo.luminescent.rendering.RoomWalls;
 import astechzgo.luminescent.sound.SoundList;
 import astechzgo.luminescent.sound.SoundManager;
 import astechzgo.luminescent.textures.TextureList;
@@ -35,7 +35,8 @@ public class Luminescent
 	public static long lastMove = System.currentTimeMillis();
 	
 		public static Room room = new Room();
-	
+		public static RoomWalls walls = new RoomWalls();	
+		
 	public static void Init()
 	{	
 		TextureList.loadSlickTextures();
@@ -66,6 +67,8 @@ public class Luminescent
 		
 		thePlayer.render();
 		
+		walls.render();
+		
 		int multiplier = (int) (System.currentTimeMillis() - lastMove);
 		lastMove = System.currentTimeMillis();
 		
@@ -80,22 +83,24 @@ public class Luminescent
 		
 		double speed = Luminescent.moveSpeed * multiplier;
 		
-		if(thePlayer.getPosX() < 0)
+		Rectangle box = room.getBox();
+		
+		if(thePlayer.getPosX() < box.getX())
 		{
-			thePlayer.setPosX(SCREEN_WIDTH);
+			thePlayer.setPosX(box.getX() + box.getWidth());
 		}
-		if(thePlayer.getPosX() > SCREEN_WIDTH)
+		if(thePlayer.getPosX() > box.getX() + box.getWidth())
 		{
-			thePlayer.setPosX(0);
+			thePlayer.setPosX(box.getX());
 		}
 		
-		if(thePlayer.getPosY() < 0)
+		if(thePlayer.getPosY() < box.getY())
 		{
-			thePlayer.setPosY(SCREEN_HEIGHT);
+			thePlayer.setPosY(box.getY() + box.getHeight());
 		}
-		if(thePlayer.getPosY() > SCREEN_HEIGHT)
+		if(thePlayer.getPosY() > box.getY() + box.getHeight())
 		{
-			thePlayer.setPosY(0);
+			thePlayer.setPosY(box.getY());
 		}
 		
 		if(SystemUtils.isKeyDown(Constants.KEYS_MOVEMENT_UP))
