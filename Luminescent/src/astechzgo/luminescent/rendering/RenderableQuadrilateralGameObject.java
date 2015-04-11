@@ -23,7 +23,11 @@ public class RenderableQuadrilateralGameObject implements IRenderedObject {
 	public RenderableQuadrilateralGameObject(int x, int y, Texture texture) {
 		this.texture = texture;
 		
-		new RenderableQuadrilateralGameObject(x, y, texture.getAsSlickTexture().getImageWidth(), texture.getAsSlickTexture().getImageHeight());
+		this.x = x;
+		this.y = y;
+		
+		this.width = texture.getAsSlickTexture().getImageWidth();
+		this.height = texture.getAsSlickTexture().getImageHeight();
 	}
 	
 	public RenderableQuadrilateralGameObject(int x, int y, int width, int height) {
