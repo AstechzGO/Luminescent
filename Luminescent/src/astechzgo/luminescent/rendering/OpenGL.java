@@ -13,8 +13,8 @@ import astechzgo.luminescent.utils.DisplayUtils;
 public class OpenGL
 {
 	private static float red = 0.0f;
-	private static float green = 0.4f;
-	private static float blue = 0.6f;
+	private static float green = 0.0f;
+	private static float blue = 0.0f;
 	private static float alpha = 1.0f;
 	
 	public static void InitOpenGL()

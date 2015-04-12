@@ -1,8 +1,13 @@
 package astechzgo.luminescent.rendering;
 
+import org.lwjgl.opengl.GL11;
+import org.newdawn.slick.Color;
+
 import astechzgo.luminescent.utils.RenderingUtils;
 
 public abstract class RenderableCircularGameObject implements IRenderedObject {
+	private Color colour = new Color(0, 0, 0);
+	
 	protected int pointSeperation;
 	protected double radius;
 	
@@ -27,6 +32,17 @@ public abstract class RenderableCircularGameObject implements IRenderedObject {
 	
 	@Override
 	public void render() {
+		GL11.glColor3f(colour.r, colour.g, colour.b);
 		RenderingUtils.RenderCircle(x, y, radius, pointSeperation);
+	}
+	
+	@Override
+	public void setColour(Color colour) {
+		this.colour = colour;
+	}
+
+	@Override
+	public Color getColour() {
+		return colour;
 	}
 }
