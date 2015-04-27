@@ -83,7 +83,7 @@ public class Luminescent
 							(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight(), true);
 				}
 			}
-			//return;
+			return;
 		}
 		room.render();
 		
