@@ -22,7 +22,8 @@ public class DisplayUtils {
 	public static final int SCREEN_WIDTH = Display.getDisplayMode().getWidth();
 	public static final int SCREEN_HEIGHT = Display.getDisplayMode().getHeight();
 	
-	public static final int HEIGHT_OFFSET = (SCREEN_HEIGHT - (SCREEN_WIDTH / 16 * 9)) / 2;
+	public static final int WIDTH_OFFSET = Math.max(0, (SCREEN_WIDTH - (SCREEN_HEIGHT / 9 * 16)) / 2);
+	public static final int HEIGHT_OFFSET = Math.max(0, (SCREEN_HEIGHT - (SCREEN_WIDTH / 16 * 9)) / 2);
 	
 	/**
 	 * Set the display mode to be used
@@ -124,20 +125,20 @@ public class DisplayUtils {
 		int width = Display.getDisplayMode().getWidth();
 		int height= Display.getDisplayMode().getHeight();
 		int bpp = Display.getDisplayMode().getBitsPerPixel() / 8;
-		ByteBuffer buffer = BufferUtils.createByteBuffer(width * (height - DisplayUtils.HEIGHT_OFFSET) * bpp);
-		GL11.glReadPixels(0, DisplayUtils.HEIGHT_OFFSET, width, height - DisplayUtils.HEIGHT_OFFSET, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+		ByteBuffer buffer = BufferUtils.createByteBuffer((width - DisplayUtils.WIDTH_OFFSET) * (height - DisplayUtils.HEIGHT_OFFSET) * bpp);
+		GL11.glReadPixels(DisplayUtils.WIDTH_OFFSET, DisplayUtils.HEIGHT_OFFSET, width - DisplayUtils.WIDTH_OFFSET, height - DisplayUtils.HEIGHT_OFFSET, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
 		String format = "png";
-		BufferedImage image = new BufferedImage(width, height - DisplayUtils.HEIGHT_OFFSET * 2, BufferedImage.TYPE_INT_RGB);
+		BufferedImage image = new BufferedImage(width - DisplayUtils.WIDTH_OFFSET * 2, height - DisplayUtils.HEIGHT_OFFSET * 2, BufferedImage.TYPE_INT_RGB);
 		
-		for(int x = 0; x < width; x++) 
+		for(int x = 0; x < width - DisplayUtils.WIDTH_OFFSET * 2; x++) 
 		{
 		    for(int y = 0; y < height - DisplayUtils.HEIGHT_OFFSET * 2; y++)
 		    {
-		        int i = (x + (width * y)) * bpp;
+		        int i = (x + ((width - DisplayUtils.WIDTH_OFFSET) * y)) * bpp;
 		        int r = buffer.get(i) & 0xFF;
 		        int g = buffer.get(i + 1) & 0xFF;
 		        int b = buffer.get(i + 2) & 0xFF;
-		        image.setRGB(x, height - DisplayUtils.HEIGHT_OFFSET * 2 - (y + 1), (0xFF << 24) | (r << 16) | (g << 8) | b);
+		        image.setRGB(width - DisplayUtils.WIDTH_OFFSET * 2 - (x + 1), height - DisplayUtils.HEIGHT_OFFSET * 2 - (y + 1), (0xFF << 24) | (r << 16) | (g << 8) | b);
 		    }
 		}
 		   

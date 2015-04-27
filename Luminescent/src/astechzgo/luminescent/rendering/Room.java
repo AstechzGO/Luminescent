@@ -11,9 +11,9 @@ public class Room extends RenderableQuadrilateralGameObject {
 	public Room() {
 		super(
 				
-				DisplayUtils.SCREEN_WIDTH / 45, 
+				(DisplayUtils.SCREEN_WIDTH - DisplayUtils.WIDTH_OFFSET * 2) / 45 + DisplayUtils.WIDTH_OFFSET, 
 				(DisplayUtils.SCREEN_HEIGHT - DisplayUtils.HEIGHT_OFFSET * 2) / 25 + DisplayUtils.HEIGHT_OFFSET, 
-				DisplayUtils.SCREEN_WIDTH - (DisplayUtils.SCREEN_WIDTH / 45 * 2),
+				(DisplayUtils.SCREEN_WIDTH - DisplayUtils.WIDTH_OFFSET * 2) - ((DisplayUtils.SCREEN_WIDTH - DisplayUtils.WIDTH_OFFSET ) / 45 * 2),
 				(DisplayUtils.SCREEN_HEIGHT - DisplayUtils.HEIGHT_OFFSET * 2) - ((DisplayUtils.SCREEN_HEIGHT - DisplayUtils.HEIGHT_OFFSET )/ 25 * 2)
 				
 			);
