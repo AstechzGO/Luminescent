@@ -163,7 +163,7 @@ public class LoggingUtils {
 		e.printStackTrace(new PrintWriter(errors));
 		String exception = errors.toString();
 		
-		log.severe(exception);
+		System.err.println(exception);
 	}
 }
 

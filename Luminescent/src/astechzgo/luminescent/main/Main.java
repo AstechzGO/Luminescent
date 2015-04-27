@@ -2,7 +2,6 @@ package astechzgo.luminescent.main;
 
 import static astechzgo.luminescent.utils.DisplayUtils.setDisplayMode;
 
-import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 
 import astechzgo.luminescent.utils.Constants;
@@ -47,7 +46,7 @@ public class Main
 			);
 			Display.create();
 		}
-		catch (LWJGLException e)
+		catch (Exception e)
 		{
 			LoggingUtils.logException(LoggingUtils.LOGGER, e);
 			System.exit(0);

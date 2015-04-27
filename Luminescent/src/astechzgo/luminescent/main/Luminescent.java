@@ -9,7 +9,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.lwjgl.BufferUtils;
-import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Cursor;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
@@ -47,7 +46,7 @@ public class Luminescent
 			Cursor emptyCursor = new Cursor(1, 1, 0, 0, 1, BufferUtils.createIntBuffer(1), null);
 			Mouse.setNativeCursor(emptyCursor);
 		} 
-		catch (LWJGLException e)
+		catch (Exception e)
 		{
 			LoggingUtils.logException(LoggingUtils.LOGGER, e);
 		}
@@ -84,7 +83,7 @@ public class Luminescent
 							(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight(), true);
 				}
 			}
-			return;
+			//return;
 		}
 		room.render();
 		
@@ -176,7 +175,7 @@ public class Luminescent
 			{
 				DisplayUtils.takeScreenshot(newFile("screenshots/" + S + ".png"));
 			} 
-			catch (LWJGLException e) 
+			catch (Exception e) 
 			{
 				LoggingUtils.logException(LoggingUtils.LOGGER, e);
 			}

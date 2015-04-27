@@ -10,7 +10,6 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import org.lwjgl.BufferUtils;
-import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
@@ -93,7 +92,7 @@ public class DisplayUtils {
 			Display.setDisplayMode(targetDisplayMode);
 			Display.setFullscreen(fullscreen);
 			
-		} catch (LWJGLException e) {
+		} catch (Exception e) {
 			System.out.println("Unable to setup mode " + width + "x" + height
 					+ " fullscreen=" + fullscreen + e);
 		}
@@ -116,9 +115,9 @@ public class DisplayUtils {
 		Display.setIcon(icons.toArray(new ByteBuffer[icons.size()]));
 	}
 
-	public static void takeScreenshot(File file) throws LWJGLException {
+	public static void takeScreenshot(File file) throws Exception {
 		if(!Display.isFullscreen()) {
-			throw new LWJGLException("Must be fullscreen to take screenshot");
+			throw new Exception("Must be fullscreen to take screenshot");
 		}
 		
 		GL11.glReadBuffer(GL11.GL_FRONT);
