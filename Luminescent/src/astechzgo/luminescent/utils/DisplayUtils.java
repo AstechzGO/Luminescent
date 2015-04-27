@@ -130,7 +130,7 @@ public class DisplayUtils {
 		String format = "png";
 		BufferedImage image = new BufferedImage(width - DisplayUtils.WIDTH_OFFSET * 2, height - DisplayUtils.HEIGHT_OFFSET * 2, BufferedImage.TYPE_INT_RGB);
 		
-		for(int x = 0; x < width - DisplayUtils.WIDTH_OFFSET; x++) 
+		for(int x = 0; x < width - DisplayUtils.WIDTH_OFFSET * 2; x++) 
 		{
 		    for(int y = 0; y < height - DisplayUtils.HEIGHT_OFFSET * 2; y++)
 		    {
