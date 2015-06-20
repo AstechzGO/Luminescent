@@ -1,5 +1,6 @@
 package astechzgo.luminescent.utils;
 
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -10,16 +11,16 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.DisplayMode;
+import org.lwjglx.opengl.Display;
+import org.lwjglx.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 
 import astechzgo.luminescent.textures.TextureList;
 
 public class DisplayUtils {
 
-	public static final int SCREEN_WIDTH = Display.getDisplayMode().getWidth();
-	public static final int SCREEN_HEIGHT = Display.getDisplayMode().getHeight();
+	public static final int SCREEN_WIDTH = (int)Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+	public static final int SCREEN_HEIGHT = (int)Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 	
 	public static final int WIDTH_OFFSET = Math.max(0, (SCREEN_WIDTH - (SCREEN_HEIGHT / 9 * 16)) / 2);
 	public static final int HEIGHT_OFFSET = Math.max(0, (SCREEN_HEIGHT - (SCREEN_WIDTH / 16 * 9)) / 2);

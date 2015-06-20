@@ -3,15 +3,15 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="lib" path="libs/JInput/jinput.jar"/>
-	<classpathentry kind="lib" path="libs/lwjgl/lwjgl_util.jar"/>
 	<classpathentry kind="lib" path="libs/lwjgl/lwjgl.jar">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="Luminescent/libs/lwjgl/natives/windows"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="libs/paulscode/LibraryLWJGLOpenAL.jar"/>
 	<classpathentry kind="lib" path="libs/paulscode/SoundSystem.jar"/>
 	<classpathentry kind="lib" path="libs/paulscode/CodecMP3.jar"/>
-	<classpathentry kind="lib" path="libs/util/slick-util.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/lwjglx"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/slick-util"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/LWJGLSoundLib"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

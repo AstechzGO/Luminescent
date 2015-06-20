@@ -1,13 +1,10 @@
 package astechzgo.luminescent.main;
 
-import static astechzgo.luminescent.utils.DisplayUtils.setDisplayMode;
-
-import org.lwjgl.opengl.Display;
+import org.lwjglx.opengl.Display;
 
 import astechzgo.luminescent.utils.Constants;
 import astechzgo.luminescent.rendering.OpenGL;
 import astechzgo.luminescent.textures.TextureList;
-import astechzgo.luminescent.utils.DisplayUtils;
 import astechzgo.luminescent.utils.LoggingUtils;
 import astechzgo.luminescent.utils.SystemUtils;
 
@@ -36,14 +33,15 @@ public class Main
 	{
 		Constants.readConstantPropertiesFromFile();
 		LoggingUtils.configureRobotLogger();
+		
+		LoggingUtils.LOGGER.warning("This is a higly experimental build, it will contain many bugs");
 
 		TextureList.loadNonSlickTextures();
 		try
 		{
-			setDisplayMode(DisplayUtils.SCREEN_WIDTH, DisplayUtils.SCREEN_HEIGHT, true);
-			DisplayUtils.setIcons(
-				new String[] {"icons.icon_16x16","icons.icon_32x32","icons.icon_64x64","icons.icon_128x128"}, this
-			);
+			//DisplayUtils.setIcons(
+			//	new String[] {"icons.icon_16x16","icons.icon_32x32","icons.icon_64x64","icons.icon_128x128"}, this
+			//);
 			Display.create();
 		}
 		catch (Exception e)
