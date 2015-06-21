@@ -13,6 +13,7 @@ import javax.imageio.ImageIO;
 import org.lwjgl.BufferUtils;
 import org.lwjglx.opengl.Display;
 import org.lwjglx.opengl.DisplayMode;
+import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
 import astechzgo.luminescent.textures.TextureList;
@@ -92,6 +93,9 @@ public class DisplayUtils {
 
 			Display.setDisplayMode(targetDisplayMode);
 			Display.setFullscreen(fullscreen);
+			
+			if(fullscreen)
+				GLFW.glfwSetInputMode(Display.getWindow(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
 			
 		} catch (Exception e) {
 			System.out.println("Unable to setup mode " + width + "x" + height
