@@ -1,9 +1,8 @@
 package astechzgo.luminescent.rendering;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.newdawn.slick.Color;
 
 import astechzgo.luminescent.utils.DisplayUtils;
 

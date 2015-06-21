@@ -1,8 +1,7 @@
 package astechzgo.luminescent.rendering;
 
+import java.awt.Color;
 import java.awt.Rectangle;
-
-import org.newdawn.slick.Color;
 
 import astechzgo.luminescent.utils.DisplayUtils;
 
