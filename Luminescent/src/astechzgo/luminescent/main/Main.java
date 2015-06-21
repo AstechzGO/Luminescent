@@ -34,7 +34,7 @@ public class Main
 		Constants.readConstantPropertiesFromFile();
 		LoggingUtils.configureRobotLogger();
 		
-		LoggingUtils.LOGGER.warning("This is a higly experimental build, it will contain many bugs");
+		System.out.println("Warning!  This is a higly experimental build, it will contain many bugs");
 
 		TextureList.loadNonSlickTextures();
 		try
