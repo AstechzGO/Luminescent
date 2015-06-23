@@ -13,7 +13,6 @@ import java.util.Scanner;
 
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWKeyCallback;
-import org.lwjglx.opengl.Display;
 
 public class KeyboardUtils {
 	
@@ -22,7 +21,7 @@ public class KeyboardUtils {
 	
 	private static final List<Integer> keysPressed = new ArrayList<Integer>();
 	
-	private static final GLFWKeyCallback keyCallback = new GLFWKeyCallback() {
+	public static final GLFWKeyCallback KEY_CALLBACK = new GLFWKeyCallback() {
 		@Override
 		public void invoke(long window, int key, int scancode, int action, int mods) {		
 			if(action == GLFW.GLFW_PRESS) {
@@ -35,7 +34,7 @@ public class KeyboardUtils {
 	};
 	
 	static{
-		glfwSetCallback(Display.getWindow(), keyCallback);
+		glfwSetCallback(DisplayUtils.getHandle(), KEY_CALLBACK);
 	}
 	
 	private static String[] genKeyNames() {
@@ -152,5 +151,9 @@ public class KeyboardUtils {
 		}
 		
 		return false;
+	}
+	
+	public static void resetKeys() {
+		keysPressed.clear();
 	}
 }

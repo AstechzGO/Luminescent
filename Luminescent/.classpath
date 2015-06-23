@@ -10,8 +10,6 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="libs/paulscode/SoundSystem.jar"/>
 	<classpathentry kind="lib" path="libs/paulscode/CodecMP3.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/lwjglx"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/slick-util"/>
 	<classpathentry kind="lib" path="libs/paulscode/LibraryLWJGLOpenAL.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

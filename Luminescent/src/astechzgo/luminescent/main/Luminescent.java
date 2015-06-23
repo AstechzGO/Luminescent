@@ -9,7 +9,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.lwjgl.glfw.GLFW;
-import org.lwjglx.opengl.Display;
 
 import astechzgo.luminescent.rendering.Player;
 import astechzgo.luminescent.rendering.RenderableQuadrilateralGameObject;
@@ -19,9 +18,9 @@ import astechzgo.luminescent.sound.SoundList;
 import astechzgo.luminescent.sound.SoundManager;
 import astechzgo.luminescent.textures.TextureList;
 import astechzgo.luminescent.utils.Constants;
+import astechzgo.luminescent.utils.DisplayUtils;
 import astechzgo.luminescent.utils.KeyboardUtils;
 import astechzgo.luminescent.utils.LoggingUtils;
-
 import static astechzgo.luminescent.utils.SystemUtils.newFile;
 
 public class Luminescent
@@ -47,7 +46,7 @@ public class Luminescent
 		
 		try 
 		{
-			GLFW.glfwSetInputMode(Display.getWindow(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
+			GLFW.glfwSetInputMode(DisplayUtils.getHandle(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
 		} 
 		catch (Exception e)
 		{
@@ -57,13 +56,13 @@ public class Luminescent
 	
 	public static void Shutdown()
 	{
-		Display.destroy();
+		GLFW.glfwDestroyWindow(DisplayUtils.getHandle());
 		System.exit(0);
 	}
 	
 	public static void Tick()
 	{
-		if(!Display.isFullscreen()) {
+		if(!DisplayUtils.isFullscreen()) {
 			RenderableQuadrilateralGameObject windowed;
 			windowed = new RenderableQuadrilateralGameObject(0, 0, TextureList.findTexture("misc.notFullscreen"));
 			windowed.render();
@@ -73,7 +72,7 @@ public class Luminescent
 			}
 			if(KeyboardUtils.isKeyDown(Constants.KEYS_UTIL_FULLSCREEN))
 			{
-				if(Display.isFullscreen()) 
+				if(DisplayUtils.isFullscreen()) 
 				{
 					setDisplayMode(854, 480, false);
 				}
@@ -147,14 +146,16 @@ public class Luminescent
 		}
 		if(KeyboardUtils.isKeyDown(Constants.KEYS_UTIL_FULLSCREEN))
 		{
-			if(Display.isFullscreen()) 
+			if(DisplayUtils.isFullscreen()) 
 			{
 				setDisplayMode(854, 480, false);
+				KeyboardUtils.resetKeys();
 			}
 			else 
 			{
 				setDisplayMode((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth(),
 						(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight(), true);
+				KeyboardUtils.resetKeys();
 			}
 		}
 		if(KeyboardUtils.isKeyDown(Constants.KEYS_UTIL_SCREENSHOT))

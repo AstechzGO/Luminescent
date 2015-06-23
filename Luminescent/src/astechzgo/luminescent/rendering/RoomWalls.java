@@ -8,11 +8,11 @@ import astechzgo.luminescent.utils.DisplayUtils;
 
 public class RoomWalls extends RenderableMultipleRenderedObjects {
 	
-	private static int posX = (DisplayUtils.SCREEN_WIDTH - DisplayUtils.WIDTH_OFFSET * 2) / 45 + DisplayUtils.WIDTH_OFFSET;
-	private static int posY = (DisplayUtils.SCREEN_HEIGHT - DisplayUtils.HEIGHT_OFFSET * 2) / 25 + DisplayUtils.HEIGHT_OFFSET;
+	private static int posX = (DisplayUtils.monitorWidth - DisplayUtils.widthOffset * 2) / 45 + DisplayUtils.widthOffset;
+	private static int posY = (DisplayUtils.monitorHeight - DisplayUtils.heightOffset * 2) / 25 + DisplayUtils.heightOffset;
 	
-	private static int width = (DisplayUtils.SCREEN_WIDTH - DisplayUtils.WIDTH_OFFSET * 2) - ((DisplayUtils.SCREEN_WIDTH - DisplayUtils.WIDTH_OFFSET ) / 45 * 2);
-	private static int height = (DisplayUtils.SCREEN_HEIGHT - DisplayUtils.HEIGHT_OFFSET * 2) - ((DisplayUtils.SCREEN_HEIGHT - DisplayUtils.HEIGHT_OFFSET )/ 25 * 2);
+	private static int width = (DisplayUtils.monitorWidth - DisplayUtils.widthOffset * 2) - ((DisplayUtils.monitorWidth - DisplayUtils.widthOffset ) / 45 * 2);
+	private static int height = (DisplayUtils.monitorHeight - DisplayUtils.heightOffset * 2) - ((DisplayUtils.monitorHeight - DisplayUtils.heightOffset )/ 25 * 2);
 
 	public RoomWalls() {
 		 super(getRoomObjects());
@@ -31,34 +31,34 @@ public class RoomWalls extends RenderableMultipleRenderedObjects {
 	
 	private static List<IRenderedObject> getRoomObjects() {
 		RenderableQuadrilateralGameObject wall1 = new RenderableQuadrilateralGameObject(
-				DisplayUtils.WIDTH_OFFSET,
-				DisplayUtils.HEIGHT_OFFSET,
+				DisplayUtils.widthOffset,
+				DisplayUtils.heightOffset,
 				posX,
-				DisplayUtils.SCREEN_HEIGHT - DisplayUtils.HEIGHT_OFFSET * 2
+				DisplayUtils.monitorHeight - DisplayUtils.heightOffset * 2
 			);
 		wall1.setColour(new Color(0.0f, 0.4f, 0.6f));
 		
 		RenderableQuadrilateralGameObject wall2 = new RenderableQuadrilateralGameObject(
-				DisplayUtils.WIDTH_OFFSET,
-				DisplayUtils.HEIGHT_OFFSET,
-				DisplayUtils.SCREEN_WIDTH - DisplayUtils.WIDTH_OFFSET * 2,
-				posY - DisplayUtils.HEIGHT_OFFSET
+				DisplayUtils.widthOffset,
+				DisplayUtils.heightOffset,
+				DisplayUtils.monitorWidth - DisplayUtils.widthOffset * 2,
+				posY - DisplayUtils.heightOffset
 			);
 		wall2.setColour(new Color(0.0f, 0.4f, 0.6f));
 		
 		RenderableQuadrilateralGameObject wall3 = new RenderableQuadrilateralGameObject(
 				width + posX,
-				DisplayUtils.HEIGHT_OFFSET,
-				DisplayUtils.SCREEN_WIDTH - DisplayUtils.WIDTH_OFFSET - (width + posX),
-				DisplayUtils.SCREEN_HEIGHT - DisplayUtils.HEIGHT_OFFSET * 2
+				DisplayUtils.heightOffset,
+				DisplayUtils.monitorWidth - DisplayUtils.widthOffset - (width + posX),
+				DisplayUtils.monitorHeight - DisplayUtils.heightOffset * 2
 			);
 		wall3.setColour(new Color(0.0f, 0.4f, 0.6f));
 		
 		RenderableQuadrilateralGameObject wall4 = new RenderableQuadrilateralGameObject(
-				DisplayUtils.WIDTH_OFFSET,
+				DisplayUtils.widthOffset,
 				height + posY,
-				DisplayUtils.SCREEN_WIDTH - DisplayUtils.WIDTH_OFFSET * 2,
-				DisplayUtils.SCREEN_HEIGHT - DisplayUtils.HEIGHT_OFFSET - (height + posY)
+				DisplayUtils.monitorWidth - DisplayUtils.widthOffset * 2,
+				DisplayUtils.monitorHeight - DisplayUtils.heightOffset - (height + posY)
 			);
 		wall4.setColour(new Color(0.0f, 0.4f, 0.6f));
 		
