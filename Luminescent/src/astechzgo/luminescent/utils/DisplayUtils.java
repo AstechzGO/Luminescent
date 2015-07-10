@@ -19,7 +19,6 @@ import static org.lwjgl.opengl.GL11.GL_FALSE;
 import static org.lwjgl.opengl.GL11.GL_TRUE;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
-import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -44,18 +43,11 @@ public class DisplayUtils {
 	
 	private static GLContext context;
 	
-	private static boolean displayCreated = false;
-	private static boolean displayFocused = false;
-	private static boolean displayVisible = true;
-	private static boolean displayDirty = false;
 	private static boolean displayResizable = false;
 	private static boolean displayFullscreen = false;
 	
 	private static DisplayMode mode = new DisplayMode(854, 480);
 	private static DisplayMode desktopDisplayMode = new DisplayMode(854, 480);
-	
-	private static int displayX = 0;
-	private static int displayY = 0;
 	
 	private static int displayWidth = 0;
 	private static int displayHeight = 0;
@@ -262,8 +254,6 @@ public class DisplayUtils {
 	
 	private static class DisplayMode {
 		private final int WIDTH, HEIGHT, BPP, FREQ;
-		private final boolean FULLSCREEN;
-		
 		public DisplayMode(int width, int height, int bpp, int freq) {
 			this(width, height, bpp, freq, true);
 		}
@@ -277,8 +267,6 @@ public class DisplayUtils {
 			this.HEIGHT = height;
 			this.BPP = bpp;
 			this.FREQ = freq;
-			
-			this.FULLSCREEN = fullscreen;
 		}
 	}
 	
@@ -318,16 +306,11 @@ public class DisplayUtils {
 			(monitorHeight - mode.HEIGHT) / 2
 		);
 		
-		displayX = (monitorWidth - mode.WIDTH) / 2;
-		displayY = (monitorHeight - mode.HEIGHT) / 2;
-
 		glfwMakeContextCurrent(handle);
 		context = GLContext.createFromCurrent();
 		
 		glfwSwapInterval(1);
 		glfwShowWindow(handle);
-		
-		displayCreated = true;
 	}
 	
 	public static long getHandle() {
@@ -336,5 +319,17 @@ public class DisplayUtils {
 	
 	public static boolean isFullscreen() {
 		return displayFullscreen;
+	}
+	
+	public static int getDisplayFramebufferWidth() {
+		return displayFramebufferWidth;
+	}
+	
+	public static int getDisplayFramebufferHeight() {
+		return displayFramebufferHeight;
+	}	
+	
+	public static GLContext getContext() {
+		return context;
 	}
 }
