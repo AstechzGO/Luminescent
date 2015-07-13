@@ -182,6 +182,9 @@ public class DisplayUtils {
 	        glfwDestroyWindow(handle);
 	        handle = newWindow;
 
+	        displayWidth = mode.WIDTH;
+	        displayHeight = mode.HEIGHT;
+	        
 	        glfwSwapInterval(1);
 	        glfwShowWindow(handle);
 	        GLContext.createFromCurrent();
@@ -229,7 +232,7 @@ public class DisplayUtils {
 		GL11.glReadBuffer(GL11.GL_FRONT);
 		int width = displayWidth;
 		int height= displayHeight;
-		int bpp = monitorBitPerPixel / 8;
+		int bpp = (monitorBitPerPixel / 8) + 1;  //For alpha
 		ByteBuffer buffer = BufferUtils.createByteBuffer((width - DisplayUtils.widthOffset) * (height - DisplayUtils.heightOffset) * bpp);
 		GL11.glReadPixels(DisplayUtils.widthOffset, DisplayUtils.heightOffset, width - DisplayUtils.widthOffset, height - DisplayUtils.heightOffset, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
 		String format = "png";

@@ -170,13 +170,11 @@ public class Luminescent
 			
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
 			Date dt = new Date();
-			@SuppressWarnings("unused")
 			String S = sdf.format(dt);
 
 			try 
 			{
-				//DisplayUtils.takeScreenshot(newFile("screenshots/" + S + ".png"));
-				System.out.println("Sorry, screenshots are not supported at this moment");
+				DisplayUtils.takeScreenshot(newFile("screenshots/" + S + ".png"));
 			} 
 			catch (Exception e) 
 			{
