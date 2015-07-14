@@ -19,6 +19,8 @@ import static org.lwjgl.opengl.GL11.GL_FALSE;
 import static org.lwjgl.opengl.GL11.GL_TRUE;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -250,10 +252,29 @@ public class DisplayUtils {
 		    }
 		}
 		   
+		image = getFlippedImage(image);
+		
 		try {
 		    ImageIO.write(image, format, file);
 		} catch (IOException e) { LoggingUtils.logException(LoggingUtils.LOGGER, e); }
 	}
+	
+    public static BufferedImage getFlippedImage(BufferedImage bi) {
+        BufferedImage flipped = new BufferedImage(
+                bi.getWidth(),
+                bi.getHeight(),
+                bi.getType());
+        AffineTransform tran = AffineTransform.getTranslateInstance(bi.getWidth(), 0);
+        AffineTransform flip = AffineTransform.getScaleInstance(-1d, 1d);
+        tran.concatenate(flip);
+
+        Graphics2D g = flipped.createGraphics();
+        g.setTransform(tran);
+        g.drawImage(bi, 0, 0, null);
+        g.dispose();
+
+        return flipped;
+    }
 	
 	private static class DisplayMode {
 		private final int WIDTH, HEIGHT, BPP, FREQ;
