@@ -179,6 +179,13 @@ public class DisplayUtils {
 	            glfwMakeContextCurrent( newWindow );	            
 	        }else{
 	            newWindow = glfwCreateWindow(mode.WIDTH, mode.HEIGHT, displayTitle, NULL, handle);
+	            
+	    		glfwSetWindowPos(
+	    				newWindow,
+	    				(monitorWidth - mode.WIDTH) / 2,
+	    				(monitorHeight - mode.HEIGHT) / 2
+	    			);
+	    		
 	            glfwMakeContextCurrent( newWindow );
 	        }
 	        glfwDestroyWindow(handle);
