@@ -1,7 +1,6 @@
 package astechzgo.luminescent.utils;
 
 import org.lwjgl.opengl.GL11;
-import org.newdawn.slick.Color;
 
 import astechzgo.luminescent.textures.Texture;
 
@@ -29,13 +28,13 @@ public class RenderingUtils
 	
 	public static void RenderQuad(int x, int y, int width, int height, Texture texture)
 	{
-		if(texture.getAsSlickTexture() != null) 
+		if(texture.getAsTexture() != 0) 
 		{
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
 			
-			Color.white.bind();
+			GL11.glColor3f(1, 1, 1);
 			
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getAsSlickTexture().getTextureID());
+			GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getAsTexture());
 			RenderQuad(x, y, width, height);
 			
 			GL11.glDisable(GL11.GL_TEXTURE_2D);

@@ -1,9 +1,9 @@
 package astechzgo.luminescent.rendering;
 
+import java.awt.Color;
 import java.util.List;
 
 import org.lwjgl.opengl.GL11;
-import org.newdawn.slick.Color;
 
 public class RenderableMultipleRenderedObjects implements IRenderedObject {
 
@@ -18,7 +18,7 @@ public class RenderableMultipleRenderedObjects implements IRenderedObject {
 	@Override
 	public void render() {
 		for(IRenderedObject object : objects) {
-			GL11.glColor3f(colour.r, colour.g, colour.b);
+			GL11.glColor3f((float)colour.getRed() / 256, (float)colour.getGreen() / 256, (float)colour.getBlue() / 256);
 			object.render();
 		}
 

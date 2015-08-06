@@ -1,6 +1,7 @@
 package astechzgo.luminescent.rendering;
 
-import org.newdawn.slick.Color;
+import java.awt.Color;
+
 
 public interface IRenderedObject
 {

@@ -30,7 +30,7 @@ public class Constants
 	static {
 		defaults.put(LOG_CONFIG, "false");
 		
-		defaults.put(KEYS_MOVEMENT_FASTER,				"{LSHIFT}");
+		defaults.put(KEYS_MOVEMENT_FASTER,				"{LEFT_SHIFT}");
 		defaults.put(KEYS_MOVEMENT_UP, 					"{W}, {UP}");
 		defaults.put(KEYS_MOVEMENT_LEFT, 				"{A}, {LEFT}");
 		defaults.put(KEYS_MOVEMENT_DOWN, 				"{S}, {DOWN}");

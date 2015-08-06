@@ -8,10 +8,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.lwjgl.BufferUtils;
-import org.lwjgl.input.Cursor;
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.Display;
+import org.lwjgl.glfw.GLFW;
 
 import astechzgo.luminescent.rendering.Player;
 import astechzgo.luminescent.rendering.RenderableQuadrilateralGameObject;
@@ -22,8 +19,8 @@ import astechzgo.luminescent.sound.SoundManager;
 import astechzgo.luminescent.textures.TextureList;
 import astechzgo.luminescent.utils.Constants;
 import astechzgo.luminescent.utils.DisplayUtils;
+import astechzgo.luminescent.utils.KeyboardUtils;
 import astechzgo.luminescent.utils.LoggingUtils;
-import astechzgo.luminescent.utils.SystemUtils;
 import static astechzgo.luminescent.utils.SystemUtils.newFile;
 
 public class Luminescent
@@ -41,39 +38,41 @@ public class Luminescent
 	{	
 		TextureList.loadSlickTextures();
 		
+		SoundManager manager = new SoundManager();
+		SoundList.initSoundList(manager);
+		
+		setDisplayMode((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth(),
+				(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight(), true);
+		
 		try 
 		{
-			Cursor emptyCursor = new Cursor(1, 1, 0, 0, 1, BufferUtils.createIntBuffer(1), null);
-			Mouse.setNativeCursor(emptyCursor);
+			GLFW.glfwSetInputMode(DisplayUtils.getHandle(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
 		} 
 		catch (Exception e)
 		{
 			LoggingUtils.logException(LoggingUtils.LOGGER, e);
 		}
-		
-		SoundManager manager = new SoundManager();
-		SoundList.initSoundList(manager);
 	}
 	
 	public static void Shutdown()
 	{
-		Display.destroy();
+		GLFW.glfwDestroyWindow(DisplayUtils.getHandle());
 		System.exit(0);
 	}
 	
 	public static void Tick()
 	{
-		if(!Display.isFullscreen()) {
+		if(!DisplayUtils.isFullscreen()) {
 			RenderableQuadrilateralGameObject windowed;
 			windowed = new RenderableQuadrilateralGameObject(0, 0, TextureList.findTexture("misc.notFullscreen"));
 			windowed.render();
-			if(SystemUtils.isKeyDown(Constants.KEYS_UTIL_EXIT))
+			if(KeyboardUtils.isKeyDown(Constants.KEYS_UTIL_EXIT))
 			{
 				Shutdown();
 			}
-			if(SystemUtils.isKeyDown(Constants.KEYS_UTIL_FULLSCREEN))
+			if(KeyboardUtils.isKeyDown(Constants.KEYS_UTIL_FULLSCREEN))
 			{
-				if(Display.isFullscreen()) 
+				if(DisplayUtils.isFullscreen()) 
 				{
 					setDisplayMode(854, 480, false);
 				}
@@ -94,7 +93,7 @@ public class Luminescent
 		int multiplier = (int) (System.currentTimeMillis() - lastMove);
 		lastMove = System.currentTimeMillis();
 		
-		if(SystemUtils.isKeyDown(Constants.KEYS_MOVEMENT_FASTER))
+		if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_FASTER))
 		{
 			Luminescent.moveSpeed = 0.88;
 		}
@@ -125,39 +124,41 @@ public class Luminescent
 			thePlayer.setPosY(box.getY());
 		}
 		
-		if(SystemUtils.isKeyDown(Constants.KEYS_MOVEMENT_UP))
+		if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_UP))
 		{
 			thePlayer.setPosY(thePlayer.getPosY() + speed);
 		}
-		if(SystemUtils.isKeyDown(Constants.KEYS_MOVEMENT_DOWN))
+		if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_DOWN))
 		{
 			thePlayer.setPosY(thePlayer.getPosY() - speed);
 		}
-		if(SystemUtils.isKeyDown(Constants.KEYS_MOVEMENT_RIGHT))
+		if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_RIGHT))
 		{
 			thePlayer.setPosX(thePlayer.getPosX() + speed);
 		}
-		if(SystemUtils.isKeyDown(Constants.KEYS_MOVEMENT_LEFT))
+		if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_LEFT))
 		{
 			thePlayer.setPosX(thePlayer.getPosX() - speed);
 		}
-		if(SystemUtils.isKeyDown(Constants.KEYS_UTIL_EXIT))
+		if(KeyboardUtils.isKeyDown(Constants.KEYS_UTIL_EXIT))
 		{
 			Shutdown();
 		}
-		if(SystemUtils.isKeyDown(Constants.KEYS_UTIL_FULLSCREEN))
+		if(KeyboardUtils.isKeyDown(Constants.KEYS_UTIL_FULLSCREEN))
 		{
-			if(Display.isFullscreen()) 
+			if(DisplayUtils.isFullscreen()) 
 			{
 				setDisplayMode(854, 480, false);
+				KeyboardUtils.resetKeys();
 			}
 			else 
 			{
 				setDisplayMode((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth(),
 						(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight(), true);
+				KeyboardUtils.resetKeys();
 			}
 		}
-		if(SystemUtils.isKeyDown(Constants.KEYS_UTIL_SCREENSHOT))
+		if(KeyboardUtils.isKeyDown(Constants.KEYS_UTIL_SCREENSHOT))
 		{
 			File dir = newFile("screenshots/");
 			dir = new File(dir.getAbsolutePath());

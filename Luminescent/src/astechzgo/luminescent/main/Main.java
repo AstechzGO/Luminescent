@@ -1,8 +1,10 @@
 package astechzgo.luminescent.main;
 
-import static astechzgo.luminescent.utils.DisplayUtils.setDisplayMode;
+import static org.lwjgl.glfw.GLFW.glfwPollEvents;
+import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
+import static org.lwjgl.opengl.GL11.GL_TRUE;
 
-import org.lwjgl.opengl.Display;
+import org.lwjgl.glfw.GLFW;
 
 import astechzgo.luminescent.utils.Constants;
 import astechzgo.luminescent.rendering.OpenGL;
@@ -24,7 +26,7 @@ public class Main
 	{
 		Init();
 		
-		while(!Display.isCloseRequested())
+		while(glfwWindowShouldClose(DisplayUtils.getHandle()) != GL_TRUE)
 		{
 			Tick();
 		}
@@ -40,11 +42,10 @@ public class Main
 		TextureList.loadNonSlickTextures();
 		try
 		{
-			setDisplayMode(DisplayUtils.SCREEN_WIDTH, DisplayUtils.SCREEN_HEIGHT, true);
-			DisplayUtils.setIcons(
-				new String[] {"icons.icon_16x16","icons.icon_32x32","icons.icon_64x64","icons.icon_128x128"}, this
-			);
-			Display.create();
+			//DisplayUtils.setIcons(
+			//	new String[] {"icons.icon_16x16","icons.icon_32x32","icons.icon_64x64","icons.icon_128x128"}, this
+			//);
+			DisplayUtils.create();
 		}
 		catch (Exception e)
 		{
@@ -52,7 +53,7 @@ public class Main
 			System.exit(0);
 		}
 		
-		Display.setTitle("Luminescent");
+		DisplayUtils.displayTitle = "Luminescent";
 		
 		OpenGL.InitOpenGL();
 		
@@ -63,7 +64,7 @@ public class Main
 	{
 		Luminescent.Shutdown();
 		
-		Display.destroy();
+		GLFW.glfwDestroyWindow(DisplayUtils.getHandle());
 		System.exit(0);
 	}
 	
@@ -72,7 +73,8 @@ public class Main
 	 */
 	public void Tick()
 	{
-		Display.update();
+		GLFW.glfwSwapBuffers(DisplayUtils.getHandle());
+		glfwPollEvents();
 		
 		OpenGL.Tick();
 		

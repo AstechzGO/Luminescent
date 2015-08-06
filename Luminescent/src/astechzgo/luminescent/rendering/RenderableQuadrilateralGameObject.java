@@ -2,8 +2,9 @@ package astechzgo.luminescent.rendering;
 
 
 
+import java.awt.Color;
+
 import org.lwjgl.opengl.GL11;
-import org.newdawn.slick.Color;
 
 import astechzgo.luminescent.textures.Texture;
 import astechzgo.luminescent.utils.RenderingUtils;
@@ -26,8 +27,8 @@ public class RenderableQuadrilateralGameObject implements IRenderedObject {
 		this.x = x;
 		this.y = y;
 		
-		this.width = texture.getAsSlickTexture().getImageWidth();
-		this.height = texture.getAsSlickTexture().getImageHeight();
+		this.width = texture.getAsBufferedImage().getWidth();
+		this.height = texture.getAsBufferedImage().getHeight();
 	}
 	
 	public RenderableQuadrilateralGameObject(int x, int y, int width, int height) {
@@ -40,7 +41,7 @@ public class RenderableQuadrilateralGameObject implements IRenderedObject {
 	
 	@Override
 	public void render() {
-		GL11.glColor3f(colour.r, colour.g, colour.b);
+		GL11.glColor3f((float)colour.getRed() / 256, (float)colour.getGreen() / 256, (float)colour.getBlue() / 256);
 		if(texture != null) {
 			RenderingUtils.RenderQuad(x, y, width, height, texture);
 		}
