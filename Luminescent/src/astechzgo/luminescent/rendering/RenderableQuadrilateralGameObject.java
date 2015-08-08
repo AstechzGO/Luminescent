@@ -81,12 +81,7 @@ public class RenderableQuadrilateralGameObject implements IRenderedObject {
 	}
 
 	@Override
-	public void resize() {
-		if((DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2 == oldGameWidth) && (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2 == oldGameHeight))
-			return;
-		
-		System.out.println("Old Resolution: 1920 x 1080, Old Pos: " + x + ", " + y + ", Old Width & Height: " + width + ", " + height);
-		
+	public void resize() {		
 		scaledX = ((int)Math.round((double)x / 1920 * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2))) + DisplayUtils.widthOffset;
 		scaledY = ((int)Math.round((double)y / 1080 * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2))) + DisplayUtils.heightOffset;
 		
@@ -95,7 +90,5 @@ public class RenderableQuadrilateralGameObject implements IRenderedObject {
 		
 		oldGameWidth = DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2;
 		oldGameHeight = DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2;
-		
-		System.out.println("New Resolution: " + (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset) + " x " + (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2) + ", New Pos: " + scaledX + ", " + scaledY + ", New Width & Height: " + scaledWidth + ", " + scaledHeight);
 	}
 }

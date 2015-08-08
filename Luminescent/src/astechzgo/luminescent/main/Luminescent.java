@@ -40,16 +40,27 @@ public class Luminescent
 		SoundManager manager = new SoundManager();
 		SoundList.initSoundList(manager);
 		
-		setDisplayMode((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth(),
+		
+		if(Constants.getConstantAsBoolean(Constants.WINDOW_FULLSCREEN)) 
+		{	
+			
+			setDisplayMode((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth(),
 				(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight(), true);
 		
-		try 
+			try 
+			{
+				GLFW.glfwSetInputMode(DisplayUtils.getHandle(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
+			} 
+			catch (Exception e)
+			{
+				LoggingUtils.logException(LoggingUtils.LOGGER, e);
+			}
+			
+			
+		}
+		else 
 		{
-			GLFW.glfwSetInputMode(DisplayUtils.getHandle(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
-		} 
-		catch (Exception e)
-		{
-			LoggingUtils.logException(LoggingUtils.LOGGER, e);
+			setDisplayMode(848, 477, false);
 		}
 	}
 	
@@ -125,7 +136,7 @@ public class Luminescent
 		{
 			if(DisplayUtils.isFullscreen()) 
 			{
-				setDisplayMode(854, 480, false);
+				setDisplayMode(848, 477, false);
 				KeyboardUtils.resetKeys();
 			}
 			else 
@@ -158,6 +169,5 @@ public class Luminescent
 				LoggingUtils.logException(LoggingUtils.LOGGER, e);
 			}
 		}
-	}
-	
+	}	
 }

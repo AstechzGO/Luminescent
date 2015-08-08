@@ -16,6 +16,11 @@ public class RenderableCircularGameObject implements IRenderedObject {
 	protected double x;
 	protected double y;
 	
+	protected int scaledX;
+	protected int scaledY;
+	
+	protected int scaledRadius;
+	
 	protected int oldGameWidth = DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2;
 	protected int oldGameHeight = DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2;
 			
@@ -37,7 +42,7 @@ public class RenderableCircularGameObject implements IRenderedObject {
 		resize();
 		
 		GL11.glColor3f((float)colour.getRed() / 256, (float)colour.getGreen() / 256, (float)colour.getBlue() / 256);
-		RenderingUtils.RenderCircle(x, y, radius, pointSeperation);
+		RenderingUtils.RenderCircle(scaledX, scaledY, scaledRadius, pointSeperation);
 	}
 	
 	@Override
@@ -52,13 +57,10 @@ public class RenderableCircularGameObject implements IRenderedObject {
 	
 	@Override
 	public void resize() {
-		if((DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2 == oldGameWidth) && (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2 == oldGameHeight))
-			return;
+		scaledX = ((int)Math.round((double)x / 1920 * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2))) + DisplayUtils.widthOffset;
+		scaledY = ((int)Math.round((double)y / 1080 * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2))) + DisplayUtils.heightOffset;
 		
-		radius = (int)Math.round(0.02083333333 * DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2);
-		
-		x = x / oldGameWidth * DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2;
-		y = y / oldGameHeight * DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2;
+		scaledRadius = (int)Math.round((double)radius / 1920 * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2));
 		
 		oldGameWidth = DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2;
 		oldGameHeight = DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2;

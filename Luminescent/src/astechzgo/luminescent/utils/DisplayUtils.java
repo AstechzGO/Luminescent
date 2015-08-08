@@ -33,8 +33,6 @@ import javax.imageio.ImageIO;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
-import org.lwjgl.glfw.GLFWWindowPosCallback;
-import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import org.lwjgl.glfw.GLFWvidmode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
@@ -47,11 +45,11 @@ public class DisplayUtils {
 	
 	private static GLContext context;
 	
-	private static boolean displayResizable = true;
+	private static boolean displayResizable = false;
 	private static boolean displayFullscreen = false;
 	
-	private static DisplayMode mode = new DisplayMode(854, 480);
-	private static DisplayMode desktopDisplayMode = new DisplayMode(854, 480);
+	private static DisplayMode mode = new DisplayMode(848, 477);
+	private static DisplayMode desktopDisplayMode = new DisplayMode(848, 477);
 	
 	private static int displayWidth = 0;
 	private static int displayHeight = 0;
@@ -70,17 +68,9 @@ public class DisplayUtils {
 	public static int widthOffset;
 	public static int heightOffset;
 	
-	private static final GLFWWindowSizeCallback RESIZE_CALLBACK = new GLFWWindowSizeCallback() {
-		@Override
-		public void invoke(long window, int width, int height) {
-			displayWidth = width;
-			displayHeight = height;
-			
-			widthOffset = Math.max(0, (monitorWidth - (monitorHeight / 9 * 16)) / 2);
-			heightOffset = Math.max(0, (monitorHeight - (monitorWidth / 16 * 9)) / 2);
-		}
-	};
-	
+	public static int oldGameWidth = getDisplayWidth() - widthOffset * 2;
+	public static int oldGameHeight = getDisplayHeight() - heightOffset * 2;
+
 	static {
 		if ( glfwInit() != GL11.GL_TRUE )
 			throw new IllegalStateException("Unable to initialize glfw");
@@ -94,8 +84,8 @@ public class DisplayUtils {
 		monitorBitPerPixel = GLFWvidmode.redBits(vidmode) + GLFWvidmode.greenBits(vidmode) + GLFWvidmode.blueBits(vidmode);
 		monitorRefreshRate = GLFWvidmode.refreshRate(vidmode);
 	
-		widthOffset = Math.max(0, (monitorWidth - (monitorHeight / 9 * 16)) / 2);
-		heightOffset = Math.max(0, (monitorHeight - (monitorWidth / 16 * 9)) / 2);
+		widthOffset = Math.max(0, (displayWidth - (displayHeight / 9 * 16)) / 2);
+		if(widthOffset == 0) heightOffset = Math.max(0, (displayHeight - (displayWidth / 16 * 9)) / 2);
 	}
 	public static String displayTitle = "";
 	
@@ -206,8 +196,8 @@ public class DisplayUtils {
 	        displayWidth = mode.WIDTH;
 	        displayHeight = mode.HEIGHT;
 	        
-	        widthOffset = Math.max(0, (monitorWidth - (monitorHeight / 9 * 16)) / 2);
-			heightOffset = Math.max(0, (monitorHeight - (monitorWidth / 16 * 9)) / 2);
+	        widthOffset = Math.max(0, (displayWidth - (displayHeight / 9 * 16)) / 2);
+			if(widthOffset == 0) heightOffset = Math.max(0, (displayHeight - (displayWidth / 16 * 9)) / 2);
 	        
 	        glfwSwapInterval(1);
 	        glfwShowWindow(handle);
@@ -220,8 +210,7 @@ public class DisplayUtils {
 			
 			if(fullscreen)
 				GLFW.glfwSetInputMode(handle, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
-			
-			glfwSetCallback(handle, RESIZE_CALLBACK);
+
 			glfwSetCallback(handle, KeyboardUtils.KEY_CALLBACK);
 			
 			
@@ -250,10 +239,6 @@ public class DisplayUtils {
 	}
 
 	public static void takeScreenshot(File file) throws Exception {
-		if(!displayFullscreen) {
-			throw new Exception("Must be fullscreen to take screenshot");
-		}
-		
 		GL11.glReadBuffer(GL11.GL_FRONT);
 		int width = displayWidth;
 		int height= displayHeight;

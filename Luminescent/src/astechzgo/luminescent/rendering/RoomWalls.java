@@ -4,12 +4,10 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-import astechzgo.luminescent.utils.DisplayUtils;
-
 public class RoomWalls extends RenderableMultipleRenderedObjects {
 	
-	private static int posX = 1920 / 45 + DisplayUtils.widthOffset;
-	private static int posY = 1080 / 25 + DisplayUtils.heightOffset;
+	private static int posX = 1920 / 45;
+	private static int posY = 1080 / 25;
 	
 	private static int width = 1920 - (1920 / 45 * 2);
 	private static int height = 1080 - (1080 / 25 * 2);

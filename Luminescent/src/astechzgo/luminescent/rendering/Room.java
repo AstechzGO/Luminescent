@@ -3,15 +3,13 @@ package astechzgo.luminescent.rendering;
 import java.awt.Color;
 import java.awt.Rectangle;
 
-import astechzgo.luminescent.utils.DisplayUtils;
-
 public class Room extends RenderableQuadrilateralGameObject {
 
 	public Room() {
 		super(
 				
-				1920 / 45 + DisplayUtils.widthOffset, 
-				1080 / 25 + DisplayUtils.heightOffset, 
+				1920 / 45, 
+				1080 / 25, 
 				1920 - (1920 / 45 * 2),
 				1080 - (1080 / 25 * 2)
 				
