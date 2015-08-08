@@ -33,6 +33,8 @@ import javax.imageio.ImageIO;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.glfw.GLFWWindowPosCallback;
+import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import org.lwjgl.glfw.GLFWvidmode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
@@ -45,7 +47,7 @@ public class DisplayUtils {
 	
 	private static GLContext context;
 	
-	private static boolean displayResizable = false;
+	private static boolean displayResizable = true;
 	private static boolean displayFullscreen = false;
 	
 	private static DisplayMode mode = new DisplayMode(854, 480);
@@ -68,6 +70,16 @@ public class DisplayUtils {
 	public static int widthOffset;
 	public static int heightOffset;
 	
+	private static final GLFWWindowSizeCallback RESIZE_CALLBACK = new GLFWWindowSizeCallback() {
+		@Override
+		public void invoke(long window, int width, int height) {
+			displayWidth = width;
+			displayHeight = height;
+			
+			widthOffset = Math.max(0, (monitorWidth - (monitorHeight / 9 * 16)) / 2);
+			heightOffset = Math.max(0, (monitorHeight - (monitorWidth / 16 * 9)) / 2);
+		}
+	};
 	
 	static {
 		if ( glfwInit() != GL11.GL_TRUE )
@@ -194,6 +206,9 @@ public class DisplayUtils {
 	        displayWidth = mode.WIDTH;
 	        displayHeight = mode.HEIGHT;
 	        
+	        widthOffset = Math.max(0, (monitorWidth - (monitorHeight / 9 * 16)) / 2);
+			heightOffset = Math.max(0, (monitorHeight - (monitorWidth / 16 * 9)) / 2);
+	        
 	        glfwSwapInterval(1);
 	        glfwShowWindow(handle);
 	        GLContext.createFromCurrent();
@@ -206,7 +221,8 @@ public class DisplayUtils {
 			if(fullscreen)
 				GLFW.glfwSetInputMode(handle, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
 			
-			glfwSetCallback(DisplayUtils.getHandle(), KeyboardUtils.KEY_CALLBACK);
+			glfwSetCallback(handle, RESIZE_CALLBACK);
+			glfwSetCallback(handle, KeyboardUtils.KEY_CALLBACK);
 			
 			
 		} catch (Exception e) {
@@ -362,5 +378,13 @@ public class DisplayUtils {
 	
 	public static GLContext getContext() {
 		return context;
+	}
+	
+	public static int getDisplayWidth() {
+		return displayWidth;
+	}
+	
+	public static int getDisplayHeight() {
+		return displayHeight;
 	}
 }

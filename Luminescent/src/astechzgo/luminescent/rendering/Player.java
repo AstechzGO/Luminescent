@@ -6,7 +6,7 @@ public class Player extends RenderableCircularGameObject
 {
 	public Player()
 	{
-		super(DisplayUtils.monitorWidth / 2, DisplayUtils.monitorHeight / 2, (int)Math.round(0.02083333333 * DisplayUtils.monitorWidth), 1);
+		super(DisplayUtils.monitorWidth / 2, DisplayUtils.monitorHeight / 2, (int)Math.round(0.02083333333 * DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2), 1);
 	}
 	
 	public double getPosX()

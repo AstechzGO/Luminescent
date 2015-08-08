@@ -33,4 +33,9 @@ public class RenderableMultipleRenderedObjects implements IRenderedObject {
 	public Color getColour() {
 		return colour;
 	}
+
+	@Override
+	public void resize() {
+		//Redundant
+	}
 }

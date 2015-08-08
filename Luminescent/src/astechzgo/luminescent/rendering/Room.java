@@ -10,10 +10,10 @@ public class Room extends RenderableQuadrilateralGameObject {
 	public Room() {
 		super(
 				
-				(DisplayUtils.monitorWidth - DisplayUtils.widthOffset * 2) / 45 + DisplayUtils.widthOffset, 
-				(DisplayUtils.monitorHeight - DisplayUtils.heightOffset * 2) / 25 + DisplayUtils.heightOffset, 
-				(DisplayUtils.monitorWidth - DisplayUtils.widthOffset * 2) - ((DisplayUtils.monitorWidth - DisplayUtils.widthOffset ) / 45 * 2),
-				(DisplayUtils.monitorHeight - DisplayUtils.heightOffset * 2) - ((DisplayUtils.monitorHeight - DisplayUtils.heightOffset )/ 25 * 2)
+				1920 / 45 + DisplayUtils.widthOffset, 
+				1080 / 25 + DisplayUtils.heightOffset, 
+				1920 - (1920 / 45 * 2),
+				1080 - (1080 / 25 * 2)
 				
 			);
 		super.setColour(new Color(0.15f, 0.15f, 0.15f));

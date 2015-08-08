@@ -11,7 +11,6 @@ import java.util.Date;
 import org.lwjgl.glfw.GLFW;
 
 import astechzgo.luminescent.rendering.Player;
-import astechzgo.luminescent.rendering.RenderableQuadrilateralGameObject;
 import astechzgo.luminescent.rendering.Room;
 import astechzgo.luminescent.rendering.RoomWalls;
 import astechzgo.luminescent.sound.SoundList;
@@ -62,28 +61,6 @@ public class Luminescent
 	
 	public static void Tick()
 	{
-		if(!DisplayUtils.isFullscreen()) {
-			RenderableQuadrilateralGameObject windowed;
-			windowed = new RenderableQuadrilateralGameObject(0, 0, TextureList.findTexture("misc.notFullscreen"));
-			windowed.render();
-			if(KeyboardUtils.isKeyDown(Constants.KEYS_UTIL_EXIT))
-			{
-				Shutdown();
-			}
-			if(KeyboardUtils.isKeyDown(Constants.KEYS_UTIL_FULLSCREEN))
-			{
-				if(DisplayUtils.isFullscreen()) 
-				{
-					setDisplayMode(854, 480, false);
-				}
-				else 
-				{
-					setDisplayMode((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth(),
-							(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight(), true);
-				}
-			}
-			return;
-		}
 		room.render();
 		
 		thePlayer.render();
