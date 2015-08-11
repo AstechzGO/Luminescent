@@ -9,4 +9,6 @@ public interface IRenderedObject
 	
 	public void setColour(Color colour);
 	public Color getColour();
+	
+	public void resize();
 }

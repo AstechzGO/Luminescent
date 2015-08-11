@@ -7,6 +7,7 @@ import java.awt.Color;
 import org.lwjgl.opengl.GL11;
 
 import astechzgo.luminescent.textures.Texture;
+import astechzgo.luminescent.utils.DisplayUtils;
 import astechzgo.luminescent.utils.RenderingUtils;
 
 public class RenderableQuadrilateralGameObject implements IRenderedObject {
@@ -20,6 +21,15 @@ public class RenderableQuadrilateralGameObject implements IRenderedObject {
 	
 	protected int width;
 	protected int height;
+	
+	protected int scaledX;
+	protected int scaledY;
+	
+	protected int scaledWidth;
+	protected int scaledHeight;
+	
+	protected int oldGameWidth = DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2;
+	protected int oldGameHeight = DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2;
 	
 	public RenderableQuadrilateralGameObject(int x, int y, Texture texture) {
 		this.texture = texture;
@@ -41,12 +51,14 @@ public class RenderableQuadrilateralGameObject implements IRenderedObject {
 	
 	@Override
 	public void render() {
+		resize();
+		
 		GL11.glColor3f((float)colour.getRed() / 256, (float)colour.getGreen() / 256, (float)colour.getBlue() / 256);
 		if(texture != null) {
-			RenderingUtils.RenderQuad(x, y, width, height, texture);
+			RenderingUtils.RenderQuad(scaledX, scaledY, scaledWidth, scaledHeight, texture);
 		}
 		else {
-			RenderingUtils.RenderQuad(x, y, width, height);
+			RenderingUtils.RenderQuad(scaledX, scaledY, scaledWidth, scaledHeight);
 		}
 	}
 
@@ -66,5 +78,17 @@ public class RenderableQuadrilateralGameObject implements IRenderedObject {
 	@Override
 	public Color getColour() {
 		return colour;
+	}
+
+	@Override
+	public void resize() {		
+		scaledX = ((int)Math.round((double)x / 1920 * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2))) + DisplayUtils.widthOffset;
+		scaledY = ((int)Math.round((double)y / 1080 * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2))) + DisplayUtils.heightOffset;
+		
+		scaledWidth = (int)Math.round((double)width / 1920 * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2));
+		scaledHeight = (int)Math.round((double)height / 1080 * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2));
+		
+		oldGameWidth = DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2;
+		oldGameHeight = DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2;
 	}
 }

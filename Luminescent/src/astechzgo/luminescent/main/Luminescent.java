@@ -11,7 +11,6 @@ import java.util.Date;
 import org.lwjgl.glfw.GLFW;
 
 import astechzgo.luminescent.rendering.Player;
-import astechzgo.luminescent.rendering.RenderableQuadrilateralGameObject;
 import astechzgo.luminescent.rendering.Room;
 import astechzgo.luminescent.rendering.RoomWalls;
 import astechzgo.luminescent.sound.SoundList;
@@ -41,16 +40,27 @@ public class Luminescent
 		SoundManager manager = new SoundManager();
 		SoundList.initSoundList(manager);
 		
-		setDisplayMode((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth(),
+		
+		if(Constants.getConstantAsBoolean(Constants.WINDOW_FULLSCREEN)) 
+		{	
+			
+			setDisplayMode((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth(),
 				(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight(), true);
 		
-		try 
+			try 
+			{
+				GLFW.glfwSetInputMode(DisplayUtils.getHandle(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
+			} 
+			catch (Exception e)
+			{
+				LoggingUtils.logException(LoggingUtils.LOGGER, e);
+			}
+			
+			
+		}
+		else 
 		{
-			GLFW.glfwSetInputMode(DisplayUtils.getHandle(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
-		} 
-		catch (Exception e)
-		{
-			LoggingUtils.logException(LoggingUtils.LOGGER, e);
+			setDisplayMode(848, 477, false);
 		}
 	}
 	
@@ -62,28 +72,6 @@ public class Luminescent
 	
 	public static void Tick()
 	{
-		if(!DisplayUtils.isFullscreen()) {
-			RenderableQuadrilateralGameObject windowed;
-			windowed = new RenderableQuadrilateralGameObject(0, 0, TextureList.findTexture("misc.notFullscreen"));
-			windowed.render();
-			if(KeyboardUtils.isKeyDown(Constants.KEYS_UTIL_EXIT))
-			{
-				Shutdown();
-			}
-			if(KeyboardUtils.isKeyDown(Constants.KEYS_UTIL_FULLSCREEN))
-			{
-				if(DisplayUtils.isFullscreen()) 
-				{
-					setDisplayMode(854, 480, false);
-				}
-				else 
-				{
-					setDisplayMode((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth(),
-							(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight(), true);
-				}
-			}
-			return;
-		}
 		room.render();
 		
 		thePlayer.render();
@@ -148,7 +136,7 @@ public class Luminescent
 		{
 			if(DisplayUtils.isFullscreen()) 
 			{
-				setDisplayMode(854, 480, false);
+				setDisplayMode(848, 477, false);
 				KeyboardUtils.resetKeys();
 			}
 			else 
@@ -181,6 +169,5 @@ public class Luminescent
 				LoggingUtils.logException(LoggingUtils.LOGGER, e);
 			}
 		}
-	}
-	
+	}	
 }

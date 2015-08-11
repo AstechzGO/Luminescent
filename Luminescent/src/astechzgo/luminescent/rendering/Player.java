@@ -1,12 +1,10 @@
 package astechzgo.luminescent.rendering;
 
-import astechzgo.luminescent.utils.DisplayUtils;
-
 public class Player extends RenderableCircularGameObject
 {
 	public Player()
 	{
-		super(DisplayUtils.monitorWidth / 2, DisplayUtils.monitorHeight / 2, (int)Math.round(0.02083333333 * DisplayUtils.monitorWidth), 1);
+		super(1920 / 2, 1080 / 2, 40, 1);
 	}
 	
 	public double getPosX()
@@ -27,11 +25,5 @@ public class Player extends RenderableCircularGameObject
 	public void setPosY(double position)
 	{
 		super.y = position;
-	}
-	
-	@Override
-	public void render()
-	{
-		super.render();
 	}
 }
