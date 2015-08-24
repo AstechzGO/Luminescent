@@ -3,12 +3,12 @@ package astechzgo.luminescent.main;
 import static astechzgo.luminescent.utils.DisplayUtils.setDisplayMode;
 
 import java.awt.Rectangle;
-import java.awt.Toolkit;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.glfw.GLFWvidmode;
 
 import astechzgo.luminescent.rendering.Player;
 import astechzgo.luminescent.rendering.Room;
@@ -44,8 +44,8 @@ public class Luminescent
 		if(Constants.getConstantAsBoolean(Constants.WINDOW_FULLSCREEN)) 
 		{	
 			
-			setDisplayMode((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth(),
-				(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight(), true);
+			setDisplayMode(GLFWvidmode.width(DisplayUtils.vidmode),
+					GLFWvidmode.height(DisplayUtils.vidmode), true);
 		
 			try 
 			{
@@ -141,8 +141,8 @@ public class Luminescent
 			}
 			else 
 			{
-				setDisplayMode((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth(),
-						(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight(), true);
+				setDisplayMode(GLFWvidmode.width(DisplayUtils.vidmode),
+						GLFWvidmode.height(DisplayUtils.vidmode), true);
 				KeyboardUtils.resetKeys();
 			}
 		}
@@ -168,6 +168,11 @@ public class Luminescent
 			{
 				LoggingUtils.logException(LoggingUtils.LOGGER, e);
 			}
+		}
+		if(KeyboardUtils.isKeyDown(Constants.KEYS_UTIL_NEXTWINDOW))
+		{
+			if(GLFW.glfwGetMonitors().capacity() > 1)
+				DisplayUtils.nextMonitor();
 		}
 	}	
 }

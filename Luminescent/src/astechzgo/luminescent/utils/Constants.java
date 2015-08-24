@@ -25,6 +25,7 @@ public class Constants
 	public static final String KEYS_UTIL_SCREENSHOT =	"keys.util.screenshot";
 	public static final String KEYS_UTIL_FULLSCREEN = 	"keys.util.fullscreen";
 	public static final String KEYS_UTIL_EXIT = 		"keys.util.exit";
+	public static final String KEYS_UTIL_NEXTWINDOW = 	"keys.utils.nextwindow";
 	
 	public static final String WINDOW_FULLSCREEN = 		"window.fullscreen";
 
@@ -40,7 +41,8 @@ public class Constants
 		
 		defaults.put(KEYS_UTIL_SCREENSHOT, 				"{F2}");
 		defaults.put(KEYS_UTIL_FULLSCREEN, 				"{F11}");
-		defaults.put(KEYS_UTIL_EXIT, 					"{ESCAPE, TAB}");
+		defaults.put(KEYS_UTIL_EXIT, 					"{TAB, ESCAPE}");
+		defaults.put(KEYS_UTIL_NEXTWINDOW,				"{F4}");
 		
 		defaults.put(WINDOW_FULLSCREEN,					"false");
 
