@@ -150,7 +150,7 @@ public class KeyboardUtils {
 			}
 		}
 		
-		return false;
+		return false || ControllerUtils.isButtonPressed(name);
 	}
 	
 	public static void resetKeys() {
