@@ -15,13 +15,6 @@ public class ControllerUtils {
 	
 	public static final List<Integer> JOYSTICK_SLOT_VALUES = getAllJoysticks();
 	
-	public static final int UP = 0;
-	public static final int DOWN = 1;
-	public static final int RIGHT = 2;
-	public static final int LEFT = 3;
-	
-	public static final int UNKNOWN_DIRECTION = -1;
-	
 	public static void updateJoysticks() {
 		for(int joystick : JOYSTICK_SLOT_VALUES) {
 			if(GLFW.glfwJoystickPresent(joystick) == 1) {
@@ -62,82 +55,126 @@ public class ControllerUtils {
 	}
 	
 	public static boolean isButtonPressed(String button) {
-		int buttonNumber = -1;
-		int analogDirection = UNKNOWN_DIRECTION;
+		for(int joy : joysticks) {
+			List<List<List<Integer>>> buttonNumbers = getButtons(joy, button);
+			if(isButtonPressed(joy, buttonNumbers)) 
+				return true;
+			else
+				return false;
+		}
+		return false;
+	}
+	
+	private static boolean isButtonPressed(int joystick, List<List<List<Integer>>> buttons) {
+		if(buttons == null) {
+			return false;
+		}
+		
+		ByteBuffer GLFWButtons = GLFW.glfwGetJoystickButtons(joystick);
+		
+		for(List<Integer> rButtons : buttons.get(SystemUtils.getCurrentOS())) {
+			boolean areAllDown = true;
+			for(Integer button : rButtons) {
+				if(button >= -1) {
+					if(GLFWButtons.getInt(button) != GLFW.GLFW_PRESS) {
+						areAllDown = false;
+					}
+				}
+				else {
+					//Decoding controller direction and axis
+					//Sorry to anyone trying to read this code
+					
+					button = Math.abs(button);
+						   
+					int axis = (button / 10) - 1;
+					int value = (button - 10 - (axis * 10)) - 2;
+						   
+					if(value == 0) value = -1;	//Because 0 means nothing
+					
+					FloatBuffer GLFWAxis = GLFW.glfwGetJoystickAxes(joystick);
+					
+					double actualValue = GLFWAxis.get(axis);
+					
+					if(value < 0) {
+						if(actualValue > value)
+							areAllDown = false;
+					}
+					else {
+						if(actualValue < value)
+							areAllDown = false;
+					}
+				}
+			}
+			if(areAllDown) {
+				return true;
+			}
+		}	
+		return false;
+	}
+	
+	private static List<List<List<Integer>>> getButtons(int joystick, String button) {
+		List<List<List<Integer>>> buttonNumbers = new ArrayList<List<List<Integer>>>();
+		
+		List<Integer> temp = null;
+		
+		buttonNumbers.add(new ArrayList<List<Integer>>());
+		buttonNumbers.add(new ArrayList<List<Integer>>());
+		buttonNumbers.add(new ArrayList<List<Integer>>());
 		
 		switch(button) {
 			case Constants.KEYS_MOVEMENT_DOWN:
-				analogDirection = DOWN;
+				temp = new ArrayList<Integer>();
+				temp.add(-23);
+				buttonNumbers.get(0).add(temp);
 				break;
 			case Constants.KEYS_MOVEMENT_FASTER:
-				buttonNumber = 0;
+				temp = new ArrayList<Integer>();
+				temp.add(8);
+				buttonNumbers.get(0).add(temp);
 				break;
 			case Constants.KEYS_MOVEMENT_LEFT:
-				analogDirection = LEFT;
+				temp = new ArrayList<Integer>();
+				temp.add(-12);
+				buttonNumbers.get(0).add(temp);
 				break;
 			case Constants.KEYS_MOVEMENT_RIGHT:
-				analogDirection = RIGHT;
+				temp = new ArrayList<Integer>();
+				temp.add(-13);
+				buttonNumbers.get(0).add(temp);
 				break;
 			case Constants.KEYS_MOVEMENT_UP:
-				analogDirection = UP;
+				temp = new ArrayList<Integer>();
+				temp.add(-22);
+				buttonNumbers.get(0).add(temp);
+				
+				temp = new ArrayList<Integer>();
+				temp.add(10);
+				buttonNumbers.get(0).add(temp);
 				break;
 			case Constants.KEYS_UTIL_EXIT:
-				buttonNumber = 4;
+				temp = new ArrayList<Integer>();
+				temp.add(4);
+				buttonNumbers.get(0).add(temp);
 				break;
 			case Constants.KEYS_UTIL_FULLSCREEN:
-				buttonNumber = 7;
+				temp = new ArrayList<Integer>();
+				temp.add(7);
+				buttonNumbers.get(0).add(temp);
 				break;
 			case Constants.KEYS_UTIL_SCREENSHOT:
-				buttonNumber = 5;
+				temp = new ArrayList<Integer>();
+				temp.add(5);
+				buttonNumbers.get(0).add(temp);
 				break;
 			case Constants.KEYS_UTIL_NEXTWINDOW:
-				buttonNumber = 6;
+				temp = new ArrayList<Integer>();
+				temp.add(6);
+				buttonNumbers.get(0).add(temp);
 				break;
 			default:
-				buttonNumber = -1;
+				buttonNumbers = null;
 				break;
 		}
-		
-		for(int joy : joysticks) {
-			if(isButtonPressed(joy, buttonNumber)) 
-				return true;
-			else if(analogDirection != UNKNOWN_DIRECTION) {
-				FloatBuffer axes = GLFW.glfwGetJoystickAxes(joy);
-				
-				double directionX = axes.get(0);
-				double directionY = axes.get(1);
-				
-				return isAnalogStickDirection(directionX, directionY, analogDirection);
-			}
-		}
-		return false;
-	}
-	
-	private static boolean isButtonPressed(int joystick, int button) {
-		if(button == -1)
-			return false;
-		
-		ByteBuffer buttons = GLFW.glfwGetJoystickButtons(joystick);
-		
-		if(buttons.getInt(button) == GLFW.GLFW_PRESS)
-			return true;
-		else
-			return false;
-		
-	}
-	
-	private static boolean isAnalogStickDirection(double x, double y, int direction) {
-		switch(direction) {
-			case UP:
-				if(y <= -1.0) return true; else return false;
-			case DOWN:
-				if(y >= 1.0) return true; else return false;
-			case RIGHT:
-				if(x >= 1.0) return true; else return false;
-			case LEFT:
-				if(x <= -1.0) return true; else return false;
-		}
-		
-		return false;
+		return buttonNumbers;
 	}
 }
