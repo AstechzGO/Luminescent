@@ -1,13 +1,23 @@
 package astechzgo.luminescent.utils;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
+import java.util.Scanner;
 
 import org.lwjgl.glfw.GLFW;
+
+import static astechzgo.luminescent.utils.SystemUtils.newFile;
 
 public class ControllerUtils {
 	
@@ -76,8 +86,13 @@ public class ControllerUtils {
 			boolean areAllDown = true;
 			for(Integer button : rButtons) {
 				if(button >= -1) {
-					if(GLFWButtons.getInt(button) != GLFW.GLFW_PRESS) {
-						areAllDown = false;
+					try{
+						if(GLFWButtons.getInt(button) != GLFW.GLFW_PRESS) {
+							areAllDown = false;
+						}
+					}
+					catch(Exception e) {
+						e.printStackTrace();
 					}
 				}
 				else {
@@ -113,68 +128,79 @@ public class ControllerUtils {
 	}
 	
 	private static List<List<List<Integer>>> getButtons(int joystick, String button) {
-		List<List<List<Integer>>> buttonNumbers = new ArrayList<List<List<Integer>>>();
+		List<List<List<Integer>>> buttonNumbers = null;
 		
-		List<Integer> temp = null;
+		File dir = newFile("controllers");
+		File defaultConf = new File(dir, "defualt.properties");
 		
-		buttonNumbers.add(new ArrayList<List<Integer>>());
-		buttonNumbers.add(new ArrayList<List<Integer>>());
-		buttonNumbers.add(new ArrayList<List<Integer>>());
+		if(!dir.isDirectory())
+			dir.mkdirs();
 		
-		switch(button) {
-			case Constants.KEYS_MOVEMENT_DOWN:
-				temp = new ArrayList<Integer>();
-				temp.add(-23);
-				buttonNumbers.get(0).add(temp);
-				break;
-			case Constants.KEYS_MOVEMENT_FASTER:
-				temp = new ArrayList<Integer>();
-				temp.add(8);
-				buttonNumbers.get(0).add(temp);
-				break;
-			case Constants.KEYS_MOVEMENT_LEFT:
-				temp = new ArrayList<Integer>();
-				temp.add(-12);
-				buttonNumbers.get(0).add(temp);
-				break;
-			case Constants.KEYS_MOVEMENT_RIGHT:
-				temp = new ArrayList<Integer>();
-				temp.add(-13);
-				buttonNumbers.get(0).add(temp);
-				break;
-			case Constants.KEYS_MOVEMENT_UP:
-				temp = new ArrayList<Integer>();
-				temp.add(-22);
-				buttonNumbers.get(0).add(temp);
-				
-				temp = new ArrayList<Integer>();
-				temp.add(10);
-				buttonNumbers.get(0).add(temp);
-				break;
-			case Constants.KEYS_UTIL_EXIT:
-				temp = new ArrayList<Integer>();
-				temp.add(4);
-				buttonNumbers.get(0).add(temp);
-				break;
-			case Constants.KEYS_UTIL_FULLSCREEN:
-				temp = new ArrayList<Integer>();
-				temp.add(7);
-				buttonNumbers.get(0).add(temp);
-				break;
-			case Constants.KEYS_UTIL_SCREENSHOT:
-				temp = new ArrayList<Integer>();
-				temp.add(5);
-				buttonNumbers.get(0).add(temp);
-				break;
-			case Constants.KEYS_UTIL_NEXTWINDOW:
-				temp = new ArrayList<Integer>();
-				temp.add(6);
-				buttonNumbers.get(0).add(temp);
-				break;
-			default:
-				buttonNumbers = null;
-				break;
+		if(!defaultConf.isFile()) {
+			try {
+				defaultConf.createNewFile();
+				InputStream confIn = (new ControllerUtils()).getClass().getResourceAsStream("/resources/properties/default.properties");
+				Files.copy(confIn, defaultConf.toPath(), StandardCopyOption.REPLACE_EXISTING);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
+		
+		String joystickName = GLFW.glfwGetJoystickName(joystick);
+		int joystickButtons = GLFW.glfwGetJoystickButtons(joystick).capacity();
+		int joystickAxes = GLFW.glfwGetJoystickAxes(joystick).capacity();
+		
+		File controllerPropertiesFile = 
+				new File(dir, joystickName + "." + joystickButtons + "." + joystickAxes + ".properties");
+		
+		if(!controllerPropertiesFile.isFile()) {
+			controllerPropertiesFile = defaultConf;
+			
+		}
+		
+		Properties p = new Properties();
+		
+		try {
+			p.load(new FileInputStream(controllerPropertiesFile));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		buttonNumbers = parse(p.getProperty(button));
+
 		return buttonNumbers;
 	}
+	
+	private static List<List<List<Integer>>> parse(String string) {
+			List<List<List<Integer>>> buttons = new ArrayList<List<List<Integer>>>(3);
+			
+			List<List<Integer>> temp = new ArrayList<List<Integer>>();
+			buttons.add(0, temp);
+			buttons.add(1, temp);
+			buttons.add(2, temp);
+			
+			Scanner scanner = new Scanner(string);
+			
+			int q = SystemUtils.getCurrentOS();
+			for (String a; (a = scanner.findWithinHorizon("(?<=\\{\\{).*?(?=\\}\\})", 0)) != null;) {
+		    
+				a = "{" + a + "}";
+				
+				Scanner sc = new Scanner(a);
+				
+				int i = 0;
+				for (String s; (s = sc.findWithinHorizon("(?<=\\{).*?(?=\\})", 0)) != null; i++) {
+					buttons.get(q).add(i, new ArrayList<Integer>());
+					s = s.replace(" ", "");
+					String[] unparsed = s.split(",");
+					for(String uNum : unparsed) {
+						buttons.get(q).get(i).add(Integer.parseInt(uNum));
+					}
+				}
+				sc.close();
+				break;
+			}
+			scanner.close();
+			return buttons;
+		}		
 }

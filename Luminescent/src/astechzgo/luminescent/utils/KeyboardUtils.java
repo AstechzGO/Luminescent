@@ -119,7 +119,6 @@ public class KeyboardUtils {
 	private static List<List<Integer>> getKeyCodes(String key) {
 		List<List<Integer>> keys = new ArrayList<List<Integer>>();
 		
-	    @SuppressWarnings("resource")
 		Scanner sc = new Scanner(Constants.getConstant(key));
 	    int i = 0;
 	    for (String s; (s = sc.findWithinHorizon("(?<=\\{).*?(?=\\})", 0)) != null; i++) {
@@ -131,6 +130,8 @@ public class KeyboardUtils {
 	    		keys.get(i).add(w);
 	    	}
 	    }
+	    
+	    sc.close();
 	    
 		return keys;
 	}
