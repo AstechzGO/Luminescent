@@ -2,7 +2,6 @@ package astechzgo.luminescent.main;
 
 import static astechzgo.luminescent.utils.DisplayUtils.setDisplayMode;
 
-import java.awt.Rectangle;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -31,8 +30,8 @@ public class Luminescent
 	
 	public static long lastMove = System.currentTimeMillis();
 	
-		public static Room room = new Room();
-		public static RoomWalls walls = new RoomWalls();	
+	public static Room room = new Room();
+	public static RoomWalls walls = new RoomWalls();	
 		
 	public static void Init()
 	{	
@@ -93,26 +92,26 @@ public class Luminescent
 		
 		double speed = Luminescent.moveSpeed * multiplier;
 		
-		Rectangle box = room.getBox();
+		if(!room.doesContain((int)thePlayer.getPosX(), (int)thePlayer.getPosY()))
+		{	
+			if(thePlayer.getPosX() < room.getPosX())
+			{
+				thePlayer.setPosX(room.getPosX() + room.getWidth());
+			}
+			if(thePlayer.getPosX() > room.getPosX() + room.getWidth())
+			{
+				thePlayer.setPosX(room.getPosX());
+			}
 		
-		if(thePlayer.getPosX() < box.getX())
-		{
-			thePlayer.setPosX(box.getX() + box.getWidth());
+			if(thePlayer.getPosY() < room.getPosY())
+			{
+				thePlayer.setPosY(room.getPosY() + room.getHeight());
+			}
+			if(thePlayer.getPosY() > room.getPosY() + room.getHeight())
+			{
+				thePlayer.setPosY(room.getPosY());
+			}
 		}
-		if(thePlayer.getPosX() > box.getX() + box.getWidth())
-		{
-			thePlayer.setPosX(box.getX());
-		}
-		
-		if(thePlayer.getPosY() < box.getY())
-		{
-			thePlayer.setPosY(box.getY() + box.getHeight());
-		}
-		if(thePlayer.getPosY() > box.getY() + box.getHeight())
-		{
-			thePlayer.setPosY(box.getY());
-		}
-		
 		if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_UP))
 		{
 			thePlayer.setPosY(thePlayer.getPosY() + speed);

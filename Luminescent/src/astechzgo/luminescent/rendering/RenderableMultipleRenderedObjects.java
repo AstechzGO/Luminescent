@@ -51,4 +51,30 @@ public class RenderableMultipleRenderedObjects implements IRenderedObject {
 		//Redundant
 		return null;
 	}
+
+	@Override
+	public boolean isTouching(IRenderedObject object) {
+		for(IRenderedObject i : objects) {
+			if(i.isTouching(object)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+
+	@Override
+	public boolean doesContain(int x, int y) {
+		for(IRenderedObject i : objects) {
+			if(i.doesContain(x, y)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public List<IRenderedObject> getAll() { 
+		return objects;
+	}
 }

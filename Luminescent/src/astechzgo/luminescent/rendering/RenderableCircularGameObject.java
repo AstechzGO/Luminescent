@@ -10,60 +10,60 @@ import astechzgo.luminescent.utils.RenderingUtils;
 
 public class RenderableCircularGameObject implements IRenderedObject {
 	private Color colour = new Color(0, 0, 0);
-	
+
 	protected int pointSeperation;
 	protected double radius;
-	
+
 	protected double x;
 	protected double y;
-	
+
 	protected int scaledX;
 	protected int scaledY;
-	
+
 	protected int scaledRadius;
-	
+
 	protected int oldGameWidth = DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2;
 	protected int oldGameHeight = DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2;
-		
+
 	protected Texture texture;
-			
+
 	public RenderableCircularGameObject(double x, double y, double radius) {
-		this(x, y, radius, 1);	
+		this(x, y, radius, 1);
 	}
-	
+
 	public RenderableCircularGameObject(double x, double y, double radius, int pointSeperation) {
 		this.x = x;
 		this.y = y;
-		
+
 		this.radius = radius;
-		
+
 		this.pointSeperation = pointSeperation;
 	}
-	
+
 	public RenderableCircularGameObject(double x, double y, double radius, Texture texture) {
 		this(x, y, radius, 1, texture);
 	}
-	
+
 	public RenderableCircularGameObject(double x, double y, double radius, int pointSeperation, Texture texture) {
 		this(x, y, radius, pointSeperation);
-		
+
 		this.texture = texture;
 	}
-	
+
 	@Override
 	public void render() {
 		resize();
-		
-		GL11.glColor3f((float)colour.getRed() / 256, (float)colour.getGreen() / 256, (float)colour.getBlue() / 256);
-		
-		if(texture != null) {
+
+		GL11.glColor3f((float) colour.getRed() / 256, (float) colour.getGreen() / 256, (float) colour.getBlue() / 256);
+
+		if (texture != null) {
 			RenderingUtils.RenderCircle(scaledX, scaledY, scaledRadius, pointSeperation, texture);
 		}
 		else {
 			RenderingUtils.RenderCircle(scaledX, scaledY, scaledRadius, pointSeperation);
 		}
 	}
-	
+
 	@Override
 	public void setColour(Color colour) {
 		this.colour = colour;
@@ -73,18 +73,23 @@ public class RenderableCircularGameObject implements IRenderedObject {
 	public Color getColour() {
 		return colour;
 	}
-	
+
 	@Override
 	public void resize() {
-		scaledX = ((int)Math.round((double)x / 1920 * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2))) + DisplayUtils.widthOffset;
-		scaledY = ((int)Math.round((double)y / 1080 * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2))) + DisplayUtils.heightOffset;
-		
-		scaledRadius = (int)Math.round((double)radius / 1920 * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2));
-		
+		scaledX = ((int) Math
+				.round((double) x / 1920 * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)))
+				+ DisplayUtils.widthOffset;
+		scaledY = ((int) Math
+				.round((double) y / 1080 * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2)))
+				+ DisplayUtils.heightOffset;
+
+		scaledRadius = (int) Math
+				.round((double) radius / 1920 * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2));
+
 		oldGameWidth = DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2;
 		oldGameHeight = DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2;
 	}
-	
+
 	@Override
 	public void setTexture(Texture texture) {
 		this.texture = texture;
@@ -93,5 +98,110 @@ public class RenderableCircularGameObject implements IRenderedObject {
 	@Override
 	public Texture getTexture() {
 		return texture;
+	}
+
+	@Override
+	public boolean isTouching(IRenderedObject object) {
+
+		if (object instanceof RenderableQuadrilateralGameObject) {
+			RenderableQuadrilateralGameObject casted = (RenderableQuadrilateralGameObject) object;
+
+			int[] xQuads = { 
+				(casted.x), 
+				(casted.x + casted.width)
+			};
+
+			int[] yQuads = { 
+				(casted.y), 
+				(casted.y + casted.height) 
+			};
+
+			boolean[][] quadrant = new boolean[2][2];
+			// Clear quadrant flags
+			for (int x = 0; x < 2; x++)
+				for (int y = 0; y < 2; y++)
+					quadrant[x][y] = false;
+
+			// Determine quadrant of each corner
+			for (int x = 0; x < 2; x++) {
+				int quadX = (xQuads[x] >= this.x) ? 0 : 1;
+				for (int y = 0; y < 2; y++) {
+					int quadY = (yQuads[y] >= this.y) ? 0 : 1;
+					quadrant[quadX][quadY] = true;
+				}
+			}
+
+			// Count the number of quadrants with at least one corner
+			int quadrants = 0;
+			for (int x = 0; x < 2; x++)
+				for (int y = 0; y < 2; y++)
+					if (quadrant[x][y])
+						quadrants++;
+
+			// Detect Collisions
+			boolean collision = false;
+			switch (quadrants) {
+			case 1: // Check each rectangle corner against circle radius
+				float radiusSquared = (float) (this.radius * this.radius);
+				for (int x = 0; x < 2; x++) {
+					float dx = (float) (xQuads[x] - this.x);
+					for (int y = 0; y < 2; y++) {
+						float dy = (float) (yQuads[y] - this.y);
+						if (dx * dx + dy * dy <= radiusSquared)
+							collision = true;
+					}
+				}
+				break;
+			case 2: // Check for intersection between rectangle and bounding box
+					// of the circle
+				boolean intersectX = !(xQuads[1] < this.x - this.radius || xQuads[0] > this.x + this.radius);
+				boolean intersectY = !(yQuads[1] < this.x - this.radius || yQuads[0] > this.x + this.radius);
+				if (intersectX && intersectY)
+					collision = true;
+				break;
+			default: // Anything else is a collision
+				collision = true;
+			}
+			return collision;
+		} 
+		else if (object instanceof RenderableCircularGameObject) {
+			RenderableCircularGameObject casted = (RenderableCircularGameObject) object;
+
+			int a = (int) (this.y - casted.y);
+			int b = (int) (this.x - casted.x);
+
+			double c = Math.sqrt((a * a) + (b * b));
+
+			if (c < (this.radius + casted.radius))
+				return true;
+			else
+				return false;
+		} 
+		else if (object instanceof RenderableMultipleRenderedObjects) {
+			RenderableMultipleRenderedObjects casted = (RenderableMultipleRenderedObjects) object;
+
+			for (IRenderedObject i : casted.getAll()) {
+				if (this.isTouching(i))
+					return true;
+			}
+
+			return false;
+		}
+		else {
+			return false;
+		}
+	}
+
+	@Override
+	public boolean doesContain(int x, int y) {
+		int a = (int) (this.y - y);
+		int b = (int) (this.x - x);
+
+		double c = Math.sqrt((a * a) + (b * b));
+
+		if (c < (this.radius))
+			return true;
+		else
+			return false;
 	}
 }
