@@ -17,6 +17,7 @@ import astechzgo.luminescent.sound.SoundList;
 import astechzgo.luminescent.sound.SoundManager;
 import astechzgo.luminescent.textures.TextureList;
 import astechzgo.luminescent.utils.Constants;
+import astechzgo.luminescent.utils.ControllerUtils;
 import astechzgo.luminescent.utils.DisplayUtils;
 import astechzgo.luminescent.utils.KeyboardUtils;
 import astechzgo.luminescent.utils.LoggingUtils;
@@ -174,5 +175,7 @@ public class Luminescent
 			if(GLFW.glfwGetMonitors().capacity() > 1)
 				DisplayUtils.nextMonitor();
 		}
+		
+		ControllerUtils.updateJoysticks();
 	}	
 }

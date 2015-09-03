@@ -7,6 +7,12 @@ public class SystemUtils {
 	private static String userHome = System.getProperty("user.home", ".");
 	private static File workingDirectory;
 	
+	private static int currentOS;
+	
+	public static final int WINDOWS = 0;
+	public static final int LINUX = 1;
+	public static final int MAC = 2;
+	
 	/**
 	 * When not deployed, this game only supports windows in the Eclipse IDE
 	 * 
@@ -22,7 +28,8 @@ public class SystemUtils {
 			      String folder = applicationData != null ? applicationData : userHome;
 
 			      workingDirectory = new File(folder, ".luminescent/");
-
+			      
+			      currentOS = WINDOWS;
 		}
 		
 		//Linux/Unix
@@ -30,17 +37,21 @@ public class SystemUtils {
 				|| System.getProperty("os.name").toLowerCase().contains("linux")) {
 			
 				workingDirectory = new File(userHome, ".luminescent/");
+				
+				currentOS = LINUX;
 		}
 		
 		//Mac
 		else if(System.getProperty("os.name").toLowerCase().contains("mac")) {
 			workingDirectory = new File(userHome, "Library/Application Support/luminescent");
+			
+			currentOS = MAC;
 		}
 		
 		//Unkown
 		else {
 			System.err.println("The current platform is not supported");
-			System.exit(-1);			
+			System.exit(-1);
 		}
 
 		setWorkingDirectory(workingDirectory.getPath());
@@ -61,5 +72,9 @@ public class SystemUtils {
 	
 	public static File newFile(String relativeLoc) {
 		return new File(new File(relativeLoc).getAbsolutePath());
+	}
+	
+	public static int getCurrentOS() {
+		return currentOS;
 	}
 }
