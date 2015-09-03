@@ -19,7 +19,6 @@ import astechzgo.luminescent.utils.Constants;
 import astechzgo.luminescent.utils.ControllerUtils;
 import astechzgo.luminescent.utils.DisplayUtils;
 import astechzgo.luminescent.utils.KeyboardUtils;
-import astechzgo.luminescent.utils.LoggingUtils;
 import static astechzgo.luminescent.utils.SystemUtils.newFile;
 
 public class Luminescent
@@ -40,7 +39,6 @@ public class Luminescent
 		SoundManager manager = new SoundManager();
 		SoundList.initSoundList(manager);
 		
-		
 		if(Constants.getConstantAsBoolean(Constants.WINDOW_FULLSCREEN)) 
 		{	
 			
@@ -53,7 +51,7 @@ public class Luminescent
 			} 
 			catch (Exception e)
 			{
-				LoggingUtils.logException(LoggingUtils.LOGGER, e);
+				e.printStackTrace();
 			}
 			
 			
@@ -149,7 +147,6 @@ public class Luminescent
 		if(KeyboardUtils.isKeyDown(Constants.KEYS_UTIL_SCREENSHOT))
 		{
 			File dir = newFile("screenshots/");
-			dir = new File(dir.getAbsolutePath());
 			
 			if(!dir.exists() || !dir.isDirectory()) 
 			{
@@ -166,7 +163,7 @@ public class Luminescent
 			} 
 			catch (Exception e) 
 			{
-				LoggingUtils.logException(LoggingUtils.LOGGER, e);
+				e.printStackTrace();
 			}
 		}
 		if(KeyboardUtils.isKeyDown(Constants.KEYS_UTIL_NEXTWINDOW))

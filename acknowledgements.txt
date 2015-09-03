@@ -139,7 +139,7 @@ astechzgo.luminescent:
 							Peter Mortensen 	(http://stackoverflow.com/users/63550/peter-mortensen)
 						Answer:
 							JayJay				(http://stackoverflow.com/users/171675/jayjay)	
-			configureRobotLogger:
+			configureLogger:
 				(Unknown)
 			cleanupLogFilename:
 				StackOverflow:

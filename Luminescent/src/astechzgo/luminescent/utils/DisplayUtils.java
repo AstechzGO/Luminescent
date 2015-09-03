@@ -268,7 +268,10 @@ public class DisplayUtils {
 		
 		try {
 		    ImageIO.write(image, format, file);
-		} catch (IOException e) { LoggingUtils.logException(LoggingUtils.LOGGER, e); }
+		} 
+		catch (IOException e) { 
+			e.printStackTrace();
+		}
 	}
 	
     public static BufferedImage getFlippedImage(BufferedImage bi) {

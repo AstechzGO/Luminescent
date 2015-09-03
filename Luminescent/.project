@@ -14,4 +14,11 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>acknowledgements.txt</name>
+			<type>1</type>
+			<locationURI>WORKSPACE_LOC/Luminescent/acknowledgements.txt</locationURI>
+		</link>
+	</linkedResources>
 </projectDescription>

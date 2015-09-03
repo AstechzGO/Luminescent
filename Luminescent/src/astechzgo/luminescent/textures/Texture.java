@@ -13,8 +13,6 @@ import javax.swing.ImageIcon;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
-import astechzgo.luminescent.utils.LoggingUtils;
-
 public class Texture {
 	
 	private final BufferedImage asBufferedImage;
@@ -125,7 +123,7 @@ public class Texture {
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			LoggingUtils.logException(LoggingUtils.LOGGER, e);
+			e.printStackTrace();
 		}
 		return 0;
 	}
