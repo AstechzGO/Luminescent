@@ -88,7 +88,7 @@ public class DisplayUtils {
 		widthOffset = Math.max(0, (displayWidth - (displayHeight / 9 * 16)) / 2);
 		if(widthOffset == 0) heightOffset = Math.max(0, (displayHeight - (displayWidth / 16 * 9)) / 2);
 	}
-	public static String displayTitle = "";
+	public static String displayTitle = "A Game with a Player that can Move";
 	
 	
 	/**

@@ -31,14 +31,14 @@ public class RenderableQuadrilateralGameObject implements IRenderedObject {
 	protected int oldGameWidth = DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2;
 	protected int oldGameHeight = DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2;
 	
-	public RenderableQuadrilateralGameObject(int x, int y, Texture texture) {
+	public RenderableQuadrilateralGameObject(int x, int y, int width, int height, Texture texture) {
 		this.texture = texture;
 		
 		this.x = x;
 		this.y = y;
 		
-		this.width = texture.getAsBufferedImage().getWidth();
-		this.height = texture.getAsBufferedImage().getHeight();
+		this.width = width;
+		this.height = height;
 	}
 	
 	public RenderableQuadrilateralGameObject(int x, int y, int width, int height) {
@@ -62,10 +62,12 @@ public class RenderableQuadrilateralGameObject implements IRenderedObject {
 		}
 	}
 
+	@Override
 	public void setTexture(Texture texture) {
 		this.texture = texture;
 	}
 
+	@Override
 	public Texture getTexture() {
 		return texture;
 	}

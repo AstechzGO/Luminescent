@@ -4,6 +4,7 @@ import java.awt.Color;
 
 import org.lwjgl.opengl.GL11;
 
+import astechzgo.luminescent.textures.Texture;
 import astechzgo.luminescent.utils.DisplayUtils;
 import astechzgo.luminescent.utils.RenderingUtils;
 
@@ -23,6 +24,8 @@ public class RenderableCircularGameObject implements IRenderedObject {
 	
 	protected int oldGameWidth = DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2;
 	protected int oldGameHeight = DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2;
+		
+	protected Texture texture;
 			
 	public RenderableCircularGameObject(double x, double y, double radius) {
 		this(x, y, radius, 1);	
@@ -37,12 +40,28 @@ public class RenderableCircularGameObject implements IRenderedObject {
 		this.pointSeperation = pointSeperation;
 	}
 	
+	public RenderableCircularGameObject(double x, double y, double radius, Texture texture) {
+		this(x, y, radius, 1, texture);
+	}
+	
+	public RenderableCircularGameObject(double x, double y, double radius, int pointSeperation, Texture texture) {
+		this(x, y, radius, pointSeperation);
+		
+		this.texture = texture;
+	}
+	
 	@Override
 	public void render() {
 		resize();
 		
 		GL11.glColor3f((float)colour.getRed() / 256, (float)colour.getGreen() / 256, (float)colour.getBlue() / 256);
-		RenderingUtils.RenderCircle(scaledX, scaledY, scaledRadius, pointSeperation);
+		
+		if(texture != null) {
+			RenderingUtils.RenderCircle(scaledX, scaledY, scaledRadius, pointSeperation, texture);
+		}
+		else {
+			RenderingUtils.RenderCircle(scaledX, scaledY, scaledRadius, pointSeperation);
+		}
 	}
 	
 	@Override
@@ -64,5 +83,15 @@ public class RenderableCircularGameObject implements IRenderedObject {
 		
 		oldGameWidth = DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2;
 		oldGameHeight = DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2;
+	}
+	
+	@Override
+	public void setTexture(Texture texture) {
+		this.texture = texture;
+	}
+
+	@Override
+	public Texture getTexture() {
+		return texture;
 	}
 }

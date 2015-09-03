@@ -53,7 +53,7 @@ public class Main
 			System.exit(0);
 		}
 		
-		DisplayUtils.displayTitle = "Luminescent";
+		DisplayUtils.displayTitle = "A Game with a Player that can Move";
 		
 		OpenGL.InitOpenGL();
 		
