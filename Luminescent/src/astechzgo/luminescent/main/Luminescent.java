@@ -27,7 +27,7 @@ public class Luminescent
 	public static Player thePlayer = new Player();
 	public static double moveSpeed = 0.5;
 	
-	public static long lastMove = System.currentTimeMillis();
+	public static double lastDelta = System.currentTimeMillis();
 	
 	public static Room room = new Room();
 	public static RoomWalls walls = new RoomWalls();	
@@ -76,8 +76,8 @@ public class Luminescent
 		
 		walls.render();
 		
-		int multiplier = (int) (System.currentTimeMillis() - lastMove);
-		lastMove = System.currentTimeMillis();
+		double delta = ((GLFW.glfwGetTime() * 1000) - lastDelta);
+		lastDelta = GLFW.glfwGetTime() * 1000;
 		
 		if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_FASTER))
 		{
@@ -88,7 +88,7 @@ public class Luminescent
 			Luminescent.moveSpeed = 0.5;
 		}
 		
-		double speed = Luminescent.moveSpeed * multiplier;
+		double speed = Luminescent.moveSpeed * delta;
 		
 		if(!room.doesContain((int)thePlayer.getPosX(), (int)thePlayer.getPosY()))
 		{	
