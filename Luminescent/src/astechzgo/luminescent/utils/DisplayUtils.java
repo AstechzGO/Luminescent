@@ -88,7 +88,7 @@ public class DisplayUtils {
 		widthOffset = Math.max(0, (displayWidth - (displayHeight / 9 * 16)) / 2);
 		if(widthOffset == 0) heightOffset = Math.max(0, (displayHeight - (displayWidth / 16 * 9)) / 2);
 	}
-	public static String displayTitle = "";
+	public static String displayTitle = "Luminescent";
 	
 	
 	/**
@@ -268,7 +268,10 @@ public class DisplayUtils {
 		
 		try {
 		    ImageIO.write(image, format, file);
-		} catch (IOException e) { LoggingUtils.logException(LoggingUtils.LOGGER, e); }
+		} 
+		catch (IOException e) { 
+			e.printStackTrace();
+		}
 	}
 	
     public static BufferedImage getFlippedImage(BufferedImage bi) {

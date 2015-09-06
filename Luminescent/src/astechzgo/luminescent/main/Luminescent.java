@@ -2,7 +2,6 @@ package astechzgo.luminescent.main;
 
 import static astechzgo.luminescent.utils.DisplayUtils.setDisplayMode;
 
-import java.awt.Rectangle;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -20,7 +19,6 @@ import astechzgo.luminescent.utils.Constants;
 import astechzgo.luminescent.utils.ControllerUtils;
 import astechzgo.luminescent.utils.DisplayUtils;
 import astechzgo.luminescent.utils.KeyboardUtils;
-import astechzgo.luminescent.utils.LoggingUtils;
 import static astechzgo.luminescent.utils.SystemUtils.newFile;
 
 public class Luminescent
@@ -29,10 +27,10 @@ public class Luminescent
 	public static Player thePlayer = new Player();
 	public static double moveSpeed = 0.5;
 	
-	public static long lastMove = System.currentTimeMillis();
+	public static double lastDelta = System.currentTimeMillis();
 	
-		public static Room room = new Room();
-		public static RoomWalls walls = new RoomWalls();	
+	public static Room room = new Room();
+	public static RoomWalls walls = new RoomWalls();	
 		
 	public static void Init()
 	{	
@@ -40,7 +38,6 @@ public class Luminescent
 		
 		SoundManager manager = new SoundManager();
 		SoundList.initSoundList(manager);
-		
 		
 		if(Constants.getConstantAsBoolean(Constants.WINDOW_FULLSCREEN)) 
 		{	
@@ -54,7 +51,7 @@ public class Luminescent
 			} 
 			catch (Exception e)
 			{
-				LoggingUtils.logException(LoggingUtils.LOGGER, e);
+				e.printStackTrace();
 			}
 			
 			
@@ -79,8 +76,8 @@ public class Luminescent
 		
 		walls.render();
 		
-		int multiplier = (int) (System.currentTimeMillis() - lastMove);
-		lastMove = System.currentTimeMillis();
+		double delta = ((GLFW.glfwGetTime() * 1000) - lastDelta);
+		lastDelta = GLFW.glfwGetTime() * 1000;
 		
 		if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_FASTER))
 		{
@@ -91,28 +88,28 @@ public class Luminescent
 			Luminescent.moveSpeed = 0.5;
 		}
 		
-		double speed = Luminescent.moveSpeed * multiplier;
+		double speed = Luminescent.moveSpeed * delta;
 		
-		Rectangle box = room.getBox();
+		if(!room.doesContain((int)thePlayer.getPosX(), (int)thePlayer.getPosY()))
+		{	
+			if(thePlayer.getPosX() < room.getPosX())
+			{
+				thePlayer.setPosX(room.getPosX() + room.getWidth());
+			}
+			if(thePlayer.getPosX() > room.getPosX() + room.getWidth())
+			{
+				thePlayer.setPosX(room.getPosX());
+			}
 		
-		if(thePlayer.getPosX() < box.getX())
-		{
-			thePlayer.setPosX(box.getX() + box.getWidth());
+			if(thePlayer.getPosY() < room.getPosY())
+			{
+				thePlayer.setPosY(room.getPosY() + room.getHeight());
+			}
+			if(thePlayer.getPosY() > room.getPosY() + room.getHeight())
+			{
+				thePlayer.setPosY(room.getPosY());
+			}
 		}
-		if(thePlayer.getPosX() > box.getX() + box.getWidth())
-		{
-			thePlayer.setPosX(box.getX());
-		}
-		
-		if(thePlayer.getPosY() < box.getY())
-		{
-			thePlayer.setPosY(box.getY() + box.getHeight());
-		}
-		if(thePlayer.getPosY() > box.getY() + box.getHeight())
-		{
-			thePlayer.setPosY(box.getY());
-		}
-		
 		if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_UP))
 		{
 			thePlayer.setPosY(thePlayer.getPosY() + speed);
@@ -150,7 +147,6 @@ public class Luminescent
 		if(KeyboardUtils.isKeyDown(Constants.KEYS_UTIL_SCREENSHOT))
 		{
 			File dir = newFile("screenshots/");
-			dir = new File(dir.getAbsolutePath());
 			
 			if(!dir.exists() || !dir.isDirectory()) 
 			{
@@ -167,7 +163,7 @@ public class Luminescent
 			} 
 			catch (Exception e) 
 			{
-				LoggingUtils.logException(LoggingUtils.LOGGER, e);
+				e.printStackTrace();
 			}
 		}
 		if(KeyboardUtils.isKeyDown(Constants.KEYS_UTIL_NEXTWINDOW))

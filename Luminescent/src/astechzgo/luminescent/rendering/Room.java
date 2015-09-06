@@ -1,7 +1,6 @@
 package astechzgo.luminescent.rendering;
 
 import java.awt.Color;
-import java.awt.Rectangle;
 
 public class Room extends RenderableQuadrilateralGameObject {
 
@@ -27,7 +26,19 @@ public class Room extends RenderableQuadrilateralGameObject {
 		super.render();
 	}
 	
-	public Rectangle getBox() {
-		return new Rectangle(super.x, super.y, super.width, super.height);
+	public double getPosX() {
+		return super.x;
+	}
+	
+	public double getPosY() {
+		return super.y;
+	}
+	
+	public double getWidth() {
+		return super.width;
+	}
+	
+	public double getHeight() {
+		return super.height;
 	}
 }

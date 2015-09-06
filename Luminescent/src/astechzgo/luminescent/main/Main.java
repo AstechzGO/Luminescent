@@ -37,7 +37,7 @@ public class Main
 	public void Init()
 	{
 		Constants.readConstantPropertiesFromFile();
-		LoggingUtils.configureRobotLogger();
+		LoggingUtils.configureLogger();
 
 		TextureList.loadNonSlickTextures();
 		try
@@ -49,7 +49,7 @@ public class Main
 		}
 		catch (Exception e)
 		{
-			LoggingUtils.logException(LoggingUtils.LOGGER, e);
+			e.printStackTrace();
 			System.exit(0);
 		}
 		

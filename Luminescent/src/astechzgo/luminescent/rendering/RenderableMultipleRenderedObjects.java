@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.lwjgl.opengl.GL11;
 
+import astechzgo.luminescent.textures.Texture;
+
 public class RenderableMultipleRenderedObjects implements IRenderedObject {
 
 	private Color colour = new Color(0, 0, 0);
@@ -37,5 +39,42 @@ public class RenderableMultipleRenderedObjects implements IRenderedObject {
 	@Override
 	public void resize() {
 		//Redundant
+	}
+	
+	@Override
+	public void setTexture(Texture texture) {
+		//Redundant
+	}
+
+	@Override
+	public Texture getTexture() {
+		//Redundant
+		return null;
+	}
+
+	@Override
+	public boolean isTouching(IRenderedObject object) {
+		for(IRenderedObject i : objects) {
+			if(i.isTouching(object)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+
+	@Override
+	public boolean doesContain(int x, int y) {
+		for(IRenderedObject i : objects) {
+			if(i.doesContain(x, y)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public List<IRenderedObject> getAll() { 
+		return objects;
 	}
 }
