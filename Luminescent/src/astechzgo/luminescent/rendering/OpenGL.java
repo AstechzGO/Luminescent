@@ -19,7 +19,7 @@ public class OpenGL
 	
 	public static void InitOpenGL()
 	{
-		ChangeResolution(DisplayUtils.SCREEN_WIDTH, DisplayUtils.SCREEN_HEIGHT);
+		ChangeResolution(DisplayUtils.getDisplayWidth(), DisplayUtils.getDisplayHeight());
 	}
 	
 	public static void Tick()

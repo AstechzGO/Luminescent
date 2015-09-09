@@ -1,0 +1,182 @@
+Project Developers:
+
+@eandr127
+@D3ZOMBKEELA
+@Patedorea
+@MatEdwards
+
+Code sources that we have used:
+
+astechzgo.luminescent:
+	main:
+		Main:
+			(Nothing)
+		Luminescent:
+			Init():
+				http://www.glfw.org/docs/latest/input.html#cursor_mode
+			Tick():
+				StackOverflow:
+					http://stackoverflow.com/questions/1459656/how-to-get-the-current-time-in-yyyy-mm-dd-hhmisec-millisecond-format-in-java:
+						Question:
+							Sunil Kumar Sahoo 	(http://stackoverflow.com/users/111988/sunil-kumar-sahoo)
+							Peter Mortensen 	(http://stackoverflow.com/users/63550/peter-mortensen)
+						Answer:
+							JayJay				(http://stackoverflow.com/users/171675/jayjay)
+	rendering:
+		IRenderedObject:
+			(Nothing)
+		OpenGL:
+			Tick:
+				http://wiki.lwjgl.org/wiki/LWJGL_Basics_3_(The_Quad)#Example
+			ChangeResolution:
+				http://wiki.lwjgl.org/wiki/LWJGL_Basics_3_(The_Quad)#Example
+		Options:
+			(Nothing)
+		Player:
+			(Nothing)
+		RenderableCircularGameObject:
+			isTouching():
+				http://www.java-gaming.org/index.php/topic,10265.
+		RenderableMultipleRenderedObjects:
+			(Nothing)
+		RenderableQuadrilateralGameObject:
+			isTouching():
+				StackOverflow:
+					http://stackoverflow.com/questions/306316/determine-if-two-rectangles-overlap-each-other:
+						Question:
+							Rob Burke 			(http://stackoverflow.com/users/135/rob-burke)
+							PhiLho				(http://stackoverflow.com/users/15459/philho)
+						Answer:
+							Charles Bretana		(http://stackoverflow.com/users/32632/charles-bretana)
+				http://www.java-gaming.org/index.php/topic,10265.
+		Room:
+			(Nothing)
+		RoomWalls:
+			(Nothing)
+	sound:
+		SoundList:
+			(Nothing)
+		SoundManager:
+			SoundManager():
+				http://www.paulscode.com/tutorials/SoundSystem/SoundSystem.pdf
+			loadSound():
+				http://www.paulscode.com/tutorials/SoundSystem/SoundSystem.pdf
+	textures:
+		Texture:
+			toByteBuffer():
+				http://www.java-gaming.org/index.php?topic=25516.0
+			toBufferedImage(String):
+				StackOverflow:
+					http://stackoverflow.com/questions/8539124/unable-to-get-image-icon-in-runnable-jar:
+						Question:
+							desmatron 				(http://stackoverflow.com/users/1055176/desmatron)
+							jadarnel27				(http://stackoverflow.com/users/861565/jadarnel27)
+						Answer:
+							JB Nizet				(http://stackoverflow.com/users/571407/jb-nizet)
+			toBufferedImage(Image):
+				StackOverflow:
+					http://stackoverflow.com/questions/13605248/java-converting-image-to-bufferedimage:
+						Question:
+							Arek Wilk 				(http://stackoverflow.com/users/1426038/arek-wilk)
+						Answer:
+							Sri Harsha Chilakapati	(http://stackoverflow.com/users/1026805/sri-harsha-chilakapati)
+							Dave Jarvis				(http://stackoverflow.com/users/59087/dave-jarvis)	
+			loadTexture:
+				http://www.java-gaming.org/index.php?topic=25516.0
+		TextureList:
+			(Nothing)
+	utils:
+		Constants:
+			https://github.com/FRC2994/FRC-2015/blob/master/src/ca/team2994/frc/utils/Constants.java
+		ControllerUtils:
+			getAllJoysticks():
+				https://github.com/LWJGL/lwjgl/blob/master/src/java/org/lwjgl/input/Keyboard.java
+				StackOverflow:
+					http://stackoverflow.com/questions/16383898/find-words-in-string-surrounded-by-and:
+						Question:
+							Emil Adz				(http://stackoverflow.com/users/1561247/emil-adz)
+						Answer:
+							Evgeniy Dorofeev		(http://stackoverflow.com/users/1831293/evgeniy-dorofeev)
+		DisplayUtils:
+			static-block:
+				https://github.com/kappaOne/lwjglx/blob/master/src/org/lwjglx/opengl/Display.java
+			setDisplayMode():
+				http://wiki.lwjgl.org/wiki/LWJGL_Basics_5_(Fullscreen)#Convenience_method_to_Switch_Resolution
+				https://github.com/kappaOne/lwjglx/blob/master/src/org/lwjglx/opengl/Display.java
+			takeScreenshot():
+				http://wiki.lwjgl.org/wiki/Taking_Screen_Shots
+			getFlippedImage():
+				StackOverflow:
+					http://stackoverflow.com/questions/13742365/how-do-i-flip-an-image-horizontally-flip-with-glreadpixels-bufferedimage-and-o:
+						Question:
+							Rose Blax				(http://stackoverflow.com/users/1878494/rose-blax)
+						Answer:
+							Andrew Thompson			(http://stackoverflow.com/users/418556/andrew-thompson)
+			DisplayMode:
+				https://github.com/kappaOne/lwjglx/blob/master/src/org/lwjglx/opengl/DisplayMode.java
+			create():
+				https://github.com/kappaOne/lwjglx/blob/master/src/org/lwjglx/opengl/Display.java
+		EConsoleHandler:
+			(Nothing)
+		KeyboardUtils:
+			genKeyNames():
+				https://github.com/LWJGL/lwjgl/blob/master/src/java/org/lwjgl/input/Keyboard.java
+			genKeyMap():
+				https://github.com/LWJGL/lwjgl/blob/master/src/java/org/lwjgl/input/Keyboard.java
+			getKeyCodes():
+				StackOverflow:
+					http://stackoverflow.com/questions/16383898/find-words-in-string-surrounded-by-and:
+						Question:
+							Emil Adz				(http://stackoverflow.com/users/1561247/emil-adz)
+						Answer:
+							Evgeniy Dorofeev		(http://stackoverflow.com/users/1831293/evgeniy-dorofeev)
+		LoggingUtils:
+			format():
+				StackOverflow:
+					http://stackoverflow.com/questions/1459656/how-to-get-the-current-time-in-yyyy-mm-dd-hhmisec-millisecond-format-in-java:
+						Question:
+							Sunil Kumar Sahoo 	(http://stackoverflow.com/users/111988/sunil-kumar-sahoo)
+							Peter Mortensen 	(http://stackoverflow.com/users/63550/peter-mortensen)
+						Answer:
+							JayJay				(http://stackoverflow.com/users/171675/jayjay)	
+			configureLogger:
+				(Unknown)
+			cleanupLogFilename:
+				StackOverflow:
+					http://stackoverflow.com/questions/1459656/how-to-get-the-current-time-in-yyyy-mm-dd-hhmisec-millisecond-format-in-java:
+						Question:
+							Sunil Kumar Sahoo 	(http://stackoverflow.com/users/111988/sunil-kumar-sahoo)
+							Peter Mortensen 	(http://stackoverflow.com/users/63550/peter-mortensen)
+						Answer:
+							JayJay				(http://stackoverflow.com/users/171675/jayjay)	
+			logException():
+				StackOverflow:
+					http://stackoverflow.com/questions/4812570/how-to-store-printstacktrace-into-a-string
+						Question:
+							ace 				(http://stackoverflow.com/users/527577/ace)
+							BalusC			 	(http://stackoverflow.com/users/157882/balusc)
+						Answer:
+							Zach L				(http://stackoverflow.com/users/568406/zach-l)
+		RenderingUtils:
+			RenderQuad():
+				http://wiki.lwjgl.org/wiki/The_Quad_textured#Loading_textures
+			RenderCircle():
+				StackOverflow:
+					http://stackoverflow.com/questions/8762826/texture-mapping-a-circle-made-using-gl-polygon:
+						Question:
+							Mike Tarrant 		(http://stackoverflow.com/users/1080242/mike-tarrant)
+							genpfault			(http://stackoverflow.com/users/44729/genpfault)
+						Answer:
+							ClickerMonkey		(http://stackoverflow.com/users/914155/clickermonkey)
+							Christian Rau		(http://stackoverflow.com/users/743214/christian-rau)
+		SystemUtils:
+			setWorkingDirectory():
+				StackOverflow:
+					http://stackoverflow.com/questions/840190/changing-the-current-working-directory-in-java
+						Question:
+							Nick				(http://stackoverflow.com/users/92222/nick)
+						Answer:
+							Steve K				(http://stackoverflow.com/users/1864131/steve-k)
+			
+					
+			

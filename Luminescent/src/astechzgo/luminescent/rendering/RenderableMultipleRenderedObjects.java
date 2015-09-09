@@ -1,9 +1,11 @@
 package astechzgo.luminescent.rendering;
 
+import java.awt.Color;
 import java.util.List;
 
 import org.lwjgl.opengl.GL11;
-import org.newdawn.slick.Color;
+
+import astechzgo.luminescent.textures.Texture;
 
 public class RenderableMultipleRenderedObjects implements IRenderedObject {
 
@@ -18,7 +20,7 @@ public class RenderableMultipleRenderedObjects implements IRenderedObject {
 	@Override
 	public void render() {
 		for(IRenderedObject object : objects) {
-			GL11.glColor3f(colour.r, colour.g, colour.b);
+			GL11.glColor3f((float)colour.getRed() / 256, (float)colour.getGreen() / 256, (float)colour.getBlue() / 256);
 			object.render();
 		}
 
@@ -32,5 +34,47 @@ public class RenderableMultipleRenderedObjects implements IRenderedObject {
 	@Override
 	public Color getColour() {
 		return colour;
+	}
+
+	@Override
+	public void resize() {
+		//Redundant
+	}
+	
+	@Override
+	public void setTexture(Texture texture) {
+		//Redundant
+	}
+
+	@Override
+	public Texture getTexture() {
+		//Redundant
+		return null;
+	}
+
+	@Override
+	public boolean isTouching(IRenderedObject object) {
+		for(IRenderedObject i : objects) {
+			if(i.isTouching(object)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+
+	@Override
+	public boolean doesContain(int x, int y) {
+		for(IRenderedObject i : objects) {
+			if(i.doesContain(x, y)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public List<IRenderedObject> getAll() { 
+		return objects;
 	}
 }

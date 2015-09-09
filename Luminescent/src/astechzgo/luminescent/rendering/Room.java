@@ -1,20 +1,16 @@
 package astechzgo.luminescent.rendering;
 
-import java.awt.Rectangle;
-
-import org.newdawn.slick.Color;
-
-import astechzgo.luminescent.utils.DisplayUtils;
+import java.awt.Color;
 
 public class Room extends RenderableQuadrilateralGameObject {
 
 	public Room() {
 		super(
 				
-				(DisplayUtils.SCREEN_WIDTH - DisplayUtils.WIDTH_OFFSET * 2) / 45 + DisplayUtils.WIDTH_OFFSET, 
-				(DisplayUtils.SCREEN_HEIGHT - DisplayUtils.HEIGHT_OFFSET * 2) / 25 + DisplayUtils.HEIGHT_OFFSET, 
-				(DisplayUtils.SCREEN_WIDTH - DisplayUtils.WIDTH_OFFSET * 2) - ((DisplayUtils.SCREEN_WIDTH - DisplayUtils.WIDTH_OFFSET ) / 45 * 2),
-				(DisplayUtils.SCREEN_HEIGHT - DisplayUtils.HEIGHT_OFFSET * 2) - ((DisplayUtils.SCREEN_HEIGHT - DisplayUtils.HEIGHT_OFFSET )/ 25 * 2)
+				1920 / 45, 
+				1080 / 25, 
+				1920 - (1920 / 45 * 2),
+				1080 - (1080 / 25 * 2)
 				
 			);
 		super.setColour(new Color(0.15f, 0.15f, 0.15f));
@@ -30,7 +26,19 @@ public class Room extends RenderableQuadrilateralGameObject {
 		super.render();
 	}
 	
-	public Rectangle getBox() {
-		return new Rectangle(super.x, super.y, super.width, super.height);
+	public double getPosX() {
+		return super.x;
+	}
+	
+	public double getPosY() {
+		return super.y;
+	}
+	
+	public double getWidth() {
+		return super.width;
+	}
+	
+	public double getHeight() {
+		return super.height;
 	}
 }
