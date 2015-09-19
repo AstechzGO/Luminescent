@@ -177,6 +177,15 @@ astechzgo.luminescent:
 							Nick				(http://stackoverflow.com/users/92222/nick)
 						Answer:
 							Steve K				(http://stackoverflow.com/users/1864131/steve-k)
-			
-					
+
+Other sources:
+
+Deployment\apache-ant-x.x.x\*:
+	https://www.apache.org/dist/ant/binaries/
+
+Deployment\jarsplice+.jar:
+	Original Source:
+		http://ninjacave.com/jarsplice
+	JarSplice Plus:
+		https://github.com/lquesada/JarSplicePlus
 			
