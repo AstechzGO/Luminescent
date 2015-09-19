@@ -178,14 +178,20 @@ astechzgo.luminescent:
 						Answer:
 							Steve K				(http://stackoverflow.com/users/1864131/steve-k)
 
-Other sources:
+Deployment:
 
 Deployment\apache-ant-x.x.x\*:
 	https://www.apache.org/dist/ant/binaries/
-
-Deployment\jarsplice+.jar:
+Deployment\build\jarsplice+.jar:
 	Original Source:
 		http://ninjacave.com/jarsplice
 	JarSplice Plus:
 		https://github.com/lquesada/JarSplicePlus
+Deployment\Build\updateANT.bat:
+	StackOverflow:
+		http://stackoverflow.com/questions/2874387/how-to-create-a-bat-file-to-download-and-unpack-a-zip-file
+				Question:
+					Rella				(http://stackoverflow.com/users/434051/rella)
+				Answer:
+					wqw					(http://stackoverflow.com/users/40691/wqw)
 			
