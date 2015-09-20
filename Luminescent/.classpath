@@ -2,13 +2,26 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-	<classpathentry kind="lib" path="libs/lwjgl/lwjgl.jar">
+	<classpathentry kind="lib" path="libs/lwjgl/lwjgl.jar" sourcepath="libs/lwjgl/lwjgl-src.zip">
 		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/Luminescent/libs/lwjgl/lwjgl-doc.zip!/"/>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="Luminescent/libs/lwjgl/natives"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="libs/paulscode/SoundSystem.jar"/>
-	<classpathentry kind="lib" path="libs/paulscode/CodecMP3.jar"/>
-	<classpathentry kind="lib" path="libs/paulscode/LibraryLWJGL3OpenAL.jar"/>
+	<classpathentry kind="lib" path="libs/paulscode/SoundSystem.jar" sourcepath="libs/paulscode/SoundSystem-src.zip">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/Luminescent/libs/paulscode/SoundSystem-doc.zip!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="libs/paulscode/CodecMP3.jar" sourcepath="libs/paulscode/CodecMP3-src.zip">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/Luminescent/libs/paulscode/CodecMP3-doc.zip!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="libs/paulscode/LibraryLWJGL3OpenAL.jar" sourcepath="libs/paulscode/LibraryLWJGL3OpenAL-src.zip">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/Luminescent/libs/paulscode/LibraryLWJGL3OpenAL-doc.zip!/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
