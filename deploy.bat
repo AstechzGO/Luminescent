@@ -1,23 +1,23 @@
+@echo off
 goto :start
 :start
-%echo off
 cd Deployment/build
 
-if not exist ../apache-ant-1.9.6 goto :error
+if not exist ..\apache-ant-1.9.6 goto :error
 
-cd ../
-build/fciv -v -xml build/out.bin -md5 apache-ant-1.9.6
+cd ..\
+build\fciv -v -xml build\out.bin -md5 apache-ant-1.9.6
 cd build
 
 if not %ERRORLEVEL%==0 goto :error
 
 echo.
 
-call ../apache-ant-1.9.6/bin/ant.bat -f build.xml
+call ..\apache-ant-1.9.6\bin\ant.bat -f build.xml
 
 echo.
 
-java -jar jarsplice+.jar -i temp/Base.jar temp/Base_lib/*.jar -n temp/Base_lib/natives/* -m astechzgo.luminescent.main.Main -o ../Luminescent.jar
+java -jar jarsplice+.jar -i temp\Base.jar temp\Base_lib\*.jar -n temp\Base_lib\natives\* -m astechzgo.luminescent.main.Main -o ..\Luminescent.jar
 
 echo.
 

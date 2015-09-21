@@ -7,7 +7,7 @@ del /q %temp%\~tmp.vbs
 move %temp%\apache-ant-1.9.6-bin.zip.extracted\apache-ant-1.9.6 ../apache-ant-1.9.6
 del /q /s %temp%\apache-ant-1.9.6-bin.zip.extracted
 pause
-../../deploy.bat
+..\..\deploy.bat
 goto :eof
 
 '--- figure out temp file & folder
