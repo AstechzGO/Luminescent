@@ -26,9 +26,9 @@ astechzgo.luminescent:
 		IRenderedObject:
 			(Nothing)
 		OpenGL:
-			Tick:
+			Tick():
 				http://wiki.lwjgl.org/wiki/LWJGL_Basics_3_(The_Quad)#Example
-			ChangeResolution:
+			ChangeResolution():
 				http://wiki.lwjgl.org/wiki/LWJGL_Basics_3_(The_Quad)#Example
 		Options:
 			(Nothing)
@@ -81,7 +81,7 @@ astechzgo.luminescent:
 						Answer:
 							Sri Harsha Chilakapati	(http://stackoverflow.com/users/1026805/sri-harsha-chilakapati)
 							Dave Jarvis				(http://stackoverflow.com/users/59087/dave-jarvis)	
-			loadTexture:
+			loadTexture():
 				http://www.java-gaming.org/index.php?topic=25516.0
 		TextureList:
 			(Nothing)
@@ -139,9 +139,9 @@ astechzgo.luminescent:
 							Peter Mortensen 	(http://stackoverflow.com/users/63550/peter-mortensen)
 						Answer:
 							JayJay				(http://stackoverflow.com/users/171675/jayjay)	
-			configureLogger:
+			configureLogger():
 				(Unknown)
-			cleanupLogFilename:
+			cleanupLogFilename():
 				StackOverflow:
 					http://stackoverflow.com/questions/1459656/how-to-get-the-current-time-in-yyyy-mm-dd-hhmisec-millisecond-format-in-java:
 						Question:
@@ -157,6 +157,8 @@ astechzgo.luminescent:
 							BalusC			 	(http://stackoverflow.com/users/157882/balusc)
 						Answer:
 							Zach L				(http://stackoverflow.com/users/568406/zach-l)
+			printException():
+				http://www.rgagnon.com/javadetails/java-0537.html
 		RenderingUtils:
 			RenderQuad():
 				http://wiki.lwjgl.org/wiki/The_Quad_textured#Loading_textures
@@ -177,6 +179,21 @@ astechzgo.luminescent:
 							Nick				(http://stackoverflow.com/users/92222/nick)
 						Answer:
 							Steve K				(http://stackoverflow.com/users/1864131/steve-k)
-			
-					
+
+Deployment:
+
+Deployment\apache-ant-1.9.6\*:
+	https://www.apache.org/dist/ant/binaries/
+Deployment\build\jarsplice+.jar:
+	Original Source:
+		http://ninjacave.com/jarsplice
+	JarSplice Plus:
+		https://github.com/lquesada/JarSplicePlus
+Deployment\Build\updateANT.bat:
+	StackOverflow:
+		http://stackoverflow.com/questions/2874387/how-to-create-a-bat-file-to-download-and-unpack-a-zip-file
+				Question:
+					Rella				(http://stackoverflow.com/users/434051/rella)
+				Answer:
+					wqw					(http://stackoverflow.com/users/40691/wqw)
 			
