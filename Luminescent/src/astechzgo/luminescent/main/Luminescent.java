@@ -19,6 +19,8 @@ import astechzgo.luminescent.utils.Constants;
 import astechzgo.luminescent.utils.ControllerUtils;
 import astechzgo.luminescent.utils.DisplayUtils;
 import astechzgo.luminescent.utils.KeyboardUtils;
+import astechzgo.luminescent.utils.LoggingUtils;
+
 import static astechzgo.luminescent.utils.SystemUtils.newFile;
 
 public class Luminescent
@@ -27,7 +29,7 @@ public class Luminescent
 	public static Player thePlayer = new Player();
 	public static double moveSpeed = 0.5;
 	
-	public static double lastDelta = System.currentTimeMillis();
+	public static double lastDelta = GLFW.glfwGetTime() * 1000;
 	
 	public static Room room = new Room();
 	public static RoomWalls walls = new RoomWalls();	
@@ -51,7 +53,7 @@ public class Luminescent
 			} 
 			catch (Exception e)
 			{
-				e.printStackTrace();
+				LoggingUtils.printException(e);
 			}
 			
 			
@@ -163,7 +165,7 @@ public class Luminescent
 			} 
 			catch (Exception e) 
 			{
-				e.printStackTrace();
+				LoggingUtils.printException(e);
 			}
 		}
 		if(KeyboardUtils.isKeyDown(Constants.KEYS_UTIL_NEXTWINDOW))

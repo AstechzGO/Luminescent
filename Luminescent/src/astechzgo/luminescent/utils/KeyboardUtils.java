@@ -59,7 +59,7 @@ public class KeyboardUtils {
 			}
 			return keys.toArray(new String[0]);
 		} catch (Exception e) {
-			e.printStackTrace();
+			LoggingUtils.printException(e);
 		}
 		return null;
 	}
@@ -97,7 +97,7 @@ public class KeyboardUtils {
 				keyMap.put(names.get(i), keys.get(i));
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			LoggingUtils.printException(e);
 		}
 		return keyMap;
 	}

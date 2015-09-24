@@ -49,7 +49,7 @@ public class Main
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			LoggingUtils.printException(e);
 			System.exit(0);
 		}
 		

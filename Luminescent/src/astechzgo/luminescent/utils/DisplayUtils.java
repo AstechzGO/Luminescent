@@ -221,7 +221,7 @@ public class DisplayUtils {
 		} catch (Exception e) {
 			System.out.println("Unable to setup mode " + width + "x" + height
 					+ " fullscreen=" + fullscreen + e);
-			e.printStackTrace();
+			LoggingUtils.printException(e);
 		}
 	}
 
@@ -270,7 +270,7 @@ public class DisplayUtils {
 		    ImageIO.write(image, format, file);
 		} 
 		catch (IOException e) { 
-			e.printStackTrace();
+			LoggingUtils.printException(e);
 		}
 	}
 	
