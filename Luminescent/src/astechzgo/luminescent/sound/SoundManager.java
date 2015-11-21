@@ -1,5 +1,6 @@
 package astechzgo.luminescent.sound;
 
+import astechzgo.luminescent.utils.LoggingUtils;
 import de.cuina.fireandfuel.CodecJLayerMP3;
 import paulscode.sound.Library;
 import paulscode.sound.SoundSystem;
@@ -24,10 +25,10 @@ public class SoundManager {
 				libraryType = Library.class; // "No Sound, Silent Mode"
 				mySoundSystem = new SoundSystem(libraryType);
 			}
-		} catch (SoundSystemException sse) {
+		} catch (SoundSystemException e) {
 
 			// Shouldn’t happen, but it is best to prepare for anything
-			sse.printStackTrace();
+			LoggingUtils.printException(e);
 			return;
 		}
 

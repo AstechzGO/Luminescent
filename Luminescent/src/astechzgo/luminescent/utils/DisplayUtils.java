@@ -1,6 +1,5 @@
 package astechzgo.luminescent.utils;
 
-import static org.lwjgl.glfw.Callbacks.glfwSetCallback;
 import static org.lwjgl.glfw.GLFW.GLFW_OPENGL_DEBUG_CONTEXT;
 import static org.lwjgl.glfw.GLFW.GLFW_RESIZABLE;
 import static org.lwjgl.glfw.GLFW.GLFW_VISIBLE;
@@ -34,17 +33,17 @@ import javax.imageio.ImageIO;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
-import org.lwjgl.glfw.GLFWvidmode;
+import org.lwjgl.glfw.GLFWVidMode;
+import org.lwjgl.glfw.GLFWVidMode.Buffer;
+import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GLContext;
+import org.lwjgl.opengl.GLCapabilities;
 
 import astechzgo.luminescent.textures.TextureList;
 
 public class DisplayUtils {	
 	
 	private static long handle;
-	
-	private static GLContext context;
 	
 	private static boolean displayResizable = false;
 	private static boolean displayFullscreen = false;
@@ -58,7 +57,7 @@ public class DisplayUtils {
 	private static int displayFramebufferHeight = 0;
 	
 	public static long monitor;
-	public static ByteBuffer vidmode;
+	public static GLFWVidMode vidmode;
 
 	public static int monitorWidth;
 	public static int monitorHeight;
@@ -71,19 +70,21 @@ public class DisplayUtils {
 	
 	public static int oldGameWidth = getDisplayWidth() - widthOffset * 2;
 	public static int oldGameHeight = getDisplayHeight() - heightOffset * 2;
+	
+	public static GLCapabilities caps;
 
 	static {
 		if ( glfwInit() != GL11.GL_TRUE )
 			throw new IllegalStateException("Unable to initialize glfw");
 		
 		monitor = glfwGetPrimaryMonitor();
-		vidmode = glfwGetVideoMode(monitor);
+		vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 	
-		monitorWidth = GLFWvidmode.width(vidmode);
-		monitorHeight = GLFWvidmode.height(vidmode);
+		monitorWidth = vidmode.width();
+		monitorHeight = vidmode.height();
 	
-		monitorBitPerPixel = GLFWvidmode.redBits(vidmode) + GLFWvidmode.greenBits(vidmode) + GLFWvidmode.blueBits(vidmode);
-		monitorRefreshRate = GLFWvidmode.refreshRate(vidmode);
+		monitorBitPerPixel = vidmode.redBits() + vidmode.greenBits() + vidmode.blueBits();
+		monitorRefreshRate = vidmode.refreshRate();
 	
 		widthOffset = Math.max(0, (displayWidth - (displayHeight / 9 * 16)) / 2);
 		if(widthOffset == 0) heightOffset = Math.max(0, (displayHeight - (displayWidth / 16 * 9)) / 2);
@@ -114,19 +115,18 @@ public class DisplayUtils {
 			DisplayMode targetDisplayMode = null;
 
 			if (fullscreen) {
-				IntBuffer count = BufferUtils.createIntBuffer(1);
-				ByteBuffer modes = GLFW.glfwGetVideoModes(monitor, count);
+				Buffer modes = GLFW.glfwGetVideoModes(monitor);
 
-				DisplayMode[] displayModes = new DisplayMode[count.get(0)];
+				DisplayMode[] displayModes = new DisplayMode[modes.capacity()];
 
-				for (int i = 0; i < count.get(0); i++) {
-					modes.position(i * GLFWvidmode.SIZEOF);
-
-					int w = GLFWvidmode.width(modes);
-					int h = GLFWvidmode.height(modes);
-					int b = GLFWvidmode.redBits(modes) + GLFWvidmode.greenBits(modes)
-							+ GLFWvidmode.blueBits(modes);
-					int r = GLFWvidmode.refreshRate(modes);
+				for (int i = 0; i < modes.capacity(); i++) {
+					GLFWVidMode mode = modes.get();
+					
+					int w = mode.width();
+					int h = mode.height();
+					int b = mode.redBits() + mode.greenBits()
+							+ mode.blueBits();
+					int r = mode.refreshRate();
 					
 					displayModes[i] = new DisplayMode(w, h, b, r);
 				}
@@ -205,7 +205,7 @@ public class DisplayUtils {
 	        
 	        glfwSwapInterval(1);
 	        glfwShowWindow(handle);
-	        GLContext.createFromCurrent();
+	        caps = GL.createCapabilities();
 
 	        GL11.glMatrixMode(GL11.GL_PROJECTION);
 			GL11.glLoadIdentity();
@@ -215,13 +215,13 @@ public class DisplayUtils {
 			if(fullscreen)
 				GLFW.glfwSetInputMode(handle, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
 
-			glfwSetCallback(handle, KeyboardUtils.KEY_CALLBACK);
+			GLFW.glfwSetKeyCallback(handle, KeyboardUtils.KEY_CALLBACK);
 			
 			
 		} catch (Exception e) {
 			System.out.println("Unable to setup mode " + width + "x" + height
 					+ " fullscreen=" + fullscreen + e);
-			e.printStackTrace();
+			LoggingUtils.printException(e);
 		}
 	}
 
@@ -270,7 +270,7 @@ public class DisplayUtils {
 		    ImageIO.write(image, format, file);
 		} 
 		catch (IOException e) { 
-			e.printStackTrace();
+			LoggingUtils.printException(e);
 		}
 	}
 	
@@ -311,12 +311,12 @@ public class DisplayUtils {
 	
 	public static void create() {
 		long monitor = glfwGetPrimaryMonitor();
-		ByteBuffer vidmode = glfwGetVideoMode(monitor);
+		GLFWVidMode vidmode = glfwGetVideoMode(monitor);
 
-		int monitorWidth = GLFWvidmode.width(vidmode);
-		int monitorHeight = GLFWvidmode.height(vidmode);
-		int monitorBitPerPixel = GLFWvidmode.redBits(vidmode) + GLFWvidmode.greenBits(vidmode) + GLFWvidmode.blueBits(vidmode);
-		int monitorRefreshRate = GLFWvidmode.refreshRate(vidmode);
+		int monitorWidth = vidmode.width();
+		int monitorHeight = vidmode.height();
+		int monitorBitPerPixel = vidmode.redBits() + vidmode.greenBits() + vidmode.redBits();
+		int monitorRefreshRate = vidmode.refreshRate();
 		
 		desktopDisplayMode = new DisplayMode(monitorWidth, monitorHeight, monitorBitPerPixel, monitorRefreshRate);
 
@@ -349,7 +349,7 @@ public class DisplayUtils {
 		);
 		
 		glfwMakeContextCurrent(handle);
-		context = GLContext.createFromCurrent();
+		caps = GL.createCapabilities();
 		
 		glfwSwapInterval(1);
 		glfwShowWindow(handle);
@@ -371,8 +371,8 @@ public class DisplayUtils {
 		return displayFramebufferHeight;
 	}	
 	
-	public static GLContext getContext() {
-		return context;
+	public static GLCapabilities getCapabilities() {
+		return caps;
 	}
 	
 	public static int getDisplayWidth() {
@@ -387,11 +387,11 @@ public class DisplayUtils {
 		DisplayUtils.monitor = monitor;
 		vidmode = glfwGetVideoMode(monitor);
 	
-		monitorWidth = GLFWvidmode.width(vidmode);
-		monitorHeight = GLFWvidmode.height(vidmode);
+		monitorWidth = vidmode.width();
+		monitorHeight = vidmode.height();
 	
-		monitorBitPerPixel = GLFWvidmode.redBits(vidmode) + GLFWvidmode.greenBits(vidmode) + GLFWvidmode.blueBits(vidmode);
-		monitorRefreshRate = GLFWvidmode.refreshRate(vidmode);
+		monitorBitPerPixel = vidmode.redBits() + vidmode.greenBits() + vidmode.blueBits();
+		monitorRefreshRate = vidmode.refreshRate();
 	
 		widthOffset = Math.max(0, (displayWidth - (displayHeight / 9 * 16)) / 2);
 		if(widthOffset == 0) heightOffset = Math.max(0, (displayHeight - (displayWidth / 16 * 9)) / 2);
@@ -470,11 +470,11 @@ public class DisplayUtils {
 				monitorOffsetWidth = getMonitorOffsetWidth(monitors[i]);
 				monitorOffsetHeight = getMonitorOffsetHeight(monitors[i]);
 
-				ByteBuffer mode = GLFW.glfwGetVideoMode(monitors[i]);
+				GLFWVidMode mode = GLFW.glfwGetVideoMode(monitors[i]);
 				
-				secondMonitorWidth = GLFWvidmode.width(mode);
+				secondMonitorWidth = mode.width();
 				
-				secondMonitorHeight = GLFWvidmode.height(mode);
+				secondMonitorHeight = mode.height();
 				
 				Rectangle r = new Rectangle(monitorOffsetWidth, monitorOffsetHeight, secondMonitorWidth, secondMonitorHeight);
 				
@@ -498,15 +498,19 @@ public class DisplayUtils {
 			
 		}
 		
+		long oldHandle = handle;
+		
 		changeMonitor(monitors[nextMonitorIdx]);
 		
 
 		if(DisplayUtils.isFullscreen()) {
-			setDisplayMode(GLFWvidmode.width(DisplayUtils.vidmode),
-					GLFWvidmode.height(DisplayUtils.vidmode), false);
+			setDisplayMode(DisplayUtils.vidmode.width(),
+					DisplayUtils.vidmode.height(), false);
 			
-			setDisplayMode(GLFWvidmode.width(DisplayUtils.vidmode),
-					GLFWvidmode.height(DisplayUtils.vidmode), true);
+			setDisplayMode(DisplayUtils.vidmode.width(),
+					DisplayUtils.vidmode.height(), true);
+			
+			GLFW.glfwDestroyWindow(oldHandle);
 		}
 		else {
 			IntBuffer xpos = BufferUtils.createIntBuffer(1);
@@ -522,8 +526,8 @@ public class DisplayUtils {
 			
 			GLFW.glfwSetWindowPos(
 					DisplayUtils.getWindow(), 
-					monitorOffsetWidth + (GLFWvidmode.width(vidmode) / 2) - (getDisplayWidth() / 2),
-					monitorOffsetHeight + (GLFWvidmode.height(vidmode) / 2) - (getDisplayHeight() / 2)
+					monitorOffsetWidth + (DisplayUtils.vidmode.width() / 2) - (getDisplayWidth() / 2),
+					monitorOffsetHeight + (DisplayUtils.vidmode.height() / 2) - (getDisplayHeight() / 2)
 				);
 		}
 		
