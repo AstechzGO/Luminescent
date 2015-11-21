@@ -1,6 +1,5 @@
 package astechzgo.luminescent.utils;
 
-import static org.lwjgl.glfw.Callbacks.glfwSetCallback;
 import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
 
 import java.lang.reflect.Field;
@@ -34,7 +33,7 @@ public class KeyboardUtils {
 	};
 	
 	static{
-		glfwSetCallback(DisplayUtils.getHandle(), KEY_CALLBACK);
+		GLFW.glfwSetKeyCallback(DisplayUtils.getHandle(), KEY_CALLBACK);
 	}
 	
 	private static String[] genKeyNames() {
