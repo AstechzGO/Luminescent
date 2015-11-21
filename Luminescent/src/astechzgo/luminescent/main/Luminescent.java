@@ -7,7 +7,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.lwjgl.glfw.GLFW;
-import org.lwjgl.glfw.GLFWvidmode;
 
 import astechzgo.luminescent.rendering.Player;
 import astechzgo.luminescent.rendering.Room;
@@ -44,8 +43,8 @@ public class Luminescent
 		if(Constants.getConstantAsBoolean(Constants.WINDOW_FULLSCREEN)) 
 		{	
 			
-			setDisplayMode(GLFWvidmode.width(DisplayUtils.vidmode),
-					GLFWvidmode.height(DisplayUtils.vidmode), true);
+			setDisplayMode(DisplayUtils.vidmode.width(),
+					DisplayUtils.vidmode.height(), true);
 		
 			try 
 			{
@@ -141,8 +140,8 @@ public class Luminescent
 			}
 			else 
 			{
-				setDisplayMode(GLFWvidmode.width(DisplayUtils.vidmode),
-						GLFWvidmode.height(DisplayUtils.vidmode), true);
+				setDisplayMode(DisplayUtils.vidmode.width(),
+						DisplayUtils.vidmode.height(), true);
 				KeyboardUtils.resetKeys();
 			}
 		}
