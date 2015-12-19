@@ -82,12 +82,17 @@ public class RenderableQuadrilateralGameObject implements IRenderedObject {
 
 	@Override
 	public void resize() {
+		int scaledCamX = ((int) Math
+				.round((double)((1920 / 2) - Camera.getX()) / 1920 * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)));
+		int scaledCamY = ((int) Math
+				.round((double)((1080 / 2) - Camera.getY()) / 1080 * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2)));
+		
 		scaledX = ((int) Math
 				.round((double) x / 1920 * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)))
-				+ DisplayUtils.widthOffset;
+				+ DisplayUtils.widthOffset + scaledCamX;
 		scaledY = ((int) Math
 				.round((double) y / 1080 * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2)))
-				+ DisplayUtils.heightOffset;
+				+ DisplayUtils.heightOffset + scaledCamY;
 
 		scaledWidth = (int) Math
 				.round((double) width / 1920 * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2));
