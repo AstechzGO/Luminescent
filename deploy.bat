@@ -1,6 +1,9 @@
 @echo off
 goto :start
 :start
+echo.
+echo Luminescent deployment tool be eandr127
+echo.
 cd Deployment/build
 
 if not exist ..\apache-ant-1.9.6 goto :error
