@@ -112,13 +112,13 @@ public class RenderableCircularGameObject implements IRenderedObject {
 			RenderableQuadrilateralGameObject casted = (RenderableQuadrilateralGameObject) object;
 
 			int[] xQuads = { 
-				(casted.x), 
-				(casted.x + casted.width)
+				(casted.aX), 
+				(casted.bX)
 			};
 
 			int[] yQuads = { 
-				(casted.y), 
-				(casted.y + casted.height) 
+				(casted.dY), 
+				(casted.aY) 
 			};
 
 			boolean[][] quadrant = new boolean[2][2];
