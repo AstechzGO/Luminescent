@@ -76,12 +76,17 @@ public class RenderableCircularGameObject implements IRenderedObject {
 
 	@Override
 	public void resize() {
+		int scaledCamX = ((int) Math
+				.round((double)((1920 / 2) - Camera.getX()) / 1920 * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)));
+		int scaledCamY = ((int) Math
+				.round((double)((1080 / 2) - Camera.getY()) / 1080 * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2)));
+
 		scaledX = ((int) Math
 				.round((double) x / 1920 * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)))
-				+ DisplayUtils.widthOffset;
+				+ DisplayUtils.widthOffset + scaledCamX;
 		scaledY = ((int) Math
 				.round((double) y / 1080 * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2)))
-				+ DisplayUtils.heightOffset;
+				+ DisplayUtils.heightOffset + scaledCamY;
 
 		scaledRadius = (int) Math
 				.round((double) radius / 1920 * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2));
@@ -107,13 +112,13 @@ public class RenderableCircularGameObject implements IRenderedObject {
 			RenderableQuadrilateralGameObject casted = (RenderableQuadrilateralGameObject) object;
 
 			int[] xQuads = { 
-				(casted.x), 
-				(casted.x + casted.width)
+				(casted.aX), 
+				(casted.bX)
 			};
 
 			int[] yQuads = { 
-				(casted.y), 
-				(casted.y + casted.height) 
+				(casted.dY), 
+				(casted.aY) 
 			};
 
 			boolean[][] quadrant = new boolean[2][2];

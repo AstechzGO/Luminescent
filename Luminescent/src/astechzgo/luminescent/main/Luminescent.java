@@ -8,6 +8,7 @@ import java.util.Date;
 
 import org.lwjgl.glfw.GLFW;
 
+import astechzgo.luminescent.rendering.Camera;
 import astechzgo.luminescent.rendering.Player;
 import astechzgo.luminescent.rendering.Room;
 import astechzgo.luminescent.rendering.RoomWalls;
@@ -71,6 +72,9 @@ public class Luminescent
 	
 	public static void Tick()
 	{
+		Camera.setX((int) thePlayer.getPosX());
+		Camera.setY((int) thePlayer.getPosY());
+		
 		room.render();
 		
 		thePlayer.render();
@@ -91,41 +95,33 @@ public class Luminescent
 		
 		double speed = Luminescent.moveSpeed * delta;
 		
-		if(!room.doesContain((int)thePlayer.getPosX(), (int)thePlayer.getPosY()))
-		{	
-			if(thePlayer.getPosX() < room.getPosX())
-			{
-				thePlayer.setPosX(room.getPosX() + room.getWidth());
-			}
-			if(thePlayer.getPosX() > room.getPosX() + room.getWidth())
-			{
-				thePlayer.setPosX(room.getPosX());
-			}
-		
-			if(thePlayer.getPosY() < room.getPosY())
-			{
-				thePlayer.setPosY(room.getPosY() + room.getHeight());
-			}
-			if(thePlayer.getPosY() > room.getPosY() + room.getHeight())
-			{
-				thePlayer.setPosY(room.getPosY());
-			}
-		}
 		if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_UP))
 		{
-			thePlayer.setPosY(thePlayer.getPosY() + speed);
+			if((thePlayer.getPosY() + speed) >= room.getPosY() + room.getHeight() - thePlayer.getRadius())
+				thePlayer.setPosY(room.getPosY() + room.getHeight() - thePlayer.getRadius());
+			else
+				thePlayer.setPosY(thePlayer.getPosY() + speed);
 		}
 		if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_DOWN))
 		{
-			thePlayer.setPosY(thePlayer.getPosY() - speed);
+			if((thePlayer.getPosY() - speed) <= room.getPosY() + thePlayer.getRadius())
+				thePlayer.setPosY(room.getPosY() + thePlayer.getRadius());
+			else
+				thePlayer.setPosY(thePlayer.getPosY() - speed);
 		}
 		if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_RIGHT))
 		{
-			thePlayer.setPosX(thePlayer.getPosX() + speed);
+			if((thePlayer.getPosX() + speed) >= room.getPosX() + room.getWidth() - thePlayer.getRadius())
+				thePlayer.setPosX(room.getPosX() + room.getWidth() - thePlayer.getRadius());
+			else
+				thePlayer.setPosX(thePlayer.getPosX() + speed);
 		}
 		if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_LEFT))
 		{
-			thePlayer.setPosX(thePlayer.getPosX() - speed);
+			if((thePlayer.getPosX() - speed) <= room.getPosX() + thePlayer.getRadius())
+				thePlayer.setPosX(room.getPosX() + thePlayer.getRadius());
+			else
+				thePlayer.setPosX(thePlayer.getPosX() - speed);
 		}
 		if(KeyboardUtils.isKeyDown(Constants.KEYS_UTIL_EXIT))
 		{

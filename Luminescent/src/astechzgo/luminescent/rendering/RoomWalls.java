@@ -28,7 +28,7 @@ public class RoomWalls extends RenderableMultipleRenderedObjects {
 	}
 	
 	private static List<IRenderedObject> getRoomObjects() {
-		RenderableQuadrilateralGameObject wall1 = new RenderableQuadrilateralGameObject(
+		RenderableQuadrilateralGameObject wall1 = new RenderableRectangularGameObject(
 				0,
 				0,
 				posX,
@@ -36,7 +36,7 @@ public class RoomWalls extends RenderableMultipleRenderedObjects {
 			);
 		wall1.setColour(new Color(0.0f, 0.4f, 0.6f));
 		
-		RenderableQuadrilateralGameObject wall2 = new RenderableQuadrilateralGameObject(
+		RenderableQuadrilateralGameObject wall2 = new RenderableRectangularGameObject(
 				0,
 				0,
 				1920,
@@ -44,7 +44,7 @@ public class RoomWalls extends RenderableMultipleRenderedObjects {
 			);
 		wall2.setColour(new Color(0.0f, 0.4f, 0.6f));
 		
-		RenderableQuadrilateralGameObject wall3 = new RenderableQuadrilateralGameObject(
+		RenderableQuadrilateralGameObject wall3 = new RenderableRectangularGameObject(
 				width + posX,
 				0,
 				1920 - (width + posX),
@@ -52,7 +52,7 @@ public class RoomWalls extends RenderableMultipleRenderedObjects {
 			);
 		wall3.setColour(new Color(0.0f, 0.4f, 0.6f));
 		
-		RenderableQuadrilateralGameObject wall4 = new RenderableQuadrilateralGameObject(
+		RenderableQuadrilateralGameObject wall4 = new RenderableRectangularGameObject(
 				0,
 				height + posY,
 				1920,
