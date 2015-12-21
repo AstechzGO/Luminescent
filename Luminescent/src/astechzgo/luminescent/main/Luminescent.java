@@ -9,9 +9,9 @@ import java.util.Date;
 
 import org.lwjgl.glfw.GLFW;
 
-import astechzgo.luminescent.rendering.Projectile;
+import astechzgo.luminescent.entity.Player;
+import astechzgo.luminescent.entity.Projectile;
 import astechzgo.luminescent.rendering.Camera;
-import astechzgo.luminescent.rendering.Player;
 import astechzgo.luminescent.rendering.Room;
 import astechzgo.luminescent.rendering.RoomWalls;
 import astechzgo.luminescent.sound.SoundList;

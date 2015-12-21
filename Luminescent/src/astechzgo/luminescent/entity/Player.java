@@ -1,4 +1,4 @@
-package astechzgo.luminescent.rendering;
+package astechzgo.luminescent.entity;
 
 import java.nio.DoubleBuffer;
 import java.nio.IntBuffer;
@@ -8,7 +8,7 @@ import org.lwjgl.glfw.GLFW;
 
 import astechzgo.luminescent.utils.DisplayUtils;
 
-public class Player extends RenderableCircularGameObject
+public class Player extends CircularEntity
 {
 	public Player()
 	{
