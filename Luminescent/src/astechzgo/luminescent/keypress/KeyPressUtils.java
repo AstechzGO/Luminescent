@@ -18,63 +18,50 @@ import astechzgo.luminescent.utils.LoggingUtils;
 public class KeyPressUtils {
 
 	
-public static void checkUtils() {
+	public static void checkUtils() {
 	
-	if(KeyboardUtils.isKeyDown(Constants.KEYS_UTIL_EXIT))
-	{
-		Luminescent.Shutdown();
-	}
-	if(Constants.getConstantAsBoolean(Constants.WINDOW_FULLSCREEN)) 
-	{	
-		setDisplayMode(DisplayUtils.vidmode.width(),
-				DisplayUtils.vidmode.height(), true);
-	}
-	else 
-	{
-		setDisplayMode(848, 477, false);
-	}
-	if(KeyboardUtils.isKeyDown(Constants.KEYS_UTIL_FULLSCREEN))
-	{
-		if(DisplayUtils.isFullscreen()) 
-		{
-			setDisplayMode(848, 477, false);
-			KeyboardUtils.resetKeys();
+		if(KeyboardUtils.isKeyDown(Constants.KEYS_UTIL_EXIT)) {
+			Luminescent.Shutdown();
 		}
-		else 
-		{
+		if(Constants.getConstantAsBoolean(Constants.WINDOW_FULLSCREEN)) {	
 			setDisplayMode(DisplayUtils.vidmode.width(),
+				DisplayUtils.vidmode.height(), true);
+		}
+		else {
+			setDisplayMode(848, 477, false);
+		}
+		if(KeyboardUtils.isKeyDown(Constants.KEYS_UTIL_FULLSCREEN)) {
+			if(DisplayUtils.isFullscreen()) {
+				setDisplayMode(848, 477, false);
+				KeyboardUtils.resetKeys();
+			}
+			else {
+				setDisplayMode(DisplayUtils.vidmode.width(),
 					DisplayUtils.vidmode.height(), true);
-			KeyboardUtils.resetKeys();
+				KeyboardUtils.resetKeys();
+			}
 		}
-	}
-	if(KeyboardUtils.isKeyDown(Constants.KEYS_UTIL_SCREENSHOT))
-	{
-		File dir = newFile("screenshots/");
+		if(KeyboardUtils.isKeyDown(Constants.KEYS_UTIL_SCREENSHOT)) {
+			File dir = newFile("screenshots/");
 		
-		if(!dir.exists() || !dir.isDirectory()) 
-		{
-			dir.mkdir();
-		}
+			if(!dir.exists() || !dir.isDirectory()) {
+				dir.mkdir();
+			}
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
-		Date dt = new Date();
-		String S = sdf.format(dt);
-
-		try 
-		{
-			DisplayUtils.takeScreenshot(newFile("screenshots/" + S + ".png"));
-		} 
-		catch (Exception e) 
-		{
-			LoggingUtils.printException(e);
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
+			Date dt = new Date();
+			String S = sdf.format(dt);
+			
+			try {
+				DisplayUtils.takeScreenshot(newFile("screenshots/" + S + ".png"));
+			} catch (Exception e) {
+				LoggingUtils.printException(e);
+			}
 		}
-	}
-	if(KeyboardUtils.isKeyDown(Constants.KEYS_UTIL_NEXTWINDOW))
-	{
-		if(GLFW.glfwGetMonitors().capacity() > 1)
-			DisplayUtils.nextMonitor();
-	}
-	
-}	
+		if(KeyboardUtils.isKeyDown(Constants.KEYS_UTIL_NEXTWINDOW)) {
+			if(GLFW.glfwGetMonitors().capacity() > 1)
+				DisplayUtils.nextMonitor();
+		}
+	}	
 }
 
