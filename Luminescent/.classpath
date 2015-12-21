@@ -5,7 +5,7 @@
 	<classpathentry kind="lib" path="libs/lwjgl/lwjgl.jar" sourcepath="libs/lwjgl/lwjgl-src.zip">
 		<attributes>
 			<attribute name="javadoc_location" value="jar:platform:/resource/Luminescent/libs/lwjgl/lwjgl-doc.zip!/"/>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="Luminescent/libs/lwjgl/natives"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="C:/Users/cnnr2/Desktop/lwjgl/native"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="libs/paulscode/SoundSystem.jar" sourcepath="libs/paulscode/SoundSystem-src.zip">
