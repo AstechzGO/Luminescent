@@ -6,13 +6,19 @@ import java.nio.IntBuffer;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 
+import astechzgo.luminescent.gameobject.Room;
+import astechzgo.luminescent.main.Luminescent;
+import astechzgo.luminescent.utils.Constants;
 import astechzgo.luminescent.utils.DisplayUtils;
+import astechzgo.luminescent.utils.KeyboardUtils;
 
 public class Player extends CircularEntity
 {
+	private double lastDelta;
 	public Player()
 	{
 		super(1920 / 2, 1080 / 2, 40, 1);
+		lastDelta = GLFW.glfwGetTime() * 1000;
 	}
 	
 	public double getPosX()
@@ -101,4 +107,133 @@ public class Player extends CircularEntity
 			rotation = 360 - Math.toDegrees(Math.atan(m));
 		return rotation;
 	}
+	public void move(Room room) {
+
+		double delta = ((GLFW.glfwGetTime() * 1000) - lastDelta);
+		lastDelta = GLFW.glfwGetTime() * 1000;
+		if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_FASTER))
+		{
+			Luminescent.moveSpeed = 0.88;
+		}
+		else
+		{
+			Luminescent.moveSpeed = 0.5;
+		}
+		
+		double speed = Luminescent.moveSpeed *  delta;
+		
+		double angle = this.setRotation();		
+		
+		if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_UP))
+		{
+			if(this.getPosX() + speed * Math.cos(Math.toRadians(angle)) >= room.getPosX() + room.getWidth() - this.getRadius())
+				this.setPosX(room.getPosX() + room.getWidth() - this.getRadius());	
+			else if(this.getPosX() + speed * Math.cos(Math.toRadians(angle)) <= room.getPosX() + this.getRadius())
+				this.setPosX(room.getPosX() + this.getRadius());
+			else
+				this.setPosX(this.getPosX() + speed * Math.cos(Math.toRadians(angle)));
+			
+			if(this.getPosY() - speed * Math.sin(Math.toRadians(angle)) >= room.getPosY() + room.getHeight() - this.getRadius())
+				this.setPosY(room.getPosY() + room.getHeight() - this.getRadius());
+			else if(this.getPosY() - speed * Math.sin(Math.toRadians(angle)) <= room.getPosY() + this.getRadius())
+				this.setPosY(room.getPosY() + this.getRadius());
+			else
+				this.setPosY(this.getPosY() - speed * Math.sin(Math.toRadians(angle)));
+		}
+		else if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_DOWN))
+		{
+			speed = -speed;
+			if(this.getPosX() + speed * Math.cos(Math.toRadians(angle)) >= room.getPosX() + room.getWidth() - this.getRadius())
+				this.setPosX(room.getPosX() + room.getWidth() - this.getRadius());		
+			else if(this.getPosX() + speed * Math.cos(Math.toRadians(angle)) <= room.getPosX() + this.getRadius())
+				this.setPosX(room.getPosX() + this.getRadius());
+			else
+				this.setPosX(this.getPosX() + speed * Math.cos(Math.toRadians(angle)));
+			
+			if(this.getPosY() - speed * Math.sin(Math.toRadians(angle)) >= room.getPosY() + room.getHeight() - this.getRadius())
+				this.setPosY(room.getPosY() + room.getHeight() - this.getRadius());
+			else if(this.getPosY() - speed * Math.sin(Math.toRadians(angle)) <= room.getPosY() + this.getRadius())
+				this.setPosY(room.getPosY() + this.getRadius());
+			else
+				this.setPosY(this.getPosY() - speed * Math.sin(Math.toRadians(angle)));
+		}
+		else if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_RIGHT))
+		{
+			if(this.getPosX() + speed * Math.sin(Math.toRadians(angle)) >= room.getPosX() + room.getWidth() - this.getRadius())
+				this.setPosX(room.getPosX() + room.getWidth() - this.getRadius());
+			else if(this.getPosX() + speed * Math.sin(Math.toRadians(angle)) <= room.getPosX() + this.getRadius())
+				this.setPosX(room.getPosX() + this.getRadius());
+			else
+				this.setPosX(this.getPosX() + speed * Math.sin(Math.toRadians(angle)));
+			
+			if(this.getPosY() - speed * Math.cos(Math.toRadians(angle)) >= room.getPosY() + room.getHeight() - this.getRadius())
+				this.setPosY(room.getPosY() + room.getHeight() - this.getRadius());
+			else if(this.getPosY() - speed * Math.cos(Math.toRadians(angle)) <= room.getPosY() + this.getRadius())
+				this.setPosY(room.getPosY() + this.getRadius());
+			else
+				this.setPosY(this.getPosY() - speed * Math.cos(Math.toRadians(angle)));
+		}
+		else if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_LEFT))
+		{
+			speed = -speed;
+			if(this.getPosX() + speed * Math.sin(Math.toRadians(angle)) >= room.getPosX() + room.getWidth() - this.getRadius())
+				this.setPosX(room.getPosX() + room.getWidth() - this.getRadius());		
+			else if(this.getPosX() + speed * Math.sin(Math.toRadians(angle)) <= room.getPosX() + this.getRadius())
+				this.setPosX(room.getPosX() + this.getRadius());
+			else
+				this.setPosX(this.getPosX() + speed * Math.sin(Math.toRadians(angle)));
+			
+			if(this.getPosY() - speed * Math.cos(Math.toRadians(angle)) >= room.getPosY() + room.getHeight() - this.getRadius())
+				this.setPosY(room.getPosY() + room.getHeight() - this.getRadius());
+			else if(this.getPosY() - speed * Math.cos(Math.toRadians(angle)) <= room.getPosY() + this.getRadius())
+				this.setPosY(room.getPosY() + this.getRadius());
+			else
+				this.setPosY(this.getPosY() - speed * Math.cos(Math.toRadians(angle)));
+		}
+
+		
+		/*if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_UP))
+		{
+
+			if((this.getPosY() + speed) >= room.getPosY() + room.getHeight() - this.getRadius()) {
+				this.setPosY(room.getPosY() + room.getHeight() - this.getRadius());
+				
+			}
+			else
+				this.setPosY(this.getPosY() + speed);
+		}
+		
+		if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_DOWN))
+		{
+		
+			if((this.getPosY() - speed) <= room.getPosY() + this.getRadius()){
+				this.setPosY(room.getPosY() + this.getRadius());
+				
+			}
+			else
+				this.setPosY(this.getPosY() - speed);
+		}
+		if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_RIGHT))
+		{
+	
+			if((this.getPosX() + speed) >= room.getPosX() + room.getWidth() - this.getRadius()) {
+				this.setPosX(room.getPosX() + room.getWidth() - this.getRadius());
+			
+			}
+			else
+				this.setPosX(this.getPosX() + speed);
+		}
+		if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_LEFT))
+		{
+		
+			if((this.getPosX() - speed) <= room.getPosX() + this.getRadius()) {
+				this.setPosX(room.getPosX() + this.getRadius());
+		
+			}
+			else
+				this.setPosX(this.getPosX() - speed);
+		}*/	
+	}
+	
+	
 }
