@@ -1,6 +1,8 @@
-package astechzgo.luminescent.rendering;
+package astechzgo.luminescent.gameobject;
 
 import java.awt.Color;
+
+import astechzgo.luminescent.rendering.RenderableRectangularGameObject;
 
 public class Room extends RenderableRectangularGameObject {
 

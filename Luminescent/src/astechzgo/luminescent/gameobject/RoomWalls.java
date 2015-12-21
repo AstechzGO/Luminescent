@@ -1,8 +1,13 @@
-package astechzgo.luminescent.rendering;
+package astechzgo.luminescent.gameobject;
 
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
+
+import astechzgo.luminescent.rendering.IRenderedObject;
+import astechzgo.luminescent.rendering.RenderableMultipleRenderedObjects;
+import astechzgo.luminescent.rendering.RenderableQuadrilateralGameObject;
+import astechzgo.luminescent.rendering.RenderableRectangularGameObject;
 
 public class RoomWalls extends RenderableMultipleRenderedObjects {
 	
