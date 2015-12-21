@@ -72,8 +72,6 @@ public class Luminescent
 		
 		room.render();
 		
-		thePlayer.render();
-		
 		walls.render();
 		
 		double delta = ((GLFW.glfwGetTime() * 1000) - lastDelta);
@@ -158,31 +156,67 @@ public class Luminescent
 			else
 				thePlayer.setPosY(thePlayer.getPosY() - speed * Math.cos(Math.toRadians(angle)));
 		}
-		if(KeyboardUtils.isKeyDown(Constants.KEYS_ACTION_SHOOT)) {
-	
-		
-				
 
+		
+		/*if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_UP))
+		{
+
+			if((thePlayer.getPosY() + speed) >= room.getPosY() + room.getHeight() - thePlayer.getRadius()) {
+				thePlayer.setPosY(room.getPosY() + room.getHeight() - thePlayer.getRadius());
+				
+			}
+			else
+				thePlayer.setPosY(thePlayer.getPosY() + speed);
+		}
+		
+		if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_DOWN))
+		{
+		
+			if((thePlayer.getPosY() - speed) <= room.getPosY() + thePlayer.getRadius()){
+				thePlayer.setPosY(room.getPosY() + thePlayer.getRadius());
+				
+			}
+			else
+				thePlayer.setPosY(thePlayer.getPosY() - speed);
+		}
+		if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_RIGHT))
+		{
+	
+			if((thePlayer.getPosX() + speed) >= room.getPosX() + room.getWidth() - thePlayer.getRadius()) {
+				thePlayer.setPosX(room.getPosX() + room.getWidth() - thePlayer.getRadius());
+			
+			}
+			else
+				thePlayer.setPosX(thePlayer.getPosX() + speed);
+		}
+		if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_LEFT))
+		{
+		
+			if((thePlayer.getPosX() - speed) <= room.getPosX() + thePlayer.getRadius()) {
+				thePlayer.setPosX(room.getPosX() + thePlayer.getRadius());
+		
+			}
+			else
+				thePlayer.setPosX(thePlayer.getPosX() - speed);
+		}*/
+		if(KeyboardUtils.isKeyDown(Constants.KEYS_ACTION_SHOOT)) {
+		// Creates Projectile and adds it to array list
 		Projectile projectile = new Projectile((int)thePlayer.getPosX(),(int) thePlayer.getPosY());
 		projectiles.add(projectile);
 						
 			}
-			
-
-	
+		// For every shot render it and keep shooting it forwards
 		for(int i = 0; i < projectiles.size(); i++){
 		    Projectile m = (Projectile) projectiles.get(i);
 		    m.fireBullet();
 		   
 		        if(room.doesContain((int)m.getX(), (int)m.getY())){
-		         	System.out.println("Amount of Onscreen Projetiles: " + projectiles.size());
-
+		         	// If the bullet is in the room render it
 		            m.render();
 		
-		 
 		        }
 		        else if(!room.doesContain((int)m.getX(),(int)m.getY())) {
-		
+		        	// If the bullet is not it the room delete it
 		            projectiles.remove(i);
 		        }
 		  
@@ -232,7 +266,7 @@ public class Luminescent
 			if(GLFW.glfwGetMonitors().capacity() > 1)
 				DisplayUtils.nextMonitor();
 		}
-		
+		thePlayer.render();
 		ControllerUtils.updateJoysticks();
 	}	
 }
