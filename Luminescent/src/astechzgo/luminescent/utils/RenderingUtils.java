@@ -7,8 +7,6 @@ import astechzgo.luminescent.textures.Texture;
 public class RenderingUtils
 {
 	
-	public static final double RADIAN = 0.01745329251994329576923690768489d;
-	
 	/*		A--B
 	 * 		|QD|
 	 * 		D--C
@@ -45,11 +43,11 @@ public class RenderingUtils
 		}
 	}
 	
-	public static void RenderCircle(double x, double y, double radius, double pointSeperation)
+	public static void RenderCircle(double x, double y, double radius, double pointSeperation, double rotation)
 	{	
 	    GL11.glBegin(GL11.GL_POLYGON);
 
-	    for (double angle=0.0; angle<360.0; angle+=pointSeperation)
+	    for (double angle=0; angle<360.0; angle+=pointSeperation)
 	    {
 	    	double radian = Math.toRadians(angle);
 
@@ -57,8 +55,8 @@ public class RenderingUtils
 	    	double ysin = (float)Math.sin(radian);
 	    	double tempx = xcos * radius + x;
 	    	double tempy = ysin * radius + y;
-	    	double tx = xcos * 0.5 + 0.5;
-	    	double ty = ysin * 0.5 + 0.5;
+	    	double tx = Math.cos(Math.toRadians(angle+rotation)) * 0.5 + 0.5;
+	    	double ty = Math.sin(Math.toRadians(angle+rotation)) * 0.5 + 0.5;
 
 	    	GL11.glTexCoord2d(tx, ty);
 	    	GL11.glVertex2d(tempx, tempy);
@@ -67,13 +65,13 @@ public class RenderingUtils
 	    GL11.glEnd();
 	}
 	
-	public static void RenderCircle(double x, double y, double radius, double pointSeperation, Texture texture) 
+	public static void RenderCircle(double x, double y, double radius, double pointSeperation, double rotation, Texture texture) 
 	{
 	    GL11.glEnable(GL11.GL_TEXTURE_2D);
 	    GL11.glColor3f(1, 1, 1);
 	    
 	    GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getAsTexture()); 
-	    RenderCircle(x, y, radius, pointSeperation);
+	    RenderCircle(x, y, radius, pointSeperation, rotation);
 	    
 	    GL11.glDisable(GL11.GL_TEXTURE_2D);
 	}

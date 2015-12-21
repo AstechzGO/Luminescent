@@ -27,6 +27,8 @@ public class RenderableCircularGameObject implements IRenderedObject {
 
 	protected Texture texture;
 
+	protected double rotation = 0.0;
+	
 	public RenderableCircularGameObject(double x, double y, double radius) {
 		this(x, y, radius, 1);
 	}
@@ -57,10 +59,10 @@ public class RenderableCircularGameObject implements IRenderedObject {
 		GL11.glColor3f((float) colour.getRed() / 256, (float) colour.getGreen() / 256, (float) colour.getBlue() / 256);
 
 		if (texture != null) {
-			RenderingUtils.RenderCircle(scaledX, scaledY, scaledRadius, pointSeperation, texture);
+			RenderingUtils.RenderCircle(scaledX, scaledY, scaledRadius, pointSeperation, rotation, texture);
 		}
 		else {
-			RenderingUtils.RenderCircle(scaledX, scaledY, scaledRadius, pointSeperation);
+			RenderingUtils.RenderCircle(scaledX, scaledY, scaledRadius, pointSeperation, rotation);
 		}
 	}
 
