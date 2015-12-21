@@ -159,9 +159,9 @@ public class Luminescent
 				thePlayer.setPosY(thePlayer.getPosY() - speed * Math.cos(Math.toRadians(angle)));
 		}
 		if(KeyboardUtils.isKeyDown(Constants.KEYS_ACTION_SHOOT)) {
-			System.out.println("crash1");
+	
 		
-						System.out.println("crash2");
+				
 
 		Projectile projectile = new Projectile((int)thePlayer.getPosX(),(int) thePlayer.getPosY());
 		projectiles.add(projectile);
@@ -175,14 +175,14 @@ public class Luminescent
 		    m.fireBullet();
 		   
 		        if(room.doesContain((int)m.getX(), (int)m.getY())){
-		         	System.out.println("projectiles " + projectiles.size());
-		        	System.out.println("rendering");
+		         	System.out.println("Amount of Onscreen Projetiles: " + projectiles.size());
+
 		            m.render();
 		
 		 
 		        }
 		        else if(!room.doesContain((int)m.getX(),(int)m.getY())) {
-		System.out.println("Removing");
+		
 		            projectiles.remove(i);
 		        }
 		  

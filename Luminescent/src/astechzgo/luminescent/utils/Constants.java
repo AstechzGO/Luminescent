@@ -41,9 +41,9 @@ public class Constants
 		defaults.put(KEYS_MOVEMENT_UP, 					"{W}, {UP}");
 		defaults.put(KEYS_MOVEMENT_LEFT, 				"{A}, {LEFT}");
 		defaults.put(KEYS_MOVEMENT_DOWN, 				"{S}, {DOWN}");
-		defaults.put(KEYS_MOVEMENT_RIGHT,               "{D}, {RIGHT}");
+		defaults.put(KEYS_MOVEMENT_RIGHT,				"{D}, {RIGHT}");
 		
-		defaults.put(KEYS_ACTION_SHOOT,                 "{SPACE}");
+		defaults.put(KEYS_ACTION_SHOOT,					"{SPACE}");
 		
 		defaults.put(KEYS_UTIL_SCREENSHOT, 				"{F2}");
 		defaults.put(KEYS_UTIL_FULLSCREEN, 				"{F11}");
