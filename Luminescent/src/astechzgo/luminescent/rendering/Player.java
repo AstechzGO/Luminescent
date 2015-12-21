@@ -62,26 +62,6 @@ public class Player extends RenderableCircularGameObject
 	}
 	
 	public double setRotation() {		
-		/*if(x == 0 && y == 0)
-			return;
-		else if(x == 0 && y == -1)
-			rotation = 90;
-		else if(x == 0 && y == 1)
-			rotation = 270;
-		else if(x == -1 && y == -1)
-			rotation = 135;
-		else if(x == -1 && y == 0)
-			rotation = 180;
-		else if(x == -1 && y == 1)
-			rotation = 225;
-		else if(x == 1 && y == -1)
-			rotation = 45;
-		else if(x == 1 && y == 0)
-			rotation = 0;
-		else if(x == 1 && y == 1)
-			rotation = 315;
-		else
-			rotation = 0;*/
 		DoubleBuffer mxpos = BufferUtils.createDoubleBuffer(1);
 		DoubleBuffer mypos = BufferUtils.createDoubleBuffer(1);
 		
@@ -108,7 +88,13 @@ public class Player extends RenderableCircularGameObject
 		double scaledX = x / GLFW.glfwGetVideoMode(DisplayUtils.monitor).width() * 1920;
 		double scaledY = y / GLFW.glfwGetVideoMode(DisplayUtils.monitor).height() * 1080;
 		
+		if(1920 / 2 - scaledX == 0){
+			rotation = 0;
+			return rotation;
+		}
+		
 		double m = (1080 / 2 - scaledY) / (1920 / 2 - scaledX);
+		
 		if(scaledX <= 1920 / 2)
 			rotation =  360 - Math.toDegrees(Math.atan(m)+180);
 		else
