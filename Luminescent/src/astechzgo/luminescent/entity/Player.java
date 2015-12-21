@@ -102,9 +102,14 @@ public class Player extends CircularEntity {
 			return rotation;
 
 		if(scaledX < 1920 / 2)
-			rotation =  360 - Math.toDegrees(Math.atan(m) - 135);
-		else
-			rotation = 360 - Math.toDegrees(Math.atan(m));
+			rotation = 180 - Math.toDegrees(Math.atan(m));
+		else {
+			if(360 - Math.toDegrees(Math.atan(m)) > 360)
+				rotation = 360 - Math.toDegrees(Math.atan(m)) - 360;
+			else
+				rotation = 360 - Math.toDegrees(Math.atan(m));
+		}
+		
 		return rotation;
 	}
 	public void move(Room room) {
