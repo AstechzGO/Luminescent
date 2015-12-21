@@ -2,20 +2,14 @@ package astechzgo.luminescent.main;
 
 import static astechzgo.luminescent.utils.DisplayUtils.setDisplayMode;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-
 import org.lwjgl.glfw.GLFW;
 
-import astechzgo.luminescent.rendering.Projectile;
+import astechzgo.luminescent.entity.Player;
+import astechzgo.luminescent.gameobject.Room;
+import astechzgo.luminescent.gameobject.RoomWalls;
 import astechzgo.luminescent.keypress.KeyPressGameplay;
 import astechzgo.luminescent.keypress.KeyPressUtils;
 import astechzgo.luminescent.rendering.Camera;
-import astechzgo.luminescent.rendering.Player;
-import astechzgo.luminescent.rendering.Room;
-import astechzgo.luminescent.rendering.RoomWalls;
 import astechzgo.luminescent.sound.SoundList;
 import astechzgo.luminescent.sound.SoundManager;
 import astechzgo.luminescent.textures.Animation;
@@ -23,10 +17,6 @@ import astechzgo.luminescent.textures.TextureList;
 import astechzgo.luminescent.utils.Constants;
 import astechzgo.luminescent.utils.ControllerUtils;
 import astechzgo.luminescent.utils.DisplayUtils;
-import astechzgo.luminescent.utils.KeyboardUtils;
-import astechzgo.luminescent.utils.LoggingUtils;
-
-import static astechzgo.luminescent.utils.SystemUtils.newFile;
 
 public class Luminescent
 {
