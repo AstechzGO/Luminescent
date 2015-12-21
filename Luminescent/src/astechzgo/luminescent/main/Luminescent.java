@@ -11,9 +11,9 @@ import org.lwjgl.glfw.GLFW;
 
 import astechzgo.luminescent.entity.Player;
 import astechzgo.luminescent.entity.Projectile;
+import astechzgo.luminescent.gameobject.Room;
+import astechzgo.luminescent.gameobject.RoomWalls;
 import astechzgo.luminescent.rendering.Camera;
-import astechzgo.luminescent.rendering.Room;
-import astechzgo.luminescent.rendering.RoomWalls;
 import astechzgo.luminescent.sound.SoundList;
 import astechzgo.luminescent.sound.SoundManager;
 import astechzgo.luminescent.textures.Animation;
