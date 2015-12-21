@@ -2,7 +2,7 @@ package astechzgo.luminescent.rendering;
 
 import java.awt.Color;
 
-public class Room extends RenderableQuadrilateralGameObject {
+public class Room extends RenderableRectangularGameObject {
 
 	public Room() {
 		super(
