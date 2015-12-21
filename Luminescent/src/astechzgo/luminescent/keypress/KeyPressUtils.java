@@ -17,18 +17,10 @@ import astechzgo.luminescent.utils.LoggingUtils;
 
 public class KeyPressUtils {
 
-	
 	public static void checkUtils() {
 	
 		if(KeyboardUtils.isKeyDown(Constants.KEYS_UTIL_EXIT)) {
 			Luminescent.Shutdown();
-		}
-		if(Constants.getConstantAsBoolean(Constants.WINDOW_FULLSCREEN)) {	
-			setDisplayMode(DisplayUtils.vidmode.width(),
-				DisplayUtils.vidmode.height(), true);
-		}
-		else {
-			setDisplayMode(848, 477, false);
 		}
 		if(KeyboardUtils.isKeyDown(Constants.KEYS_UTIL_FULLSCREEN)) {
 			if(DisplayUtils.isFullscreen()) {

@@ -12,42 +12,35 @@ import astechzgo.luminescent.utils.Constants;
 import astechzgo.luminescent.utils.DisplayUtils;
 import astechzgo.luminescent.utils.KeyboardUtils;
 
-public class Player extends CircularEntity
-{
+public class Player extends CircularEntity {
 	private double lastDelta;
-	public Player()
-	{
+	
+	public Player() {
 		super(1920 / 2, 1080 / 2, 40, 1);
 		lastDelta = GLFW.glfwGetTime() * 1000;
 	}
 	
-	public double getPosX()
-	{
+	public double getPosX() {
 		return super.x;
 	}
 	
-	public double getPosY()
-	{
+	public double getPosY() {
 		return super.y;
 	}
 	
-	public void setPosX(double position)
-	{
+	public void setPosX(double position) {
 		super.x = position;
 	}
 	
-	public void setPosY(double position)
-	{
+	public void setPosY(double position) {
 		super.y = position;
 	}
 	
-	public void setRadius(double radius)
-	{
+	public void setRadius(double radius) {
 		this.radius = radius;
 	}
 	
-	public double getRadius()
-	{
+	public double getRadius() {
 		return radius;
 	}
 	
@@ -94,15 +87,22 @@ public class Player extends CircularEntity
 		double scaledX = x / GLFW.glfwGetVideoMode(DisplayUtils.monitor).width() * 1920;
 		double scaledY = y / GLFW.glfwGetVideoMode(DisplayUtils.monitor).height() * 1080;
 		
-		if(1920 / 2 - scaledX == 0){
-			rotation = 0;
+		double m = (1080 / 2 - scaledY) / (1920 / 2 - scaledX);
+		
+		if(m == Double.POSITIVE_INFINITY) {
+			rotation = 90;
 			return rotation;
 		}
 		
-		double m = (1080 / 2 - scaledY) / (1920 / 2 - scaledX);
-		
-		if(scaledX <= 1920 / 2)
-			rotation =  360 - Math.toDegrees(Math.atan(m)+180);
+		if(m == Double.NEGATIVE_INFINITY) {
+			rotation = 270;
+			return rotation;
+		}
+		if(scaledX == 1920 / 2 && scaledY == 1080 / 2)
+			return rotation;
+
+		if(scaledX < 1920 / 2)
+			rotation =  360 - Math.toDegrees(Math.atan(m) - 135);
 		else
 			rotation = 360 - Math.toDegrees(Math.atan(m));
 		return rotation;
@@ -111,12 +111,10 @@ public class Player extends CircularEntity
 
 		double delta = ((GLFW.glfwGetTime() * 1000) - lastDelta);
 		lastDelta = GLFW.glfwGetTime() * 1000;
-		if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_FASTER))
-		{
+		if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_FASTER)) {
 			Luminescent.moveSpeed = 0.88;
 		}
-		else
-		{
+		else {
 			Luminescent.moveSpeed = 0.5;
 		}
 		
@@ -124,8 +122,7 @@ public class Player extends CircularEntity
 		
 		double angle = this.setRotation();		
 		
-		if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_UP))
-		{
+		if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_UP)) {
 			if(this.getPosX() + speed * Math.cos(Math.toRadians(angle)) >= room.getPosX() + room.getWidth() - this.getRadius())
 				this.setPosX(room.getPosX() + room.getWidth() - this.getRadius());	
 			else if(this.getPosX() + speed * Math.cos(Math.toRadians(angle)) <= room.getPosX() + this.getRadius())
@@ -140,8 +137,7 @@ public class Player extends CircularEntity
 			else
 				this.setPosY(this.getPosY() - speed * Math.sin(Math.toRadians(angle)));
 		}
-		else if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_DOWN))
-		{
+		else if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_DOWN)) {
 			speed = -speed;
 			if(this.getPosX() + speed * Math.cos(Math.toRadians(angle)) >= room.getPosX() + room.getWidth() - this.getRadius())
 				this.setPosX(room.getPosX() + room.getWidth() - this.getRadius());		
@@ -157,8 +153,7 @@ public class Player extends CircularEntity
 			else
 				this.setPosY(this.getPosY() - speed * Math.sin(Math.toRadians(angle)));
 		}
-		else if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_RIGHT))
-		{
+		else if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_RIGHT)) {
 			if(this.getPosX() + speed * Math.sin(Math.toRadians(angle)) >= room.getPosX() + room.getWidth() - this.getRadius())
 				this.setPosX(room.getPosX() + room.getWidth() - this.getRadius());
 			else if(this.getPosX() + speed * Math.sin(Math.toRadians(angle)) <= room.getPosX() + this.getRadius())
@@ -173,8 +168,7 @@ public class Player extends CircularEntity
 			else
 				this.setPosY(this.getPosY() - speed * Math.cos(Math.toRadians(angle)));
 		}
-		else if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_LEFT))
-		{
+		else if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_LEFT)) {
 			speed = -speed;
 			if(this.getPosX() + speed * Math.sin(Math.toRadians(angle)) >= room.getPosX() + room.getWidth() - this.getRadius())
 				this.setPosX(room.getPosX() + room.getWidth() - this.getRadius());		
@@ -192,44 +186,32 @@ public class Player extends CircularEntity
 		}
 
 		
-		/*if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_UP))
-		{
+		/*if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_UP)) {
 
-			if((this.getPosY() + speed) >= room.getPosY() + room.getHeight() - this.getRadius()) {
-				this.setPosY(room.getPosY() + room.getHeight() - this.getRadius());
-				
-			}
+			if((this.getPosY() + speed) >= room.getPosY() + room.getHeight() - this.getRadius())
+				this.setPosY(room.getPosY() + room.getHeight() - this.getRadius());	
 			else
 				this.setPosY(this.getPosY() + speed);
 		}
 		
-		if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_DOWN))
-		{
+		if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_DOWN)) {
 		
-			if((this.getPosY() - speed) <= room.getPosY() + this.getRadius()){
+			if((this.getPosY() - speed) <= room.getPosY() + this.getRadius())
 				this.setPosY(room.getPosY() + this.getRadius());
-				
-			}
 			else
 				this.setPosY(this.getPosY() - speed);
 		}
-		if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_RIGHT))
-		{
+		if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_RIGHT)) {
 	
-			if((this.getPosX() + speed) >= room.getPosX() + room.getWidth() - this.getRadius()) {
+			if((this.getPosX() + speed) >= room.getPosX() + room.getWidth() - this.getRadius())
 				this.setPosX(room.getPosX() + room.getWidth() - this.getRadius());
-			
-			}
 			else
 				this.setPosX(this.getPosX() + speed);
 		}
-		if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_LEFT))
-		{
+		if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_LEFT)) {
 		
-			if((this.getPosX() - speed) <= room.getPosX() + this.getRadius()) {
+			if((this.getPosX() - speed) <= room.getPosX() + this.getRadius())
 				this.setPosX(room.getPosX() + this.getRadius());
-		
-			}
 			else
 				this.setPosX(this.getPosX() - speed);
 		}*/	
