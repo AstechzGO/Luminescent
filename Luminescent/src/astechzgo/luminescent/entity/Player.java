@@ -154,35 +154,36 @@ public class Player extends CircularEntity {
 				this.setPosY(this.getPosY() - speed * Math.sin(Math.toRadians(angle)));
 		}
 		else if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_RIGHT)) {
-			if(this.getPosX() + speed * Math.sin(Math.toRadians(angle)) >= room.getPosX() + room.getWidth() - this.getRadius())
+			angle = angle + 90;
+			if((this.getPosX() + speed * Math.cos(Math.toRadians(angle))) >= room.getPosX() + room.getWidth() - this.getRadius())
 				this.setPosX(room.getPosX() + room.getWidth() - this.getRadius());
-			else if(this.getPosX() + speed * Math.sin(Math.toRadians(angle)) <= room.getPosX() + this.getRadius())
+			else if(this.getPosX() + speed * Math.cos(Math.toRadians(angle)) <= room.getPosX() + this.getRadius())
 				this.setPosX(room.getPosX() + this.getRadius());
 			else
-				this.setPosX(this.getPosX() + speed * Math.sin(Math.toRadians(angle)));
+				this.setPosX(this.getPosX() + speed * Math.cos(Math.toRadians(angle)));
 			
-			if(this.getPosY() - speed * Math.cos(Math.toRadians(angle)) >= room.getPosY() + room.getHeight() - this.getRadius())
+			if(this.getPosY() - speed * Math.sin(Math.toRadians(angle)) >= room.getPosY() + room.getHeight() - this.getRadius())
 				this.setPosY(room.getPosY() + room.getHeight() - this.getRadius());
-			else if(this.getPosY() - speed * Math.cos(Math.toRadians(angle)) <= room.getPosY() + this.getRadius())
+			else if(this.getPosY() - speed * Math.sin(Math.toRadians(angle)) <= room.getPosY() + this.getRadius())
 				this.setPosY(room.getPosY() + this.getRadius());
 			else
-				this.setPosY(this.getPosY() - speed * Math.cos(Math.toRadians(angle)));
+				this.setPosY(this.getPosY() - speed * Math.sin(Math.toRadians(angle)));
 		}
 		else if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_LEFT)) {
-			speed = -speed;
-			if(this.getPosX() + speed * Math.sin(Math.toRadians(angle)) >= room.getPosX() + room.getWidth() - this.getRadius())
+			angle = angle - 90;
+			if(this.getPosX() + speed * Math.cos(Math.toRadians(angle)) >= room.getPosX() + room.getWidth() - this.getRadius())
 				this.setPosX(room.getPosX() + room.getWidth() - this.getRadius());		
-			else if(this.getPosX() + speed * Math.sin(Math.toRadians(angle)) <= room.getPosX() + this.getRadius())
+			else if(this.getPosX() + speed * Math.cos(Math.toRadians(angle)) <= room.getPosX() + this.getRadius())
 				this.setPosX(room.getPosX() + this.getRadius());
 			else
-				this.setPosX(this.getPosX() + speed * Math.sin(Math.toRadians(angle)));
+				this.setPosX(this.getPosX() + speed * Math.cos(Math.toRadians(angle)));
 			
-			if(this.getPosY() - speed * Math.cos(Math.toRadians(angle)) >= room.getPosY() + room.getHeight() - this.getRadius())
+			if(this.getPosY() - speed * Math.sin(Math.toRadians(angle)) >= room.getPosY() + room.getHeight() - this.getRadius())
 				this.setPosY(room.getPosY() + room.getHeight() - this.getRadius());
-			else if(this.getPosY() - speed * Math.cos(Math.toRadians(angle)) <= room.getPosY() + this.getRadius())
+			else if(this.getPosY() - speed * Math.sin(Math.toRadians(angle)) <= room.getPosY() + this.getRadius())
 				this.setPosY(room.getPosY() + this.getRadius());
 			else
-				this.setPosY(this.getPosY() - speed * Math.cos(Math.toRadians(angle)));
+				this.setPosY(this.getPosY() - speed * Math.sin(Math.toRadians(angle)));
 		}
 
 		
