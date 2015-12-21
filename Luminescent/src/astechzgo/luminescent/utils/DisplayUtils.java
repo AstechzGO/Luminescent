@@ -212,7 +212,7 @@ public class DisplayUtils {
 			GL11.glOrtho(0, mode.WIDTH, 0, mode.HEIGHT, 1, -1);
 			GL11.glMatrixMode(GL11.GL_MODELVIEW);
 			GL11.glEnable(GL11.GL_BLEND);
-		    GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
 			GLFW.glfwSetKeyCallback(handle, KeyboardUtils.KEY_CALLBACK);
 			

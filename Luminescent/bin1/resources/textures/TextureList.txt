@@ -1,4 +1,0 @@
-$icons.icon_16x16
-$icons.icon_32x32
-$icons.icon_64x64
-$icons.icon_128x128
