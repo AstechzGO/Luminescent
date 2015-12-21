@@ -43,4 +43,17 @@ public class RenderableRectangularGameObject extends RenderableQuadrilateralGame
 		this.width = width;
 		this.height = height;
 	}
+	public void render() {
+		super.aX = x;
+		super. aY = y + height;
+		super .bX = x + width;
+		super .bY = y + height;
+		super.cX = x + width;
+		super.cY = y;
+		super.dX = x;
+		super.dY = y;
+				
+		super.render();
+		
+	}
 }

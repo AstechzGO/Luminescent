@@ -22,6 +22,8 @@ public class Constants
 	public static final String KEYS_MOVEMENT_DOWN =		"keys.movement.down";
 	public static final String KEYS_MOVEMENT_RIGHT = 	"keys.movement.right";
 	
+	public static final String KEYS_ACTION_SHOOT = "keys.action.shoot";
+	
 	public static final String KEYS_UTIL_SCREENSHOT =	"keys.util.screenshot";
 	public static final String KEYS_UTIL_FULLSCREEN = 	"keys.util.fullscreen";
 	public static final String KEYS_UTIL_EXIT = 		"keys.util.exit";
@@ -33,11 +35,15 @@ public class Constants
 	static {
 		defaults.put(LOG_CONFIG, "false");
 		
+
+		
 		defaults.put(KEYS_MOVEMENT_FASTER,				"{LEFT_SHIFT}");
 		defaults.put(KEYS_MOVEMENT_UP, 					"{W}, {UP}");
 		defaults.put(KEYS_MOVEMENT_LEFT, 				"{A}, {LEFT}");
 		defaults.put(KEYS_MOVEMENT_DOWN, 				"{S}, {DOWN}");
-		defaults.put(KEYS_MOVEMENT_RIGHT, 				"{D}, {RIGHT}");
+		defaults.put(KEYS_MOVEMENT_RIGHT,               "{D}, {RIGHT}");
+		
+		defaults.put(KEYS_ACTION_SHOOT,                 "{SPACE}");
 		
 		defaults.put(KEYS_UTIL_SCREENSHOT, 				"{F2}");
 		defaults.put(KEYS_UTIL_FULLSCREEN, 				"{F11}");

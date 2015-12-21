@@ -4,10 +4,12 @@ import static astechzgo.luminescent.utils.DisplayUtils.setDisplayMode;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import org.lwjgl.glfw.GLFW;
 
+import astechzgo.luminescent.rendering.Projectile;
 import astechzgo.luminescent.rendering.Camera;
 import astechzgo.luminescent.rendering.Player;
 import astechzgo.luminescent.rendering.Room;
@@ -29,6 +31,8 @@ public class Luminescent
 	
 	public static Player thePlayer = new Player();
 	public static double moveSpeed = 0.5;
+	
+	public static ArrayList<Projectile> projectiles = new ArrayList<>();
 	
 	public static double lastDelta = GLFW.glfwGetTime() * 1000;
 	
@@ -154,6 +158,35 @@ public class Luminescent
 			else
 				thePlayer.setPosY(thePlayer.getPosY() - speed * Math.cos(Math.toRadians(angle)));
 		}
+		if(KeyboardUtils.isKeyDown(Constants.KEYS_ACTION_SHOOT)) {
+			System.out.println("crash1");
+		
+						System.out.println("crash2");
+
+		Projectile projectile = new Projectile((int)thePlayer.getPosX(),(int) thePlayer.getPosY());
+		projectiles.add(projectile);
+						
+			}
+			
+
+	
+		for(int i = 0; i < projectiles.size(); i++){
+		    Projectile m = (Projectile) projectiles.get(i);
+		    m.fireBullet();
+		   
+		        if(room.doesContain((int)m.getX(), (int)m.getY())){
+		         	System.out.println("projectiles " + projectiles.size());
+		        	System.out.println("rendering");
+		            m.render();
+		
+		 
+		        }
+		        else if(!room.doesContain((int)m.getX(),(int)m.getY())) {
+		System.out.println("Removing");
+		            projectiles.remove(i);
+		        }
+		  
+		    }
 		if(KeyboardUtils.isKeyDown(Constants.KEYS_UTIL_EXIT))
 		{
 			Shutdown();
