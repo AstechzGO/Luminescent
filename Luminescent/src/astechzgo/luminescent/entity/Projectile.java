@@ -1,4 +1,4 @@
-package astechzgo.luminescent.rendering;
+package astechzgo.luminescent.entity;
 
 import java.awt.Color;
 
@@ -6,7 +6,7 @@ import org.lwjgl.glfw.GLFW;
 
 import astechzgo.luminescent.main.Luminescent;
 
-public class Projectile extends RenderableRectangularGameObject {
+public class Projectile extends RectangularEntity {
 	// Used to get Direction for Shooting
 	private double lastDelta;
 	private double rotation;
