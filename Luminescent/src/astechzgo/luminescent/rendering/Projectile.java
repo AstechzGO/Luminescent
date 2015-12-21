@@ -10,7 +10,7 @@ public class Projectile extends RenderableRectangularGameObject {
 	// Used to get Direction for Shooting
 	private double lastDelta;
 	private double rotation;
-
+	// The Class
 	// Constructor for projectile
 	public Projectile(int x, int y) {
 		super(x, y, 5, 5);
