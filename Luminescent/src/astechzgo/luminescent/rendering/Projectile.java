@@ -20,7 +20,7 @@ public void fireBullet() {
 	double delta = ((GLFW.glfwGetTime() * 1000) - lastDelta);
 	super.x = (int) (Luminescent.thePlayer.getPosX() + 1 * delta* Math.cos(Math.toRadians(-rotation)));
 	super.y = (int) (Luminescent.thePlayer.getPosY() + 1 * delta *Math.sin(Math.toRadians(-rotation)));
-	System.out.println("Firing at: " + super.x + super.y);
+
 }
 public double getX()
 {
