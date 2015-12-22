@@ -96,18 +96,18 @@ public class ControllerUtils {
 					}
 				}
 				else {
-					//Decoding controller direction and axis
-					//Sorry to anyone trying to read this code
+					// Decoding controller direction and axis
+					// Sorry to anyone trying to read this code
 					
 					button = Math.abs(button);
 						   
 					int axis = (button / 10) - 1;
 					int value = (button - 10 - (axis * 10)) - 2;
 						   
-					if(value == 0) value = -1;	//Because 0 means nothing
+					if(value == 0) value = -1;	// Because 0 means nothing
 					
 					FloatBuffer GLFWAxis = GLFW.glfwGetJoystickAxes(joystick);
-					
+
 					double actualValue = GLFWAxis.get(axis);
 					
 					if(value < 0) {

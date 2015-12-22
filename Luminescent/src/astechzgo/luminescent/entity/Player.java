@@ -9,11 +9,15 @@ import org.lwjgl.glfw.GLFW;
 import astechzgo.luminescent.gameobject.Room;
 import astechzgo.luminescent.main.Luminescent;
 import astechzgo.luminescent.utils.Constants;
+import astechzgo.luminescent.utils.ControllerUtils;
 import astechzgo.luminescent.utils.DisplayUtils;
 import astechzgo.luminescent.utils.KeyboardUtils;
 
 public class Player extends CircularEntity {
 	private double lastDelta;
+	
+	private double lastMouseX = 0;
+	private double lastMouseY = 0;
 	
 	public Player() {
 		super(1920 / 2, 1080 / 2, 40, 1);
@@ -60,7 +64,21 @@ public class Player extends CircularEntity {
 		oldGameHeight = DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2;
 	}
 	
-	public double setRotation() {		
+	public double setRotation() {
+		if(ControllerUtils.isButtonPressed(Constants.CONTROLLER_MOVEMENT_ROTATION_CLOCKWISE)) {
+			double delta = ((GLFW.glfwGetTime() * 1000) - lastDelta);
+			
+			rotation = rotation + 5 * delta;
+			
+			return rotation;
+		}
+		if(ControllerUtils.isButtonPressed(Constants.CONTROLLER_MOVEMENT_ROTATION_COUNTERCLOCKWISE)) {
+			double delta = ((GLFW.glfwGetTime() * 1000) - lastDelta);
+			
+			rotation = rotation - 5 * delta;
+			return rotation;
+		}
+
 		DoubleBuffer mxpos = BufferUtils.createDoubleBuffer(1);
 		DoubleBuffer mypos = BufferUtils.createDoubleBuffer(1);
 		
@@ -68,6 +86,12 @@ public class Player extends CircularEntity {
 		
 		double x = mxpos.get(0);
 		double y = mypos.get(0);
+		
+		if(x == lastMouseX && y == lastMouseY) 
+			return rotation;
+		
+		lastMouseX = x;
+		lastMouseY = y;
 		
 		mxpos.clear();
 		mypos.clear();
@@ -142,7 +166,7 @@ public class Player extends CircularEntity {
 			else
 				this.setPosY(this.getPosY() - speed * Math.sin(Math.toRadians(angle)));
 		}
-		else if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_DOWN)) {
+		if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_DOWN)) {
 			speed = -speed;
 			if(this.getPosX() + speed * Math.cos(Math.toRadians(angle)) >= room.getPosX() + room.getWidth() - this.getRadius())
 				this.setPosX(room.getPosX() + room.getWidth() - this.getRadius());		
@@ -158,7 +182,7 @@ public class Player extends CircularEntity {
 			else
 				this.setPosY(this.getPosY() - speed * Math.sin(Math.toRadians(angle)));
 		}
-		else if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_RIGHT)) {
+		if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_RIGHT)) {
 			angle = angle + 90;
 			if((this.getPosX() + speed * Math.cos(Math.toRadians(angle))) >= room.getPosX() + room.getWidth() - this.getRadius())
 				this.setPosX(room.getPosX() + room.getWidth() - this.getRadius());
@@ -174,7 +198,7 @@ public class Player extends CircularEntity {
 			else
 				this.setPosY(this.getPosY() - speed * Math.sin(Math.toRadians(angle)));
 		}
-		else if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_LEFT)) {
+		if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_LEFT)) {
 			angle = angle - 90;
 			if(this.getPosX() + speed * Math.cos(Math.toRadians(angle)) >= room.getPosX() + room.getWidth() - this.getRadius())
 				this.setPosX(room.getPosX() + room.getWidth() - this.getRadius());		
