@@ -28,8 +28,8 @@ public class Projectile extends RectangularEntity {
 	// Called every tick from Luminescent class, shoots bullet in direction
 	public void fireBullet() {
 		double delta = ((GLFW.glfwGetTime() * 1000) - lastDelta);
-		super.x = (int) (x + 1 * delta * Math.cos(Math.toRadians(-rotation)));
-		super.y = (int) (y + 1 * delta * Math.sin(Math.toRadians(-rotation)));
+		super.x = (int) (x + 2.5 * delta * Math.cos(Math.toRadians(-rotation)));
+		super.y = (int) (y + 2.5 * delta * Math.sin(Math.toRadians(-rotation)));
 
 	}
 
