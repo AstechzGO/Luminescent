@@ -59,7 +59,7 @@ public class ControllerUtils {
 			return joysticks;
 		}
 		catch(Exception e) {
-			LoggingUtils.printException(e);
+			e.printStackTrace();
 		}
 		return null;	
 	}
@@ -92,7 +92,7 @@ public class ControllerUtils {
 						}
 					}
 					catch(Exception e) {
-						LoggingUtils.printException(e);
+						e.printStackTrace();
 					}
 				}
 				else {
@@ -142,7 +142,7 @@ public class ControllerUtils {
 				InputStream confIn = (new ControllerUtils()).getClass().getResourceAsStream("/resources/properties/default.properties");
 				Files.copy(confIn, defaultConf.toPath(), StandardCopyOption.REPLACE_EXISTING);
 			} catch (IOException e) {
-				LoggingUtils.printException(e);
+				e.printStackTrace();
 			}
 		}
 		
@@ -163,7 +163,7 @@ public class ControllerUtils {
 		try {
 			p.load(new FileInputStream(controllerPropertiesFile));
 		} catch (IOException e) {
-			LoggingUtils.printException(e);
+			e.printStackTrace();
 		}
 		
 		buttonNumbers = parse(p.getProperty(button));

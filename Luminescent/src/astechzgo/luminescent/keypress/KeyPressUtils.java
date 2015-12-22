@@ -13,7 +13,6 @@ import astechzgo.luminescent.main.Luminescent;
 import astechzgo.luminescent.utils.Constants;
 import astechzgo.luminescent.utils.DisplayUtils;
 import astechzgo.luminescent.utils.KeyboardUtils;
-import astechzgo.luminescent.utils.LoggingUtils;
 
 public class KeyPressUtils {
 
@@ -47,7 +46,7 @@ public class KeyPressUtils {
 			try {
 				DisplayUtils.takeScreenshot(newFile("screenshots/" + S + ".png"));
 			} catch (Exception e) {
-				LoggingUtils.printException(e);
+				e.printStackTrace();
 			}
 		}
 		if(KeyboardUtils.isKeyDown(Constants.KEYS_UTIL_NEXTWINDOW)) {

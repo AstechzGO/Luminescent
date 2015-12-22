@@ -111,7 +111,7 @@ public class Constants
 			try {
 				newFile(CONSTANTS_FILE_NAME).createNewFile();
 			} catch (IOException e) {
-				LoggingUtils.printException(e);
+				e.printStackTrace();
 			}
 		}
 		
@@ -129,7 +129,7 @@ public class Constants
 				}
 			} catch (IOException e) {
 				System.out.println("Error: Unable to close properties file " + CONSTANTS_FILE_NAME);
-				LoggingUtils.printException(e);
+				e.printStackTrace();
 			}			
 		}
 		
