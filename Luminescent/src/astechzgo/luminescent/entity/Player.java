@@ -16,12 +16,14 @@ import astechzgo.luminescent.utils.KeyboardUtils;
 public class Player extends CircularEntity {
 	private double lastDelta;
 	
+	private double lastControllerDelta = 0;
 	private double lastMouseX = 0;
 	private double lastMouseY = 0;
 	
 	public Player() {
 		super(1920 / 2, 1080 / 2, 40, 1);
 		lastDelta = GLFW.glfwGetTime() * 1000;
+		lastControllerDelta = GLFW.glfwGetTime() * 1000;
 	}
 	
 	public double getPosX() {
@@ -65,17 +67,16 @@ public class Player extends CircularEntity {
 	}
 	
 	public double setRotation() {
+		double delta = ((GLFW.glfwGetTime() * 1000) - lastControllerDelta);
+		lastControllerDelta = GLFW.glfwGetTime() * 1000;
+		
 		if(ControllerUtils.isButtonPressed(Constants.CONTROLLER_MOVEMENT_ROTATION_CLOCKWISE)) {
-			double delta = ((GLFW.glfwGetTime() * 1000) - lastDelta);
-			
-			rotation = rotation + 5 * delta;
+			rotation = rotation + 0.5 * delta;
 			
 			return rotation;
 		}
 		if(ControllerUtils.isButtonPressed(Constants.CONTROLLER_MOVEMENT_ROTATION_COUNTERCLOCKWISE)) {
-			double delta = ((GLFW.glfwGetTime() * 1000) - lastDelta);
-			
-			rotation = rotation - 5 * delta;
+			rotation = rotation - 0.5 * delta;
 			return rotation;
 		}
 
