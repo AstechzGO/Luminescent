@@ -51,8 +51,16 @@ public class KeyPressUtils {
 			}
 		}
 		if(KeyboardUtils.isKeyDown(Constants.KEYS_UTIL_NEXTWINDOW)) {
-			if(GLFW.glfwGetMonitors().capacity() > 1)
-				DisplayUtils.nextMonitor();
+			if(GLFW.glfwGetMonitors().capacity() > 1) {
+				if(DisplayUtils.isFullscreen()) {
+					setDisplayMode(848, 477, false);
+					DisplayUtils.nextMonitor();
+					setDisplayMode(DisplayUtils.monitorWidth, DisplayUtils.monitorHeight, true);
+				}
+				else {
+					DisplayUtils.nextMonitor();
+				}
+			}
 		}
 	}	
 }

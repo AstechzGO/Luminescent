@@ -447,88 +447,61 @@ public class DisplayUtils {
 		int secondMonitorWidth = 0;
 		int secondMonitorHeight = 0;
 		
-		if(DisplayUtils.isFullscreen()) {
-			for(int i = 0; i < monitors.length; i++) {
-				if(monitors[i] == GLFW.glfwGetWindowMonitor(DisplayUtils.getWindow())) {
-					currentMonitorIdx = i;
-				}
-			}
-				
-			if(currentMonitorIdx != (monitors.length - 1))
-				nextMonitorIdx = currentMonitorIdx + 1;
-			else
-				nextMonitorIdx = 0;
-		
-		}
-		else {
-			IntBuffer xpos = BufferUtils.createIntBuffer(1);
-			IntBuffer ypos = BufferUtils.createIntBuffer(1);
 
-			for(int i = 0; i < monitors.length; i++) {
-				
-				monitorOffsetWidth = getMonitorOffsetWidth(monitors[i]);
-				monitorOffsetHeight = getMonitorOffsetHeight(monitors[i]);
+		IntBuffer xpos = BufferUtils.createIntBuffer(1);
+		IntBuffer ypos = BufferUtils.createIntBuffer(1);
 
-				GLFWVidMode mode = GLFW.glfwGetVideoMode(monitors[i]);
+		for(int i = 0; i < monitors.length; i++) {
 				
-				secondMonitorWidth = mode.width();
+			monitorOffsetWidth = getMonitorOffsetWidth(monitors[i]);
+			monitorOffsetHeight = getMonitorOffsetHeight(monitors[i]);
+
+			GLFWVidMode mode = GLFW.glfwGetVideoMode(monitors[i]);
 				
-				secondMonitorHeight = mode.height();
+			secondMonitorWidth = mode.width();
 				
-				Rectangle r = new Rectangle(monitorOffsetWidth, monitorOffsetHeight, secondMonitorWidth, secondMonitorHeight);
+			secondMonitorHeight = mode.height();
 				
-				GLFW.glfwGetWindowPos(DisplayUtils.getWindow(), xpos, ypos);
+			Rectangle r = new Rectangle(monitorOffsetWidth, monitorOffsetHeight, secondMonitorWidth, secondMonitorHeight);
 				
-				int x = xpos.get();
-				int y = ypos.get();
+			GLFW.glfwGetWindowPos(DisplayUtils.getWindow(), xpos, ypos);
 				
-				xpos.clear();
-				ypos.clear();
+			int x = xpos.get();
+			int y = ypos.get();
 				
-				if(r.contains(x, y)) {
-					currentMonitorIdx = i;
-					if(currentMonitorIdx != (monitors.length - 1))
-						nextMonitorIdx = currentMonitorIdx + 1;
-					else
-						nextMonitorIdx = 0;
-					break;
-				}
+			xpos.clear();
+			ypos.clear();
+				
+			if(r.contains(x, y)) {
+				currentMonitorIdx = i;
+				if(currentMonitorIdx != (monitors.length - 1))
+					nextMonitorIdx = currentMonitorIdx + 1;
+				else
+					nextMonitorIdx = 0;
+				break;
 			}
-			
 		}
-		
-		long oldHandle = handle;
 		
 		changeMonitor(monitors[nextMonitorIdx]);
 		
 
-		if(DisplayUtils.isFullscreen()) {
-			setDisplayMode(DisplayUtils.vidmode.width(),
-					DisplayUtils.vidmode.height(), false);
+		xpos = BufferUtils.createIntBuffer(1);
+		ypos = BufferUtils.createIntBuffer(1);
 			
-			setDisplayMode(DisplayUtils.vidmode.width(),
-					DisplayUtils.vidmode.height(), true);
+		GLFW.glfwGetMonitorPos(monitors[nextMonitorIdx], xpos, ypos);
 			
-			GLFW.glfwDestroyWindow(oldHandle);
-		}
-		else {
-			IntBuffer xpos = BufferUtils.createIntBuffer(1);
-			IntBuffer ypos = BufferUtils.createIntBuffer(1);
+		monitorOffsetWidth = xpos.get();
+		monitorOffsetHeight = ypos.get();
 			
-			GLFW.glfwGetMonitorPos(monitors[nextMonitorIdx], xpos, ypos);
+		xpos.clear();
+		ypos.clear();
 			
-			monitorOffsetWidth = xpos.get();
-			monitorOffsetHeight = ypos.get();
-			
-			xpos.clear();
-			ypos.clear();
-			
-			GLFW.glfwSetWindowPos(
-					DisplayUtils.getWindow(), 
-					monitorOffsetWidth + (DisplayUtils.vidmode.width() / 2) - (getDisplayWidth() / 2),
-					monitorOffsetHeight + (DisplayUtils.vidmode.height() / 2) - (getDisplayHeight() / 2)
-				);
-		}
+		GLFW.glfwSetWindowPos(
+				DisplayUtils.getWindow(), 
+				monitorOffsetWidth + (DisplayUtils.vidmode.width() / 2) - (getDisplayWidth() / 2),
+				monitorOffsetHeight + (DisplayUtils.vidmode.height() / 2) - (getDisplayHeight() / 2)
+			);
+		
 		
 		KeyboardUtils.resetKeys();
 	}
