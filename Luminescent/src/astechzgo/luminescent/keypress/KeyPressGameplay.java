@@ -2,6 +2,8 @@ package astechzgo.luminescent.keypress;
 
 import java.util.ArrayList;
 
+import org.lwjgl.glfw.GLFW;
+
 import astechzgo.luminescent.entity.Player;
 import astechzgo.luminescent.entity.Projectile;
 import astechzgo.luminescent.gameobject.Room;
@@ -11,13 +13,18 @@ import astechzgo.luminescent.utils.KeyboardUtils;
 public class KeyPressGameplay {
 	
 	public static ArrayList<Projectile> projectiles = new ArrayList<>();
+	private static double lastShot;
 	
 	public static void checkGameActions(Player thePlayer, Room room) {
 		
-		if(KeyboardUtils.isKeyDown(Constants.KEYS_ACTION_SHOOT)) {
+		double deltaShot = (GLFW.glfwGetTime() * 1000) - lastShot;
+		
+		if(KeyboardUtils.isKeyDown(Constants.KEYS_ACTION_SHOOT) && deltaShot > 250) {
 			// Creates Projectile and adds it to array list
 			Projectile projectile = new Projectile((int)thePlayer.getPosX(),(int) thePlayer.getPosY());
-			projectiles.add(projectile);					
+			projectiles.add(projectile);	
+			
+			lastShot = (GLFW.glfwGetTime() * 1000);
 		}
 		
 		// For every shot render it and keep shooting it forwards

@@ -4,25 +4,51 @@ Project Developers:
 @D3ZOMBKEELA
 @Patedorea
 @MatEdwards
+@Stealth2994
 
 Code sources that we have used:
 
 astechzgo.luminescent:
+	entity:
+		CircularEntity:
+			(Nothing)
+		Entity:
+			(Nothing)
+		Player:
+			(Nothing)
+		PolygonalEntity:
+			(Nothing)
+		Projectile:
+			(Nothing)
+		QuadrilateralEntity:
+			(Nothing)
+		RectangularEntity:
+			(Nothing)
+	gameobject:
+		Room:
+			(Nothing)
+		RoomWalls:
+			(Nothing)
+	keypress:
+		KeyPressGameplay:
+			(Nothing)
+		KeyPressUtils:
+			checkUtils():
+				StackOverflow:
+					http://stackoverflow.com/questions/1459656/how-to-get-the-current-time-in-yyyy-mm-dd-hhmisec-millisecond-format-in-java:
+						Question:
+							Sunil Kumar Sahoo 		(http://stackoverflow.com/users/111988/sunil-kumar-sahoo)
+							Peter Mortensen 		(http://stackoverflow.com/users/63550/peter-mortensen)
+						Answer:
+							JayJay					(http://stackoverflow.com/users/171675/jayjay)				
 	main:
 		Main:
 			(Nothing)
 		Luminescent:
-			Init():
-				http://www.glfw.org/docs/latest/input.html#cursor_mode
-			Tick():
-				StackOverflow:
-					http://stackoverflow.com/questions/1459656/how-to-get-the-current-time-in-yyyy-mm-dd-hhmisec-millisecond-format-in-java:
-						Question:
-							Sunil Kumar Sahoo 	(http://stackoverflow.com/users/111988/sunil-kumar-sahoo)
-							Peter Mortensen 	(http://stackoverflow.com/users/63550/peter-mortensen)
-						Answer:
-							JayJay				(http://stackoverflow.com/users/171675/jayjay)
+			(Nothing)
 	rendering:
+		Camera:
+			(Nothing)
 		IRenderedObject:
 			(Nothing)
 		OpenGL:
@@ -32,8 +58,6 @@ astechzgo.luminescent:
 				http://wiki.lwjgl.org/wiki/LWJGL_Basics_3_(The_Quad)#Example
 		Options:
 			(Nothing)
-		Player:
-			(Nothing)
 		RenderableCircularGameObject:
 			isTouching():
 				http://www.java-gaming.org/index.php/topic,10265.
@@ -41,18 +65,18 @@ astechzgo.luminescent:
 			(Nothing)
 		RenderableQuadrilateralGameObject:
 			isTouching():
-				StackOverflow:
-					http://stackoverflow.com/questions/306316/determine-if-two-rectangles-overlap-each-other:
-						Question:
-							Rob Burke 			(http://stackoverflow.com/users/135/rob-burke)
-							PhiLho				(http://stackoverflow.com/users/15459/philho)
-						Answer:
-							Charles Bretana		(http://stackoverflow.com/users/32632/charles-bretana)
 				http://www.java-gaming.org/index.php/topic,10265.
-		Room:
-			(Nothing)
-		RoomWalls:
-			(Nothing)
+			doesContain():
+				StackOverflow:
+					http://stackoverflow.com/questions/2049582/how-to-determine-a-point-in-a-2d-triangle
+						Question:
+							ET 0.618				(http://stackoverflow.com/users/237460/et-0-618)
+							ideasman42				(http://stackoverflow.com/users/432509/ideasman42)
+						Answer:
+							Kornel Kisielewicz		(http://stackoverflow.com/users/233522/kornel-kisielewicz)
+							msrd0					(http://stackoverflow.com/users/3755692/msrd0)		
+		RenderableRectangularGameObject:
+			(Nothing)	
 	sound:
 		SoundList:
 			(Nothing)
@@ -62,6 +86,8 @@ astechzgo.luminescent:
 			loadSound():
 				http://www.paulscode.com/tutorials/SoundSystem/SoundSystem.pdf
 	textures:
+		Animation:
+			(Nothing)
 		Texture:
 			toByteBuffer():
 				http://www.java-gaming.org/index.php?topic=25516.0
@@ -140,7 +166,12 @@ astechzgo.luminescent:
 						Answer:
 							JayJay				(http://stackoverflow.com/users/171675/jayjay)	
 			configureLogger():
-				(Unknown)
+				StackOverflow:
+					http://stackoverflow.com/questions/1200175/log4j-redirect-stdout-to-dailyrollingfileappender
+						Question:
+							letronje			(http://stackoverflow.com/users/119622/letronje)
+						Answer:
+							Dario				(http://stackoverflow.com/users/401712/dario)
 			cleanupLogFilename():
 				StackOverflow:
 					http://stackoverflow.com/questions/1459656/how-to-get-the-current-time-in-yyyy-mm-dd-hhmisec-millisecond-format-in-java:
@@ -149,14 +180,6 @@ astechzgo.luminescent:
 							Peter Mortensen 	(http://stackoverflow.com/users/63550/peter-mortensen)
 						Answer:
 							JayJay				(http://stackoverflow.com/users/171675/jayjay)	
-			logException():
-				StackOverflow:
-					http://stackoverflow.com/questions/4812570/how-to-store-printstacktrace-into-a-string
-						Question:
-							ace 				(http://stackoverflow.com/users/527577/ace)
-							BalusC			 	(http://stackoverflow.com/users/157882/balusc)
-						Answer:
-							Zach L				(http://stackoverflow.com/users/568406/zach-l)
 			printException():
 				http://www.rgagnon.com/javadetails/java-0537.html
 		RenderingUtils:
