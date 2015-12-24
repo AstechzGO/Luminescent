@@ -8,6 +8,7 @@ import org.lwjgl.glfw.GLFW;
 
 import astechzgo.luminescent.gameobject.Room;
 import astechzgo.luminescent.main.Luminescent;
+import astechzgo.luminescent.rendering.Camera;
 import astechzgo.luminescent.utils.Constants;
 import astechzgo.luminescent.utils.ControllerUtils;
 import astechzgo.luminescent.utils.DisplayUtils;
@@ -21,7 +22,7 @@ public class Player extends CircularEntity {
 	private double lastMouseY = 0;
 	
 	public Player() {
-		super(1920 / 2, 1080 / 2, 40, 1);
+		super(Camera.CAMERA_WIDTH / 2, 1080 / 2, 40, 1);
 		lastDelta = GLFW.glfwGetTime() * 1000;
 		lastControllerDelta = GLFW.glfwGetTime() * 1000;
 	}
@@ -60,7 +61,7 @@ public class Player extends CircularEntity {
 				+ DisplayUtils.heightOffset;
 				
 		scaledRadius = (int) Math
-				.round((double) radius / 1920 * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2));
+				.round((double) radius / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2));
 
 		oldGameWidth = DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2;
 		oldGameHeight = DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2;
@@ -103,16 +104,16 @@ public class Player extends CircularEntity {
 		
 		GLFW.glfwGetWindowPos(DisplayUtils.getHandle(), xpos, ypos);
 		
-		x = x + xpos.get(0) + ((1920 / 2) - xpos.get(0) - DisplayUtils.getDisplayWidth() / 2);
+		x = x + xpos.get(0) + ((Camera.CAMERA_WIDTH / 2) - xpos.get(0) - DisplayUtils.getDisplayWidth() / 2);
 		y = -y + DisplayUtils.monitorHeight - ypos.get(0) - ((1080 / 2) - ypos.get(0) - DisplayUtils.getDisplayHeight() / 2);
 		
 		xpos.clear();
 		ypos.clear();
 		
-		double scaledX = x / GLFW.glfwGetVideoMode(DisplayUtils.monitor).width() * 1920;
+		double scaledX = x / GLFW.glfwGetVideoMode(DisplayUtils.monitor).width() * Camera.CAMERA_WIDTH;
 		double scaledY = y / GLFW.glfwGetVideoMode(DisplayUtils.monitor).height() * 1080;
 		
-		double m = (1080 / 2 - scaledY) / (1920 / 2 - scaledX);
+		double m = (1080 / 2 - scaledY) / (Camera.CAMERA_WIDTH / 2 - scaledX);
 		
 		if(m == Double.POSITIVE_INFINITY) {
 			rotation = 90;
@@ -123,10 +124,10 @@ public class Player extends CircularEntity {
 			rotation = 270;
 			return rotation;
 		}
-		if(scaledX == 1920 / 2 && scaledY == 1080 / 2)
+		if(scaledX == Camera.CAMERA_WIDTH / 2 && scaledY == 1080 / 2)
 			return rotation;
 
-		if(scaledX < 1920 / 2)
+		if(scaledX < Camera.CAMERA_WIDTH / 2)
 			rotation = 180 - Math.toDegrees(Math.atan(m));
 		else {
 			if(360 - Math.toDegrees(Math.atan(m)) > 360)

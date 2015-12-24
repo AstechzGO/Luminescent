@@ -79,19 +79,19 @@ public class RenderableCircularGameObject implements IRenderedObject {
 	@Override
 	public void resize() {
 		int scaledCamX = ((int) Math
-				.round((double)((1920 / 2) - Camera.getX()) / 1920 * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)));
+				.round((double)((Camera.CAMERA_WIDTH / 2) - Camera.getX()) / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)));
 		int scaledCamY = ((int) Math
-				.round((double)((1080 / 2) - Camera.getY()) / 1080 * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2)));
+				.round((double)((Camera.CAMERA_HEIGHT / 2) - Camera.getY()) / Camera.CAMERA_HEIGHT * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2)));
 
 		scaledX = ((int) Math
-				.round((double) x / 1920 * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)))
+				.round((double) x / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)))
 				+ DisplayUtils.widthOffset + scaledCamX;
 		scaledY = ((int) Math
-				.round((double) y / 1080 * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2)))
+				.round((double) y / Camera.CAMERA_HEIGHT * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2)))
 				+ DisplayUtils.heightOffset + scaledCamY;
 
 		scaledRadius = (int) Math
-				.round((double) radius / 1920 * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2));
+				.round((double) radius / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2));
 
 		oldGameWidth = DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2;
 		oldGameHeight = DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2;
