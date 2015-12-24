@@ -9,14 +9,17 @@ import astechzgo.luminescent.rendering.IRenderedObject;
 import astechzgo.luminescent.rendering.RenderableMultipleRenderedObjects;
 import astechzgo.luminescent.rendering.RenderableQuadrilateralGameObject;
 import astechzgo.luminescent.rendering.RenderableRectangularGameObject;
+import astechzgo.luminescent.worldloader.JSONWorldLoader;
 
 public class RoomWalls extends RenderableMultipleRenderedObjects {
 	
-	private static int posX = Camera.CAMERA_WIDTH / 45;
-	private static int posY = Camera.CAMERA_HEIGHT / 25;
+	private static Room room = JSONWorldLoader.loadRoom();
 	
-	private static int width = Camera.CAMERA_WIDTH - (Camera.CAMERA_WIDTH / 45 * 2);
-	private static int height = Camera.CAMERA_HEIGHT - (Camera.CAMERA_HEIGHT / 25 * 2);
+	private static int posX = room.getPosX();
+	private static int posY = room.getPosY();
+	
+	private static int width = room.getWidth();
+	private static int height = room.getHeight();
 
 	public RoomWalls() {
 		 super(getRoomObjects());

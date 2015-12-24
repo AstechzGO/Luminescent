@@ -23,5 +23,10 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/Luminescent/libs/paulscode/LibraryLWJGL3OpenAL-doc.zip!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="libs/google/gson-2.5.jar" sourcepath="libs/google/gson-2.5-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/Luminescent/libs/google/gson-2.5-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

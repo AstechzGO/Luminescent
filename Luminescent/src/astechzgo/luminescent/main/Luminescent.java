@@ -17,6 +17,7 @@ import astechzgo.luminescent.textures.TextureList;
 import astechzgo.luminescent.utils.Constants;
 import astechzgo.luminescent.utils.ControllerUtils;
 import astechzgo.luminescent.utils.DisplayUtils;
+import astechzgo.luminescent.worldloader.JSONWorldLoader;
 
 public class Luminescent
 {
@@ -27,7 +28,7 @@ public class Luminescent
 	
 	public static double lastDelta = GLFW.glfwGetTime() * 1000;
 	
-	public static Room room = new Room();
+	public static Room room = JSONWorldLoader.loadRoom();
 	public static RoomWalls walls = new RoomWalls();	
 		
 	public static void Init()
