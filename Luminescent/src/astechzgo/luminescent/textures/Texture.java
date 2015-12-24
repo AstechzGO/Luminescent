@@ -2,6 +2,7 @@ package astechzgo.luminescent.textures;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -12,8 +13,6 @@ import javax.swing.ImageIcon;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
-
-import astechzgo.luminescent.utils.LoggingUtils;
 
 public class Texture {
 	
@@ -100,7 +99,7 @@ public class Texture {
 		bGr.dispose();
 
 		// Return the buffered image
-		return bimage;
+		return getFlippedImage(bimage);
 	}
 	
 	private int loadTexture() {
@@ -124,8 +123,7 @@ public class Texture {
           return textureID;
 			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			LoggingUtils.printException(e);
+			e.printStackTrace();
 		}
 		return 0;
 	}
@@ -137,4 +135,21 @@ public class Texture {
 	public String getName() {
 		return name;
 	}
+	
+    private BufferedImage getFlippedImage(BufferedImage bi) {
+        BufferedImage flipped = new BufferedImage(
+                bi.getWidth(),
+                bi.getHeight(),
+                bi.getType());
+        AffineTransform tran = AffineTransform.getTranslateInstance(0, bi.getHeight());
+        AffineTransform flip = AffineTransform.getScaleInstance(1d, -1d);
+        tran.concatenate(flip);
+
+        Graphics2D g = flipped.createGraphics();
+        g.setTransform(tran);
+        g.drawImage(bi, 0, 0, null);
+        g.dispose();
+
+        return flipped;
+    }
 }

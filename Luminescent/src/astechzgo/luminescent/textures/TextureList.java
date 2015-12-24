@@ -7,8 +7,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import astechzgo.luminescent.utils.LoggingUtils;
-
 public class TextureList {
 	private static List<String> nonSlickTextures = new ArrayList<String>();
 	private static List<String> slickTextures = new ArrayList<String>();
@@ -36,7 +34,7 @@ public class TextureList {
 			slickTextures = slick;
 			
 		} catch (IOException e) {
-			LoggingUtils.printException(e);
+			e.printStackTrace();
 		}
 	}
 	

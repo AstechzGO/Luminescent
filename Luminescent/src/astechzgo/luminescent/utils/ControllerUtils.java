@@ -59,7 +59,7 @@ public class ControllerUtils {
 			return joysticks;
 		}
 		catch(Exception e) {
-			LoggingUtils.printException(e);
+			e.printStackTrace();
 		}
 		return null;	
 	}
@@ -92,22 +92,22 @@ public class ControllerUtils {
 						}
 					}
 					catch(Exception e) {
-						LoggingUtils.printException(e);
+						e.printStackTrace();
 					}
 				}
 				else {
-					//Decoding controller direction and axis
-					//Sorry to anyone trying to read this code
+					// Decoding controller direction and axis
+					// Sorry to anyone trying to read this code
 					
 					button = Math.abs(button);
 						   
 					int axis = (button / 10) - 1;
 					int value = (button - 10 - (axis * 10)) - 2;
 						   
-					if(value == 0) value = -1;	//Because 0 means nothing
+					if(value == 0) value = -1;	// Because 0 means nothing
 					
 					FloatBuffer GLFWAxis = GLFW.glfwGetJoystickAxes(joystick);
-					
+
 					double actualValue = GLFWAxis.get(axis);
 					
 					if(value < 0) {
@@ -142,7 +142,7 @@ public class ControllerUtils {
 				InputStream confIn = (new ControllerUtils()).getClass().getResourceAsStream("/resources/properties/default.properties");
 				Files.copy(confIn, defaultConf.toPath(), StandardCopyOption.REPLACE_EXISTING);
 			} catch (IOException e) {
-				LoggingUtils.printException(e);
+				e.printStackTrace();
 			}
 		}
 		
@@ -163,7 +163,7 @@ public class ControllerUtils {
 		try {
 			p.load(new FileInputStream(controllerPropertiesFile));
 		} catch (IOException e) {
-			LoggingUtils.printException(e);
+			e.printStackTrace();
 		}
 		
 		buttonNumbers = parse(p.getProperty(button));

@@ -2,25 +2,22 @@ package astechzgo.luminescent.main;
 
 import static astechzgo.luminescent.utils.DisplayUtils.setDisplayMode;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import org.lwjgl.glfw.GLFW;
 
-import astechzgo.luminescent.rendering.Player;
-import astechzgo.luminescent.rendering.Room;
-import astechzgo.luminescent.rendering.RoomWalls;
+import astechzgo.luminescent.entity.Player;
+import astechzgo.luminescent.gameobject.Room;
+import astechzgo.luminescent.gameobject.RoomWalls;
+import astechzgo.luminescent.keypress.KeyPressGameplay;
+import astechzgo.luminescent.keypress.KeyPressUtils;
+import astechzgo.luminescent.rendering.Camera;
 import astechzgo.luminescent.sound.SoundList;
 import astechzgo.luminescent.sound.SoundManager;
+import astechzgo.luminescent.textures.Animation;
 import astechzgo.luminescent.textures.TextureList;
 import astechzgo.luminescent.utils.Constants;
 import astechzgo.luminescent.utils.ControllerUtils;
 import astechzgo.luminescent.utils.DisplayUtils;
-import astechzgo.luminescent.utils.KeyboardUtils;
-import astechzgo.luminescent.utils.LoggingUtils;
-
-import static astechzgo.luminescent.utils.SystemUtils.newFile;
+import astechzgo.luminescent.worldloader.JSONWorldLoader;
 
 public class Luminescent
 {
@@ -28,34 +25,25 @@ public class Luminescent
 	public static Player thePlayer = new Player();
 	public static double moveSpeed = 0.5;
 	
+	
 	public static double lastDelta = GLFW.glfwGetTime() * 1000;
 	
-	public static Room room = new Room();
+	public static Room room = JSONWorldLoader.loadRoom();
 	public static RoomWalls walls = new RoomWalls();	
 		
 	public static void Init()
 	{	
 		TextureList.loadSlickTextures();
-		
+
 		SoundManager manager = new SoundManager();
 		SoundList.initSoundList(manager);
 		
+		thePlayer.setTexture(new Animation("pacman.frame", 20));
+		
 		if(Constants.getConstantAsBoolean(Constants.WINDOW_FULLSCREEN)) 
 		{	
-			
 			setDisplayMode(DisplayUtils.vidmode.width(),
 					DisplayUtils.vidmode.height(), true);
-		
-			try 
-			{
-				GLFW.glfwSetInputMode(DisplayUtils.getHandle(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
-			} 
-			catch (Exception e)
-			{
-				LoggingUtils.printException(e);
-			}
-			
-			
 		}
 		else 
 		{
@@ -71,108 +59,17 @@ public class Luminescent
 	
 	public static void Tick()
 	{
+		Camera.setX((int) thePlayer.getPosX());
+		Camera.setY((int) thePlayer.getPosY());
+		
 		room.render();
-		
-		thePlayer.render();
-		
 		walls.render();
 		
-		double delta = ((GLFW.glfwGetTime() * 1000) - lastDelta);
-		lastDelta = GLFW.glfwGetTime() * 1000;
+		KeyPressUtils.checkUtils();
+		KeyPressGameplay.checkGameActions(thePlayer, room);
 		
-		if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_FASTER))
-		{
-			Luminescent.moveSpeed = 0.88;
-		}
-		else
-		{
-			Luminescent.moveSpeed = 0.5;
-		}
-		
-		double speed = Luminescent.moveSpeed * delta;
-		
-		if(!room.doesContain((int)thePlayer.getPosX(), (int)thePlayer.getPosY()))
-		{	
-			if(thePlayer.getPosX() < room.getPosX())
-			{
-				thePlayer.setPosX(room.getPosX() + room.getWidth());
-			}
-			if(thePlayer.getPosX() > room.getPosX() + room.getWidth())
-			{
-				thePlayer.setPosX(room.getPosX());
-			}
-		
-			if(thePlayer.getPosY() < room.getPosY())
-			{
-				thePlayer.setPosY(room.getPosY() + room.getHeight());
-			}
-			if(thePlayer.getPosY() > room.getPosY() + room.getHeight())
-			{
-				thePlayer.setPosY(room.getPosY());
-			}
-		}
-		if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_UP))
-		{
-			thePlayer.setPosY(thePlayer.getPosY() + speed);
-		}
-		if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_DOWN))
-		{
-			thePlayer.setPosY(thePlayer.getPosY() - speed);
-		}
-		if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_RIGHT))
-		{
-			thePlayer.setPosX(thePlayer.getPosX() + speed);
-		}
-		if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_LEFT))
-		{
-			thePlayer.setPosX(thePlayer.getPosX() - speed);
-		}
-		if(KeyboardUtils.isKeyDown(Constants.KEYS_UTIL_EXIT))
-		{
-			Shutdown();
-		}
-		if(KeyboardUtils.isKeyDown(Constants.KEYS_UTIL_FULLSCREEN))
-		{
-			if(DisplayUtils.isFullscreen()) 
-			{
-				setDisplayMode(848, 477, false);
-				KeyboardUtils.resetKeys();
-			}
-			else 
-			{
-				setDisplayMode(DisplayUtils.vidmode.width(),
-						DisplayUtils.vidmode.height(), true);
-				KeyboardUtils.resetKeys();
-			}
-		}
-		if(KeyboardUtils.isKeyDown(Constants.KEYS_UTIL_SCREENSHOT))
-		{
-			File dir = newFile("screenshots/");
-			
-			if(!dir.exists() || !dir.isDirectory()) 
-			{
-				dir.mkdir();
-			}
-			
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
-			Date dt = new Date();
-			String S = sdf.format(dt);
-
-			try 
-			{
-				DisplayUtils.takeScreenshot(newFile("screenshots/" + S + ".png"));
-			} 
-			catch (Exception e) 
-			{
-				LoggingUtils.printException(e);
-			}
-		}
-		if(KeyboardUtils.isKeyDown(Constants.KEYS_UTIL_NEXTWINDOW))
-		{
-			if(GLFW.glfwGetMonitors().capacity() > 1)
-				DisplayUtils.nextMonitor();
-		}
-		
+		thePlayer.move(room);
+		thePlayer.render();
 		ControllerUtils.updateJoysticks();
-	}	
+	}
 }

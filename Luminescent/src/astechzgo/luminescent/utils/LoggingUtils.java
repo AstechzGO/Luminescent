@@ -1,11 +1,10 @@
 package astechzgo.luminescent.utils;
 
-import java.io.ByteArrayOutputStream;
+import static astechzgo.luminescent.utils.SystemUtils.newFile;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.FileHandler;
@@ -13,8 +12,6 @@ import java.util.logging.Formatter;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
-
-import static astechzgo.luminescent.utils.SystemUtils.newFile;
 
 public class LoggingUtils {
 
@@ -43,7 +40,7 @@ public class LoggingUtils {
 					threadName = t.getName();
 				}
 			}
-			String msg = S + " [" + threadName + "/" + (debug ? "DEBUG" : record.getLevel().getName()) + "]: " + record.getMessage();
+			String msg = S + " [" + threadName + "/" + (debug ? "DEBUG" : record.getLevel().getName()) + "]: " + record.getMessage() + "\n";
 			
 			return msg;
 		}
@@ -61,13 +58,15 @@ public class LoggingUtils {
 			LOGGER.setUseParentHandlers(false);			
 			final FileHandler fh = new FileHandler(LOG_FILE.getAbsolutePath(), true);
 			final EConsoleHandler ch = new EConsoleHandler();
+			
 			ch.setFormatter(FORMATTER);
-			
-			
 			fh.setFormatter(FORMATTER);
 			
 			LOGGER.addHandler(fh);
 			LOGGER.addHandler(ch);
+
+			System.setOut(createLoggingProxy(System.out, Level.INFO));
+			System.setErr(createLoggingProxy(System.err, Level.SEVERE));
 			
 			if(Constants.getConstantAsBoolean(Constants.LOG_CONFIG)) {
 				LOGGER.setLevel(Level.CONFIG);
@@ -89,24 +88,30 @@ public class LoggingUtils {
 			});
 			
 		} catch (SecurityException | IOException e) {
-			LoggingUtils.printException(e);
+			e.printStackTrace();
 		}
+	}
+	
+	private static PrintStream createLoggingProxy(final PrintStream realPrintStream, Level level) {
+		return new PrintStream(realPrintStream) {
+			public void write(byte[] b) throws IOException {
+			    String string = new String(b);
+			    if (!string.trim().isEmpty())
+			        LOGGER.log(level, string);
+			}
 
-		System.setOut(new PrintStream(new ByteArrayOutputStream()) {
-		    public void println(String str) {
-		        process(str + "\n");
-		    }
+			public void write(byte[] b, int off, int len) {
+			    String string = new String(b, off, len);
+			    if (!string.trim().isEmpty())
+			        LOGGER.log(level, string);
+			}
 
-		    public void print(String str) {
-		        process(str);
-		    }
-
-		    private void process(String str) {
-		    	
-		    	if(!str.trim().isEmpty())
-		    		LOGGER.info(str);
-		    }
-		});
+			public void write(int b) {
+			    String string = String.valueOf((char) b);
+			    if (!string.trim().isEmpty())
+			        LOGGER.log(level, string);
+			}
+		};
 	}
 	
 	private static void cleanupLogFilename() {
@@ -136,13 +141,6 @@ public class LoggingUtils {
         if (!success) {
             System.err.println("Unknown Error");
         }
-	}
-	
-	public static void printException(Exception e) {
-		StringWriter sw = new StringWriter();
-		PrintWriter pw = new PrintWriter(sw);
-		e.printStackTrace(pw);
-		System.err.println(sw.toString());
 	}
 }
 

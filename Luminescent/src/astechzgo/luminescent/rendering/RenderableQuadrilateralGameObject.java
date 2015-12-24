@@ -1,6 +1,7 @@
 package astechzgo.luminescent.rendering;
 
 import java.awt.Color;
+import java.awt.geom.Line2D;
 
 import org.lwjgl.opengl.GL11;
 
@@ -14,37 +15,61 @@ public class RenderableQuadrilateralGameObject implements IRenderedObject {
 
 	protected Texture texture;
 
-	protected int x;
-	protected int y;
+	protected int aX;
+	protected int aY;
+	
+	protected int bX;
+	protected int bY;
+	
+	protected int cX;
+	protected int cY;
+	
+	protected int dX;
+	protected int dY;
 
-	protected int width;
-	protected int height;
-
-	protected int scaledX;
-	protected int scaledY;
-
-	protected int scaledWidth;
-	protected int scaledHeight;
+	protected int scaledAX;
+	protected int scaledAY;
+	
+	protected int scaledBX;
+	protected int scaledBY;
+	
+	protected int scaledCX;
+	protected int scaledCY;
+	
+	protected int scaledDX;
+	protected int scaledDY;
 
 	protected int oldGameWidth = DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2;
 	protected int oldGameHeight = DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2;
 
-	public RenderableQuadrilateralGameObject(int x, int y, int width, int height, Texture texture) {
+	public RenderableQuadrilateralGameObject(int aX, int aY, int bX, int bY, int cX, int cY, int dX, int dY, Texture texture) {
 		this.texture = texture;
-
-		this.x = x;
-		this.y = y;
-
-		this.width = width;
-		this.height = height;
+		
+		this.aX = aX;
+		this.aY = aY;
+		
+		this.bX = bX;
+		this.bY = bY;
+		
+		this.cX = cX;
+		this.cY = cY;
+		
+		this.dX = dX;
+		this.dY = dY;
 	}
 
-	public RenderableQuadrilateralGameObject(int x, int y, int width, int height) {
-		this.x = x;
-		this.y = y;
-
-		this.width = width;
-		this.height = height;
+	public RenderableQuadrilateralGameObject(int aX, int aY, int bX, int bY, int cX, int cY, int dX, int dY) {
+		this.aX = aX;
+		this.aY = aY;
+		
+		this.bX = bX;
+		this.bY = bY;
+		
+		this.cX = cX;
+		this.cY = cY;
+		
+		this.dX = dX;
+		this.dY = dY;
 	}
 
 	@Override
@@ -53,10 +78,10 @@ public class RenderableQuadrilateralGameObject implements IRenderedObject {
 
 		GL11.glColor3f((float) colour.getRed() / 256, (float) colour.getGreen() / 256, (float) colour.getBlue() / 256);
 		if (texture != null) {
-			RenderingUtils.RenderQuad(scaledX, scaledY, scaledWidth, scaledHeight, texture);
+			RenderingUtils.RenderQuad(scaledAX, scaledAY, scaledBX, scaledBY, scaledCX, scaledCY, scaledDX, scaledDY, texture);
 		} 
 		else {
-			RenderingUtils.RenderQuad(scaledX, scaledY, scaledWidth, scaledHeight);
+			RenderingUtils.RenderQuad(scaledAX, scaledAY, scaledBX, scaledBY, scaledCX, scaledCY, scaledDX, scaledDY);
 		}
 	}
 
@@ -82,17 +107,35 @@ public class RenderableQuadrilateralGameObject implements IRenderedObject {
 
 	@Override
 	public void resize() {
-		scaledX = ((int) Math
-				.round((double) x / 1920 * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)))
-				+ DisplayUtils.widthOffset;
-		scaledY = ((int) Math
-				.round((double) y / 1080 * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2)))
-				+ DisplayUtils.heightOffset;
-
-		scaledWidth = (int) Math
-				.round((double) width / 1920 * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2));
-		scaledHeight = (int) Math
-				.round((double) height / 1080 * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2));
+		int scaledCamX = ((int) Math
+				.round((double)((Camera.CAMERA_WIDTH / 2) - Camera.getX()) / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)));
+		int scaledCamY = ((int) Math
+				.round((double)((Camera.CAMERA_HEIGHT / 2) - Camera.getY()) / Camera.CAMERA_HEIGHT * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2)));
+		
+		scaledAX = ((int) Math
+				.round((double) aX / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)))
+				+ DisplayUtils.widthOffset + scaledCamX;
+		scaledAY = (int) Math
+				.round((double) aY / Camera.CAMERA_HEIGHT * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2))
+				+ DisplayUtils.heightOffset + scaledCamY;
+		scaledBX = ((int) Math
+				.round((double) bX / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)))
+				+ DisplayUtils.widthOffset + scaledCamX;
+		scaledBY = (int) Math
+				.round((double) bY / Camera.CAMERA_HEIGHT * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2))
+				+ DisplayUtils.heightOffset + scaledCamY;
+		scaledCX = ((int) Math
+				.round((double) cX / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)))
+				+ DisplayUtils.widthOffset + scaledCamX;
+		scaledCY = (int) Math
+				.round((double) cY / Camera.CAMERA_HEIGHT * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2))
+				+ DisplayUtils.heightOffset + scaledCamY;
+		scaledDX = ((int) Math
+				.round((double) dX / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)))
+				+ DisplayUtils.widthOffset + scaledCamX;
+		scaledDY = (int) Math
+				.round((double) dY / Camera.CAMERA_HEIGHT * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2))
+				+ DisplayUtils.heightOffset + scaledCamY;
 
 		oldGameWidth = DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2;
 		oldGameHeight = DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2;
@@ -102,35 +145,38 @@ public class RenderableQuadrilateralGameObject implements IRenderedObject {
 	public boolean isTouching(IRenderedObject object) {
 		if (object instanceof RenderableQuadrilateralGameObject) {
 			RenderableQuadrilateralGameObject casted = (RenderableQuadrilateralGameObject) object;
-
-			int aX1 = this.x;
-			int aX2 = this.x + this.width;
-
-			int aY1 = this.y;
-			int aY2 = this.y + this.height;
-
-			int bX1 = casted.x;
-			int bX2 = casted.x + casted.width;
-
-			int bY1 = casted.y;
-			int bY2 = casted.y + casted.height;
-
-			if (aX1 <= bX2 && aX2 >= bX1 && aY1 <= bY2 && aY2 >= bY1)
-				return true;
-			else
-				return false;
+			
+			if(
+					Line2D.linesIntersect(aX, aY, bX, bY, casted.aX, casted.aY, casted.bX, casted.bY) ||	
+					Line2D.linesIntersect(aX, aY, bX, bY, casted.bX, casted.bY, casted.cX, casted.cY) ||	
+					Line2D.linesIntersect(aX, aY, bX, bY, casted.cX, casted.cY, casted.dX, casted.dY) ||
+					Line2D.linesIntersect(aX, aY, bX, bY, casted.dX, casted.dY, casted.aX, casted.aY) ||
+					Line2D.linesIntersect(bX, bY, cX, cY, casted.aX, casted.aY, casted.bX, casted.bY) ||	
+					Line2D.linesIntersect(bX, bY, cX, cY, casted.bX, casted.bY, casted.cX, casted.cY) ||	
+					Line2D.linesIntersect(bX, bY, cX, cY, casted.cX, casted.cY, casted.dX, casted.dY) ||
+					Line2D.linesIntersect(bX, bY, cX, cY, casted.dX, casted.dY, casted.aX, casted.aY) ||
+					Line2D.linesIntersect(cX, cY, dX, dY, casted.aX, casted.aY, casted.bX, casted.bY) ||	
+					Line2D.linesIntersect(cX, cY, dX, dY, casted.bX, casted.bY, casted.cX, casted.cY) ||	
+					Line2D.linesIntersect(cX, cY, dX, dY, casted.cX, casted.cY, casted.dX, casted.dY) ||
+					Line2D.linesIntersect(cX, cY, dX, dY, casted.dX, casted.dY, casted.aX, casted.aY) ||
+					Line2D.linesIntersect(dX, dY, aX, aY, casted.aX, casted.aY, casted.bX, casted.bY) ||	
+					Line2D.linesIntersect(dX, dY, aX, aY, casted.bX, casted.bY, casted.cX, casted.cY) ||	
+					Line2D.linesIntersect(dX, dY, aX, aY, casted.cX, casted.cY, casted.dX, casted.dY) ||
+					Line2D.linesIntersect(dX, dY, aX, aY, casted.dX, casted.dY, casted.aX, casted.aY)
+					)
+			return true;
 		}
 		else if (object instanceof RenderableCircularGameObject) {
 			RenderableCircularGameObject casted = (RenderableCircularGameObject) object;
 
 			int[] xQuads = { 
-				(this.x), 
-				(this.x + this.width) 
+				(aX), 
+				(bX) 
 			};
 
 			int[] yQuads = {
-				(this.y),
-				(this.y + this.height)
+				(dY),
+				(aY)
 			};
 
 			boolean[][] quadrant = new boolean[2][2];
@@ -191,23 +237,44 @@ public class RenderableQuadrilateralGameObject implements IRenderedObject {
 
 			return false;
 		} 
-		else {
-			return false;
-		}
+		return false;
 	}
 
 	@Override
 	public boolean doesContain(int x, int y) {
+		boolean b1, b2, b3;
 
-		int x1 = this.x;
-		int x2 = this.x + this.width;
+		int aX = this.aX;
+		int aY = this.aY;
+		
+		int bX = this.bX;
+		int bY = this.bY;
+		
+		int cX = this.cX;
+		int cY = this.cY;
+		
+	    b1 = ((x - bX) * (aY - bY) - (aX - bX) * (y - bY)) < 0.0f;
+	    b2 = ((x - cX) * (bY - cY) - (bX - cX) * (y - cY)) < 0.0f;
+	    b3 = ((x - aX) * (cY - aY) - (cX - aX) * (y - aY)) < 0.0f;
 
-		int y1 = this.y;
-		int y2 = this.y + this.height;
+	    boolean a = ((b1 == b2) && (b2 == b3));
+	    
 
-		if ((x > x1 && x < x2) && (y > y1 && y < y2))
-			return true;
-		else
-			return false;
+		aX = this.aX;
+		aY = this.aY;
+		
+		bX = this.dX;
+		bY = this.dY;
+		
+		cX = this.cX;
+		cY = this.cY;
+		
+	    b1 = ((x - bX) * (aY - bY) - (aX - bX) * (y - bY)) < 0.0f;
+	    b2 = ((x - cX) * (bY - cY) - (bX - cX) * (y - cY)) < 0.0f;
+	    b3 = ((x - aX) * (cY - aY) - (cX - aX) * (y - aY)) < 0.0f;
+
+	    boolean b = ((b1 == b2) && (b2 == b3));
+	    
+	    return a || b;
 	}
 }

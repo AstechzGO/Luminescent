@@ -4,25 +4,51 @@ Project Developers:
 @D3ZOMBKEELA
 @Patedorea
 @MatEdwards
+@Stealth2994
 
 Code sources that we have used:
 
 astechzgo.luminescent:
+	entity:
+		CircularEntity:
+			(Nothing)
+		Entity:
+			(Nothing)
+		Player:
+			(Nothing)
+		PolygonalEntity:
+			(Nothing)
+		Projectile:
+			(Nothing)
+		QuadrilateralEntity:
+			(Nothing)
+		RectangularEntity:
+			(Nothing)
+	gameobject:
+		Room:
+			(Nothing)
+		RoomWalls:
+			(Nothing)
+	keypress:
+		KeyPressGameplay:
+			(Nothing)
+		KeyPressUtils:
+			checkUtils():
+				StackOverflow:
+					http://stackoverflow.com/questions/1459656/how-to-get-the-current-time-in-yyyy-mm-dd-hhmisec-millisecond-format-in-java:
+						Question:
+							Sunil Kumar Sahoo 			(http://stackoverflow.com/users/111988/sunil-kumar-sahoo)
+							Peter Mortensen 			(http://stackoverflow.com/users/63550/peter-mortensen)
+						Answer:
+							JayJay						(http://stackoverflow.com/users/171675/jayjay)				
 	main:
 		Main:
 			(Nothing)
 		Luminescent:
-			Init():
-				http://www.glfw.org/docs/latest/input.html#cursor_mode
-			Tick():
-				StackOverflow:
-					http://stackoverflow.com/questions/1459656/how-to-get-the-current-time-in-yyyy-mm-dd-hhmisec-millisecond-format-in-java:
-						Question:
-							Sunil Kumar Sahoo 	(http://stackoverflow.com/users/111988/sunil-kumar-sahoo)
-							Peter Mortensen 	(http://stackoverflow.com/users/63550/peter-mortensen)
-						Answer:
-							JayJay				(http://stackoverflow.com/users/171675/jayjay)
+			(Nothing)
 	rendering:
+		Camera:
+			(Nothing)
 		IRenderedObject:
 			(Nothing)
 		OpenGL:
@@ -32,8 +58,6 @@ astechzgo.luminescent:
 				http://wiki.lwjgl.org/wiki/LWJGL_Basics_3_(The_Quad)#Example
 		Options:
 			(Nothing)
-		Player:
-			(Nothing)
 		RenderableCircularGameObject:
 			isTouching():
 				http://www.java-gaming.org/index.php/topic,10265.
@@ -41,18 +65,18 @@ astechzgo.luminescent:
 			(Nothing)
 		RenderableQuadrilateralGameObject:
 			isTouching():
-				StackOverflow:
-					http://stackoverflow.com/questions/306316/determine-if-two-rectangles-overlap-each-other:
-						Question:
-							Rob Burke 			(http://stackoverflow.com/users/135/rob-burke)
-							PhiLho				(http://stackoverflow.com/users/15459/philho)
-						Answer:
-							Charles Bretana		(http://stackoverflow.com/users/32632/charles-bretana)
 				http://www.java-gaming.org/index.php/topic,10265.
-		Room:
-			(Nothing)
-		RoomWalls:
-			(Nothing)
+			doesContain():
+				StackOverflow:
+					http://stackoverflow.com/questions/2049582/how-to-determine-a-point-in-a-2d-triangle:
+						Question:
+							ET 0.618					(http://stackoverflow.com/users/237460/et-0-618)
+							ideasman42					(http://stackoverflow.com/users/432509/ideasman42)
+						Answer:
+							Kornel Kisielewicz			(http://stackoverflow.com/users/233522/kornel-kisielewicz)
+							msrd0						(http://stackoverflow.com/users/3755692/msrd0)		
+		RenderableRectangularGameObject:
+			(Nothing)	
 	sound:
 		SoundList:
 			(Nothing)
@@ -62,6 +86,8 @@ astechzgo.luminescent:
 			loadSound():
 				http://www.paulscode.com/tutorials/SoundSystem/SoundSystem.pdf
 	textures:
+		Animation:
+			(Nothing)
 		Texture:
 			toByteBuffer():
 				http://www.java-gaming.org/index.php?topic=25516.0
@@ -69,18 +95,18 @@ astechzgo.luminescent:
 				StackOverflow:
 					http://stackoverflow.com/questions/8539124/unable-to-get-image-icon-in-runnable-jar:
 						Question:
-							desmatron 				(http://stackoverflow.com/users/1055176/desmatron)
-							jadarnel27				(http://stackoverflow.com/users/861565/jadarnel27)
+							desmatron 					(http://stackoverflow.com/users/1055176/desmatron)
+							jadarnel27					(http://stackoverflow.com/users/861565/jadarnel27)
 						Answer:
-							JB Nizet				(http://stackoverflow.com/users/571407/jb-nizet)
+							JB Nizet					(http://stackoverflow.com/users/571407/jb-nizet)
 			toBufferedImage(Image):
 				StackOverflow:
 					http://stackoverflow.com/questions/13605248/java-converting-image-to-bufferedimage:
 						Question:
-							Arek Wilk 				(http://stackoverflow.com/users/1426038/arek-wilk)
+							Arek Wilk 					(http://stackoverflow.com/users/1426038/arek-wilk)
 						Answer:
-							Sri Harsha Chilakapati	(http://stackoverflow.com/users/1026805/sri-harsha-chilakapati)
-							Dave Jarvis				(http://stackoverflow.com/users/59087/dave-jarvis)	
+							Sri Harsha Chilakapati		(http://stackoverflow.com/users/1026805/sri-harsha-chilakapati)
+							Dave Jarvis					(http://stackoverflow.com/users/59087/dave-jarvis)	
 			loadTexture():
 				http://www.java-gaming.org/index.php?topic=25516.0
 		TextureList:
@@ -94,9 +120,9 @@ astechzgo.luminescent:
 				StackOverflow:
 					http://stackoverflow.com/questions/16383898/find-words-in-string-surrounded-by-and:
 						Question:
-							Emil Adz				(http://stackoverflow.com/users/1561247/emil-adz)
+							Emil Adz					(http://stackoverflow.com/users/1561247/emil-adz)
 						Answer:
-							Evgeniy Dorofeev		(http://stackoverflow.com/users/1831293/evgeniy-dorofeev)
+							Evgeniy Dorofeev			(http://stackoverflow.com/users/1831293/evgeniy-dorofeev)
 		DisplayUtils:
 			static-block:
 				https://github.com/kappaOne/lwjglx/blob/master/src/org/lwjglx/opengl/Display.java
@@ -109,9 +135,9 @@ astechzgo.luminescent:
 				StackOverflow:
 					http://stackoverflow.com/questions/13742365/how-do-i-flip-an-image-horizontally-flip-with-glreadpixels-bufferedimage-and-o:
 						Question:
-							Rose Blax				(http://stackoverflow.com/users/1878494/rose-blax)
+							Rose Blax					(http://stackoverflow.com/users/1878494/rose-blax)
 						Answer:
-							Andrew Thompson			(http://stackoverflow.com/users/418556/andrew-thompson)
+							Andrew Thompson				(http://stackoverflow.com/users/418556/andrew-thompson)
 			DisplayMode:
 				https://github.com/kappaOne/lwjglx/blob/master/src/org/lwjglx/opengl/DisplayMode.java
 			create():
@@ -127,36 +153,33 @@ astechzgo.luminescent:
 				StackOverflow:
 					http://stackoverflow.com/questions/16383898/find-words-in-string-surrounded-by-and:
 						Question:
-							Emil Adz				(http://stackoverflow.com/users/1561247/emil-adz)
+							Emil Adz					(http://stackoverflow.com/users/1561247/emil-adz)
 						Answer:
-							Evgeniy Dorofeev		(http://stackoverflow.com/users/1831293/evgeniy-dorofeev)
+							Evgeniy Dorofeev			(http://stackoverflow.com/users/1831293/evgeniy-dorofeev)
 		LoggingUtils:
 			format():
 				StackOverflow:
 					http://stackoverflow.com/questions/1459656/how-to-get-the-current-time-in-yyyy-mm-dd-hhmisec-millisecond-format-in-java:
 						Question:
-							Sunil Kumar Sahoo 	(http://stackoverflow.com/users/111988/sunil-kumar-sahoo)
-							Peter Mortensen 	(http://stackoverflow.com/users/63550/peter-mortensen)
+							Sunil Kumar Sahoo 			(http://stackoverflow.com/users/111988/sunil-kumar-sahoo)
+							Peter Mortensen 			(http://stackoverflow.com/users/63550/peter-mortensen)
 						Answer:
-							JayJay				(http://stackoverflow.com/users/171675/jayjay)	
+							JayJay						(http://stackoverflow.com/users/171675/jayjay)	
 			configureLogger():
-				(Unknown)
+				StackOverflow:
+					http://stackoverflow.com/questions/1200175/log4j-redirect-stdout-to-dailyrollingfileappender:
+						Question:
+							letronje					(http://stackoverflow.com/users/119622/letronje)
+						Answer:
+							Dario						(http://stackoverflow.com/users/401712/dario)
 			cleanupLogFilename():
 				StackOverflow:
 					http://stackoverflow.com/questions/1459656/how-to-get-the-current-time-in-yyyy-mm-dd-hhmisec-millisecond-format-in-java:
 						Question:
-							Sunil Kumar Sahoo 	(http://stackoverflow.com/users/111988/sunil-kumar-sahoo)
-							Peter Mortensen 	(http://stackoverflow.com/users/63550/peter-mortensen)
+							Sunil Kumar Sahoo 			(http://stackoverflow.com/users/111988/sunil-kumar-sahoo)
+							Peter Mortensen 			(http://stackoverflow.com/users/63550/peter-mortensen)
 						Answer:
-							JayJay				(http://stackoverflow.com/users/171675/jayjay)	
-			logException():
-				StackOverflow:
-					http://stackoverflow.com/questions/4812570/how-to-store-printstacktrace-into-a-string
-						Question:
-							ace 				(http://stackoverflow.com/users/527577/ace)
-							BalusC			 	(http://stackoverflow.com/users/157882/balusc)
-						Answer:
-							Zach L				(http://stackoverflow.com/users/568406/zach-l)
+							JayJay						(http://stackoverflow.com/users/171675/jayjay)	
 			printException():
 				http://www.rgagnon.com/javadetails/java-0537.html
 		RenderingUtils:
@@ -166,19 +189,37 @@ astechzgo.luminescent:
 				StackOverflow:
 					http://stackoverflow.com/questions/8762826/texture-mapping-a-circle-made-using-gl-polygon:
 						Question:
-							Mike Tarrant 		(http://stackoverflow.com/users/1080242/mike-tarrant)
-							genpfault			(http://stackoverflow.com/users/44729/genpfault)
+							Mike Tarrant 				(http://stackoverflow.com/users/1080242/mike-tarrant)
+							genpfault					(http://stackoverflow.com/users/44729/genpfault)
 						Answer:
-							ClickerMonkey		(http://stackoverflow.com/users/914155/clickermonkey)
-							Christian Rau		(http://stackoverflow.com/users/743214/christian-rau)
+							ClickerMonkey				(http://stackoverflow.com/users/914155/clickermonkey)
+							Christian Rau				(http://stackoverflow.com/users/743214/christian-rau)
 		SystemUtils:
 			setWorkingDirectory():
 				StackOverflow:
-					http://stackoverflow.com/questions/840190/changing-the-current-working-directory-in-java
+					http://stackoverflow.com/questions/840190/changing-the-current-working-directory-in-java:
 						Question:
-							Nick				(http://stackoverflow.com/users/92222/nick)
+							Nick						(http://stackoverflow.com/users/92222/nick)
 						Answer:
-							Steve K				(http://stackoverflow.com/users/1864131/steve-k)
+							Steve K						(http://stackoverflow.com/users/1864131/steve-k)
+	worldloader:
+		JSONWorldLoader:
+			loadRoom():
+				StackOverflow:
+					http://stackoverflow.com/questions/2591098/how-to-parse-json-in-java:
+						Question:
+							Muhammad Maqsoodur Rehman	(http://stackoverflow.com/users/2355649/muhammad-maqsoodur-rehman)
+							hjpotter92					(http://stackoverflow.com/users/1190388/hjpotter92)
+						Answer:
+							Stoyan Dekov				(http://stackoverflow.com/users/5020253/stoyan-dekov)
+			parseString:
+				StackOverflow:
+					http://stackoverflow.com/questions/1432245/how-to-parse-a-mathematical-expression-given-as-a-string-and-return-a-number:
+						Question:
+							Martijn Courteaux			(http://stackoverflow.com/users/155137/martijn-courteaux)
+							Mark Rotteveel				(http://stackoverflow.com/users/466862/mark-rotteveel)
+						Answer:
+							Abdennour TOUMI				(http://stackoverflow.com/users/747579/abdennour-toumi)
 
 Deployment:
 
@@ -191,9 +232,9 @@ Deployment\build\jarsplice+.jar:
 		https://github.com/lquesada/JarSplicePlus
 Deployment\Build\updateANT.bat:
 	StackOverflow:
-		http://stackoverflow.com/questions/2874387/how-to-create-a-bat-file-to-download-and-unpack-a-zip-file
+		http://stackoverflow.com/questions/2874387/how-to-create-a-bat-file-to-download-and-unpack-a-zip-file:
 				Question:
-					Rella				(http://stackoverflow.com/users/434051/rella)
+					Rella								(http://stackoverflow.com/users/434051/rella)
 				Answer:
-					wqw					(http://stackoverflow.com/users/40691/wqw)
+					wqw									(http://stackoverflow.com/users/40691/wqw)
 			

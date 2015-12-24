@@ -13,8 +13,8 @@ import astechzgo.luminescent.utils.DisplayUtils;
 public class OpenGL
 {
 	private static float red = 0.0f;
-	private static float green = 0.0f;
-	private static float blue = 0.0f;
+	private static float green = 0.4f;
+	private static float blue = 0.6f;
 	private static float alpha = 1.0f;
 	
 	public static void InitOpenGL()
@@ -34,6 +34,8 @@ public class OpenGL
 		GL11.glLoadIdentity();
 		GL11.glOrtho(0, x, 0, y, 1, -1);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 	}
 	
 	public static void SetClearColor(float redVal, float greenVal, float blueVal, float alphaVal)

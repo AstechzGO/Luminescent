@@ -27,6 +27,8 @@ public class RenderableCircularGameObject implements IRenderedObject {
 
 	protected Texture texture;
 
+	protected double rotation = 0.0;
+	
 	public RenderableCircularGameObject(double x, double y, double radius) {
 		this(x, y, radius, 1);
 	}
@@ -57,10 +59,10 @@ public class RenderableCircularGameObject implements IRenderedObject {
 		GL11.glColor3f((float) colour.getRed() / 256, (float) colour.getGreen() / 256, (float) colour.getBlue() / 256);
 
 		if (texture != null) {
-			RenderingUtils.RenderCircle(scaledX, scaledY, scaledRadius, pointSeperation, texture);
+			RenderingUtils.RenderCircle(scaledX, scaledY, scaledRadius, pointSeperation, rotation, texture);
 		}
 		else {
-			RenderingUtils.RenderCircle(scaledX, scaledY, scaledRadius, pointSeperation);
+			RenderingUtils.RenderCircle(scaledX, scaledY, scaledRadius, pointSeperation, rotation);
 		}
 	}
 
@@ -76,15 +78,20 @@ public class RenderableCircularGameObject implements IRenderedObject {
 
 	@Override
 	public void resize() {
+		int scaledCamX = ((int) Math
+				.round((double)((Camera.CAMERA_WIDTH / 2) - Camera.getX()) / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)));
+		int scaledCamY = ((int) Math
+				.round((double)((Camera.CAMERA_HEIGHT / 2) - Camera.getY()) / Camera.CAMERA_HEIGHT * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2)));
+
 		scaledX = ((int) Math
-				.round((double) x / 1920 * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)))
-				+ DisplayUtils.widthOffset;
+				.round((double) x / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)))
+				+ DisplayUtils.widthOffset + scaledCamX;
 		scaledY = ((int) Math
-				.round((double) y / 1080 * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2)))
-				+ DisplayUtils.heightOffset;
+				.round((double) y / Camera.CAMERA_HEIGHT * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2)))
+				+ DisplayUtils.heightOffset + scaledCamY;
 
 		scaledRadius = (int) Math
-				.round((double) radius / 1920 * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2));
+				.round((double) radius / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2));
 
 		oldGameWidth = DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2;
 		oldGameHeight = DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2;
@@ -107,13 +114,13 @@ public class RenderableCircularGameObject implements IRenderedObject {
 			RenderableQuadrilateralGameObject casted = (RenderableQuadrilateralGameObject) object;
 
 			int[] xQuads = { 
-				(casted.x), 
-				(casted.x + casted.width)
+				(casted.aX), 
+				(casted.bX)
 			};
 
 			int[] yQuads = { 
-				(casted.y), 
-				(casted.y + casted.height) 
+				(casted.dY), 
+				(casted.aY) 
 			};
 
 			boolean[][] quadrant = new boolean[2][2];
