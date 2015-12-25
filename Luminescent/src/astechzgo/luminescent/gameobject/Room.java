@@ -11,14 +11,7 @@ public class Room extends RenderableRectangularGameObject {
 		super(loader.getX(), loader.getY(), loader.getWidth(), loader.getHeight());
 		super.setColour(new Color(0.15f, 0.15f, 0.15f));
 	}
-	
-	/*
-	 * 			Camera.CAMERA_WIDTH / 45, 
-	 *			Camera.CAMERA_HEIGHT / 25, 
-	 *			Camera.CAMERA_WIDTH - (Camera.CAMERA_WIDTH / 45 * 2),
-	 *			Camera.CAMERA_HEIGHT - (Camera.CAMERA_HEIGHT / 25 * 2)
-	 */
-	
+
 	public void setSize(int width, int height) {
 		super.width = width;
 		super.height = height;

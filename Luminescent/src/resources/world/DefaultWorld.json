@@ -1,6 +1,8 @@
-{
-	"x": "CAMERA_WIDTH / 45",
-	"y": "CAMERA_HEIGHT / 25",
-	"width": "CAMERA_WIDTH - (CAMERA_WIDTH / 45 * 2)",
-	"height": "CAMERA_HEIGHT - (CAMERA_HEIGHT / 25 * 2)"
-}
+[
+	{
+		"x": "CAMERA_WIDTH / 45",
+		"y": "CAMERA_HEIGHT / 25",
+		"width": "CAMERA_WIDTH - (CAMERA_WIDTH / 45 * 2)",
+		"height": "CAMERA_HEIGHT - (CAMERA_HEIGHT / 25 * 2)"
+	}
+]

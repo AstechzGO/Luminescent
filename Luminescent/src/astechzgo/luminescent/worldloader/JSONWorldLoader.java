@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -26,7 +28,7 @@ public class JSONWorldLoader {
 	public String width;
 	public String height;
 	
-	public static Room loadRoom() {
+	public static List<Room> loadRooms() {
 		Gson g = new Gson();
 		String parse = "";
 		InputStream in = new TextureList().getClass().getResourceAsStream("/resources/world/DefaultWorld.json");
@@ -40,7 +42,14 @@ public class JSONWorldLoader {
 			e.printStackTrace();
 		}
 		
-		return new Room(g.fromJson(parse, JSONWorldLoader.class));
+		JSONWorldLoader[] loaders = g.fromJson(parse, JSONWorldLoader[].class);
+		List<Room> rooms = new ArrayList<Room>();
+		
+		for(JSONWorldLoader loader : loaders) {
+			rooms.add(new Room(loader));
+		}
+		
+		return rooms;
 	}
 	
 	public int getX() {
