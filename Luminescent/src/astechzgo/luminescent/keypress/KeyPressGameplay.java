@@ -1,6 +1,7 @@
 package astechzgo.luminescent.keypress;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.lwjgl.glfw.GLFW;
 
@@ -15,7 +16,7 @@ public class KeyPressGameplay {
 	public static ArrayList<Projectile> projectiles = new ArrayList<>();
 	private static double lastShot;
 	
-	public static void checkGameActions(Player thePlayer, Room room) {
+	public static void checkGameActions(Player thePlayer, List<Room> rooms) {
 		
 		double deltaShot = (GLFW.glfwGetTime() * 1000) - lastShot;
 		
@@ -32,11 +33,11 @@ public class KeyPressGameplay {
 			Projectile m = (Projectile) projectiles.get(i);
 			m.fireBullet();
 			
-			if(room.doesContain((int)m.getX(), (int)m.getY())) {
+			if(rooms.get(0).doesContain((int)m.getX(), (int)m.getY())) {
 				// If the bullet is in the room render it
 				m.render();
 			}
-			else if(!room.doesContain((int)m.getX(),(int)m.getY())) {
+			else if(!rooms.get(0).doesContain((int)m.getX(),(int)m.getY())) {
 				// If the bullet is not it the room delete it
 				projectiles.remove(i);
 			}

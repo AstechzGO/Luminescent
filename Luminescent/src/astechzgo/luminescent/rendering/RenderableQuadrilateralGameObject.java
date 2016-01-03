@@ -108,33 +108,33 @@ public class RenderableQuadrilateralGameObject implements IRenderedObject {
 	@Override
 	public void resize() {
 		int scaledCamX = ((int) Math
-				.round((double)((1920 / 2) - Camera.getX()) / 1920 * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)));
+				.round((double)((Camera.CAMERA_WIDTH / 2) - Camera.getX()) / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)));
 		int scaledCamY = ((int) Math
-				.round((double)((1080 / 2) - Camera.getY()) / 1080 * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2)));
+				.round((double)((Camera.CAMERA_HEIGHT / 2) - Camera.getY()) / Camera.CAMERA_HEIGHT * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2)));
 		
 		scaledAX = ((int) Math
-				.round((double) aX / 1920 * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)))
+				.round((double) aX / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)))
 				+ DisplayUtils.widthOffset + scaledCamX;
 		scaledAY = (int) Math
-				.round((double) aY / 1080 * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2))
+				.round((double) aY / Camera.CAMERA_HEIGHT * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2))
 				+ DisplayUtils.heightOffset + scaledCamY;
 		scaledBX = ((int) Math
-				.round((double) bX / 1920 * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)))
+				.round((double) bX / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)))
 				+ DisplayUtils.widthOffset + scaledCamX;
 		scaledBY = (int) Math
-				.round((double) bY / 1080 * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2))
+				.round((double) bY / Camera.CAMERA_HEIGHT * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2))
 				+ DisplayUtils.heightOffset + scaledCamY;
 		scaledCX = ((int) Math
-				.round((double) cX / 1920 * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)))
+				.round((double) cX / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)))
 				+ DisplayUtils.widthOffset + scaledCamX;
 		scaledCY = (int) Math
-				.round((double) cY / 1080 * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2))
+				.round((double) cY / Camera.CAMERA_HEIGHT * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2))
 				+ DisplayUtils.heightOffset + scaledCamY;
 		scaledDX = ((int) Math
-				.round((double) dX / 1920 * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)))
+				.round((double) dX / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)))
 				+ DisplayUtils.widthOffset + scaledCamX;
 		scaledDY = (int) Math
-				.round((double) dY / 1080 * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2))
+				.round((double) dY / Camera.CAMERA_HEIGHT * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2))
 				+ DisplayUtils.heightOffset + scaledCamY;
 
 		oldGameWidth = DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2;

@@ -3,21 +3,15 @@ package astechzgo.luminescent.gameobject;
 import java.awt.Color;
 
 import astechzgo.luminescent.rendering.RenderableRectangularGameObject;
+import astechzgo.luminescent.worldloader.JSONWorldLoader;
 
 public class Room extends RenderableRectangularGameObject {
 
-	public Room() {
-		super(
-				
-				1920 / 45, 
-				1080 / 25, 
-				1920 - (1920 / 45 * 2),
-				1080 - (1080 / 25 * 2)
-				
-			);
+	public Room(JSONWorldLoader loader) {
+		super(loader.getX(), loader.getY(), loader.getWidth(), loader.getHeight());
 		super.setColour(new Color(0.15f, 0.15f, 0.15f));
 	}
-	
+
 	public void setSize(int width, int height) {
 		super.width = width;
 		super.height = height;
@@ -28,19 +22,19 @@ public class Room extends RenderableRectangularGameObject {
 		super.render();
 	}
 	
-	public double getPosX() {
+	public int getPosX() {
 		return super.x;
 	}
 	
-	public double getPosY() {
+	public int getPosY() {
 		return super.y;
 	}
 	
-	public double getWidth() {
+	public int getWidth() {
 		return super.width;
 	}
 	
-	public double getHeight() {
+	public int getHeight() {
 		return super.height;
 	}
 }

@@ -2,12 +2,14 @@ package astechzgo.luminescent.entity;
 
 import java.nio.DoubleBuffer;
 import java.nio.IntBuffer;
+import java.util.List;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 
 import astechzgo.luminescent.gameobject.Room;
 import astechzgo.luminescent.main.Luminescent;
+import astechzgo.luminescent.rendering.Camera;
 import astechzgo.luminescent.utils.Constants;
 import astechzgo.luminescent.utils.ControllerUtils;
 import astechzgo.luminescent.utils.DisplayUtils;
@@ -21,7 +23,7 @@ public class Player extends CircularEntity {
 	private double lastMouseY = 0;
 	
 	public Player() {
-		super(1920 / 2, 1080 / 2, 40, 1);
+		super(Camera.CAMERA_WIDTH / 2, Camera.CAMERA_HEIGHT / 2, 40, 1);
 		lastDelta = GLFW.glfwGetTime() * 1000;
 		lastControllerDelta = GLFW.glfwGetTime() * 1000;
 	}
@@ -60,7 +62,7 @@ public class Player extends CircularEntity {
 				+ DisplayUtils.heightOffset;
 				
 		scaledRadius = (int) Math
-				.round((double) radius / 1920 * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2));
+				.round((double) radius / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2));
 
 		oldGameWidth = DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2;
 		oldGameHeight = DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2;
@@ -103,16 +105,16 @@ public class Player extends CircularEntity {
 		
 		GLFW.glfwGetWindowPos(DisplayUtils.getHandle(), xpos, ypos);
 		
-		x = x + xpos.get(0) + ((1920 / 2) - xpos.get(0) - DisplayUtils.getDisplayWidth() / 2);
-		y = -y + DisplayUtils.monitorHeight - ypos.get(0) - ((1080 / 2) - ypos.get(0) - DisplayUtils.getDisplayHeight() / 2);
+		x = x + xpos.get(0) + ((Camera.CAMERA_WIDTH / 2) - xpos.get(0) - DisplayUtils.getDisplayWidth() / 2);
+		y = -y + DisplayUtils.monitorHeight - ypos.get(0) - ((Camera.CAMERA_HEIGHT / 2) - ypos.get(0) - DisplayUtils.getDisplayHeight() / 2);
 		
 		xpos.clear();
 		ypos.clear();
 		
-		double scaledX = x / GLFW.glfwGetVideoMode(DisplayUtils.monitor).width() * 1920;
-		double scaledY = y / GLFW.glfwGetVideoMode(DisplayUtils.monitor).height() * 1080;
+		double scaledX = x / GLFW.glfwGetVideoMode(DisplayUtils.monitor).width() * Camera.CAMERA_WIDTH;
+		double scaledY = y / GLFW.glfwGetVideoMode(DisplayUtils.monitor).height() * Camera.CAMERA_HEIGHT;
 		
-		double m = (1080 / 2 - scaledY) / (1920 / 2 - scaledX);
+		double m = (Camera.CAMERA_HEIGHT / 2 - scaledY) / (Camera.CAMERA_WIDTH / 2 - scaledX);
 		
 		if(m == Double.POSITIVE_INFINITY) {
 			rotation = 90;
@@ -123,10 +125,10 @@ public class Player extends CircularEntity {
 			rotation = 270;
 			return rotation;
 		}
-		if(scaledX == 1920 / 2 && scaledY == 1080 / 2)
+		if(scaledX == Camera.CAMERA_WIDTH / 2 && scaledY == Camera.CAMERA_HEIGHT / 2)
 			return rotation;
 
-		if(scaledX < 1920 / 2)
+		if(scaledX < Camera.CAMERA_WIDTH / 2)
 			rotation = 180 - Math.toDegrees(Math.atan(m));
 		else {
 			if(360 - Math.toDegrees(Math.atan(m)) > 360)
@@ -137,7 +139,7 @@ public class Player extends CircularEntity {
 		
 		return rotation;
 	}
-	public void move(Room room) {
+	public void move(List<Room> rooms) {
 
 		double delta = ((GLFW.glfwGetTime() * 1000) - lastDelta);
 		lastDelta = GLFW.glfwGetTime() * 1000;
@@ -186,20 +188,65 @@ public class Player extends CircularEntity {
 		
 		double angle = setRotation() + tempAngle;
 		
-		if(this.getPosX() + speed * Math.cos(Math.toRadians(angle)) >= room.getPosX() + room.getWidth() - this.getRadius())
-			this.setPosX(room.getPosX() + room.getWidth() - this.getRadius());		
-		else if(this.getPosX() + speed * Math.cos(Math.toRadians(angle)) <= room.getPosX() + this.getRadius())
-			this.setPosX(room.getPosX() + this.getRadius());
+		double x = 0;
+		double y = 0;
+		
+		boolean bx = false;
+		boolean by = false;
+		
+		boolean initX = true;
+		boolean initY = true;
+		
+		for(Room room : rooms) {
+			if(this.getPosX() + speed * Math.cos(Math.toRadians(angle)) >= room.getPosX() + room.getWidth() - this.getRadius()) {
+				bx = true;
+				
+				double temp = room.getPosX() + room.getWidth() - this.getRadius();
+				if(temp > x || initX) {
+					x = temp;
+					initX = false;
+				}
+			}
+			else if(this.getPosX() + speed * Math.cos(Math.toRadians(angle)) <= room.getPosX() + this.getRadius()) {
+				bx = true;
+				
+				double temp = room.getPosX() + this.getRadius();
+				if(temp > x || initX) {
+					x = temp;
+					initX = false;
+				}
+			}
+		}
+		
+		if(bx)
+			this.setPosX(x);
 		else
 			this.setPosX(this.getPosX() + speed * Math.cos(Math.toRadians(angle)));
 		
-		if(this.getPosY() - speed * Math.sin(Math.toRadians(angle)) >= room.getPosY() + room.getHeight() - this.getRadius())
-			this.setPosY(room.getPosY() + room.getHeight() - this.getRadius());
-		else if(this.getPosY() - speed * Math.sin(Math.toRadians(angle)) <= room.getPosY() + this.getRadius())
-			this.setPosY(room.getPosY() + this.getRadius());
-		else
-			this.setPosY(this.getPosY() - speed * Math.sin(Math.toRadians(angle)));
+		for(Room room : rooms) {
+			if(this.getPosY() - speed * Math.sin(Math.toRadians(angle)) >= room.getPosY() + room.getHeight() - this.getRadius()) {
+				double temp = room.getPosY() + room.getHeight() - this.getRadius();
+				if(temp > y || initY) {
+					y = temp;
+					initY = false;
+				}
+			}
+			else if(this.getPosY() - speed * Math.sin(Math.toRadians(angle)) <= room.getPosY() + this.getRadius()) {
+				double temp = room.getPosY() + this.getRadius();
+				if(temp < y || initY) {
+					y = temp;
+					initY = false;
+				}
+			}
+			else {
+				by = true;
+			}
+		}
 		
+		if(by)
+			this.setPosY(this.getPosY() - speed * Math.sin(Math.toRadians(angle)));
+		else
+			this.setPosY(y);
 		
 		/*if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_UP)) {
 
