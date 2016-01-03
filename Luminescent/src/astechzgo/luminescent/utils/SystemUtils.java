@@ -2,16 +2,12 @@ package astechzgo.luminescent.utils;
 
 import java.io.File;
 
+import org.lwjgl.system.Platform;
+
 public class SystemUtils {
 
 	private static String userHome = System.getProperty("user.home", ".");
 	private static File workingDirectory;
-	
-	private static int currentOS;
-	
-	public static final int WINDOWS = 0;
-	public static final int LINUX = 1;
-	public static final int MAC = 2;
 	
 	/**
 	 * When not deployed, this game only supports windows in the Eclipse IDE
@@ -21,34 +17,18 @@ public class SystemUtils {
 	 */
 	public static void doOSSetUp() {
 		
-		//Windows
-		if(System.getProperty("os.name").toLowerCase().contains("win")) {
-				
-			      String applicationData = System.getenv("APPDATA");
-			      String folder = applicationData != null ? applicationData : userHome;
-
-			      workingDirectory = new File(folder, ".luminescent/");
-			      
-			      currentOS = WINDOWS;
+		if(Platform.get() == Platform.LINUX) {
+			workingDirectory = new File(userHome, ".luminescent/");
 		}
-		
-		//Linux/Unix
-		else if(System.getProperty("os.name").toLowerCase().contains("unix")
-				|| System.getProperty("os.name").toLowerCase().contains("linux")) {
-			
-				workingDirectory = new File(userHome, ".luminescent/");
-				
-				currentOS = LINUX;
-		}
-		
-		//Mac
-		else if(System.getProperty("os.name").toLowerCase().contains("mac")) {
+		else if(Platform.get() == Platform.MACOSX) {
 			workingDirectory = new File(userHome, "Library/Application Support/luminescent");
-			
-			currentOS = MAC;
 		}
-		
-		//Unkown
+		else if(Platform.get() == Platform.WINDOWS) {
+			String applicationData = System.getenv("APPDATA");
+			String folder = applicationData != null ? applicationData : userHome;
+
+			workingDirectory = new File(folder, ".luminescent/");
+		}		
 		else {
 			System.err.println("The current platform is not supported");
 			System.exit(-1);
@@ -72,9 +52,5 @@ public class SystemUtils {
 	
 	public static File newFile(String relativeLoc) {
 		return new File(new File(relativeLoc).getAbsolutePath());
-	}
-	
-	public static int getCurrentOS() {
-		return currentOS;
 	}
 }
