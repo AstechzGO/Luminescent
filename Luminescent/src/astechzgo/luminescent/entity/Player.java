@@ -105,8 +105,8 @@ public class Player extends CircularEntity {
 		
 		GLFW.glfwGetWindowPos(DisplayUtils.getHandle(), xpos, ypos);
 		
-		x = x + xpos.get(0) + ((Camera.CAMERA_WIDTH / 2) - xpos.get(0) - DisplayUtils.getDisplayWidth() / 2);
-		y = -y + DisplayUtils.monitorHeight - ypos.get(0) - ((Camera.CAMERA_HEIGHT / 2) - ypos.get(0) - DisplayUtils.getDisplayHeight() / 2);
+		x = x + xpos.get(0) + ((DisplayUtils.monitorWidth / 2) - xpos.get(0) - DisplayUtils.getDisplayWidth() / 2);
+		y = -y + DisplayUtils.monitorHeight - ypos.get(0) - ((DisplayUtils.monitorHeight / 2) - ypos.get(0) - DisplayUtils.getDisplayHeight() / 2);
 		
 		xpos.clear();
 		ypos.clear();
