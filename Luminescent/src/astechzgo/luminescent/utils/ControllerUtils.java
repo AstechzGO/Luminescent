@@ -16,6 +16,7 @@ import java.util.Properties;
 import java.util.Scanner;
 
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.system.Platform;
 
 import static astechzgo.luminescent.utils.SystemUtils.newFile;
 
@@ -82,7 +83,7 @@ public class ControllerUtils {
 		
 		ByteBuffer GLFWButtons = GLFW.glfwGetJoystickButtons(joystick);
 		
-		for(List<Integer> rButtons : buttons.get(SystemUtils.getCurrentOS())) {
+		for(List<Integer> rButtons : buttons.get(Platform.get().ordinal())) {
 			boolean areAllDown = true;
 			for(Integer button : rButtons) {
 				if(button >= -1) {
@@ -181,7 +182,7 @@ public class ControllerUtils {
 			
 			Scanner scanner = new Scanner(string);
 			
-			int q = SystemUtils.getCurrentOS();
+			int q = Platform.get().ordinal();
 			for (String a; (a = scanner.findWithinHorizon("(?<=\\{\\{).*?(?=\\}\\})", 0)) != null;) {
 		    
 				a = "{" + a + "}";
