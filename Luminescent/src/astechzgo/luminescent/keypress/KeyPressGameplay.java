@@ -15,7 +15,7 @@ public class KeyPressGameplay {
 	
 	public static ArrayList<Projectile> projectiles = new ArrayList<>();
 	private static double lastShot;
-	public static boolean killProjectile = false;
+
 	public static void checkGameActions(Player thePlayer, List<Room> rooms) {
 		
 		double deltaShot = (GLFW.glfwGetTime() * 1000) - lastShot;
@@ -29,6 +29,7 @@ public class KeyPressGameplay {
 		}
 		
 		// For every shot render it and keep shooting it forwards
+		 boolean killProjectile = false;
 		for(int i = 0; i < projectiles.size(); i++) {
 			Projectile m = (Projectile) projectiles.get(i);
 			m.fireBullet();
