@@ -4,5 +4,23 @@
 		"y": "CAMERA_HEIGHT / 25",
 		"width": "CAMERA_WIDTH - (CAMERA_WIDTH / 45 * 2)",
 		"height": "CAMERA_HEIGHT - (CAMERA_HEIGHT / 25 * 2)"
+	},
+		{
+		"x": "CAMERA_WIDTH",
+		"y": "CAMERA_HEIGHT",
+		"width": "CAMERA_WIDTH - (CAMERA_WIDTH / 45 * 2)",
+		"height": "CAMERA_HEIGHT - (CAMERA_HEIGHT / 25 * 2)"
+	},
+			{
+		"x": "CAMERA_WIDTH * 1.2",
+		"y": "CAMERA_HEIGHT * 1.2",
+		"width": "CAMERA_WIDTH - (CAMERA_WIDTH / 25 * 2)",
+		"height": "CAMERA_HEIGHT - (CAMERA_HEIGHT / 25 * 2)"
+	},
+			{
+		"x": "CAMERA_WIDTH / 5",
+		"y": "CAMERA_HEIGHT / 5",
+		"width": "CAMERA_WIDTH - (CAMERA_WIDTH / 100 * 2)",
+		"height": "CAMERA_HEIGHT - (CAMERA_HEIGHT / 25 * 2)"
 	}
 ]

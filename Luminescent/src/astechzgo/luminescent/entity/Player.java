@@ -191,15 +191,16 @@ public class Player extends CircularEntity {
 		double x = 0;
 		double y = 0;
 		
-		boolean bx = false;
-		boolean by = false;
-		
+	
+		boolean done = false;
 		boolean initX = true;
 		boolean initY = true;
 		
 		for(Room room : rooms) {
+			boolean bx = false;
+			boolean by = false;
 			if(this.getPosX() + speed * Math.cos(Math.toRadians(angle)) >= room.getPosX() + room.getWidth() - this.getRadius()) {
-				bx = true;
+	
 				
 				double temp = room.getPosX() + room.getWidth() - this.getRadius();
 				if(temp > x || initX) {
@@ -208,22 +209,17 @@ public class Player extends CircularEntity {
 				}
 			}
 			else if(this.getPosX() + speed * Math.cos(Math.toRadians(angle)) <= room.getPosX() + this.getRadius()) {
-				bx = true;
+
 				
 				double temp = room.getPosX() + this.getRadius();
 				if(temp > x || initX) {
 					x = temp;
 					initX = false;
 				}
+			} else{ 
+				bx = true;
 			}
-		}
-		
-		if(bx)
-			this.setPosX(x);
-		else
-			this.setPosX(this.getPosX() + speed * Math.cos(Math.toRadians(angle)));
-		
-		for(Room room : rooms) {
+			
 			if(this.getPosY() - speed * Math.sin(Math.toRadians(angle)) >= room.getPosY() + room.getHeight() - this.getRadius()) {
 				double temp = room.getPosY() + room.getHeight() - this.getRadius();
 				if(temp > y || initY) {
@@ -241,12 +237,18 @@ public class Player extends CircularEntity {
 			else {
 				by = true;
 			}
+			if(by && bx) {
+				this.setPosX(this.getPosX() + speed * Math.cos(Math.toRadians(angle)));
+				this.setPosY(this.getPosY() - speed * Math.sin(Math.toRadians(angle)));
+				done = true;
+				break;
+			} 
 		}
 		
-		if(by)
-			this.setPosY(this.getPosY() - speed * Math.sin(Math.toRadians(angle)));
-		else
+/*		if(!done) {
+			this.setPosX(x);
 			this.setPosY(y);
+		}*/
 		
 		/*if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_UP)) {
 
