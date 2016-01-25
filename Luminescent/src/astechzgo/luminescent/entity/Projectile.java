@@ -16,7 +16,7 @@ public class Projectile extends RectangularEntity {
 	// The Class
 	// Constructor for projectile
 	public Projectile(int x, int y) {
-		super(x, y, 5, 5);
+		super(x, y, 100,100);
 		super.setColour(new Color(0.5f, 0.6f, 0.2f));
 		lastDelta = GLFW.glfwGetTime() * 1000;
 		rotation = Luminescent.thePlayer.setRotation();
