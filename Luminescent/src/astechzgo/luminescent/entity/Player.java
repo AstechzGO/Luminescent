@@ -15,12 +15,15 @@ import astechzgo.luminescent.utils.ControllerUtils;
 import astechzgo.luminescent.utils.DisplayUtils;
 import astechzgo.luminescent.utils.KeyboardUtils;
 
-public class Player extends CircularEntity {
+public class Player extends CircularEntity implements LivingEntity{
 	private double lastDelta;
 	
 	private double lastControllerDelta = 0;
 	private double lastMouseX = 0;
 	private double lastMouseY = 0;
+	
+	private int health;	
+	private boolean alive;
 	
 	public Player() {
 		super(Camera.CAMERA_WIDTH / 2, Camera.CAMERA_HEIGHT / 2, 40, 1);
@@ -277,6 +280,22 @@ public class Player extends CircularEntity {
 			else
 				this.setPosX(this.getPosX() - speed);
 		}*/	
+	}
+
+	@Override
+	public int getHealth() {
+		return health;
+	}
+
+	@Override
+	public void setHealth(int health) {
+		this.health = health;
+		
+	}
+
+	@Override
+	public boolean isAlive() {
+		return alive;
 	}
 	
 	
