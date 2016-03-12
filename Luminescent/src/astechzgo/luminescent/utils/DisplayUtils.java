@@ -70,6 +70,9 @@ public class DisplayUtils {
 	public static int oldGameWidth = getDisplayWidth() - widthOffset * 2;
 	public static int oldGameHeight = getDisplayHeight() - heightOffset * 2;
 	
+	@SuppressWarnings("unused")
+	private static GLFWImage.Buffer icons;
+	
 	public static GLCapabilities caps;
 
 	static {
@@ -215,6 +218,9 @@ public class DisplayUtils {
 
 			GLFW.glfwSetKeyCallback(handle, KeyboardUtils.KEY_CALLBACK);
 			
+//			Uncomment when updated to new LWJGL release
+//			GLFW.glfwSetWindowIcon(handle, icons);
+			
 			
 		} catch (Exception e) {
 			System.out.println("Unable to setup mode " + width + "x" + height
@@ -239,9 +245,8 @@ public class DisplayUtils {
 			
 			icons.position(i++).width(width).height(height).pixels(buffer);
 		}
-
-//		Uncomment when updated to new LWJGL release
-//		GLFW.glfwSetWindowIcon(handle, icons);
+		
+		DisplayUtils.icons = icons;
 	}
 
 	public static void takeScreenshot(File file) throws Exception {
@@ -352,6 +357,9 @@ public class DisplayUtils {
 		
 		glfwMakeContextCurrent(handle);
 		caps = GL.createCapabilities();
+		
+//		Uncomment when updated to new LWJGL release
+//		GLFW.glfwSetWindowIcon(handle, icons);
 		
 		glfwSwapInterval(1);
 		glfwShowWindow(handle);

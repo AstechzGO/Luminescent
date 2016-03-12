@@ -25,13 +25,16 @@ public class Texture {
 	public Texture(String textureName, boolean slick) {
 		name = textureName;
 		
-		asBufferedImage = toBufferedImage(textureName);
-		asByteBuffer = toByteBuffer(asBufferedImage);
-		
-		if(slick)
-			textureNumber = loadTexture();
-		else
+		if(!slick) {
 			textureNumber = -1;
+			asBufferedImage = toBufferedImage(textureName);
+			asByteBuffer = toByteBuffer(asBufferedImage);
+		}
+		else {
+			asBufferedImage = toBufferedImage(textureName);
+			asByteBuffer = toByteBuffer(asBufferedImage);
+			textureNumber = loadTexture();
+		}
 	}
 	
 	/**
@@ -99,7 +102,10 @@ public class Texture {
 		bGr.dispose();
 
 		// Return the buffered image
-		return getFlippedImage(bimage);
+		if(textureNumber == -1)
+			return bimage;
+		else
+			return getFlippedImage(bimage);
 	}
 	
 	private int loadTexture() {
