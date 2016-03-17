@@ -2,6 +2,7 @@ package astechzgo.luminescent.entity;
 
 import java.nio.DoubleBuffer;
 import java.nio.IntBuffer;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.lwjgl.BufferUtils;
@@ -188,6 +189,9 @@ public class Player extends CircularEntity {
 		
 		double angle = setRotation() + tempAngle;
 		
+		List<Double> verticalEdges = getVerticalEdges(rooms);
+		List<Double> horizontalEdges = getHorizontalEdges(rooms);
+		
 		double x = 0;
 		double y = 0;
 		
@@ -197,25 +201,27 @@ public class Player extends CircularEntity {
 		boolean initX = true;
 		boolean initY = true;
 		
-		for(Room room : rooms) {
-			if(this.getPosX() + speed * Math.cos(Math.toRadians(angle)) >= room.getPosX() + room.getWidth() - this.getRadius()) {
+		for(double verticalEdge : verticalEdges) {
+			double projectedX = this.getPosX() + speed * Math.cos(Math.toRadians(angle));
+			
+			if(!(this.getPosX() > verticalEdge - this.radius) && (projectedX >= verticalEdge - this.radius)) {
 				bx = true;
 				
-				double temp = room.getPosX() + room.getWidth() - this.getRadius();
+				double temp = verticalEdge - this.radius;
 				if(temp > x || initX) {
 					x = temp;
 					initX = false;
 				}
 			}
-			else if(this.getPosX() + speed * Math.cos(Math.toRadians(angle)) <= room.getPosX() + this.getRadius()) {
+			else if(!(this.getPosX() < verticalEdge + this.getRadius()) && (projectedX <= verticalEdge + this.getRadius())) {
 				bx = true;
 				
-				double temp = room.getPosX() + this.getRadius();
+				double temp = verticalEdge + this.radius;
 				if(temp > x || initX) {
 					x = temp;
 					initX = false;
 				}
-			}
+			}					
 		}
 		
 		if(bx)
@@ -223,7 +229,7 @@ public class Player extends CircularEntity {
 		else
 			this.setPosX(this.getPosX() + speed * Math.cos(Math.toRadians(angle)));
 		
-		for(Room room : rooms) {
+		/*for(Room room : rooms) {
 			if(this.getPosY() - speed * Math.sin(Math.toRadians(angle)) >= room.getPosY() + room.getHeight() - this.getRadius()) {
 				double temp = room.getPosY() + room.getHeight() - this.getRadius();
 				if(temp > y || initY) {
@@ -241,12 +247,35 @@ public class Player extends CircularEntity {
 			else {
 				by = true;
 			}
+		}*/
+		
+		for(double horizontalEdge : horizontalEdges) {
+			double projectedY = this.getPosY() - speed * Math.sin(Math.toRadians(angle));
+			
+			if(!(this.getPosY() > horizontalEdge - this.radius) && (projectedY >= horizontalEdge - this.radius)) {
+				by = true;
+				
+				double temp = horizontalEdge - this.radius;
+				if(temp > y || initY) {
+					y = temp;
+					initY = false;
+				}
+			}
+			else if(!(this.getPosY() < horizontalEdge + this.getRadius()) && (projectedY <= horizontalEdge + this.getRadius())) {
+				by = true;
+				
+				double temp = horizontalEdge + this.radius;
+				if(temp > y || initY) {
+					y = temp;
+					initY = false;
+				}
+			}					
 		}
 		
 		if(by)
-			this.setPosY(this.getPosY() - speed * Math.sin(Math.toRadians(angle)));
-		else
 			this.setPosY(y);
+		else
+			this.setPosY(this.getPosY() - speed * Math.sin(Math.toRadians(angle)));
 		
 		/*if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_UP)) {
 
@@ -280,4 +309,26 @@ public class Player extends CircularEntity {
 	}
 	
 	
+	// TODO: Simplify edges
+	private List<Double> getVerticalEdges(List<Room> rooms) {
+		List<Double> verticalEdges = new ArrayList<Double>();
+	
+		for(Room room : rooms) {
+			verticalEdges.add	((double) room.getPosX());
+			verticalEdges.add	((double) (room.getPosX() + room.getWidth()));
+		}
+		
+		return verticalEdges;
+	}
+	
+	private List<Double> getHorizontalEdges(List<Room> rooms) {
+		List<Double> horizontalEdges = new ArrayList<Double>();
+		
+		for(Room room : rooms) {
+			horizontalEdges.add	((double) (room.getPosY() + room.getHeight()));
+			horizontalEdges.add	((double) (room.getPosY()));
+		}
+		
+		return horizontalEdges;
+	}
 }
