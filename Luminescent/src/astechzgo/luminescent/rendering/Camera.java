@@ -2,25 +2,25 @@ package astechzgo.luminescent.rendering;
 
 public class Camera {
 	
-	public static final int CAMERA_WIDTH = 1920;
-	public static final int CAMERA_HEIGHT = 1080;
+	public static final double CAMERA_WIDTH = 1920;
+	public static final double CAMERA_HEIGHT = 1080;
 	
-	private static int x = CAMERA_WIDTH / 2;
-	private static int y = CAMERA_HEIGHT / 2;
+	private static double x = CAMERA_WIDTH / 2;
+	private static double y = CAMERA_HEIGHT / 2;
 	
-	public static int getX() {
+	public static double getX() {
 		return x;
 	}
 	
-	public static int getY() {
+	public static double getY() {
 		return y;
 	}
 	
-	public static void setX(int x) {
+	public static void setX(double x) {
 		Camera.x = x;
 	}
 	
-	public static void setY(int y) {
+	public static void setY(double y) {
 		Camera.y = y;
 	}
 }

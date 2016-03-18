@@ -18,5 +18,5 @@ public interface IRenderedObject
 	public void setTexture(Texture texture);
 	
 	public boolean isTouching(IRenderedObject object);
-	public boolean doesContain(int x, int y);
+	public boolean doesContain(double x, double y);
 }

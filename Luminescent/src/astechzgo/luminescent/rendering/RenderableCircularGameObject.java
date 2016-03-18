@@ -113,12 +113,12 @@ public class RenderableCircularGameObject implements IRenderedObject {
 		if (object instanceof RenderableQuadrilateralGameObject) {
 			RenderableQuadrilateralGameObject casted = (RenderableQuadrilateralGameObject) object;
 
-			int[] xQuads = { 
+			double[] xQuads = { 
 				(casted.aX), 
 				(casted.bX)
 			};
 
-			int[] yQuads = { 
+			double[] yQuads = { 
 				(casted.dY), 
 				(casted.aY) 
 			};
@@ -200,9 +200,9 @@ public class RenderableCircularGameObject implements IRenderedObject {
 	}
 
 	@Override
-	public boolean doesContain(int x, int y) {
-		int a = (int) (this.y - y);
-		int b = (int) (this.x - x);
+	public boolean doesContain(double x, double y) {
+		double a = this.y - y;
+		double b = this.x - x;
 
 		double c = Math.sqrt((a * a) + (b * b));
 
