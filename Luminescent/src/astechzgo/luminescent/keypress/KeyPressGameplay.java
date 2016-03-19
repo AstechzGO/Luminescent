@@ -22,7 +22,7 @@ public class KeyPressGameplay {
 		
 		if(KeyboardUtils.isKeyDown(Constants.KEYS_ACTION_SHOOT) && deltaShot > 250) {
 			// Creates Projectile and adds it to array list
-			Projectile projectile = new Projectile((int)thePlayer.getPosX(),(int) thePlayer.getPosY());
+			Projectile projectile = new Projectile(thePlayer.getPosX(), thePlayer.getPosY());
 			projectiles.add(projectile);	
 			
 			lastShot = (GLFW.glfwGetTime() * 1000);
@@ -30,17 +30,39 @@ public class KeyPressGameplay {
 		
 		// For every shot render it and keep shooting it forwards
 		for(int i = 0; i < projectiles.size(); i++) {
-			Projectile m = (Projectile) projectiles.get(i);
-			m.fireBullet();
+			Projectile m = projectiles.get(i);
+			m.fireBullet(getVerticalEdges(rooms), getHorizontalEdges(rooms));
 			
-			if(rooms.get(0).doesContain((int)m.getX(), (int)m.getY())) {
+			if(!m.isDead()) {
 				// If the bullet is in the room render it
 				m.render();
 			}
-			else if(!rooms.get(0).doesContain((int)m.getX(),(int)m.getY())) {
+			else {
 				// If the bullet is not it the room delete it
 				projectiles.remove(i);
 			}
 		}
+	}
+	
+	private static List<Double> getVerticalEdges(List<Room> rooms) {
+		List<Double> verticalEdges = new ArrayList<Double>();
+	
+		for(Room room : rooms) {
+			verticalEdges.add(room.getPosX());
+			verticalEdges.add(room.getPosX() + room.getWidth());
+		}
+		
+		return verticalEdges;
+	}
+	
+	private static List<Double> getHorizontalEdges(List<Room> rooms) {
+		List<Double> horizontalEdges = new ArrayList<Double>();
+		
+		for(Room room : rooms) {
+			horizontalEdges.add(room.getPosY() + room.getHeight());
+			horizontalEdges.add(room.getPosY());
+		}
+		
+		return horizontalEdges;
 	}
 }

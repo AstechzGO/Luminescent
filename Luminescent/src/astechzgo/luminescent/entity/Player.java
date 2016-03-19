@@ -9,7 +9,6 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 
 import astechzgo.luminescent.gameobject.Room;
-import astechzgo.luminescent.main.Luminescent;
 import astechzgo.luminescent.rendering.Camera;
 import astechzgo.luminescent.utils.Constants;
 import astechzgo.luminescent.utils.ControllerUtils;
@@ -17,6 +16,9 @@ import astechzgo.luminescent.utils.DisplayUtils;
 import astechzgo.luminescent.utils.KeyboardUtils;
 
 public class Player extends CircularEntity {
+	public static final double slowSpeed = 0.5;
+	public static final double fastSpeed = 0.88;
+	
 	private double lastDelta;
 	
 	private double lastControllerDelta = 0;
@@ -144,14 +146,15 @@ public class Player extends CircularEntity {
 
 		double delta = ((GLFW.glfwGetTime() * 1000) - lastDelta);
 		lastDelta = GLFW.glfwGetTime() * 1000;
+		
+		double speed = 0;
+		
 		if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_FASTER)) {
-			Luminescent.moveSpeed = 0.88;
+			speed = Player.fastSpeed * delta;
 		}
 		else {
-			Luminescent.moveSpeed = 0.5;
-		}
-		
-		double speed = Luminescent.moveSpeed * delta;	
+			speed = Player.slowSpeed * delta;
+		}	
 		
 		boolean down = true;
 		
@@ -314,8 +317,8 @@ public class Player extends CircularEntity {
 		List<Double> verticalEdges = new ArrayList<Double>();
 	
 		for(Room room : rooms) {
-			verticalEdges.add	((double) room.getPosX());
-			verticalEdges.add	((double) (room.getPosX() + room.getWidth()));
+			verticalEdges.add(room.getPosX());
+			verticalEdges.add(room.getPosX() + room.getWidth());
 		}
 		
 		return verticalEdges;
@@ -325,8 +328,8 @@ public class Player extends CircularEntity {
 		List<Double> horizontalEdges = new ArrayList<Double>();
 		
 		for(Room room : rooms) {
-			horizontalEdges.add	((double) (room.getPosY() + room.getHeight()));
-			horizontalEdges.add	((double) (room.getPosY()));
+			horizontalEdges.add(room.getPosY() + room.getHeight());
+			horizontalEdges.add(room.getPosY());
 		}
 		
 		return horizontalEdges;

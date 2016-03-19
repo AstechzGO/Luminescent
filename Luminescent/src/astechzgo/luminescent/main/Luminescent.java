@@ -24,9 +24,7 @@ public class Luminescent
 {
 	
 	public static Player thePlayer = new Player();
-	public static double moveSpeed = 0.5;
-	
-	
+
 	public static double lastDelta = GLFW.glfwGetTime() * 1000;
 	
 	public static List<Room> rooms = JSONWorldLoader.loadRooms();
@@ -59,8 +57,8 @@ public class Luminescent
 	
 	public static void Tick()
 	{
-		Camera.setX((int) thePlayer.getPosX());
-		Camera.setY((int) thePlayer.getPosY());
+		Camera.setX(thePlayer.getPosX());
+		Camera.setY(thePlayer.getPosY());
 		
 
 		for(Room room : rooms)
