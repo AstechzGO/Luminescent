@@ -2,7 +2,7 @@
 goto :start
 :start
 echo.
-echo Luminescent deployment tool be eandr127
+echo Luminescent deployment tool by eandr127
 echo.
 cd Deployment/build
 
@@ -17,10 +17,6 @@ if not %ERRORLEVEL%==0 goto :error
 echo.
 
 call ..\apache-ant-1.9.6\bin\ant.bat -f build.xml
-
-echo.
-
-java -jar jarsplice+.jar -i temp\Base.jar temp\Base_lib\*.jar -n temp\Base_lib\natives\* -m astechzgo.luminescent.main.Main -o ..\Luminescent.jar
 
 echo.
 

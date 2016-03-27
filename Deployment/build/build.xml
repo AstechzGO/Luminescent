@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project default="create_run_jar" name="Create Runnable Jar for Project Luminescent with libraries in sub-folder">
-    <!--this file was created by Eclipse Runnable JAR Export Wizard-->
-    <!--ANT 1.7 is required                                        -->
+<project default="create_run_jar" name="Create Runnable Jar for Project Luminescent with Jar-in-Jar Loader">
+    <!--this file was created by Eclipse Runnable JAR file Export Wizard-->
+    <!--ANT 1.7 is required-->
     <!--define folder properties-->
     <property name="dir.buildfile" value="."/>
-    <property name="dir.workspace" value="C:/Users/ryan/Documents/EclipseProjects"/>
-    <property name="dir.jarfile" value="${dir.buildfile}/temp"/>
+    <property name="dir.workspace" value="../../../"/>
+    <property name="dir.jarfile" value="${dir.workspace}/Luminescent/Deployment"/>
     <target name="create_run_jar">
-        <jar destfile="${dir.jarfile}/Base.jar">
+        <jar destfile="${dir.jarfile}/Luminescent.jar">
             <manifest>
-                <attribute name="Main-Class" value="astechzgo.luminescent.main.Main"/>
-                <attribute name="Class-Path" value=". Base_lib/lwjgl.jar Base_lib/SoundSystem.jar Base_lib/CodecMP3.jar Base_lib/LibraryLWJGL3OpenAL.jar"/>
+                <attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
+                <attribute name="Rsrc-Main-Class" value="astechzgo.luminescent.main.Main"/>
+                <attribute name="Class-Path" value="."/>
+                <attribute name="Rsrc-Class-Path" value="./ lwjgl.jar SoundSystem.jar CodecMP3.jar LibraryLWJGL3OpenAL.jar gson-2.5.jar"/>
             </manifest>
+            <zipfileset src="jar-in-jar-loader.zip"/>
             <fileset dir="${dir.workspace}/Luminescent/Luminescent/bin"/>
+            <zipfileset dir="${dir.workspace}/Luminescent/Luminescent/libs/lwjgl" includes="lwjgl.jar"/>
+            <zipfileset dir="${dir.workspace}/Luminescent/Luminescent/libs/paulscode" includes="SoundSystem.jar"/>
+            <zipfileset dir="${dir.workspace}/Luminescent/Luminescent/libs/paulscode" includes="CodecMP3.jar"/>
+            <zipfileset dir="${dir.workspace}/Luminescent/Luminescent/libs/paulscode" includes="LibraryLWJGL3OpenAL.jar"/>
+            <zipfileset dir="${dir.workspace}/Luminescent/Luminescent/libs/google" includes="gson-2.5.jar"/>
+			<fileset dir="${dir.workspace}/Luminescent/Luminescent/libs/lwjgl/natives"/>
         </jar>
-        <delete dir="${dir.jarfile}/Base_lib"/>
-        <mkdir dir="${dir.jarfile}/Base_lib"/>
-        <copy file="${dir.workspace}/Luminescent/Luminescent/libs/lwjgl/lwjgl.jar" todir="${dir.jarfile}/Base_lib"/>
-        <copy file="${dir.workspace}/Luminescent/Luminescent/libs/paulscode/SoundSystem.jar" todir="${dir.jarfile}/Base_lib"/>
-        <copy file="${dir.workspace}/Luminescent/Luminescent/libs/paulscode/CodecMP3.jar" todir="${dir.jarfile}/Base_lib"/>
-        <copy file="${dir.workspace}/Luminescent/Luminescent/libs/paulscode/LibraryLWJGL3OpenAL.jar" todir="${dir.jarfile}/Base_lib"/>
-	
-	<mkdir dir="${dir.jarfile}/Base_lib/natives"/>
-	<copydir src="${dir.workspace}/Luminescent/Luminescent/libs/lwjgl/natives/" dest="${dir.jarfile}/Base_lib/natives"/>
     </target>
 </project>
