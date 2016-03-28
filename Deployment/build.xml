@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project default="create_run_jar" name="Create Runnable Jar for Project Luminescent with Jar-in-Jar Loader">
+<project default="deploy_jar" name="Luminescent deployment tool by eandr127">
     <!--this file was created by Eclipse Runnable JAR file Export Wizard-->
     <!--ANT 1.7 is required-->
     <!--define folder properties-->
     <property name="dir.buildfile" value="."/>
-    <property name="dir.workspace" value="../../../"/>
-    <property name="dir.jarfile" value="${dir.workspace}/Luminescent/Deployment"/>
-    <target name="create_run_jar">
+    <property name="dir.workspace" value="../../"/>
+    <property name="dir.jarfile" value="${dir.workspace}/Luminescent"/>
+    <target name="deploy_jar">
+		<echo>Luminescent deployment tool by eandr127</echo>
         <jar destfile="${dir.jarfile}/Luminescent.jar">
             <manifest>
                 <attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
@@ -23,5 +24,7 @@
             <zipfileset dir="${dir.workspace}/Luminescent/Luminescent/libs/google" includes="gson-2.5.jar"/>
 			<fileset dir="${dir.workspace}/Luminescent/Luminescent/libs/lwjgl/natives"/>
         </jar>
+		<echo>The output jar has been placed in Luminescent's root folder</echo>
+		<input message="Press enter to continue..."/>
     </target>
 </project>
