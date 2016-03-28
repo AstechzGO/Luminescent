@@ -42,9 +42,10 @@ public class Main
 		TextureList.loadNonSlickTextures();
 		try
 		{
-			//DisplayUtils.setIcons(
-			//	new String[] {"icons.icon_16x16","icons.icon_32x32","icons.icon_64x64","icons.icon_128x128"}, this
-			//);
+			// Currently does nothing 
+			DisplayUtils.setIcons(
+				new String[] {"icons.icon_16x16","icons.icon_32x32","icons.icon_64x64","icons.icon_128x128"}
+			);
 			DisplayUtils.create();
 		}
 		catch (Exception e)

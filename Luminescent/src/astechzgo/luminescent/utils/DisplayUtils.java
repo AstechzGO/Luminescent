@@ -26,13 +26,12 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.imageio.ImageIO;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.glfw.GLFWVidMode.Buffer;
 import org.lwjgl.opengl.GL;
@@ -70,6 +69,9 @@ public class DisplayUtils {
 	
 	public static int oldGameWidth = getDisplayWidth() - widthOffset * 2;
 	public static int oldGameHeight = getDisplayHeight() - heightOffset * 2;
+	
+	@SuppressWarnings("unused")
+	private static GLFWImage.Buffer icons;
 	
 	public static GLCapabilities caps;
 
@@ -216,6 +218,9 @@ public class DisplayUtils {
 
 			GLFW.glfwSetKeyCallback(handle, KeyboardUtils.KEY_CALLBACK);
 			
+//			Uncomment when updated to new LWJGL release
+//			GLFW.glfwSetWindowIcon(handle, icons);
+			
 			
 		} catch (Exception e) {
 			System.out.println("Unable to setup mode " + width + "x" + height
@@ -227,18 +232,21 @@ public class DisplayUtils {
 	/**
 	 * Sets the icons for display
 	 * 
-	 * @param nIcon
-	 *            The locations of the icons
-	 * @param c
-	 *            A random object
+	 * @param nIcon The locations of the icons
 	 */
-	public static void setIcons(String[] nIcon, Object c) {
-		List<ByteBuffer> icons = new ArrayList<ByteBuffer>();
+	public static void setIcons(String[] nIcon) {
+		GLFWImage.Buffer icons = GLFWImage.callocBuffer(nIcon.length);
+		
+		int i = 0;
 		for (String name : nIcon) {
-			icons.add(TextureList.findTexture(name).getAsByteBuffer());
+			ByteBuffer buffer = TextureList.findTexture(name).getAsByteBuffer();
+			int width = TextureList.findTexture(name).getAsBufferedImage().getWidth();
+			int height = TextureList.findTexture(name).getAsBufferedImage().getHeight();
+			
+			icons.position(i++).width(width).height(height).pixels(buffer);
 		}
-
-		//Display.setIcon(icons.toArray(new ByteBuffer[icons.size()]));
+		
+		DisplayUtils.icons = icons;
 	}
 
 	public static void takeScreenshot(File file) throws Exception {
@@ -349,6 +357,9 @@ public class DisplayUtils {
 		
 		glfwMakeContextCurrent(handle);
 		caps = GL.createCapabilities();
+		
+//		Uncomment when updated to new LWJGL release
+//		GLFW.glfwSetWindowIcon(handle, icons);
 		
 		glfwSwapInterval(1);
 		glfwShowWindow(handle);
