@@ -14,8 +14,8 @@ public class SoundManager {
 	public SoundManager() {
 		boolean aLCompatible = SoundSystem
 				.libraryCompatible(LibraryLWJGLOpenAL.class);
-		@SuppressWarnings("rawtypes")
-		Class libraryType;
+
+		Class<? extends Library> libraryType;
 		try {
 			if (aLCompatible) {
 				libraryType = LibraryLWJGLOpenAL.class; // OpenAL
