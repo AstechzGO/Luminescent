@@ -52,7 +52,9 @@ public class KeyPressUtils {
 					e.printStackTrace();
 				}
 				
-				Luminescent.SOUND_MANAGER.getSoundSystem().stop("keys.util.screenshot.CameraClick");
+				if(Luminescent.SOUND_MANAGER.getSoundSystem().playing("keys.util.screenshot.CameraClick"))
+					Luminescent.SOUND_MANAGER.getSoundSystem().stop("keys.util.screenshot.CameraClick");
+				
 				Luminescent.SOUND_MANAGER.getSoundSystem().play("keys.util.screenshot.CameraClick");
 				
 				takingScreenshot = true;
