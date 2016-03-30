@@ -28,13 +28,14 @@ public class Luminescent
 	public static double lastDelta = GLFW.glfwGetTime() * 1000;
 	
 	public static List<Room> rooms = JSONWorldLoader.loadRooms();
+	
+	public static final SoundManager SOUND_MANAGER = new SoundManager();
 		
 	public static void Init()
 	{	
 		TextureList.loadSlickTextures();
 
-		SoundManager manager = new SoundManager();
-		SoundList.initSoundList(manager);
+		SoundList.initSoundList(SOUND_MANAGER);
 		
 		thePlayer.setTexture(new Animation("pacman.frame", 20));
 		

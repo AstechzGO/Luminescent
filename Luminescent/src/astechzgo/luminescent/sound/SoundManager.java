@@ -32,7 +32,7 @@ public class SoundManager {
 		}
 
 		try {
-			SoundSystemConfig.setSoundFilesPackage("");
+			SoundSystemConfig.setSoundFilesPackage("resources/sounds/");
 			SoundSystemConfig.setCodec("mp3", CodecJLayerMP3.class);
 		} catch (SoundSystemException e) {
 			System.err.println("error linking with the CodecWav plug-in");
@@ -53,7 +53,7 @@ public class SoundManager {
 	public void loadSound(String s, boolean loop) {
 		String oldS = s;
 		
-		s = "resources/sounds/" + s.replaceAll("\\.", "/") + ".mp3";
+		s = s.replaceAll("\\.", "/") + ".mp3";
 		
 		boolean priority = false;
 		String filename = s;

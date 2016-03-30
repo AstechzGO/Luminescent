@@ -16,6 +16,8 @@ import astechzgo.luminescent.utils.KeyboardUtils;
 
 public class KeyPressUtils {
 
+	private static boolean takingScreenshot = false;
+	
 	public static void checkUtils() {
 	
 		if(KeyboardUtils.isKeyDown(Constants.KEYS_UTIL_EXIT)) {
@@ -32,22 +34,32 @@ public class KeyPressUtils {
 				KeyboardUtils.resetKeys();
 			}
 		}
-		if(KeyboardUtils.isKeyDown(Constants.KEYS_UTIL_SCREENSHOT)) {
-			File dir = newFile("screenshots/");
-		
-			if(!dir.exists() || !dir.isDirectory()) {
-				dir.mkdir();
+		if(KeyboardUtils.isKeyDown(Constants.KEYS_UTIL_SCREENSHOT)) {			
+			if(!takingScreenshot) {
+				File dir = newFile("screenshots/");
+				
+				if(!dir.exists() || !dir.isDirectory()) {
+					dir.mkdir();
+				}
+				
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
+				Date dt = new Date();
+				String S = sdf.format(dt);
+				
+				try {
+					DisplayUtils.takeScreenshot(newFile("screenshots/" + S + ".png"));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+				Luminescent.SOUND_MANAGER.getSoundSystem().stop("keys.util.screenshot.CameraClick");
+				Luminescent.SOUND_MANAGER.getSoundSystem().play("keys.util.screenshot.CameraClick");
+				
+				takingScreenshot = true;
 			}
-		
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
-			Date dt = new Date();
-			String S = sdf.format(dt);
-			
-			try {
-				DisplayUtils.takeScreenshot(newFile("screenshots/" + S + ".png"));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+		}
+		else if(takingScreenshot) {
+			takingScreenshot = false;
 		}
 		if(KeyboardUtils.isKeyDown(Constants.KEYS_UTIL_NEXTWINDOW)) {
 			if(GLFW.glfwGetMonitors().capacity() > 1) {

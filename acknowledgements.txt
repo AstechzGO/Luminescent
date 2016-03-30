@@ -220,3 +220,11 @@ astechzgo.luminescent:
 							Mark Rotteveel				(http://stackoverflow.com/users/466862/mark-rotteveel)
 						Answer:
 							Abdennour TOUMI				(http://stackoverflow.com/users/747579/abdennour-toumi)
+resources
+	sounds
+		keys
+			util
+				screenshot
+					CameraClick.mp3:
+						http://www.soundjay.com/camera-sound-effect.html:
+							Camera Shutter Click 01
