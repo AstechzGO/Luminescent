@@ -8,6 +8,7 @@ import org.lwjgl.glfw.GLFW;
 
 import astechzgo.luminescent.entity.Player;
 import astechzgo.luminescent.gameobject.Room;
+import astechzgo.luminescent.keypress.Key;
 import astechzgo.luminescent.keypress.KeyPressGameplay;
 import astechzgo.luminescent.keypress.KeyPressUtils;
 import astechzgo.luminescent.rendering.Camera;
@@ -58,6 +59,8 @@ public class Luminescent
 	
 	public static void Tick()
 	{
+		Key.updateKeys();
+		
 		Camera.setX(thePlayer.getPosX());
 		Camera.setY(thePlayer.getPosY());
 		

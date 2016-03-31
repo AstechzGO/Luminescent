@@ -8,8 +8,8 @@ import org.lwjgl.glfw.GLFW;
 import astechzgo.luminescent.entity.Player;
 import astechzgo.luminescent.entity.Projectile;
 import astechzgo.luminescent.gameobject.Room;
-import astechzgo.luminescent.utils.Constants;
-import astechzgo.luminescent.utils.KeyboardUtils;
+
+import static astechzgo.luminescent.keypress.Key.*;
 
 public class KeyPressGameplay {
 	
@@ -20,7 +20,7 @@ public class KeyPressGameplay {
 		
 		double deltaShot = (GLFW.glfwGetTime() * 1000) - lastShot;
 		
-		if(KeyboardUtils.isKeyDown(Constants.KEYS_ACTION_SHOOT) && deltaShot > 250) {
+		if(KEYS_ACTION_SHOOT.isKeyDown() && deltaShot > 250) {
 			// Creates Projectile and adds it to array list
 			Projectile projectile = new Projectile(thePlayer.getPosX(), thePlayer.getPosY());
 			projectiles.add(projectile);	

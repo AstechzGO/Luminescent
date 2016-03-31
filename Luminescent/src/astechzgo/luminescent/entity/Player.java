@@ -13,7 +13,8 @@ import astechzgo.luminescent.rendering.Camera;
 import astechzgo.luminescent.utils.Constants;
 import astechzgo.luminescent.utils.ControllerUtils;
 import astechzgo.luminescent.utils.DisplayUtils;
-import astechzgo.luminescent.utils.KeyboardUtils;
+
+import static astechzgo.luminescent.keypress.Key.*;
 
 public class Player extends CircularEntity {
 	public static final double slowSpeed = 0.5;
@@ -149,7 +150,7 @@ public class Player extends CircularEntity {
 		
 		double speed = 0;
 		
-		if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_FASTER)) {
+		if(KEYS_MOVEMENT_FASTER.isKeyDown()) {
 			speed = Player.fastSpeed * delta;
 		}
 		else {
@@ -160,21 +161,21 @@ public class Player extends CircularEntity {
 		
 		double tempAngle = -1;
 		
-		if(!(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_UP) == KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_DOWN))) {
+		if(!(KEYS_MOVEMENT_UP.isKeyDown()) == KEYS_MOVEMENT_DOWN.isKeyDown()) {
 			down = false;
 			
-			if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_UP))
+			if(KEYS_MOVEMENT_UP.isKeyDown())
 				tempAngle = 0;
 			else
 				tempAngle = 180;
 		}
-		if(!(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_LEFT) == KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_RIGHT))) {
+		if(!(KEYS_MOVEMENT_LEFT.isKeyDown() == KEYS_MOVEMENT_RIGHT.isKeyDown())) {
 			down = false;
 			
-			if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_LEFT))
+			if(KEYS_MOVEMENT_LEFT.isKeyDown())
 				if(tempAngle == -1)
 					tempAngle =  270;
-				else if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_UP))
+				else if(KEYS_MOVEMENT_UP.isKeyDown())
 					tempAngle = (tempAngle + 360 + 270) / 2;
 				else
 					tempAngle = (tempAngle + 270) / 2;
