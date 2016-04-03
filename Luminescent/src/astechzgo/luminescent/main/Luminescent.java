@@ -12,6 +12,7 @@ import astechzgo.luminescent.keypress.Key;
 import astechzgo.luminescent.keypress.KeyPressGameplay;
 import astechzgo.luminescent.keypress.KeyPressUtils;
 import astechzgo.luminescent.rendering.Camera;
+import astechzgo.luminescent.sound.Sound;
 import astechzgo.luminescent.textures.Animation;
 import astechzgo.luminescent.textures.TextureList;
 import astechzgo.luminescent.utils.Constants;
@@ -31,6 +32,8 @@ public class Luminescent
 	public static void Init()
 	{	
 		TextureList.loadSlickTextures();
+		
+		Sound.init();
 		
 		thePlayer.setTexture(new Animation("pacman.frame", 20));
 		

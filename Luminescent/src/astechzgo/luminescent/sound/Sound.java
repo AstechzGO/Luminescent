@@ -2,18 +2,18 @@ package astechzgo.luminescent.sound;
 
 import java.rmi.server.UID;
 
-import paulscode.sound.SoundSystemConfig;
-
 public class Sound {
 
 	private static final SoundManager soundManager = new SoundManager();
 	
-	static {
+	public static void init() {
 		SoundList.initSoundList(soundManager);
 	}
 	
 	private final String sourcename;
 	private final String uniquename;
+	
+	boolean destroyed = false;
 	
 	public Sound(String sourcename) {
 		this.sourcename = sourcename;
@@ -21,18 +21,9 @@ public class Sound {
 	}
 	
 	private String getUniqueName(String sourcename) {
-		// TODO: Copy just copy sound source instead of loading it twice
 		String uniquename = sourcename + new UID();
 		
-		String filename = sourcename.replaceAll("\\.", "/") + ".mp3";
-		
-		boolean priority = false;
-		float x = 0;
-		float y = 0;
-		float z = 0;
-		int aModel = SoundSystemConfig.ATTENUATION_ROLLOFF;
-		float rFactor = SoundSystemConfig.getDefaultRolloff();
-		soundManager.getSoundSystem().newSource(priority, uniquename, filename, false, x, y, z, aModel, rFactor);
+		soundManager.addUniqueSource(sourcename, uniquename);
 		
 		return uniquename;
 	}
@@ -42,10 +33,20 @@ public class Sound {
 	}
 	
 	public void play() {
+		if(destroyed) {
+			System.err.println("Can't play destroyed object!");
+			return;
+		}
+		
 		soundManager.getSoundSystem().play(uniquename);
 	}
 	
 	public void stop() {
+		if(destroyed) {
+			System.err.println("Can't stop destroyed object!");
+			return;
+		}
+		
 		if(soundManager.getSoundSystem().playing(uniquename))
 			soundManager.getSoundSystem().stop(uniquename);
 	}
@@ -56,6 +57,26 @@ public class Sound {
 	}
 	
 	public void pause() {
+		if(destroyed) {
+			System.err.println("Can't pause destroyed object!");
+			return;
+		}
+		
 		soundManager.getSoundSystem().pause(uniquename);
+	}
+	
+	public void playDestroy() {
+		play();
+		destroy();
+	}
+	
+	public void destroy() {
+		if(destroyed) {
+			System.err.println("Can't destroy destroyed object!");
+			return;
+		}
+		
+		soundManager.getSoundSystem().unloadSound(uniquename);
+		destroyed = true;
 	}
 }
