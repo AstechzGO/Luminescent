@@ -2,7 +2,6 @@ package astechzgo.luminescent.keypress;
 
 import static astechzgo.luminescent.utils.DisplayUtils.setDisplayMode;
 import static astechzgo.luminescent.utils.SystemUtils.newFile;
-import static astechzgo.luminescent.keypress.Key.*;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -11,10 +10,15 @@ import java.util.Date;
 import org.lwjgl.glfw.GLFW;
 
 import astechzgo.luminescent.main.Luminescent;
+import astechzgo.luminescent.sound.Sound;
 import astechzgo.luminescent.utils.DisplayUtils;
 import astechzgo.luminescent.utils.KeyboardUtils;
 
+import static astechzgo.luminescent.keypress.Key.*;
+
 public class KeyPressUtils {
+	
+	private static Sound cameraClick = new Sound("keys.util.screenshot.CameraClick");
 	
 	public static void checkUtils() {
 	
@@ -49,10 +53,7 @@ public class KeyPressUtils {
 				e.printStackTrace();
 			}
 			
-			if(Luminescent.SOUND_MANAGER.getSoundSystem().playing("keys.util.screenshot.CameraClick"))
-				Luminescent.SOUND_MANAGER.getSoundSystem().stop("keys.util.screenshot.CameraClick");
-			
-			Luminescent.SOUND_MANAGER.getSoundSystem().play("keys.util.screenshot.CameraClick");
+			cameraClick.restart();
 		}
 		if(KEYS_UTIL_NEXTWINDOW.isKeyDownOnce()) {
 			if(GLFW.glfwGetMonitors().capacity() > 1) {

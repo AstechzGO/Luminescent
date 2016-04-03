@@ -53,10 +53,9 @@ public class SoundManager {
 	public void loadSound(String s, boolean loop) {
 		String oldS = s;
 		
-		s = s.replaceAll("\\.", "/") + ".mp3";
+		String filename = s.replaceAll("\\.", "/") + ".mp3";
 		
 		boolean priority = false;
-		String filename = s;
 		float x = 0;
 		float y = 0;
 		float z = 0;
