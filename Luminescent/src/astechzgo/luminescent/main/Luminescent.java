@@ -38,7 +38,7 @@ public class Luminescent
 		SoundManager manager = new SoundManager();
 		SoundList.initSoundList(manager);
 		
-		thePlayer.setTexture(new Animation("pacman.frame", 20));
+		thePlayer.setTexture(new Animation("player.frame", 16));
 		
 		if(Constants.getConstantAsBoolean(Constants.WINDOW_FULLSCREEN)) 
 		{	
@@ -66,11 +66,12 @@ public class Luminescent
 		for(Room room : rooms)
 			room.render();
 		
-		KeyPressUtils.checkUtils();
-		KeyPressGameplay.checkGameActions(thePlayer, rooms);
-		
 		thePlayer.move(rooms);
 		thePlayer.render();
+		
+		KeyPressUtils.checkUtils();		
+		KeyPressGameplay.checkGameActions(thePlayer, rooms);
+		
 		ControllerUtils.updateJoysticks();
 	}
 }

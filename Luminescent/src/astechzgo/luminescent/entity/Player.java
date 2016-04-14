@@ -117,24 +117,24 @@ public class Player extends CircularEntity {
 		double m = (Camera.CAMERA_HEIGHT / 2 - scaledY) / (Camera.CAMERA_WIDTH / 2 - scaledX);
 		
 		if(m == Double.POSITIVE_INFINITY) {
-			rotation = 90;
+			rotation = 0;
 			return rotation;
 		}
 		
 		if(m == Double.NEGATIVE_INFINITY) {
-			rotation = 270;
+			rotation = 180;
 			return rotation;
 		}
 		if(scaledX == Camera.CAMERA_WIDTH / 2 && scaledY == Camera.CAMERA_HEIGHT / 2)
 			return rotation;
 
 		if(scaledX < Camera.CAMERA_WIDTH / 2)
-			rotation = 180 - Math.toDegrees(Math.atan(m));
+			rotation = 90 - Math.toDegrees(Math.atan(m));
 		else {
-			if(360 - Math.toDegrees(Math.atan(m)) > 360)
-				rotation = 360 - Math.toDegrees(Math.atan(m)) - 360;
+			if(270 - Math.toDegrees(Math.atan(m)) > 360)
+				rotation = 270 - Math.toDegrees(Math.atan(m)) - 360;
 			else
-				rotation = 360 - Math.toDegrees(Math.atan(m));
+				rotation = 270 - Math.toDegrees(Math.atan(m));
 		}
 		
 		return rotation;
@@ -160,31 +160,33 @@ public class Player extends CircularEntity {
 			down = false;
 			
 			if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_UP))
-				tempAngle = 0;
+				tempAngle = 90;
 			else
-				tempAngle = 180;
+				tempAngle = 270;
 		}
 		if(!(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_LEFT) == KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_RIGHT))) {
 			down = false;
 			
 			if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_LEFT))
 				if(tempAngle == -1)
-					tempAngle =  270;
+					tempAngle =  180;
 				else if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_UP))
-					tempAngle = (tempAngle + 360 + 270) / 2;
+					tempAngle = (tempAngle + 180) / 2;
 				else
-					tempAngle = (tempAngle + 270) / 2;
+					tempAngle = (tempAngle + 180) / 2;
 			else
 				if(tempAngle == -1)
-					tempAngle =  90;
-				else 
-					tempAngle = (tempAngle + 90) / 2;
+					tempAngle =  0;
+				else if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_UP))
+					tempAngle = tempAngle / 2;
+				else
+					tempAngle = (tempAngle + 360) / 2;
 		}
 					
 		if(down)
 			speed = 0;		
 		
-		if(tempAngle == -1) tempAngle = 0;
+		if(tempAngle == -1) tempAngle = 90;
 		
 		double angle = setRotation() + tempAngle;
 		
