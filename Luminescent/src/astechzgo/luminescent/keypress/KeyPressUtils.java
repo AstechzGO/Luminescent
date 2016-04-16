@@ -10,18 +10,22 @@ import java.util.Date;
 import org.lwjgl.glfw.GLFW;
 
 import astechzgo.luminescent.main.Luminescent;
-import astechzgo.luminescent.utils.Constants;
+import astechzgo.luminescent.sound.Sound;
 import astechzgo.luminescent.utils.DisplayUtils;
 import astechzgo.luminescent.utils.KeyboardUtils;
 
-public class KeyPressUtils {
+import static astechzgo.luminescent.keypress.Key.*;
 
+public class KeyPressUtils {
+	
+	private static Sound cameraClick = new Sound("keys.util.screenshot.CameraClick");
+	
 	public static void checkUtils() {
 	
-		if(KeyboardUtils.isKeyDown(Constants.KEYS_UTIL_EXIT)) {
+		if(KEYS_UTIL_EXIT.isKeyDownOnce()) {
 			Luminescent.Shutdown();
 		}
-		if(KeyboardUtils.isKeyDown(Constants.KEYS_UTIL_FULLSCREEN)) {
+		if(KEYS_UTIL_FULLSCREEN.isKeyDownOnce()) {
 			if(DisplayUtils.isFullscreen()) {
 				setDisplayMode(848, 477, false);
 				KeyboardUtils.resetKeys();
@@ -32,13 +36,13 @@ public class KeyPressUtils {
 				KeyboardUtils.resetKeys();
 			}
 		}
-		if(KeyboardUtils.isKeyDown(Constants.KEYS_UTIL_SCREENSHOT)) {
+		if(KEYS_UTIL_SCREENSHOT.isKeyDownOnce()) {			
 			File dir = newFile("screenshots/");
-		
+			
 			if(!dir.exists() || !dir.isDirectory()) {
 				dir.mkdir();
 			}
-		
+			
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
 			Date dt = new Date();
 			String S = sdf.format(dt);
@@ -48,8 +52,10 @@ public class KeyPressUtils {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			
+			cameraClick.restart();
 		}
-		if(KeyboardUtils.isKeyDown(Constants.KEYS_UTIL_NEXTWINDOW)) {
+		if(KEYS_UTIL_NEXTWINDOW.isKeyDownOnce()) {
 			if(GLFW.glfwGetMonitors().capacity() > 1) {
 				if(DisplayUtils.isFullscreen()) {
 					setDisplayMode(848, 477, false);

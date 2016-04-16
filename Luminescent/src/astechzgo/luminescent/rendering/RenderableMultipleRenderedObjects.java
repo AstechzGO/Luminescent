@@ -64,7 +64,7 @@ public class RenderableMultipleRenderedObjects implements IRenderedObject {
 	}
 
 	@Override
-	public boolean doesContain(int x, int y) {
+	public boolean doesContain(double x, double y) {
 		for(IRenderedObject i : objects) {
 			if(i.doesContain(x, y)) {
 				return true;
