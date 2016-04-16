@@ -15,17 +15,17 @@ public class RenderableQuadrilateralGameObject implements IRenderedObject {
 
 	protected Texture texture;
 
-	protected int aX;
-	protected int aY;
+	protected double aX;
+	protected double aY;
 	
-	protected int bX;
-	protected int bY;
+	protected double bX;
+	protected double bY;
 	
-	protected int cX;
-	protected int cY;
+	protected double cX;
+	protected double cY;
 	
-	protected int dX;
-	protected int dY;
+	protected double dX;
+	protected double dY;
 
 	protected int scaledAX;
 	protected int scaledAY;
@@ -42,7 +42,7 @@ public class RenderableQuadrilateralGameObject implements IRenderedObject {
 	protected int oldGameWidth = DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2;
 	protected int oldGameHeight = DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2;
 
-	public RenderableQuadrilateralGameObject(int aX, int aY, int bX, int bY, int cX, int cY, int dX, int dY, Texture texture) {
+	public RenderableQuadrilateralGameObject(double aX, double aY, double bX, double bY, double cX, double cY, double dX, double dY, Texture texture) {
 		this.texture = texture;
 		
 		this.aX = aX;
@@ -58,7 +58,7 @@ public class RenderableQuadrilateralGameObject implements IRenderedObject {
 		this.dY = dY;
 	}
 
-	public RenderableQuadrilateralGameObject(int aX, int aY, int bX, int bY, int cX, int cY, int dX, int dY) {
+	public RenderableQuadrilateralGameObject(double aX, double aY, double bX, double bY, double cX, double cY, double dX, double dY) {
 		this.aX = aX;
 		this.aY = aY;
 		
@@ -113,28 +113,28 @@ public class RenderableQuadrilateralGameObject implements IRenderedObject {
 				.round((double)((Camera.CAMERA_HEIGHT / 2) - Camera.getY()) / Camera.CAMERA_HEIGHT * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2)));
 		
 		scaledAX = ((int) Math
-				.round((double) aX / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)))
+				.round(aX / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)))
 				+ DisplayUtils.widthOffset + scaledCamX;
 		scaledAY = (int) Math
-				.round((double) aY / Camera.CAMERA_HEIGHT * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2))
+				.round(aY / Camera.CAMERA_HEIGHT * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2))
 				+ DisplayUtils.heightOffset + scaledCamY;
 		scaledBX = ((int) Math
-				.round((double) bX / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)))
+				.round(bX / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)))
 				+ DisplayUtils.widthOffset + scaledCamX;
 		scaledBY = (int) Math
-				.round((double) bY / Camera.CAMERA_HEIGHT * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2))
+				.round(bY / Camera.CAMERA_HEIGHT * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2))
 				+ DisplayUtils.heightOffset + scaledCamY;
 		scaledCX = ((int) Math
-				.round((double) cX / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)))
+				.round(cX / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)))
 				+ DisplayUtils.widthOffset + scaledCamX;
 		scaledCY = (int) Math
-				.round((double) cY / Camera.CAMERA_HEIGHT * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2))
+				.round(cY / Camera.CAMERA_HEIGHT * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2))
 				+ DisplayUtils.heightOffset + scaledCamY;
 		scaledDX = ((int) Math
-				.round((double) dX / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)))
+				.round(dX / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)))
 				+ DisplayUtils.widthOffset + scaledCamX;
 		scaledDY = (int) Math
-				.round((double) dY / Camera.CAMERA_HEIGHT * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2))
+				.round(dY / Camera.CAMERA_HEIGHT * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2))
 				+ DisplayUtils.heightOffset + scaledCamY;
 
 		oldGameWidth = DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2;
@@ -169,12 +169,12 @@ public class RenderableQuadrilateralGameObject implements IRenderedObject {
 		else if (object instanceof RenderableCircularGameObject) {
 			RenderableCircularGameObject casted = (RenderableCircularGameObject) object;
 
-			int[] xQuads = { 
+			double[] xQuads = { 
 				(aX), 
 				(bX) 
 			};
 
-			int[] yQuads = {
+			double[] yQuads = {
 				(dY),
 				(aY)
 			};
@@ -241,17 +241,17 @@ public class RenderableQuadrilateralGameObject implements IRenderedObject {
 	}
 
 	@Override
-	public boolean doesContain(int x, int y) {
+	public boolean doesContain(double x, double y) {
 		boolean b1, b2, b3;
 
-		int aX = this.aX;
-		int aY = this.aY;
+		double aX = this.aX;
+		double aY = this.aY;
 		
-		int bX = this.bX;
-		int bY = this.bY;
+		double bX = this.bX;
+		double bY = this.bY;
 		
-		int cX = this.cX;
-		int cY = this.cY;
+		double cX = this.cX;
+		double cY = this.cY;
 		
 	    b1 = ((x - bX) * (aY - bY) - (aX - bX) * (y - bY)) < 0.0f;
 	    b2 = ((x - cX) * (bY - cY) - (bX - cX) * (y - cY)) < 0.0f;
