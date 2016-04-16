@@ -78,20 +78,20 @@ public class RenderableCircularGameObject implements IRenderedObject {
 
 	@Override
 	public void resize() {
-		int scaledCamX = ((int) Math
-				.round((double)((Camera.CAMERA_WIDTH / 2) - Camera.getX()) / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)));
-		int scaledCamY = ((int) Math
-				.round((double)((Camera.CAMERA_HEIGHT / 2) - Camera.getY()) / Camera.CAMERA_HEIGHT * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2)));
+		int scaledCamX = (int) (Math
+				.round((Camera.CAMERA_WIDTH / 2) - Camera.getX()) / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2));
+		int scaledCamY = (int) (Math
+				.round((Camera.CAMERA_HEIGHT / 2) - Camera.getY()) / Camera.CAMERA_HEIGHT * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2));
 
 		scaledX = ((int) Math
-				.round((double) x / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)))
+				.round( x / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)))
 				+ DisplayUtils.widthOffset + scaledCamX;
 		scaledY = ((int) Math
-				.round((double) y / Camera.CAMERA_HEIGHT * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2)))
+				.round(y / Camera.CAMERA_HEIGHT * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2)))
 				+ DisplayUtils.heightOffset + scaledCamY;
 
 		scaledRadius = (int) Math
-				.round((double) radius / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2));
+				.round(radius / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2));
 
 		oldGameWidth = DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2;
 		oldGameHeight = DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2;
@@ -113,12 +113,12 @@ public class RenderableCircularGameObject implements IRenderedObject {
 		if (object instanceof RenderableQuadrilateralGameObject) {
 			RenderableQuadrilateralGameObject casted = (RenderableQuadrilateralGameObject) object;
 
-			int[] xQuads = { 
+			double[] xQuads = { 
 				(casted.aX), 
 				(casted.bX)
 			};
 
-			int[] yQuads = { 
+			double[] yQuads = { 
 				(casted.dY), 
 				(casted.aY) 
 			};
@@ -200,9 +200,9 @@ public class RenderableCircularGameObject implements IRenderedObject {
 	}
 
 	@Override
-	public boolean doesContain(int x, int y) {
-		int a = (int) (this.y - y);
-		int b = (int) (this.x - x);
+	public boolean doesContain(double x, double y) {
+		double a = this.y - y;
+		double b = this.x - x;
 
 		double c = Math.sqrt((a * a) + (b * b));
 

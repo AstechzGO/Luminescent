@@ -43,7 +43,7 @@ public class RenderingUtils
 		}
 	}
 	
-	public static void RenderCircle(double x, double y, double radius, double pointSeperation, double rotation)
+	public static void RenderCircle(int x, int y, double radius, double pointSeperation, double rotation)
 	{	
 	    GL11.glBegin(GL11.GL_POLYGON);
 
@@ -65,7 +65,7 @@ public class RenderingUtils
 	    GL11.glEnd();
 	}
 	
-	public static void RenderCircle(double x, double y, double radius, double pointSeperation, double rotation, Texture texture) 
+	public static void RenderCircle(int x, int y, double radius, double pointSeperation, double rotation, Texture texture) 
 	{
 	    GL11.glEnable(GL11.GL_TEXTURE_2D);
 	    GL11.glColor3f(1, 1, 1);

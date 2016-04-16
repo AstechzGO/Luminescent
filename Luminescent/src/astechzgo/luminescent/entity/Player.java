@@ -2,20 +2,24 @@ package astechzgo.luminescent.entity;
 
 import java.nio.DoubleBuffer;
 import java.nio.IntBuffer;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 
 import astechzgo.luminescent.gameobject.Room;
-import astechzgo.luminescent.main.Luminescent;
 import astechzgo.luminescent.rendering.Camera;
 import astechzgo.luminescent.utils.Constants;
 import astechzgo.luminescent.utils.ControllerUtils;
 import astechzgo.luminescent.utils.DisplayUtils;
-import astechzgo.luminescent.utils.KeyboardUtils;
+
+import static astechzgo.luminescent.keypress.Key.*;
 
 public class Player extends CircularEntity {
+	public static final double slowSpeed = 0.5;
+	public static final double fastSpeed = 0.88;
+	
 	private double lastDelta;
 	
 	private double lastControllerDelta = 0;
@@ -143,34 +147,35 @@ public class Player extends CircularEntity {
 
 		double delta = ((GLFW.glfwGetTime() * 1000) - lastDelta);
 		lastDelta = GLFW.glfwGetTime() * 1000;
-		if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_FASTER)) {
-			Luminescent.moveSpeed = 0.88;
+		
+		double speed = 0;
+		
+		if(KEYS_MOVEMENT_FASTER.isKeyDown()) {
+			speed = Player.fastSpeed * delta;
 		}
 		else {
-			Luminescent.moveSpeed = 0.5;
-		}
-		
-		double speed = Luminescent.moveSpeed * delta;	
+			speed = Player.slowSpeed * delta;
+		}	
 		
 		boolean down = true;
 		
 		double tempAngle = -1;
 		
-		if(!(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_UP) == KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_DOWN))) {
+		if(!(KEYS_MOVEMENT_UP.isKeyDown()) == KEYS_MOVEMENT_DOWN.isKeyDown()) {
 			down = false;
 			
-			if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_UP))
+			if(KEYS_MOVEMENT_UP.isKeyDown())
 				tempAngle = 0;
 			else
 				tempAngle = 180;
 		}
-		if(!(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_LEFT) == KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_RIGHT))) {
+		if(!(KEYS_MOVEMENT_LEFT.isKeyDown() == KEYS_MOVEMENT_RIGHT.isKeyDown())) {
 			down = false;
 			
-			if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_LEFT))
+			if(KEYS_MOVEMENT_LEFT.isKeyDown())
 				if(tempAngle == -1)
 					tempAngle =  270;
-				else if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_UP))
+				else if(KEYS_MOVEMENT_UP.isKeyDown())
 					tempAngle = (tempAngle + 360 + 270) / 2;
 				else
 					tempAngle = (tempAngle + 270) / 2;
@@ -188,6 +193,9 @@ public class Player extends CircularEntity {
 		
 		double angle = setRotation() + tempAngle;
 		
+		List<Double> verticalEdges = getVerticalEdges(rooms);
+		List<Double> horizontalEdges = getHorizontalEdges(rooms);
+		
 		double x = 0;
 		double y = 0;
 		
@@ -197,25 +205,27 @@ public class Player extends CircularEntity {
 		boolean initX = true;
 		boolean initY = true;
 		
-		for(Room room : rooms) {
-			if(this.getPosX() + speed * Math.cos(Math.toRadians(angle)) >= room.getPosX() + room.getWidth() - this.getRadius()) {
+		for(double verticalEdge : verticalEdges) {
+			double projectedX = this.getPosX() + speed * Math.cos(Math.toRadians(angle));
+			
+			if(!(this.getPosX() > verticalEdge - this.radius) && (projectedX >= verticalEdge - this.radius)) {
 				bx = true;
 				
-				double temp = room.getPosX() + room.getWidth() - this.getRadius();
+				double temp = verticalEdge - this.radius;
 				if(temp > x || initX) {
 					x = temp;
 					initX = false;
 				}
 			}
-			else if(this.getPosX() + speed * Math.cos(Math.toRadians(angle)) <= room.getPosX() + this.getRadius()) {
+			else if(!(this.getPosX() < verticalEdge + this.getRadius()) && (projectedX <= verticalEdge + this.getRadius())) {
 				bx = true;
 				
-				double temp = room.getPosX() + this.getRadius();
+				double temp = verticalEdge + this.radius;
 				if(temp > x || initX) {
 					x = temp;
 					initX = false;
 				}
-			}
+			}					
 		}
 		
 		if(bx)
@@ -223,7 +233,7 @@ public class Player extends CircularEntity {
 		else
 			this.setPosX(this.getPosX() + speed * Math.cos(Math.toRadians(angle)));
 		
-		for(Room room : rooms) {
+		/*for(Room room : rooms) {
 			if(this.getPosY() - speed * Math.sin(Math.toRadians(angle)) >= room.getPosY() + room.getHeight() - this.getRadius()) {
 				double temp = room.getPosY() + room.getHeight() - this.getRadius();
 				if(temp > y || initY) {
@@ -241,12 +251,35 @@ public class Player extends CircularEntity {
 			else {
 				by = true;
 			}
+		}*/
+		
+		for(double horizontalEdge : horizontalEdges) {
+			double projectedY = this.getPosY() - speed * Math.sin(Math.toRadians(angle));
+			
+			if(!(this.getPosY() > horizontalEdge - this.radius) && (projectedY >= horizontalEdge - this.radius)) {
+				by = true;
+				
+				double temp = horizontalEdge - this.radius;
+				if(temp > y || initY) {
+					y = temp;
+					initY = false;
+				}
+			}
+			else if(!(this.getPosY() < horizontalEdge + this.getRadius()) && (projectedY <= horizontalEdge + this.getRadius())) {
+				by = true;
+				
+				double temp = horizontalEdge + this.radius;
+				if(temp > y || initY) {
+					y = temp;
+					initY = false;
+				}
+			}					
 		}
 		
 		if(by)
-			this.setPosY(this.getPosY() - speed * Math.sin(Math.toRadians(angle)));
-		else
 			this.setPosY(y);
+		else
+			this.setPosY(this.getPosY() - speed * Math.sin(Math.toRadians(angle)));
 		
 		/*if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_UP)) {
 
@@ -280,4 +313,26 @@ public class Player extends CircularEntity {
 	}
 	
 	
+	// TODO: Simplify edges
+	private List<Double> getVerticalEdges(List<Room> rooms) {
+		List<Double> verticalEdges = new ArrayList<Double>();
+	
+		for(Room room : rooms) {
+			verticalEdges.add(room.getPosX());
+			verticalEdges.add(room.getPosX() + room.getWidth());
+		}
+		
+		return verticalEdges;
+	}
+	
+	private List<Double> getHorizontalEdges(List<Room> rooms) {
+		List<Double> horizontalEdges = new ArrayList<Double>();
+		
+		for(Room room : rooms) {
+			horizontalEdges.add(room.getPosY() + room.getHeight());
+			horizontalEdges.add(room.getPosY());
+		}
+		
+		return horizontalEdges;
+	}
 }

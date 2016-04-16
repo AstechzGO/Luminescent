@@ -22,19 +22,19 @@ public class Room extends RenderableRectangularGameObject {
 		super.render();
 	}
 	
-	public int getPosX() {
+	public double getPosX() {
 		return super.x;
 	}
 	
-	public int getPosY() {
+	public double getPosY() {
 		return super.y;
 	}
 	
-	public int getWidth() {
+	public double getWidth() {
 		return super.width;
 	}
 	
-	public int getHeight() {
+	public double getHeight() {
 		return super.height;
 	}
 }
