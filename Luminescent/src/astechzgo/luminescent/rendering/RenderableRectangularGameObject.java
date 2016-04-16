@@ -7,11 +7,11 @@ public class RenderableRectangularGameObject extends RenderableQuadrilateralGame
 
 	protected Texture texture;
 
-	protected int x;
-	protected int y;
+	protected double x;
+	protected double y;
 
-	protected int width;
-	protected int height;
+	protected double width;
+	protected double height;
 
 	protected int scaledX;
 	protected int scaledY;
@@ -22,7 +22,7 @@ public class RenderableRectangularGameObject extends RenderableQuadrilateralGame
 	protected int oldGameWidth = DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2;
 	protected int oldGameHeight = DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2;
 
-	public RenderableRectangularGameObject(int x, int y, int width, int height, Texture texture) {
+	public RenderableRectangularGameObject(double x, double y, double width, double height, Texture texture) {
 		super(x, y + height, x + width, y + height, x + width, y, x, y, texture);
 		
 		this.texture = texture;
@@ -34,7 +34,7 @@ public class RenderableRectangularGameObject extends RenderableQuadrilateralGame
 		this.height = height;
 	}
 
-	public RenderableRectangularGameObject(int x, int y, int width, int height) {
+	public RenderableRectangularGameObject(double x, double y, double width, double height) {
 		super(x, y + height, x + width, y + height, x + width, y, x, y);
 		
 		this.x = x;
