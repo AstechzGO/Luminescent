@@ -516,4 +516,16 @@ public class DisplayUtils {
 		
 		KeyboardUtils.resetKeys();
 	}
+	
+	public static void renderResolutionBorder() {
+		GL11.glColor3f(0, 0, 0);
+		if(widthOffset != 0) {
+			RenderingUtils.RenderQuad(0, 0, 0, displayHeight, widthOffset, displayHeight, widthOffset, 0);
+			RenderingUtils.RenderQuad(displayWidth - widthOffset, 0, displayWidth - widthOffset, displayHeight, displayWidth, displayHeight, displayWidth, 0);
+		}
+		if(heightOffset != 0) {
+			RenderingUtils.RenderQuad(0, displayHeight - heightOffset, 0, displayHeight, displayWidth, displayHeight, displayWidth, displayHeight - heightOffset);
+			RenderingUtils.RenderQuad(0, 0, 0, heightOffset, displayWidth, heightOffset, displayWidth, 0);
+		}
+	}
 }
