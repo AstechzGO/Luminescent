@@ -59,10 +59,10 @@ public class Player extends CircularEntity {
 	@Override
 	public void resize() {
 		scaledX = ((int) Math
-				.round((double) (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset)) / 2)
+				.round((double) (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)) / 2)
 				+ DisplayUtils.widthOffset;
 		scaledY = ((int) Math
-				.round((double) (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset)) / 2)
+				.round((double) (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2)) / 2)
 				+ DisplayUtils.heightOffset;
 				
 		scaledRadius = (int) Math
@@ -109,19 +109,16 @@ public class Player extends CircularEntity {
 		
 		GLFW.glfwGetWindowPos(DisplayUtils.getHandle(), xpos, ypos);
 		
-		x = x + xpos.get(0) + ((DisplayUtils.monitorWidth / 2) - xpos.get(0) - DisplayUtils.getDisplayWidth() / 2);
-		y = -y + DisplayUtils.monitorHeight - ypos.get(0) - ((DisplayUtils.monitorHeight / 2) - ypos.get(0) - DisplayUtils.getDisplayHeight() / 2);
+		y = DisplayUtils.getDisplayHeight() - y;
 		
 		xpos.clear();
 		ypos.clear();
 		
-		double scaledX = x / GLFW.glfwGetVideoMode(DisplayUtils.monitor).width() * Camera.CAMERA_WIDTH;
-		double scaledY = y / GLFW.glfwGetVideoMode(DisplayUtils.monitor).height() * Camera.CAMERA_HEIGHT;
-		
-		double m = (Camera.CAMERA_HEIGHT / 2 - scaledY) / (Camera.CAMERA_WIDTH / 2 - scaledX);
+		double m = (scaledY - y) / (scaledX - x);
 		
 		if(m == Double.POSITIVE_INFINITY) {
 			rotation = 90;
+			System.out.println(rotation);
 			return rotation;
 		}
 		
@@ -129,10 +126,11 @@ public class Player extends CircularEntity {
 			rotation = 270;
 			return rotation;
 		}
-		if(scaledX == Camera.CAMERA_WIDTH / 2 && scaledY == Camera.CAMERA_HEIGHT / 2)
+		if(x == scaledX && y == scaledY) {
 			return rotation;
+		}
 
-		if(scaledX < Camera.CAMERA_WIDTH / 2)
+		if(x < scaledX)
 			rotation = 180 - Math.toDegrees(Math.atan(m));
 		else {
 			if(360 - Math.toDegrees(Math.atan(m)) > 360)
