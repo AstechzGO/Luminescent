@@ -70,6 +70,9 @@ public class Luminescent
 		
 		thePlayer.move(rooms);
 		thePlayer.render();
+		
+		DisplayUtils.renderResolutionBorder();
+		
 		ControllerUtils.updateJoysticks();
 	}
 }
