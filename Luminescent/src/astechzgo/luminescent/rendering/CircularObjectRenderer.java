@@ -8,7 +8,7 @@ import astechzgo.luminescent.textures.Texture;
 import astechzgo.luminescent.utils.DisplayUtils;
 import astechzgo.luminescent.utils.RenderingUtils;
 
-public class RenderableCircularGameObject implements IRenderedObject {
+public class CircularObjectRenderer implements IObjectRenderer {
 	private Color colour = new Color(0, 0, 0);
 
 	protected int pointSeperation;
@@ -29,11 +29,11 @@ public class RenderableCircularGameObject implements IRenderedObject {
 
 	protected double rotation = 0.0;
 	
-	public RenderableCircularGameObject(double x, double y, double radius) {
+	public CircularObjectRenderer(double x, double y, double radius) {
 		this(x, y, radius, 1);
 	}
 
-	public RenderableCircularGameObject(double x, double y, double radius, int pointSeperation) {
+	public CircularObjectRenderer(double x, double y, double radius, int pointSeperation) {
 		this.x = x;
 		this.y = y;
 
@@ -42,11 +42,11 @@ public class RenderableCircularGameObject implements IRenderedObject {
 		this.pointSeperation = pointSeperation;
 	}
 
-	public RenderableCircularGameObject(double x, double y, double radius, Texture texture) {
+	public CircularObjectRenderer(double x, double y, double radius, Texture texture) {
 		this(x, y, radius, 1, texture);
 	}
 
-	public RenderableCircularGameObject(double x, double y, double radius, int pointSeperation, Texture texture) {
+	public CircularObjectRenderer(double x, double y, double radius, int pointSeperation, Texture texture) {
 		this(x, y, radius, pointSeperation);
 
 		this.texture = texture;
@@ -108,10 +108,10 @@ public class RenderableCircularGameObject implements IRenderedObject {
 	}
 
 	@Override
-	public boolean isTouching(IRenderedObject object) {
+	public boolean isTouching(IObjectRenderer object) {
 
-		if (object instanceof RenderableQuadrilateralGameObject) {
-			RenderableQuadrilateralGameObject casted = (RenderableQuadrilateralGameObject) object;
+		if (object instanceof QuadrilateralObjectRenderer) {
+			QuadrilateralObjectRenderer casted = (QuadrilateralObjectRenderer) object;
 
 			double[] xQuads = { 
 				(casted.aX), 
@@ -171,8 +171,8 @@ public class RenderableCircularGameObject implements IRenderedObject {
 			}
 			return collision;
 		} 
-		else if (object instanceof RenderableCircularGameObject) {
-			RenderableCircularGameObject casted = (RenderableCircularGameObject) object;
+		else if (object instanceof CircularObjectRenderer) {
+			CircularObjectRenderer casted = (CircularObjectRenderer) object;
 
 			int a = (int) (this.y - casted.y);
 			int b = (int) (this.x - casted.x);
@@ -184,10 +184,10 @@ public class RenderableCircularGameObject implements IRenderedObject {
 			else
 				return false;
 		} 
-		else if (object instanceof RenderableMultipleRenderedObjects) {
-			RenderableMultipleRenderedObjects casted = (RenderableMultipleRenderedObjects) object;
+		else if (object instanceof MultipleObjectRenderer) {
+			MultipleObjectRenderer casted = (MultipleObjectRenderer) object;
 
-			for (IRenderedObject i : casted.getAll()) {
+			for (IObjectRenderer i : casted.getAll()) {
 				if (this.isTouching(i))
 					return true;
 			}
@@ -210,5 +210,25 @@ public class RenderableCircularGameObject implements IRenderedObject {
 			return true;
 		else
 			return false;
+	}
+
+	@Override
+	public double getX() {
+		return x;
+	}
+
+	@Override
+	public double getY() {
+		return y;
+	}
+
+	@Override
+	public void setX(double x) {
+		this.x = x;
+	}
+
+	@Override
+	public void setY(double y) {
+		this.y = y;
 	}
 }

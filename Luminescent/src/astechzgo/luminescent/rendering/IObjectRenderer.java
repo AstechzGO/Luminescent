@@ -5,7 +5,7 @@ import java.awt.Color;
 import astechzgo.luminescent.textures.Texture;
 
 
-public interface IRenderedObject
+public interface IObjectRenderer
 {
 	public void render();
 	
@@ -17,6 +17,12 @@ public interface IRenderedObject
 	public Texture getTexture();
 	public void setTexture(Texture texture);
 	
-	public boolean isTouching(IRenderedObject object);
+	public boolean isTouching(IObjectRenderer object);
 	public boolean doesContain(double x, double y);
+	
+	public double getX();
+	public double getY();
+	
+	public void setX(double x);
+	public void setY(double y);
 }
