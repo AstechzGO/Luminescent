@@ -1,1 +1,2 @@
 ant.importBuild 'build.xml'
+ant.importBuild 'deploy.xml'

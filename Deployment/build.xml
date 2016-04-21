@@ -1,30 +1,51 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project default="deploy_jar" name="Luminescent deployment tool by eandr127">
-    <!--this file was created by Eclipse Runnable JAR file Export Wizard-->
-    <!--ANT 1.7 is required-->
-    <!--define folder properties-->
-    <property name="dir.buildfile" value="."/>
-    <property name="dir.workspace" value="../../"/>
-    <property name="dir.jarfile" value="${dir.workspace}/Luminescent"/>
-    <target name="deploy_jar">
-		<echo>Luminescent deployment tool by eandr127</echo>
-        <jar destfile="${dir.jarfile}/Luminescent.jar">
-            <manifest>
-                <attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
-                <attribute name="Rsrc-Main-Class" value="astechzgo.luminescent.main.Main"/>
-                <attribute name="Class-Path" value="."/>
-                <attribute name="Rsrc-Class-Path" value="./ lwjgl.jar SoundSystem.jar CodecMP3.jar LibraryLWJGL3OpenAL.jar gson-2.5.jar"/>
-            </manifest>
-            <zipfileset src="jar-in-jar-loader.zip"/>
-            <fileset dir="${dir.workspace}/Luminescent/Luminescent/bin"/>
-            <zipfileset dir="${dir.workspace}/Luminescent/Luminescent/libs/lwjgl" includes="lwjgl.jar"/>
-            <zipfileset dir="${dir.workspace}/Luminescent/Luminescent/libs/paulscode" includes="SoundSystem.jar"/>
-            <zipfileset dir="${dir.workspace}/Luminescent/Luminescent/libs/paulscode" includes="CodecMP3.jar"/>
-            <zipfileset dir="${dir.workspace}/Luminescent/Luminescent/libs/paulscode" includes="LibraryLWJGL3OpenAL.jar"/>
-            <zipfileset dir="${dir.workspace}/Luminescent/Luminescent/libs/google" includes="gson-2.5.jar"/>
-			<fileset dir="${dir.workspace}/Luminescent/Luminescent/libs/lwjgl/natives"/>
-        </jar>
-		<echo>The output jar has been placed in Luminescent's root folder</echo>
-		<input message="Press enter to continue..."/>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. --><project basedir="../Luminescent" default="build" name="Luminescent">
+    <property environment="env"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.8"/>
+    <property name="source" value="1.8"/>
+	
+    <path id="Luminescent.classpath">
+        <pathelement location="../Luminescent/bin"/>
+        <pathelement location="../Luminescent/libs/lwjgl/lwjgl.jar"/>
+        <pathelement location="../Luminescent/libs/paulscode/SoundSystem.jar"/>
+        <pathelement location="../Luminescent/libs/paulscode/CodecMP3.jar"/>
+        <pathelement location="../Luminescent/libs/paulscode/LibraryLWJGL3OpenAL.jar"/>
+        <pathelement location="../Luminescent/libs/google/gson-2.5.jar"/>
+    </path>
+    <target name="init">
+        <mkdir dir="../Luminescent/bin"/>
+        <copy includeemptydirs="false" todir="../Luminescent/bin">
+            <fileset dir="../Luminescent/src">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+	<!-- Delete bin, copy all non .java files to bin, using javac set source path & classpath -->
+    <target name="clean">
+        <delete dir="../Luminescent/bin"/>
+    </target>
+    <target depends="build-project" name="build"/>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="../Luminescent/bin" includeantruntime="false" source="${source}" target="${target}">
+            <src path="../Luminescent/src"/>
+            <classpath refid="Luminescent.classpath"/>
+        </javac>
+    </target>
+    <target depends="build" name="Main">
+        <java classname="astechzgo.luminescent.main.Main" failonerror="true" fork="yes">
+            <classpath refid="Luminescent.classpath"/>
+			<sysproperty key="java.library.path" path="../Luminescent/libs/lwjgl/natives"/>
+        </java>
+    </target>
+    <target depends="build" name="Version">
+        <java classname="org.lwjgl.Version" failonerror="true" fork="yes">
+            <classpath refid="Luminescent.classpath"/>
+        </java>
     </target>
 </project>
