@@ -5,7 +5,7 @@
     <!--define folder properties-->
     <property name="dir.buildfile" value="."/>
     <property name="dir.workspace" value="../"/>
-    <property name="dir.jarfile" value="${dir.workspace}/Luminescent"/>
+    <property name="dir.jarfile" value="${dir.workspace}"/>
     <target depends="build" name="deploy_jar">
 		<echo>Luminescent deployment tool by eandr127</echo>
         <jar destfile="${dir.jarfile}/Luminescent.jar">
@@ -15,7 +15,7 @@
                 <attribute name="Class-Path" value="."/>
                 <attribute name="Rsrc-Class-Path" value="./ lwjgl.jar SoundSystem.jar CodecMP3.jar LibraryLWJGL3OpenAL.jar gson-2.5.jar"/>
             </manifest>
-            <zipfileset src="buildtools/jar-in-jar-loader.zip"/>
+            <zipfileset src="jar-in-jar-loader.zip"/>
             <fileset dir="${dir.jarfile}/bin"/>
             <zipfileset dir="${dir.jarfile}/libs/lwjgl" includes="lwjgl.jar"/>
             <zipfileset dir="${dir.jarfile}/libs/paulscode" includes="SoundSystem.jar"/>
