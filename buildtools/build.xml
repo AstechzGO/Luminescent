@@ -3,49 +3,50 @@
               Any modifications will be overwritten.
               To include a user specific buildfile here, simply create one in the same
               directory with the processing instruction <?eclipse.ant.import?>
-              as the first entry and export the buildfile again. --><project basedir="../Luminescent" default="build" name="Luminescent">
+              as the first entry and export the buildfile again. --><project basedir="." default="build" name="Luminescent">
     <property environment="env"/>
     <property name="debuglevel" value="source,lines,vars"/>
     <property name="target" value="1.8"/>
     <property name="source" value="1.8"/>
 	
     <path id="Luminescent.classpath">
-        <pathelement location="../Luminescent/bin"/>
-        <pathelement location="../Luminescent/libs/lwjgl/lwjgl.jar"/>
-        <pathelement location="../Luminescent/libs/paulscode/SoundSystem.jar"/>
-        <pathelement location="../Luminescent/libs/paulscode/CodecMP3.jar"/>
-        <pathelement location="../Luminescent/libs/paulscode/LibraryLWJGL3OpenAL.jar"/>
-        <pathelement location="../Luminescent/libs/google/gson-2.5.jar"/>
+        <pathelement location="bin"/>
+        <pathelement location="libs/lwjgl/lwjgl.jar"/>
+        <pathelement location="libs/paulscode/SoundSystem.jar"/>
+        <pathelement location="libs/paulscode/CodecMP3.jar"/>
+        <pathelement location="libs/paulscode/LibraryLWJGL3OpenAL.jar"/>
+        <pathelement location="libs/google/gson-2.5.jar"/>
     </path>
     <target name="init">
-        <mkdir dir="../Luminescent/bin"/>
-        <copy includeemptydirs="false" todir="../Luminescent/bin">
-            <fileset dir="../Luminescent/src">
+        <mkdir dir="bin"/>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="src">
                 <exclude name="**/*.java"/>
             </fileset>
         </copy>
     </target>
 	<!-- Delete bin, copy all non .java files to bin, using javac set source path & classpath -->
     <target name="clean">
-        <delete dir="../Luminescent/bin"/>
+        <delete dir="bin"/>
     </target>
     <target depends="build-project" name="build"/>
     <target depends="init" name="build-project">
         <echo message="${ant.project.name}: ${ant.file}"/>
-        <javac debug="true" debuglevel="${debuglevel}" destdir="../Luminescent/bin" includeantruntime="false" source="${source}" target="${target}">
-            <src path="../Luminescent/src"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
+            <src path="src"/>
             <classpath refid="Luminescent.classpath"/>
         </javac>
     </target>
     <target depends="build" name="Main">
         <java classname="astechzgo.luminescent.main.Main" failonerror="true" fork="yes">
             <classpath refid="Luminescent.classpath"/>
-			<sysproperty key="java.library.path" path="../Luminescent/libs/lwjgl/natives"/>
+			<sysproperty key="java.library.path" path="libs/lwjgl/natives"/>
         </java>
     </target>
     <target depends="build" name="Version">
         <java classname="org.lwjgl.Version" failonerror="true" fork="yes">
             <classpath refid="Luminescent.classpath"/>
+			<sysproperty key="java.library.path" path="libs/lwjgl/natives"/>
         </java>
     </target>
 </project>
