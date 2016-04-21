@@ -38,15 +38,6 @@
         </javac>
     </target>
     <target depends="build" name="Main">
-        <java classname="astechzgo.luminescent.main.Main" failonerror="true" fork="yes">
-            <classpath refid="Luminescent.classpath"/>
-			<sysproperty key="java.library.path" path="../libs/lwjgl/natives"/>
-        </java>
-    </target>
-    <target depends="build" name="Version">
-        <java classname="org.lwjgl.Version" failonerror="true" fork="yes">
-            <classpath refid="Luminescent.classpath"/>
-			<sysproperty key="java.library.path" path="../libs/lwjgl/natives"/>
-        </java>
-    </target>
+		<java jar="../Luminescent.jar" fork="true"/>
+	</target>
 </project>
