@@ -35,7 +35,7 @@ public class Luminescent
 		
 		Sound.init();
 		
-		thePlayer.setTexture(new Animation("pacman.frame", 20));
+		thePlayer.getRenderer().setTexture(new Animation("pacman.frame", 20));
 		
 		if(Constants.getConstantAsBoolean(Constants.WINDOW_FULLSCREEN)) 
 		{	

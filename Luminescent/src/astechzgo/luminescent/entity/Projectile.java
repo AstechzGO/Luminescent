@@ -6,27 +6,39 @@ import java.util.List;
 import org.lwjgl.glfw.GLFW;
 
 import astechzgo.luminescent.main.Luminescent;
+import astechzgo.luminescent.rendering.IObjectRenderer;
+import astechzgo.luminescent.rendering.RectangularObjectRenderer;
 
-public class Projectile extends RectangularEntity {
+public class Projectile extends LivingEntity {
 	
 	private static final double speed = 2.5;
 	
-	private boolean dead = false;
-	
 	// Used to get Direction for Shooting
 	private double lastDelta;
-	private double rotation;
+	private final double rotation;
+	
+	private double x;
+	private double y;
+	
+	private final double width;
+	private final double height;
+	
+	private final RectangularObjectRenderer renderer;
 
 	// The Class
 	// Constructor for projectile
 	public Projectile(double x, double y) {
-		super(x, y, 5, 5);
-		super.setColour(new Color(0.5f, 0.6f, 0.2f));
+		renderer = new RectangularObjectRenderer(x, y, 5, 5);
+		renderer.setColour(new Color(0.5f, 0.6f, 0.2f));
+		
 		lastDelta = GLFW.glfwGetTime() * 1000;
 		rotation = Luminescent.thePlayer.setRotation();
 		
 		this.x = x;
 		this.y = y;
+		
+		this.width = 5;
+		this.height = 5;
 	}
 
 	// Called every tick from Luminescent class, shoots bullet in direction
@@ -44,6 +56,8 @@ public class Projectile extends RectangularEntity {
 		
 		boolean initX = true;
 		boolean initY = true;
+		
+		this.setAlive(true);
 		
 		for(double verticalEdge : verticalEdges) {
 			double projectedX = this.x + speed * Math.cos(Math.toRadians(rotation));
@@ -70,7 +84,7 @@ public class Projectile extends RectangularEntity {
 		
 		if(bx) {
 			this.x = x;
-			dead = true;
+			this.setAlive(false);
 		}
 		else
 			this.x = this.x + speed * Math.cos(Math.toRadians(rotation));
@@ -100,7 +114,7 @@ public class Projectile extends RectangularEntity {
 		
 		if(by) {
 			this.y = y;
-			dead = true;
+			this.setAlive(false);
 		}
 		else
 			this.y = this.y - speed * Math.sin(Math.toRadians(rotation));		
@@ -114,8 +128,15 @@ public class Projectile extends RectangularEntity {
 	public double getY() {
 		return y;
 	}
-	
-	public boolean isDead() {
-		return dead;
+
+	@Override
+	public IObjectRenderer getRenderer() {
+		return renderer;
+	}
+
+	@Override
+	public void updateRenderer() {
+		renderer.setX(x);
+		renderer.setY(y);
 	}
 }

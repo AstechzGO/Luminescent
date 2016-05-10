@@ -9,7 +9,7 @@ import astechzgo.luminescent.textures.Texture;
 import astechzgo.luminescent.utils.DisplayUtils;
 import astechzgo.luminescent.utils.RenderingUtils;
 
-public class RenderableQuadrilateralGameObject implements IRenderedObject {
+public class QuadrilateralObjectRenderer implements IObjectRenderer {
 
 	private Color colour = new Color(0, 0, 0);
 
@@ -42,7 +42,7 @@ public class RenderableQuadrilateralGameObject implements IRenderedObject {
 	protected int oldGameWidth = DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2;
 	protected int oldGameHeight = DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2;
 
-	public RenderableQuadrilateralGameObject(double aX, double aY, double bX, double bY, double cX, double cY, double dX, double dY, Texture texture) {
+	public QuadrilateralObjectRenderer(double aX, double aY, double bX, double bY, double cX, double cY, double dX, double dY, Texture texture) {
 		this.texture = texture;
 		
 		this.aX = aX;
@@ -58,7 +58,7 @@ public class RenderableQuadrilateralGameObject implements IRenderedObject {
 		this.dY = dY;
 	}
 
-	public RenderableQuadrilateralGameObject(double aX, double aY, double bX, double bY, double cX, double cY, double dX, double dY) {
+	public QuadrilateralObjectRenderer(double aX, double aY, double bX, double bY, double cX, double cY, double dX, double dY) {
 		this.aX = aX;
 		this.aY = aY;
 		
@@ -142,9 +142,9 @@ public class RenderableQuadrilateralGameObject implements IRenderedObject {
 	}
 
 	@Override
-	public boolean isTouching(IRenderedObject object) {
-		if (object instanceof RenderableQuadrilateralGameObject) {
-			RenderableQuadrilateralGameObject casted = (RenderableQuadrilateralGameObject) object;
+	public boolean isTouching(IObjectRenderer object) {
+		if (object instanceof QuadrilateralObjectRenderer) {
+			QuadrilateralObjectRenderer casted = (QuadrilateralObjectRenderer) object;
 			
 			if(
 					Line2D.linesIntersect(aX, aY, bX, bY, casted.aX, casted.aY, casted.bX, casted.bY) ||	
@@ -166,8 +166,8 @@ public class RenderableQuadrilateralGameObject implements IRenderedObject {
 					)
 			return true;
 		}
-		else if (object instanceof RenderableCircularGameObject) {
-			RenderableCircularGameObject casted = (RenderableCircularGameObject) object;
+		else if (object instanceof CircularObjectRenderer) {
+			CircularObjectRenderer casted = (CircularObjectRenderer) object;
 
 			double[] xQuads = { 
 				(aX), 
@@ -227,10 +227,10 @@ public class RenderableQuadrilateralGameObject implements IRenderedObject {
 			}
 			return collision;
 		} 
-		else if (object instanceof RenderableMultipleRenderedObjects) {
-			RenderableMultipleRenderedObjects casted = (RenderableMultipleRenderedObjects) object;
+		else if (object instanceof MultipleObjectRenderer) {
+			MultipleObjectRenderer casted = (MultipleObjectRenderer) object;
 
-			for (IRenderedObject i : casted.getAll()) {
+			for (IObjectRenderer i : casted.getAll()) {
 				if (this.isTouching(i))
 					return true;
 			}
@@ -276,5 +276,25 @@ public class RenderableQuadrilateralGameObject implements IRenderedObject {
 	    boolean b = ((b1 == b2) && (b2 == b3));
 	    
 	    return a || b;
+	}
+
+	@Override
+	public double getX() {
+		return aX;
+	}
+
+	@Override
+	public double getY() {
+		return aY;
+	}
+
+	@Override
+	public void setX(double x) {
+		aX = x;
+	}
+
+	@Override
+	public void setY(double y) {
+		aY = y;
 	}
 }
