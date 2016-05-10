@@ -2,10 +2,10 @@ package astechzgo.luminescent.gameobject;
 
 import java.awt.Color;
 
-import astechzgo.luminescent.rendering.RenderableRectangularGameObject;
+import astechzgo.luminescent.rendering.RectangularObjectRenderer;
 import astechzgo.luminescent.worldloader.JSONWorldLoader;
 
-public class Room extends RenderableRectangularGameObject {
+public class Room extends RectangularObjectRenderer {
 
 	public Room(JSONWorldLoader loader) {
 		super(loader.getX(), loader.getY(), loader.getWidth(), loader.getHeight());
