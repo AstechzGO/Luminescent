@@ -35,7 +35,7 @@ public class Luminescent
 		
 		Sound.init();
 		
-		thePlayer.getRenderer().setTexture(new Animation("pacman.frame", 20));
+		thePlayer.getRenderer().setTexture(new Animation("player.frame", 16));
 		
 		if(Constants.getConstantAsBoolean(Constants.WINDOW_FULLSCREEN)) 
 		{	
@@ -65,13 +65,13 @@ public class Luminescent
 		for(Room room : rooms)
 			room.render();
 		
-		KeyPressUtils.checkUtils();
-		KeyPressGameplay.checkGameActions(thePlayer, rooms);
-		
 		thePlayer.move(rooms);
 		thePlayer.render();
 		
 		DisplayUtils.renderResolutionBorder();
+		
+		KeyPressUtils.checkUtils();		
+		KeyPressGameplay.checkGameActions(thePlayer, rooms);
 		
 		ControllerUtils.updateJoysticks();
 	}
