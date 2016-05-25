@@ -160,7 +160,7 @@ public class Player extends LivingEntity {
 			down = false;
 			
 			if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_UP))
-				tempAngle = 0;
+				tempAngle = 90;
 			else
 				tempAngle = 270;
 		}

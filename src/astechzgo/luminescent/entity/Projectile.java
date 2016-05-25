@@ -34,11 +34,11 @@ public class Projectile extends LivingEntity {
 		lastDelta = GLFW.glfwGetTime() * 1000;
 		rotation = Luminescent.thePlayer.setRotation();
 		
-		this.x = (int) (x + (22.5 + super.width / 2) * Math.cos(Math.toRadians(270 - rotation)));
-		this.y = (int) (y + (22.5 + super.height / 2)  * Math.sin(Math.toRadians(270 - rotation)));
-		
 		this.width = 5;
 		this.height = 5;
+		
+		this.x = (int) (x + (22.5 + width / 2) * Math.cos(Math.toRadians(270 - rotation)));
+		this.y = (int) (y + (22.5 + height / 2)  * Math.sin(Math.toRadians(270 - rotation)));
 	}
 
 	// Called every tick from Luminescent class, shoots bullet in direction
