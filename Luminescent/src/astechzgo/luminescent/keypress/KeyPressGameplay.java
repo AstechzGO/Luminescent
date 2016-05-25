@@ -33,7 +33,7 @@ public class KeyPressGameplay {
 			Projectile m = projectiles.get(i);
 			m.fireBullet(getVerticalEdges(rooms), getHorizontalEdges(rooms));
 			
-			if(!m.isDead()) {
+			if(m.isAlive()) {
 				// If the bullet is in the room render it
 				m.render();
 			}

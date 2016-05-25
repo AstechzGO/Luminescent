@@ -10,6 +10,9 @@ import org.lwjgl.glfw.GLFW;
 
 import astechzgo.luminescent.gameobject.Room;
 import astechzgo.luminescent.rendering.Camera;
+import astechzgo.luminescent.rendering.CircularObjectRenderer;
+import astechzgo.luminescent.rendering.IObjectRenderer;
+import astechzgo.luminescent.textures.Texture;
 import astechzgo.luminescent.utils.Constants;
 import astechzgo.luminescent.utils.ControllerUtils;
 import astechzgo.luminescent.utils.DisplayUtils;
@@ -17,20 +20,30 @@ import astechzgo.luminescent.utils.KeyboardUtils;
 
 import static astechzgo.luminescent.keypress.Key.*;
 
-public class Player extends CircularEntity {
+public class Player extends LivingEntity {
+
+	private double radius;
+	private double rotation;
+	
+	private final PlayerRenderer renderer;
+	
 	public static final double slowSpeed = 0.5;
 	public static final double fastSpeed = 0.88;
-	
+
 	private double lastDelta;
 	
 	private double lastControllerDelta = 0;
 	private double lastMouseX = 0;
-	private double lastMouseY = 0;
+	private double lastMouseY = 0;	
 	
 	public Player() {
-		super(Camera.CAMERA_WIDTH / 2, Camera.CAMERA_HEIGHT / 2, 40, 1);
+		renderer = new PlayerRenderer(Camera.CAMERA_WIDTH / 2, Camera.CAMERA_HEIGHT / 2, 40, 1);
 		lastDelta = GLFW.glfwGetTime() * 1000;
 		lastControllerDelta = GLFW.glfwGetTime() * 1000;
+		
+		radius = 40;
+		x = Camera.CAMERA_WIDTH / 2;
+		y = Camera.CAMERA_HEIGHT / 2;
 	}
 	
 	public double getPosX() {
@@ -55,22 +68,6 @@ public class Player extends CircularEntity {
 	
 	public double getRadius() {
 		return radius;
-	}
-	
-	@Override
-	public void resize() {
-		scaledX = ((int) Math
-				.round((double) (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)) / 2)
-				+ DisplayUtils.widthOffset;
-		scaledY = ((int) Math
-				.round((double) (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2)) / 2)
-				+ DisplayUtils.heightOffset;
-				
-		scaledRadius = (int) Math
-				.round((double) radius / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2));
-
-		oldGameWidth = DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2;
-		oldGameHeight = DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2;
 	}
 	
 	public double setRotation() {
@@ -115,7 +112,7 @@ public class Player extends CircularEntity {
 		xpos.clear();
 		ypos.clear();
 		
-		double m = (scaledY - y) / (scaledX - x);
+		double m = (renderer.getScaledY() - y) / (renderer.getScaledX() - x);
 		
 		if(m == Double.POSITIVE_INFINITY) {
 			rotation = 0;
@@ -126,11 +123,11 @@ public class Player extends CircularEntity {
 			rotation = 180;
 			return rotation;
 		}
-		if(x == scaledX && y == scaledY) {
+		if(x == renderer.getScaledX() && y == renderer.getScaledY()) {
 			return rotation;
 		}
 
-		if(x < scaledX)
+		if(x < renderer.getScaledX())
 			rotation = 90 - Math.toDegrees(Math.atan(m));
 		else {
 			if(270 - Math.toDegrees(Math.atan(m)) > 360)
@@ -312,7 +309,6 @@ public class Player extends CircularEntity {
 		}*/	
 	}
 	
-	
 	// TODO: Simplify edges
 	private List<Double> getVerticalEdges(List<Room> rooms) {
 		List<Double> verticalEdges = new ArrayList<Double>();
@@ -334,5 +330,64 @@ public class Player extends CircularEntity {
 		}
 		
 		return horizontalEdges;
+	}
+
+	@Override
+	public IObjectRenderer getRenderer() {
+		return renderer;
+	}
+	
+	private class PlayerRenderer extends CircularObjectRenderer {
+		
+		private PlayerRenderer(double x, double y, double radius) {
+			super(x, y, radius);
+		}
+		
+		private PlayerRenderer(double x, double y, double radius, int pointSeperation) {
+			super(x, y, radius, pointSeperation);
+		}
+		
+		private PlayerRenderer(double x, double y, double radius, int pointSeperation, Texture texture) {
+			super(x, y, radius, pointSeperation, texture);
+		}
+		
+		private PlayerRenderer(double x, double y, double radius, Texture texture) {
+			super(x, y, radius, texture);
+		}
+		
+		@Override
+		public void resize() {
+			scaledX = ((int) Math
+					.round((double) (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)) / 2)
+					+ DisplayUtils.widthOffset;
+			scaledY = ((int) Math
+					.round((double) (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2)) / 2)
+					+ DisplayUtils.heightOffset;
+					
+			scaledRadius = (int) Math
+					.round((double) radius / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2));
+
+			oldGameWidth = DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2;
+			oldGameHeight = DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2;
+		}
+		
+		private double getScaledX() {
+			return scaledX;
+		}
+		
+		private double getScaledY() {
+			return scaledY;
+		}
+		
+		private void setRotation(double rotation) {
+			this.rotation = rotation;
+		}
+	}
+
+	@Override
+	public void updateRenderer() {
+		renderer.setRotation(rotation);
+		renderer.setX(x);
+		renderer.setY(y);
 	}
 }

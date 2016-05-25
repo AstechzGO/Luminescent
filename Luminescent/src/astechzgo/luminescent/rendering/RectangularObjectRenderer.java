@@ -3,7 +3,7 @@ package astechzgo.luminescent.rendering;
 import astechzgo.luminescent.textures.Texture;
 import astechzgo.luminescent.utils.DisplayUtils;
 
-public class RenderableRectangularGameObject extends RenderableQuadrilateralGameObject {
+public class RectangularObjectRenderer extends QuadrilateralObjectRenderer {
 
 	protected Texture texture;
 
@@ -22,7 +22,7 @@ public class RenderableRectangularGameObject extends RenderableQuadrilateralGame
 	protected int oldGameWidth = DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2;
 	protected int oldGameHeight = DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2;
 
-	public RenderableRectangularGameObject(double x, double y, double width, double height, Texture texture) {
+	public RectangularObjectRenderer(double x, double y, double width, double height, Texture texture) {
 		super(x, y + height, x + width, y + height, x + width, y, x, y, texture);
 		
 		this.texture = texture;
@@ -34,7 +34,7 @@ public class RenderableRectangularGameObject extends RenderableQuadrilateralGame
 		this.height = height;
 	}
 
-	public RenderableRectangularGameObject(double x, double y, double width, double height) {
+	public RectangularObjectRenderer(double x, double y, double width, double height) {
 		super(x, y + height, x + width, y + height, x + width, y, x, y);
 		
 		this.x = x;
@@ -55,5 +55,25 @@ public class RenderableRectangularGameObject extends RenderableQuadrilateralGame
 				
 		super.render();
 		
+	}
+
+	@Override
+	public double getX() {
+		return x;
+	}
+
+	@Override
+	public double getY() {
+		return y;
+	}
+
+	@Override
+	public void setX(double x) {
+		this.x = x;
+	}
+
+	@Override
+	public void setY(double y) {
+		this.y = y;
 	}
 }
