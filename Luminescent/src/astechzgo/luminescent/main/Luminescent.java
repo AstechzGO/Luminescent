@@ -35,7 +35,7 @@ public class Luminescent
 		
 		Sound.init();
 		
-		thePlayer.setTexture(new Animation("player.frame", 16));
+		thePlayer.getRenderer().setTexture(new Animation("player.frame", 16));
 		
 		if(Constants.getConstantAsBoolean(Constants.WINDOW_FULLSCREEN)) 
 		{	

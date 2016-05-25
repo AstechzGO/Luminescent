@@ -7,19 +7,19 @@ import org.lwjgl.opengl.GL11;
 
 import astechzgo.luminescent.textures.Texture;
 
-public class RenderableMultipleRenderedObjects implements IRenderedObject {
+public class MultipleObjectRenderer implements IObjectRenderer {
 
 	private Color colour = new Color(0, 0, 0);
 	
-	private List<IRenderedObject> objects;
+	private List<IObjectRenderer> objects;
 	
-	public RenderableMultipleRenderedObjects(List<IRenderedObject> objects) {
+	public MultipleObjectRenderer(List<IObjectRenderer> objects) {
 		this.objects = objects;
 	}
 
 	@Override
 	public void render() {
-		for(IRenderedObject object : objects) {
+		for(IObjectRenderer object : objects) {
 			GL11.glColor3f((float)colour.getRed() / 256, (float)colour.getGreen() / 256, (float)colour.getBlue() / 256);
 			object.render();
 		}
@@ -53,8 +53,8 @@ public class RenderableMultipleRenderedObjects implements IRenderedObject {
 	}
 
 	@Override
-	public boolean isTouching(IRenderedObject object) {
-		for(IRenderedObject i : objects) {
+	public boolean isTouching(IObjectRenderer object) {
+		for(IObjectRenderer i : objects) {
 			if(i.isTouching(object)) {
 				return true;
 			}
@@ -65,7 +65,7 @@ public class RenderableMultipleRenderedObjects implements IRenderedObject {
 
 	@Override
 	public boolean doesContain(double x, double y) {
-		for(IRenderedObject i : objects) {
+		for(IObjectRenderer i : objects) {
 			if(i.doesContain(x, y)) {
 				return true;
 			}
@@ -74,7 +74,30 @@ public class RenderableMultipleRenderedObjects implements IRenderedObject {
 		return false;
 	}
 	
-	public List<IRenderedObject> getAll() { 
+	public List<IObjectRenderer> getAll() { 
 		return objects;
+	}
+
+	@Override
+	public double getX() {
+		//Redundant
+		return 0;
+	}
+
+	@Override
+	public double getY() {
+		//Redundant
+		return 0;
+	}
+
+	@Override
+	public void setX(double x) {
+		//Redundant
+		
+	}
+
+	@Override
+	public void setY(double y) {
+		//Redundant
 	}
 }
