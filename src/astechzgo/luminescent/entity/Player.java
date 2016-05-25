@@ -16,6 +16,7 @@ import astechzgo.luminescent.textures.Texture;
 import astechzgo.luminescent.utils.Constants;
 import astechzgo.luminescent.utils.ControllerUtils;
 import astechzgo.luminescent.utils.DisplayUtils;
+import astechzgo.luminescent.utils.KeyboardUtils;
 
 import static astechzgo.luminescent.keypress.Key.*;
 
@@ -114,12 +115,12 @@ public class Player extends LivingEntity {
 		double m = (renderer.getScaledY() - y) / (renderer.getScaledX() - x);
 		
 		if(m == Double.POSITIVE_INFINITY) {
-			rotation = 90;
+			rotation = 0;
 			return rotation;
 		}
 		
 		if(m == Double.NEGATIVE_INFINITY) {
-			rotation = 270;
+			rotation = 180;
 			return rotation;
 		}
 		if(x == renderer.getScaledX() && y == renderer.getScaledY()) {
@@ -127,12 +128,12 @@ public class Player extends LivingEntity {
 		}
 
 		if(x < renderer.getScaledX())
-			rotation = 180 - Math.toDegrees(Math.atan(m));
+			rotation = 90 - Math.toDegrees(Math.atan(m));
 		else {
-			if(360 - Math.toDegrees(Math.atan(m)) > 360)
-				rotation = 360 - Math.toDegrees(Math.atan(m)) - 360;
+			if(270 - Math.toDegrees(Math.atan(m)) > 360)
+				rotation = 270 - Math.toDegrees(Math.atan(m)) - 360;
 			else
-				rotation = 360 - Math.toDegrees(Math.atan(m));
+				rotation = 270 - Math.toDegrees(Math.atan(m));
 		}
 		
 		return rotation;
@@ -158,10 +159,10 @@ public class Player extends LivingEntity {
 		if(!(KEYS_MOVEMENT_UP.isKeyDown()) == KEYS_MOVEMENT_DOWN.isKeyDown()) {
 			down = false;
 			
-			if(KEYS_MOVEMENT_UP.isKeyDown())
+			if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_UP))
 				tempAngle = 0;
 			else
-				tempAngle = 180;
+				tempAngle = 270;
 		}
 		if(!(KEYS_MOVEMENT_LEFT.isKeyDown() == KEYS_MOVEMENT_RIGHT.isKeyDown())) {
 			down = false;
@@ -169,21 +170,23 @@ public class Player extends LivingEntity {
 			if(KEYS_MOVEMENT_LEFT.isKeyDown())
 				if(tempAngle == -1)
 					tempAngle =  270;
-				else if(KEYS_MOVEMENT_UP.isKeyDown())
-					tempAngle = (tempAngle + 360 + 270) / 2;
+				else if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_UP))
+					tempAngle = (tempAngle + 360 + 270);
 				else
-					tempAngle = (tempAngle + 270) / 2;
+					tempAngle = (tempAngle + 180) / 2;
 			else
 				if(tempAngle == -1)
-					tempAngle =  90;
-				else 
-					tempAngle = (tempAngle + 90) / 2;
+					tempAngle =  0;
+				else if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_UP))
+					tempAngle = tempAngle / 2;
+				else
+					tempAngle = (tempAngle + 360) / 2;
 		}
 					
 		if(down)
 			speed = 0;		
 		
-		if(tempAngle == -1) tempAngle = 0;
+		if(tempAngle == -1) tempAngle = 90;
 		
 		double angle = setRotation() + tempAngle;
 		

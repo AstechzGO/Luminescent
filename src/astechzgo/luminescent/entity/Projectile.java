@@ -34,8 +34,8 @@ public class Projectile extends LivingEntity {
 		lastDelta = GLFW.glfwGetTime() * 1000;
 		rotation = Luminescent.thePlayer.setRotation();
 		
-		this.x = x;
-		this.y = y;
+		this.x = (int) (x + (22.5 + super.width / 2) * Math.cos(Math.toRadians(270 - rotation)));
+		this.y = (int) (y + (22.5 + super.height / 2)  * Math.sin(Math.toRadians(270 - rotation)));
 		
 		this.width = 5;
 		this.height = 5;
@@ -44,6 +44,7 @@ public class Projectile extends LivingEntity {
 	// Called every tick from Luminescent class, shoots bullet in direction
 	public void fireBullet(List<Double> verticalEdges, List<Double> horizontalEdges) {
 		double delta = ((GLFW.glfwGetTime() * 1000) - lastDelta);
+		
 		lastDelta = GLFW.glfwGetTime() * 1000;
 		
 		double speed = Projectile.speed * delta;
@@ -60,7 +61,7 @@ public class Projectile extends LivingEntity {
 		this.setAlive(true);
 		
 		for(double verticalEdge : verticalEdges) {
-			double projectedX = this.x + speed * Math.cos(Math.toRadians(rotation));
+			double projectedX = this.x + speed * Math.cos(Math.toRadians(rotation - 270));
 			
 			if(!(this.x > verticalEdge - width) && (projectedX >= verticalEdge - width)) {
 				bx = true;
@@ -87,10 +88,10 @@ public class Projectile extends LivingEntity {
 			this.setAlive(false);
 		}
 		else
-			this.x = this.x + speed * Math.cos(Math.toRadians(rotation));
+			this.x = this.x + speed * Math.cos(Math.toRadians(rotation - 270));
 		
 		for(double horizontalEdge : horizontalEdges) {
-			double projectedY = this.y - speed * Math.sin(Math.toRadians(rotation));
+			double projectedY = this.y - speed * Math.sin(Math.toRadians(rotation - 270));
 			
 			if(!(this.y > horizontalEdge - height) && (projectedY >= horizontalEdge - height)) {
 				by = true;
@@ -117,8 +118,7 @@ public class Projectile extends LivingEntity {
 			this.setAlive(false);
 		}
 		else
-			this.y = this.y - speed * Math.sin(Math.toRadians(rotation));		
-
+			this.y = this.y - speed * Math.sin(Math.toRadians(rotation - 270));		
 	}
 
 	public double getX() {
