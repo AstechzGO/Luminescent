@@ -10,26 +10,20 @@ Code sources that we have used:
 
 astechzgo.luminescent:
 	entity:
-		CircularEntity:
-			(Nothing)
 		Entity:
+			(Nothing)
+		LivingEntity:
 			(Nothing)
 		Player:
 			(Nothing)
-		PolygonalEntity:
-			(Nothing)
 		Projectile:
-			(Nothing)
-		QuadrilateralEntity:
-			(Nothing)
-		RectangularEntity:
 			(Nothing)
 	gameobject:
 		Room:
 			(Nothing)
-		RoomWalls:
-			(Nothing)
 	keypress:
+		Key:
+			(Nothing)
 		KeyPressGameplay:
 			(Nothing)
 		KeyPressUtils:
@@ -49,7 +43,12 @@ astechzgo.luminescent:
 	rendering:
 		Camera:
 			(Nothing)
-		IRenderedObject:
+		CircularObjectRenderer:
+			isTouching():
+				http://www.java-gaming.org/index.php/topic,10265.
+		IObjectRenderer:
+			(Nothing)
+		MultipleObjectRenderer:
 			(Nothing)
 		OpenGL:
 			Tick():
@@ -58,12 +57,7 @@ astechzgo.luminescent:
 				http://wiki.lwjgl.org/wiki/LWJGL_Basics_3_(The_Quad)#Example
 		Options:
 			(Nothing)
-		RenderableCircularGameObject:
-			isTouching():
-				http://www.java-gaming.org/index.php/topic,10265.
-		RenderableMultipleRenderedObjects:
-			(Nothing)
-		RenderableQuadrilateralGameObject:
+		QuadrilateralObjectRenderer:
 			isTouching():
 				http://www.java-gaming.org/index.php/topic,10265.
 			doesContain():
@@ -75,9 +69,11 @@ astechzgo.luminescent:
 						Answer:
 							Kornel Kisielewicz			(http://stackoverflow.com/users/233522/kornel-kisielewicz)
 							msrd0						(http://stackoverflow.com/users/3755692/msrd0)		
-		RenderableRectangularGameObject:
+		RectangularObjectRenderer:
 			(Nothing)	
 	sound:
+		Sound:
+			(Nothing)
 		SoundList:
 			(Nothing)
 		SoundManager:
