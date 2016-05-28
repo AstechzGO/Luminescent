@@ -8,6 +8,7 @@ import org.lwjgl.glfw.GLFW;
 
 import astechzgo.luminescent.utils.Constants;
 import astechzgo.luminescent.rendering.OpenGL;
+import astechzgo.luminescent.textures.Animation;
 import astechzgo.luminescent.textures.TextureList;
 import astechzgo.luminescent.utils.DisplayUtils;
 import astechzgo.luminescent.utils.LoggingUtils;
@@ -64,9 +65,6 @@ public class Main
 	public void Shutdown()
 	{
 		Luminescent.Shutdown();
-		
-		GLFW.glfwDestroyWindow(DisplayUtils.getHandle());
-		System.exit(0);
 	}
 	
 	/**

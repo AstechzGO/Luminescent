@@ -1,5 +1,9 @@
 package astechzgo.luminescent.keypress;
 
+import static astechzgo.luminescent.keypress.Key.KEYS_UTIL_EXIT;
+import static astechzgo.luminescent.keypress.Key.KEYS_UTIL_FULLSCREEN;
+import static astechzgo.luminescent.keypress.Key.KEYS_UTIL_NEXTWINDOW;
+import static astechzgo.luminescent.keypress.Key.KEYS_UTIL_SCREENSHOT;
 import static astechzgo.luminescent.utils.DisplayUtils.setDisplayMode;
 import static astechzgo.luminescent.utils.SystemUtils.newFile;
 
@@ -8,13 +12,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.opengl.GL11;
 
-import astechzgo.luminescent.main.Luminescent;
 import astechzgo.luminescent.sound.Sound;
 import astechzgo.luminescent.utils.DisplayUtils;
 import astechzgo.luminescent.utils.KeyboardUtils;
-
-import static astechzgo.luminescent.keypress.Key.*;
 
 public class KeyPressUtils {
 	
@@ -23,7 +25,7 @@ public class KeyPressUtils {
 	public static void checkUtils() {
 	
 		if(KEYS_UTIL_EXIT.isKeyDownOnce()) {
-			Luminescent.Shutdown();
+			GLFW.glfwSetWindowShouldClose(DisplayUtils.getHandle(), GL11.GL_TRUE);
 		}
 		if(KEYS_UTIL_FULLSCREEN.isKeyDownOnce()) {
 			if(DisplayUtils.isFullscreen()) {

@@ -3,6 +3,7 @@ package astechzgo.luminescent.main;
 import static astechzgo.luminescent.utils.DisplayUtils.setDisplayMode;
 
 import java.util.List;
+import java.util.Set;
 
 import org.lwjgl.glfw.GLFW;
 
@@ -51,7 +52,8 @@ public class Luminescent
 	public static void Shutdown()
 	{
 		GLFW.glfwDestroyWindow(DisplayUtils.getHandle());
-		System.exit(0);
+		Sound.cleanup();
+		Animation.cleanup();
 	}
 	
 	public static void Tick()
