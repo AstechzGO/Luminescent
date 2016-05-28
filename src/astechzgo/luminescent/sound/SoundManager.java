@@ -43,13 +43,6 @@ public class SoundManager {
 		} catch (SoundSystemException e) {
 			System.err.println("error linking with the CodecWav plug-in");
 		}
-
-		Runtime.getRuntime().addShutdownHook(new Thread() {
-			@Override
-			public void run() {
-				mySoundSystem.cleanup();
-			}
-		});
 	}
 
 	public SoundSystem getSoundSystem() {

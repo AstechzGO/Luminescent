@@ -10,6 +10,10 @@ public class Sound {
 		SoundList.initSoundList(soundManager);
 	}
 	
+	public static void cleanup() {
+		soundManager.getSoundSystem().cleanup();
+	}
+	
 	private final String sourcename;
 	private final String uniquename;
 	

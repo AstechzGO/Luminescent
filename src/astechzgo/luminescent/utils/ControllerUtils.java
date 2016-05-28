@@ -67,7 +67,7 @@ public class ControllerUtils {
 	
 	public static boolean isButtonPressed(String button) {
 		for(int joy : joysticks) {
-			List<List<List<Integer>>> buttonNumbers = getButtons(joy, button);
+			List<List<List<Double>>> buttonNumbers = getButtons(joy, button);
 			if(isButtonPressed(joy, buttonNumbers)) 
 				return true;
 			else
@@ -76,19 +76,19 @@ public class ControllerUtils {
 		return false;
 	}
 	
-	private static boolean isButtonPressed(int joystick, List<List<List<Integer>>> buttons) {
+	private static boolean isButtonPressed(int joystick, List<List<List<Double>>> buttons) {
 		if(buttons == null) {
 			return false;
 		}
 		
 		ByteBuffer GLFWButtons = GLFW.glfwGetJoystickButtons(joystick);
 		
-		for(List<Integer> rButtons : buttons.get(Platform.get().ordinal())) {
+		for(List<Double> rButtons : buttons.get(Platform.get().ordinal())) {
 			boolean areAllDown = true;
-			for(Integer button : rButtons) {
+			for(Double button : rButtons) {
 				if(button >= -1) {
 					try{
-						if(GLFWButtons.getInt(button) != GLFW.GLFW_PRESS) {
+						if(GLFWButtons.getInt(button.intValue()) != GLFW.GLFW_PRESS) {
 							areAllDown = false;
 						}
 					}
@@ -102,8 +102,8 @@ public class ControllerUtils {
 					
 					button = Math.abs(button);
 						   
-					int axis = (button / 10) - 1;
-					int value = (button - 10 - (axis * 10)) - 2;
+					int axis = (int)(button / 10) - 1;
+					double value = (button - 10 - (axis * 10)) - 2;
 						   
 					if(value == 0) value = -1;	// Because 0 means nothing
 					
@@ -128,8 +128,8 @@ public class ControllerUtils {
 		return false;
 	}
 	
-	private static List<List<List<Integer>>> getButtons(int joystick, String button) {
-		List<List<List<Integer>>> buttonNumbers = null;
+	private static List<List<List<Double>>> getButtons(int joystick, String button) {
+		List<List<List<Double>>> buttonNumbers = null;
 		
 		File dir = newFile("controllers");
 		File defaultConf = new File(dir, "defualt.properties");
@@ -172,10 +172,10 @@ public class ControllerUtils {
 		return buttonNumbers;
 	}
 	
-	private static List<List<List<Integer>>> parse(String string) {
-			List<List<List<Integer>>> buttons = new ArrayList<List<List<Integer>>>(3);
+	private static List<List<List<Double>>> parse(String string) {
+			List<List<List<Double>>> buttons = new ArrayList<List<List<Double>>>(3);
 			
-			List<List<Integer>> temp = new ArrayList<List<Integer>>();
+			List<List<Double>> temp = new ArrayList<List<Double>>();
 			buttons.add(0, temp);
 			buttons.add(1, temp);
 			buttons.add(2, temp);
@@ -191,11 +191,11 @@ public class ControllerUtils {
 				
 				int i = 0;
 				for (String s; (s = sc.findWithinHorizon("(?<=\\{).*?(?=\\})", 0)) != null; i++) {
-					buttons.get(q).add(i, new ArrayList<Integer>());
+					buttons.get(q).add(i, new ArrayList<Double>());
 					s = s.replace(" ", "");
 					String[] unparsed = s.split(",");
 					for(String uNum : unparsed) {
-						buttons.get(q).get(i).add(Integer.parseInt(uNum));
+						buttons.get(q).get(i).add(Double.parseDouble(uNum));
 					}
 				}
 				sc.close();

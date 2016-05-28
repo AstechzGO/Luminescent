@@ -11,6 +11,8 @@ public class Animation extends Texture {
 	
 	private static int idx = 0;
 	
+	private static final Timer t;
+	
 	static {		
 		TimerTask tt = new TimerTask() {
 			@Override
@@ -19,8 +21,12 @@ public class Animation extends Texture {
 			}
 		};
 		
-		Timer t = new Timer();
+		t = new Timer();
 		t.scheduleAtFixedRate(tt, 100, 100);
+	}
+	
+	public static void cleanup() {
+		t.cancel();
 	}
 	
 	private static void updateIndex() {
