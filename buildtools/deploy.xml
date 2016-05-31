@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="deploy_jar" name="Luminescent deployment tool by eandr127">
+    <!--this file was created by Eclipse Runnable JAR file Export Wizard-->
+    <!--ANT 1.7 is required-->
+    <!--define folder properties-->
+    <property name="dir.buildfile" value="."/>
+    <property name="dir.workspace" value="../"/>
+    <property name="dir.jarfile" value="${dir.workspace}"/>
+    <target depends="build" name="deploy_jar">
+		<echo>Luminescent deployment tool by eandr127</echo>
+        <jar destfile="${dir.jarfile}/Luminescent.jar">
+            <manifest>
+                <attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
+                <attribute name="Rsrc-Main-Class" value="astechzgo.luminescent.main.Main"/>
+                <attribute name="Class-Path" value="."/>
+                <attribute name="Rsrc-Class-Path" value="./ lwjgl.jar SoundSystem.jar CodecMP3.jar LibraryLWJGL3OpenAL.jar gson-2.5.jar"/>
+            </manifest>
+            <zipfileset src="jar-in-jar-loader.zip"/>
+            <fileset dir="${dir.jarfile}/bin"/>
+            <zipfileset dir="${dir.jarfile}/libs/lwjgl" includes="lwjgl.jar"/>
+            <zipfileset dir="${dir.jarfile}/libs/paulscode" includes="SoundSystem.jar"/>
+            <zipfileset dir="${dir.jarfile}/libs/paulscode" includes="CodecMP3.jar"/>
+            <zipfileset dir="${dir.jarfile}/libs/paulscode" includes="LibraryLWJGL3OpenAL.jar"/>
+            <zipfileset dir="${dir.jarfile}/libs/google" includes="gson-2.5.jar"/>
+			<fileset dir="${dir.jarfile}/libs/lwjgl/natives"/>
+        </jar>
+		<echo>The output jar has been placed in Luminescent's root folder</echo>
+    </target>
+</project>
