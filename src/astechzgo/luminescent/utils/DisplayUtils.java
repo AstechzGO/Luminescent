@@ -70,13 +70,12 @@ public class DisplayUtils {
 	public static int oldGameWidth = getDisplayWidth() - widthOffset * 2;
 	public static int oldGameHeight = getDisplayHeight() - heightOffset * 2;
 	
-	@SuppressWarnings("unused")
 	private static GLFWImage.Buffer icons;
 	
 	public static GLCapabilities caps;
 
 	static {
-		if ( glfwInit() != GL11.GL_TRUE )
+		if (!glfwInit())
 			throw new IllegalStateException("Unable to initialize glfw");
 		
 		monitor = glfwGetPrimaryMonitor();
@@ -218,8 +217,7 @@ public class DisplayUtils {
 
 			GLFW.glfwSetKeyCallback(handle, KeyboardUtils.KEY_CALLBACK);
 			
-//			Uncomment when updated to new LWJGL release
-//			GLFW.glfwSetWindowIcon(handle, icons);
+			GLFW.glfwSetWindowIcon(handle, icons);
 			
 			
 		} catch (Exception e) {
@@ -235,7 +233,7 @@ public class DisplayUtils {
 	 * @param nIcon The locations of the icons
 	 */
 	public static void setIcons(String[] nIcon) {
-		GLFWImage.Buffer icons = GLFWImage.callocBuffer(nIcon.length);
+		GLFWImage.Buffer icons = GLFWImage.calloc(nIcon.length);
 		
 		int i = 0;
 		for (String name : nIcon) {
@@ -358,8 +356,7 @@ public class DisplayUtils {
 		glfwMakeContextCurrent(handle);
 		caps = GL.createCapabilities();
 		
-//		Uncomment when updated to new LWJGL release
-//		GLFW.glfwSetWindowIcon(handle, icons);
+		GLFW.glfwSetWindowIcon(handle, icons);
 		
 		glfwSwapInterval(1);
 		glfwShowWindow(handle);

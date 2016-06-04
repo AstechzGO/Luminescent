@@ -1,34 +1,36 @@
 package astechzgo.luminescent.utils;
 
+import static astechzgo.luminescent.utils.SystemUtils.newFile;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Scanner;
 
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.system.APIUtil;
 import org.lwjgl.system.Platform;
-
-import static astechzgo.luminescent.utils.SystemUtils.newFile;
 
 public class ControllerUtils {
 	
 	public static List<Integer> joysticks = new ArrayList<Integer>();
 	
-	public static final List<Integer> JOYSTICK_SLOT_VALUES = getAllJoysticks();
+	public static final Map<Integer, String> JOYSTICK_SLOT_VALUES = APIUtil.apiClassTokens((field, value) -> field.getName().startsWith("GLFW_JOYSTICK_"), null, GLFW.class);
 	
 	public static void updateJoysticks() {
-		for(int joystick : JOYSTICK_SLOT_VALUES) {
-			if(GLFW.glfwJoystickPresent(joystick) == 1) {
+		for(Entry<Integer, String> joystickEntry : JOYSTICK_SLOT_VALUES.entrySet()) {
+			int joystick = joystickEntry.getKey();
+			if(GLFW.glfwJoystickPresent(joystick)) {
 				if(!joysticks.contains(joystick)) {
 					joysticks.add(joystick);
 				}
@@ -39,30 +41,6 @@ public class ControllerUtils {
 				}
 			}
 		}
-	}
-	
-	private static List<Integer> getAllJoysticks() {
-		// Use reflection to find out key names
-		Field[] fields = GLFW.class.getFields();
-						
-		List<Integer> joysticks = new ArrayList<Integer>();
-		try {
-			for ( Field field : fields ) {
-				if ( Modifier.isStatic(field.getModifiers())
-					&& Modifier.isPublic(field.getModifiers())
-					&& Modifier.isFinal(field.getModifiers())
-					&& field.getType().equals(int.class)
-					&& field.getName().startsWith("GLFW_JOYSTICK_") ) {
-									
-					joysticks.add(field.getInt(null));
-				}
-			}
-			return joysticks;
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-		}
-		return null;	
 	}
 	
 	public static boolean isButtonPressed(String button) {

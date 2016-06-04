@@ -2,21 +2,19 @@ package astechzgo.luminescent.utils;
 
 import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Scanner;
 
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWKeyCallback;
+import org.lwjgl.system.APIUtil;
 
 public class KeyboardUtils {
 	
-	private static final String[] keyName = genKeyNames();
-	private static final Map<String, Integer> keyMap = genKeyMap();
+	private static final Map<Integer, String> KEY_CODES = APIUtil.apiClassTokens((field, value) -> field.getName().startsWith("GLFW_KEY_"), null, GLFW.class);
 	
 	private static final List<Integer> keysPressed = new ArrayList<Integer>();
 	
@@ -32,82 +30,27 @@ public class KeyboardUtils {
 		}
 	};
 	
-	static{
+	static {
+		for (Entry<Integer, String> entry : KEY_CODES.entrySet()) {
+            entry.setValue(entry.getValue().substring(9));
+        }
+		
 		GLFW.glfwSetKeyCallback(DisplayUtils.getHandle(), KEY_CALLBACK);
 	}
 	
-	private static String[] genKeyNames() {
-		// Use reflection to find out key names
-		Field[] fields = GLFW.class.getFields();
-		
-		List<String> keys = new ArrayList<String>();
-		try {
-			for ( Field field : fields ) {
-				if ( Modifier.isStatic(field.getModifiers())
-				     && Modifier.isPublic(field.getModifiers())
-				     && Modifier.isFinal(field.getModifiers())
-				     && field.getType().equals(int.class)
-				     && field.getName().startsWith("GLFW_KEY_")
-				     && !field.getName().endsWith("WIN") ) { /* Don't use deprecated names */
-					
-					String name = field.getName().substring(9);
-					
-					keys.add(name);
-				}
-
-			}
-			return keys.toArray(new String[0]);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	private static Map<String, Integer> genKeyMap() {
-		// Use reflection to find out key names
-		Field[] fields = GLFW.class.getFields();
-		
-		Map<String, Integer> keyMap = null;
-		
-		List<String> names = new ArrayList<String>();
-		List<Integer> keys = new ArrayList<Integer>();
-		
-		try {
-			for ( Field field : fields ) {
-				if ( Modifier.isStatic(field.getModifiers())
-				     && Modifier.isPublic(field.getModifiers())
-				     && Modifier.isFinal(field.getModifiers())
-				     && field.getType().equals(int.class)
-				     && field.getName().startsWith("GLFW_KEY_")
-				     && !field.getName().endsWith("WIN") ) { /* Don't use deprecated names */
-
-					int key = field.getInt(null);
-					String name = field.getName().substring(9);
-					
-					names.add(name);
-					keys.add(key);
-					
-					//keyMap.put(name, key);
-				}
-			}
-			keyMap = new HashMap<String, Integer>(names.size());
-			
-			for(int i = 0; i < keys.size(); i++) {
-				keyMap.put(names.get(i), keys.get(i));
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return keyMap;
-	}
-	
 	private static int getKeyNumber(String keyname) {
-		return keyMap.get(keyname);
+		for (Entry<Integer, String> entry : KEY_CODES.entrySet()) {
+            if (entry.getValue().equals(keyname)) {
+                return entry.getKey();
+            }
+        }
+		
+		return GLFW.GLFW_KEY_UNKNOWN;
 	}
 	
 	@SuppressWarnings("unused")
 	private static String getKeyName(int keynumber) {
-		return keyName[keynumber];
+		return KEY_CODES.get(keynumber);
 	}
 	
 	private static boolean isKeyDown(int key) {

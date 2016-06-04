@@ -3,9 +3,10 @@ package astechzgo.luminescent.main;
 import static astechzgo.luminescent.utils.DisplayUtils.setDisplayMode;
 
 import java.util.List;
-import java.util.Set;
 
+import org.lwjgl.glfw.Callbacks;
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.system.MemoryUtil;
 
 import astechzgo.luminescent.entity.Player;
 import astechzgo.luminescent.gameobject.Room;
@@ -51,6 +52,7 @@ public class Luminescent
 	
 	public static void Shutdown()
 	{
+		Callbacks.glfwFreeCallbacks(DisplayUtils.getHandle());
 		GLFW.glfwDestroyWindow(DisplayUtils.getHandle());
 		Sound.cleanup();
 		Animation.cleanup();
