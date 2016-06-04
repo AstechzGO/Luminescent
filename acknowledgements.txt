@@ -111,14 +111,8 @@ astechzgo.luminescent:
 		Constants:
 			https://github.com/FRC2994/FRC-2015/blob/master/src/ca/team2994/frc/utils/Constants.java
 		ControllerUtils:
-			getAllJoysticks():
-				https://github.com/LWJGL/lwjgl/blob/master/src/java/org/lwjgl/input/Keyboard.java
-				StackOverflow:
-					http://stackoverflow.com/questions/16383898/find-words-in-string-surrounded-by-and:
-						Question:
-							Emil Adz					(http://stackoverflow.com/users/1561247/emil-adz)
-						Answer:
-							Evgeniy Dorofeev			(http://stackoverflow.com/users/1831293/evgeniy-dorofeev)
+			JOYSTICK_SLOT_VALUES:
+				https://github.com/LWJGL/lwjgl3/blob/master/modules/core/src/test/java/org/lwjgl/demo/glfw/Events.java
 		DisplayUtils:
 			static-block:
 				https://github.com/kappaOne/lwjglx/blob/master/src/org/lwjglx/opengl/Display.java
@@ -141,10 +135,8 @@ astechzgo.luminescent:
 		EConsoleHandler:
 			(Nothing)
 		KeyboardUtils:
-			genKeyNames():
-				https://github.com/LWJGL/lwjgl/blob/master/src/java/org/lwjgl/input/Keyboard.java
-			genKeyMap():
-				https://github.com/LWJGL/lwjgl/blob/master/src/java/org/lwjgl/input/Keyboard.java
+			KEY_CODES:
+				https://github.com/LWJGL/lwjgl3/blob/master/modules/core/src/test/java/org/lwjgl/demo/glfw/Events.java
 			getKeyCodes():
 				StackOverflow:
 					http://stackoverflow.com/questions/16383898/find-words-in-string-surrounded-by-and:
