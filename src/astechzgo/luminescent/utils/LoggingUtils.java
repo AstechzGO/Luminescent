@@ -24,7 +24,6 @@ public class LoggingUtils {
 
 		@Override
 		public String format(LogRecord record) {
-			// TODO Auto-generated method stub
 			boolean debug = false;
 			if(record.getLevel() == Level.CONFIG) {
 				debug = true;

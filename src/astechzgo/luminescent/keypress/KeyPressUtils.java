@@ -12,7 +12,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.lwjgl.glfw.GLFW;
-import org.lwjgl.opengl.GL11;
 
 import astechzgo.luminescent.sound.Sound;
 import astechzgo.luminescent.utils.DisplayUtils;
@@ -25,7 +24,7 @@ public class KeyPressUtils {
 	public static void checkUtils() {
 	
 		if(KEYS_UTIL_EXIT.isKeyDownOnce()) {
-			GLFW.glfwSetWindowShouldClose(DisplayUtils.getHandle(), GL11.GL_TRUE);
+			GLFW.glfwSetWindowShouldClose(DisplayUtils.getHandle(), true);
 		}
 		if(KEYS_UTIL_FULLSCREEN.isKeyDownOnce()) {
 			if(DisplayUtils.isFullscreen()) {
