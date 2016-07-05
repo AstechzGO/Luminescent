@@ -34,6 +34,7 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.glfw.GLFWVidMode.Buffer;
+import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLCapabilities;
@@ -44,7 +45,7 @@ public class DisplayUtils {
 	
 	private static long handle;
 	
-	private static boolean displayResizable = false;
+	private static boolean displayResizable = true;
 	private static boolean displayFullscreen = false;
 	
 	private static DisplayMode mode = new DisplayMode(848, 477);
@@ -216,9 +217,11 @@ public class DisplayUtils {
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
 			GLFW.glfwSetKeyCallback(handle, KeyboardUtils.KEY_CALLBACK);
+			GLFW.glfwSetWindowSizeCallback(handle, RESIZED_CALLBACK);
 			
 			GLFW.glfwSetWindowIcon(handle, icons);
 			
+			GLFW.glfwSetWindowAspectRatio(handle, 16, 9);
 			
 		} catch (Exception e) {
 			System.out.println("Unable to setup mode " + width + "x" + height
@@ -357,6 +360,10 @@ public class DisplayUtils {
 		caps = GL.createCapabilities();
 		
 		GLFW.glfwSetWindowIcon(handle, icons);
+		
+		GLFW.glfwSetWindowSizeCallback(handle, RESIZED_CALLBACK);
+		
+		GLFW.glfwSetWindowAspectRatio(handle, 16, 9);
 		
 		glfwSwapInterval(1);
 		glfwShowWindow(handle);
@@ -523,6 +530,56 @@ public class DisplayUtils {
 		if(heightOffset != 0) {
 			RenderingUtils.RenderQuad(0, displayHeight - heightOffset, 0, displayHeight, displayWidth, displayHeight, displayWidth, displayHeight - heightOffset);
 			RenderingUtils.RenderQuad(0, 0, 0, heightOffset, displayWidth, heightOffset, displayWidth, 0);
+		}
+	}
+	
+	public static final GLFWWindowSizeCallback RESIZED_CALLBACK = new GLFWWindowSizeCallback() {
+
+		@Override
+		public void invoke(long window, int width, int height) {
+			DisplayUtils.changeSize();
+		}
+		
+	};
+	
+	public static void changeSize() {
+
+		IntBuffer w = BufferUtils.createIntBuffer(1);	
+		IntBuffer h = BufferUtils.createIntBuffer(1);
+		GLFW.glfwGetWindowSize(handle, w, h);
+		int width = w.get(0);
+		int height = h.get(0);
+		
+		w.clear();
+		h.clear();
+		
+		// return if requested DisplayMode is already set
+		if ((displayWidth == width)
+				&& (displayHeight == height)) {
+			return;
+		}
+
+		try {
+			DisplayMode targetDisplayMode = new DisplayMode(width, height);
+
+			mode = targetDisplayMode;
+
+	        displayWidth = mode.WIDTH;
+	        displayHeight = mode.HEIGHT;
+	        
+	        widthOffset = Math.max(0, (displayWidth - (displayHeight / 9 * 16)) / 2);
+			if(widthOffset == 0) heightOffset = Math.max(0, (displayHeight - (displayWidth / 16 * 9)) / 2);
+
+	        GL11.glMatrixMode(GL11.GL_PROJECTION);
+			GL11.glLoadIdentity();
+			GL11.glOrtho(0, mode.WIDTH, 0, mode.HEIGHT, 1, -1);
+
+			GL11.glViewport(0, 0, DisplayUtils.getDisplayWidth(), DisplayUtils.getDisplayHeight());
+			
+			
+		} catch (Exception e) {
+			System.out.println("Unable to setup mode " + width + "x" + height + e);
+			e.printStackTrace();
 		}
 	}
 }
