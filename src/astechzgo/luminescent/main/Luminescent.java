@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.lwjgl.glfw.Callbacks;
 import org.lwjgl.glfw.GLFW;
-import org.lwjgl.system.MemoryUtil;
 
 import astechzgo.luminescent.entity.Player;
 import astechzgo.luminescent.gameobject.Room;
