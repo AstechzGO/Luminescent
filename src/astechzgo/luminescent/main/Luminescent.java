@@ -71,11 +71,11 @@ public class Luminescent
 		thePlayer.move(rooms);
 		thePlayer.render();
 		
-		DisplayUtils.renderResolutionBorder();
-		
 		KeyPressUtils.checkUtils();		
 		KeyPressGameplay.checkGameActions(thePlayer, rooms);
 		
 		ControllerUtils.updateJoysticks();
+		
+		DisplayUtils.renderResolutionBorder();
 	}
 }
