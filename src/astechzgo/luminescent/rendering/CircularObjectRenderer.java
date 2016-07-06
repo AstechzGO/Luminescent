@@ -56,7 +56,7 @@ public class CircularObjectRenderer implements IObjectRenderer {
 	public void render() {
 		resize();
 
-		GL11.glColor3f((float) colour.getRed() / 256, (float) colour.getGreen() / 256, (float) colour.getBlue() / 256);
+		GL11.glColor4f((float) colour.getRed() / 256, (float) colour.getGreen() / 256, (float) colour.getBlue() / 256, (float) colour.getAlpha() / 256);
 
 		if (texture != null) {
 			RenderingUtils.RenderCircle(scaledX, scaledY, scaledRadius, pointSeperation, rotation, texture);
