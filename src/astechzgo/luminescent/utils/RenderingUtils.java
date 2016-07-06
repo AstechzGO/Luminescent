@@ -82,7 +82,8 @@ public class RenderingUtils
      * Draws a texture region with the currently bound texture on specified
      * coordinates.
      */
-    public static void DrawTextureRegion(int x, int y, int regX, int regY, int regWidth, int regHeight, Color colour, Texture texture) {
+    public static void DrawTextureRegion(int x, int y, int regX, int regY, int regWidth, int regHeight, Color colour, Texture texture)
+    {
         /* Vertex positions */
         int vAX = x;
         int vAY = y + regHeight;
@@ -110,7 +111,8 @@ public class RenderingUtils
      * Draws a texture region with the currently bound texture on specified
      * coordinates.
      */
-    public static void DrawTextureRegion(int vAX, int vAY, int vBX, int vBY, int vCX, int vCY, int vDX, int vDY, float tAX, float tAY, float tBX, float tBY, float tCX, float tCY, float tDX, float tDY, Color colour, Texture texture) {
+    public static void DrawTextureRegion(int vAX, int vAY, int vBX, int vBY, int vCX, int vCY, int vDX, int vDY, float tAX, float tAY, float tBX, float tBY, float tCX, float tCY, float tDX, float tDY, Color colour, Texture texture)
+    {
     	if(texture.getAsTexture() != 0) 
 		{
 			GL11.glEnable(GL11.GL_TEXTURE_2D);

@@ -50,6 +50,8 @@ import astechzgo.luminescent.utils.RenderingUtils;
 public class Font {
 	
 	public static final String TEXTURE_NAME = "Glyph-Atlas";
+	
+	public static final Font NORMAL_FONT = new Font();
 
     /**
      * Contains the glyphs for each char.
@@ -65,6 +67,8 @@ public class Font {
      */
     private int fontHeight;
 
+    private final java.awt.Font font;
+    
     /**
      * Creates a default antialiased font with monospaced glyphs and default
      * size 16.
@@ -147,6 +151,11 @@ public class Font {
      * @param antiAlias Wheter the font should be antialiased or not
      */
     public Font(java.awt.Font font, boolean antiAlias) {
+    	if(font.getSize() == 0)
+    		font = font.deriveFont(1.0f);
+    		
+    	this.font = font;
+    	
         glyphs = new HashMap<>();
         texture = createFontTexture(font, antiAlias);
     }
@@ -414,5 +423,17 @@ public class Font {
      */
     public void drawText(CharSequence text, int x, int y) {
         drawText(text, x, y, Color.WHITE);
+    }
+    
+    public String getFontName() {
+    	return font.getFontName();
+    }
+    
+    public int getFontStyle() {
+    	return font.getStyle();
+    }
+    
+    public int getFontSize() {
+    	return font.getSize();
     }
 }
