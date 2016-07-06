@@ -20,7 +20,7 @@ public class MultipleObjectRenderer implements IObjectRenderer {
 	@Override
 	public void render() {
 		for(IObjectRenderer object : objects) {
-			GL11.glColor3f((float)colour.getRed() / 256, (float)colour.getGreen() / 256, (float)colour.getBlue() / 256);
+			GL11.glColor4f((float) colour.getRed() / 256, (float) colour.getGreen() / 256, (float) colour.getBlue() / 256, (float) colour.getAlpha() / 256);
 			object.render();
 		}
 

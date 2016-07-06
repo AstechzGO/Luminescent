@@ -117,7 +117,7 @@ public class RenderingUtils
 		{
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
 			
-			GL11.glColor3f((float) colour.getRed() / 256, (float) colour.getGreen() / 256, (float) colour.getBlue() / 256);
+			GL11.glColor4f((float) colour.getRed() / 256, (float) colour.getGreen() / 256, (float) colour.getBlue() / 256, (float) colour.getAlpha() / 256);
 			
 			GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getAsTexture());
 			
