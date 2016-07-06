@@ -23,15 +23,19 @@ public class Texture {
 	private final String name;
 	
 	public Texture(String textureName, boolean slick) {
+		this(textureName, slick, toImage(textureName));
+	}
+	
+	public Texture(String textureName, boolean slick, Image asImage) {
 		name = textureName;
 		
 		if(!slick) {
 			textureNumber = -1;
-			asBufferedImage = toBufferedImage(textureName);
+			asBufferedImage = toBufferedImage(asImage);
 			asByteBuffer = toByteBuffer(asBufferedImage);
 		}
 		else {
-			asBufferedImage = toBufferedImage(textureName);
+			asBufferedImage = toBufferedImage(asImage);
 			asByteBuffer = toByteBuffer(asBufferedImage);
 			textureNumber = loadTexture();
 		}
@@ -65,11 +69,11 @@ public class Texture {
         return buffer;
 	}
 	
-	private BufferedImage toBufferedImage(String imageLoc) {
+	private static Image toImage(String imageLoc) {
 		imageLoc = imageLoc.replaceAll("\\.", "/");
-		Image img = new ImageIcon(this.getClass().getResource(
+		Image img = new ImageIcon(Texture.class.getResource(
 				"/resources/textures/" + imageLoc + ".png")).getImage();
-		return toBufferedImage(img);
+		return img;
 	}
 	
 	public BufferedImage getAsBufferedImage() {
