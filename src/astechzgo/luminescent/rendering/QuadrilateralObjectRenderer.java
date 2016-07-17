@@ -5,6 +5,7 @@ import java.awt.geom.Line2D;
 
 import org.lwjgl.opengl.GL11;
 
+import astechzgo.luminescent.main.Luminescent;
 import astechzgo.luminescent.textures.Texture;
 import astechzgo.luminescent.utils.DisplayUtils;
 import astechzgo.luminescent.utils.RenderingUtils;
@@ -76,9 +77,13 @@ public class QuadrilateralObjectRenderer implements IObjectRenderer {
 	public void render() {
 		resize();
 
-		GL11.glColor3f((float) colour.getRed() / 256, (float) colour.getGreen() / 256, (float) colour.getBlue() / 256);
+		GL11.glColor3f((float) colour.getRed() / 255, (float) colour.getGreen() / 255, (float) colour.getBlue() / 255);
+		
 		if (texture != null) {
+			Luminescent.defaultShader.applyShader();
+			Luminescent.defaultShader.updateTransMatrix();
 			RenderingUtils.RenderQuad(scaledAX, scaledAY, scaledBX, scaledBY, scaledCX, scaledCY, scaledDX, scaledDY, texture);
+			Luminescent.defaultShader.withdrawShader();
 		} 
 		else {
 			RenderingUtils.RenderQuad(scaledAX, scaledAY, scaledBX, scaledBY, scaledCX, scaledCY, scaledDX, scaledDY);
