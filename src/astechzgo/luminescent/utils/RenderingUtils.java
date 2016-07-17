@@ -1,5 +1,7 @@
 package astechzgo.luminescent.utils;
 
+import java.awt.Color;
+
 import org.lwjgl.opengl.GL11;
 
 import astechzgo.luminescent.textures.Texture;
@@ -75,4 +77,64 @@ public class RenderingUtils
 	    
 	    GL11.glDisable(GL11.GL_TEXTURE_2D);
 	}
+	
+    /**
+     * Draws a texture region with the currently bound texture on specified
+     * coordinates.
+     */
+    public static void DrawTextureRegion(int x, int y, int regX, int regY, int regWidth, int regHeight, Color colour, Texture texture)
+    {
+        /* Vertex positions */
+        int vAX = x;
+        int vAY = y + regHeight;
+        int vBX = x + regWidth;
+        int vBY = y + regHeight;
+        int vCX = x + regWidth;
+        int vCY = y;
+        int vDX = x;
+        int vDY = y;
+
+        /* Texture coordinates */
+        float tAX = (float) (regX) / texture.getAsBufferedImage().getWidth();
+        float tAY = (float) (regY + regHeight) / texture.getAsBufferedImage().getHeight();
+        float tBX = (float) (regX + regWidth) / texture.getAsBufferedImage().getWidth();
+        float tBY = (float) (regY + regHeight) / texture.getAsBufferedImage().getHeight();
+        float tCX = (float) (regX + regWidth) / texture.getAsBufferedImage().getWidth();
+        float tCY = (float) (regY) / texture.getAsBufferedImage().getHeight();
+        float tDX = (float) (regX) / texture.getAsBufferedImage().getWidth();
+        float tDY = (float) (regY) / texture.getAsBufferedImage().getHeight();
+        
+        DrawTextureRegion(vAX, vAY, vBX, vBY, vCX, vCY, vDX, vDY, tAX, tAY, tBX, tBY, tCX, tCY, tDX, tDY, colour, texture);
+    }
+
+    /**
+     * Draws a texture region with the currently bound texture on specified
+     * coordinates.
+     */
+    public static void DrawTextureRegion(int vAX, int vAY, int vBX, int vBY, int vCX, int vCY, int vDX, int vDY, float tAX, float tAY, float tBX, float tBY, float tCX, float tCY, float tDX, float tDY, Color colour, Texture texture)
+    {
+    	if(texture.getAsTexture() != 0) 
+		{
+			GL11.glEnable(GL11.GL_TEXTURE_2D);
+			
+			GL11.glColor4f((float) colour.getRed() / 256, (float) colour.getGreen() / 256, (float) colour.getBlue() / 256, (float) colour.getAlpha() / 256);
+			
+			GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getAsTexture());
+			
+			GL11.glBegin(GL11.GL_QUADS);
+			
+			GL11.glTexCoord2f(tAX, tAY);
+			GL11.glVertex2d(vAX, vAY);
+			GL11.glTexCoord2f(tBX, tBY);
+			GL11.glVertex2d(vBX, vBY);
+			GL11.glTexCoord2f(tCX, tCY);
+			GL11.glVertex2d(vCX, vCY);
+			GL11.glTexCoord2f(tDX, tDY);
+			GL11.glVertex2d(vDX, vDY);
+			
+			GL11.glEnd();
+			
+			GL11.glDisable(GL11.GL_TEXTURE_2D);
+		}
+    }
 }
