@@ -57,7 +57,7 @@ public class CircularObjectRenderer implements IObjectRenderer {
 	public void render() {
 		resize();
 
-		GL11.glColor3f((float) colour.getRed() / 255, (float) colour.getGreen() / 255, (float) colour.getBlue() / 255);
+		GL11.glColor4f((float) colour.getRed() / 255, (float) colour.getGreen() / 255, (float) colour.getBlue() / 255, (float) colour.getAlpha() / 255);
 
 		if (texture != null) {
 			Luminescent.defaultShader.applyShader();

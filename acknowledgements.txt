@@ -92,6 +92,11 @@ astechzgo.luminescent:
 				http://www.paulscode.com/tutorials/SoundSystem/SoundSystem.pdf
 			loadSound():
 				http://www.paulscode.com/tutorials/SoundSystem/SoundSystem.pdf
+	text:
+		Font:
+			https://github.com/SilverTiger/lwjgl3-tutorial/blob/master/src/silvertiger/tutorial/lwjgl/text/Font.java
+		Glyph:
+			https://github.com/SilverTiger/lwjgl3-tutorial/blob/master/src/silvertiger/tutorial/lwjgl/text/Glyph.java
 	textures:
 		Animation:
 			(Nothing)
@@ -194,6 +199,8 @@ astechzgo.luminescent:
 							ClickerMonkey				(http://stackoverflow.com/users/914155/clickermonkey)
 							Christian Rau				(http://stackoverflow.com/users/743214/christian-rau)
 				http://wiki.lwjgl.org/wiki/The_Quad_textured
+			DrawTextureRegion():
+				https://github.com/SilverTiger/lwjgl3-tutorial/blob/master/src/silvertiger/tutorial/lwjgl/graphic/Renderer.java#L351
 		SystemUtils:
 			setWorkingDirectory():
 				StackOverflow:
