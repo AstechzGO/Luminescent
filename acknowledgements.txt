@@ -46,6 +46,8 @@ astechzgo.luminescent:
 		CircularObjectRenderer:
 			isTouching():
 				http://www.java-gaming.org/index.php/topic,10265.
+		FrameBuffer:
+			https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/graphics/glutils/GLFrameBuffer.java
 		IObjectRenderer:
 			(Nothing)
 		MultipleObjectRenderer:
