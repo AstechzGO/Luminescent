@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.lwjgl.glfw.GLFW;
 
+import astechzgo.luminescent.coordinates.GameCoordinates;
+import astechzgo.luminescent.coordinates.WindowCoordinates;
 import astechzgo.luminescent.main.Luminescent;
 import astechzgo.luminescent.rendering.IObjectRenderer;
 import astechzgo.luminescent.rendering.RectangularObjectRenderer;
@@ -17,9 +19,6 @@ public class Projectile extends LivingEntity {
 	private double lastDelta;
 	private final double rotation;
 	
-	private double x;
-	private double y;
-	
 	private final double width;
 	private final double height;
 	
@@ -27,8 +26,8 @@ public class Projectile extends LivingEntity {
 
 	// The Class
 	// Constructor for projectile
-	public Projectile(double x, double y) {
-		renderer = new RectangularObjectRenderer(x, y, 5, 5);
+	public Projectile(GameCoordinates coordinates) {
+		renderer = new RectangularObjectRenderer(new WindowCoordinates(coordinates), 5, 5);
 		renderer.setColour(new Color(0.5f, 0.6f, 0.2f));
 		
 		lastDelta = GLFW.glfwGetTime() * 1000;
@@ -37,8 +36,7 @@ public class Projectile extends LivingEntity {
 		this.width = 5;
 		this.height = 5;
 		
-		this.x = (int) (x + (22.5 + width / 2) * Math.cos(Math.toRadians(270 - rotation)));
-		this.y = (int) (y + (22.5 + height / 2)  * Math.sin(Math.toRadians(270 - rotation)));
+		this.coordinates = new GameCoordinates(coordinates.getGameCoordinatesX() + (22.5 + width / 2) * Math.cos(Math.toRadians(270 - rotation)), coordinates.getGameCoordinatesZ() + (22.5 + height / 2)  * Math.sin(Math.toRadians(270 - rotation)));
 	}
 
 	// Called every tick from Luminescent class, shoots bullet in direction
@@ -50,20 +48,20 @@ public class Projectile extends LivingEntity {
 		double speed = Projectile.speed * delta;
 		
 		double x = 0;
-		double y = 0;
+		double z = 0;
 		
 		boolean bx = false;
-		boolean by = false;
+		boolean bz = false;
 		
 		boolean initX = true;
-		boolean initY = true;
+		boolean initZ = true;
 		
 		this.setAlive(true);
 		
 		for(double verticalEdge : verticalEdges) {
-			double projectedX = this.x + speed * Math.cos(Math.toRadians(rotation - 270));
+			double projectedX = getCoordinates().getGameCoordinatesX() + speed * Math.cos(Math.toRadians(rotation - 270));
 			
-			if(!(this.x > verticalEdge - width) && (projectedX >= verticalEdge - width)) {
+			if(!(getCoordinates().getGameCoordinatesX() > verticalEdge - width) && (projectedX >= verticalEdge - width)) {
 				bx = true;
 				
 				double temp = verticalEdge - width;
@@ -72,7 +70,7 @@ public class Projectile extends LivingEntity {
 					initX = false;
 				}
 			}
-			else if(!(this.x < verticalEdge) && (projectedX <= verticalEdge)) {
+			else if(!(getCoordinates().getGameCoordinatesX() < verticalEdge) && (projectedX <= verticalEdge)) {
 				bx = true;
 				
 				double temp = verticalEdge;
@@ -84,49 +82,47 @@ public class Projectile extends LivingEntity {
 		}
 		
 		if(bx) {
-			this.x = x;
+			double tempz = getCoordinates().getGameCoordinatesZ();
+			coordinates = new GameCoordinates(x, tempz);
 			this.setAlive(false);
 		}
-		else
-			this.x = this.x + speed * Math.cos(Math.toRadians(rotation - 270));
+		else {
+			double tempz = getCoordinates().getGameCoordinatesZ();
+			coordinates = new GameCoordinates(getCoordinates().getGameCoordinatesX() + speed * Math.cos(Math.toRadians(rotation - 270)), tempz);
+		}
 		
 		for(double horizontalEdge : horizontalEdges) {
-			double projectedY = this.y - speed * Math.sin(Math.toRadians(rotation - 270));
+			double projectedZ = this.getCoordinates().getGameCoordinatesZ() - speed * Math.sin(Math.toRadians(rotation - 270));
 			
-			if(!(this.y > horizontalEdge - height) && (projectedY >= horizontalEdge - height)) {
-				by = true;
+			if(!(getCoordinates().getGameCoordinatesZ() > horizontalEdge - height) && (projectedZ >= horizontalEdge - height)) {
+				bz = true;
 				
 				double temp = horizontalEdge - height;
-				if(temp > y || initY) {
-					y = temp;
-					initY = false;
+				if(temp > z || initZ) {
+					z = temp;
+					initZ = false;
 				}
 			}
-			else if(!(this.y < horizontalEdge) && (projectedY <= horizontalEdge)) {
-				by = true;
+			else if(!(getCoordinates().getGameCoordinatesZ() < horizontalEdge) && (projectedZ <= horizontalEdge)) {
+				bz = true;
 				
 				double temp = horizontalEdge;
-				if(temp > y || initY) {
-					y = temp;
-					initY = false;
+				if(temp > z || initZ) {
+					z = temp;
+					initZ = false;
 				}
 			}					
 		}
 		
-		if(by) {
-			this.y = y;
+		if(bz) {
+			double tempx = getCoordinates().getGameCoordinatesX();
+			coordinates = new GameCoordinates(tempx, z);
 			this.setAlive(false);
 		}
-		else
-			this.y = this.y - speed * Math.sin(Math.toRadians(rotation - 270));		
-	}
-
-	public double getX() {
-		return x;
-	}
-
-	public double getY() {
-		return y;
+		else {
+			double tempx = getCoordinates().getGameCoordinatesX();
+			coordinates = new GameCoordinates(tempx, getCoordinates().getGameCoordinatesZ() - speed * Math.sin(Math.toRadians(rotation - 270)));	
+		}
 	}
 
 	@Override
@@ -136,7 +132,6 @@ public class Projectile extends LivingEntity {
 
 	@Override
 	public void updateRenderer() {
-		renderer.setX(x);
-		renderer.setY(y);
+		renderer.setCoordinates(new WindowCoordinates(coordinates));
 	}
 }

@@ -11,6 +11,7 @@ import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
+import astechzgo.luminescent.coordinates.ScaledWindowCoordinates;
 import astechzgo.luminescent.textures.Texture;
 
 public class RenderingUtils {
@@ -20,7 +21,16 @@ public class RenderingUtils {
 	 * |QD|
 	 * D--C
 	 */
-	public static void RenderQuad(int aX, int aY, int bX, int bY, int cX, int cY, int dX, int dY) {
+	public static void RenderQuad(ScaledWindowCoordinates a, ScaledWindowCoordinates b, ScaledWindowCoordinates c, ScaledWindowCoordinates d) {
+		int aX = (int) a.getScaledWindowCoordinatesX();
+		int aY = (int) a.getScaledWindowCoordinatesY();
+		int bX = (int) b.getScaledWindowCoordinatesX();
+		int bY = (int) b.getScaledWindowCoordinatesY();
+		int cX = (int) c.getScaledWindowCoordinatesX();
+		int cY = (int) c.getScaledWindowCoordinatesY();
+		int dX = (int) d.getScaledWindowCoordinatesX();
+		int dY = (int) d.getScaledWindowCoordinatesY();
+		
 		// Vertices, the order is not important. XYZW instead of XYZ
 		float[] vertices = {
 				aX, aY, 0f, 1f,
@@ -35,18 +45,18 @@ public class RenderingUtils {
 		FloatBuffer currentColour = BufferUtils.createFloatBuffer(4);
 		GL11.glGetFloatv(GL11.GL_CURRENT_COLOR, currentColour);
 
-		float r = currentColour.get();
-		float g = currentColour.get();
-		float b = currentColour.get();
-		float a = currentColour.get();
+		float red = currentColour.get();
+		float green = currentColour.get();
+		float blue = currentColour.get();
+		float alpha = currentColour.get();
 
 		currentColour.clear();
 
 		float[] colors = { 
-				r, g, b, a,
-				r, g, b, a,
-				r, g, b, a,
-				r, g, b, a
+				red, green, blue, alpha,
+				red, green, blue, alpha,
+				red, green, blue, alpha,
+				red, green, blue, alpha
 		};
 		FloatBuffer colorsBuffer = BufferUtils.createFloatBuffer(colors.length);
 		colorsBuffer.put(colors);
@@ -129,20 +139,20 @@ public class RenderingUtils {
 		GL30.glBindVertexArray(0);
 	}
 
-	public static void RenderQuad(int aX, int aY, int bX, int bY, int cX, int cY, int dX, int dY, Texture texture) {
+	public static void RenderQuad(ScaledWindowCoordinates a, ScaledWindowCoordinates b, ScaledWindowCoordinates c, ScaledWindowCoordinates d, Texture texture) {
 		if (texture.getAsTexture() != 0) {
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
 
 			GL11.glColor3f(1, 1, 1);
 
 			GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getAsTexture());
-			RenderQuad(aX, aY, bX, bY, cX, cY, dX, dY);
+			RenderQuad(a, b, c, d);
 
 			GL11.glDisable(GL11.GL_TEXTURE_2D);
 		}
 	}
 
-	public static void RenderCircle(int x, int y, double radius, double pointSeperation, double rotation) {
+	public static void RenderCircle(ScaledWindowCoordinates coordinates, double radius, double pointSeperation, double rotation) {
 		int loops = (int) (360 / pointSeperation);
 
 		// Add vertex for root of circle
@@ -153,10 +163,10 @@ public class RenderingUtils {
 		FloatBuffer currentColour = BufferUtils.createFloatBuffer(4);
 		GL11.glGetFloatv(GL11.GL_CURRENT_COLOR, currentColour);
 
-		float r = currentColour.get();
-		float g = currentColour.get();
-		float b = currentColour.get();
-		float a = currentColour.get();
+		float red = currentColour.get();
+		float green = currentColour.get();
+		float blue = currentColour.get();
+		float alpha = currentColour.get();
 
 		currentColour.clear();
 
@@ -165,8 +175,8 @@ public class RenderingUtils {
 
 			double xcos = (double) Math.cos(radian);
 			double ysin = (float) Math.sin(radian);
-			double tempx = xcos * radius + x;
-			double tempy = ysin * radius + y;
+			double tempx = xcos * radius + coordinates.getScaledWindowCoordinatesX();
+			double tempy = ysin * radius + coordinates.getScaledWindowCoordinatesY();
 			double tx = Math.cos(Math.toRadians(angle + rotation)) * 0.5 + 0.5;
 			double ty = Math.sin(Math.toRadians(angle + rotation)) * 0.5 + 0.5;
 
@@ -181,25 +191,25 @@ public class RenderingUtils {
 			vertices[i * 4 + 2] = 0.0f;
 			vertices[i * 4 + 3] = 1.0f;
 
-			colors[i * 4] = r;
-			colors[i * 4 + 1] = g;
-			colors[i * 4 + 2] = b;
-			colors[i * 4 + 3] = a;
+			colors[i * 4] = red;
+			colors[i * 4 + 1] = green;
+			colors[i * 4 + 2] = blue;
+			colors[i * 4 + 3] = alpha;
 		}
 
 		// Root of circle
-		vertices[loops * 4] = x;
-		vertices[loops * 4 + 1] = y;
+		vertices[loops * 4] = (int) coordinates.getScaledWindowCoordinatesX();
+		vertices[loops * 4 + 1] = (int) coordinates.getScaledWindowCoordinatesY();
 		vertices[loops * 4 + 2] = 0.0f;
 		vertices[loops * 4 + 3] = 1.0f;
 
 		texCoords[loops * 2] = 0.5f;
 		texCoords[loops * 2 + 1] = 0.5f;
 
-		colors[loops * 4] = r;
-		colors[loops * 4 + 1] = g;
-		colors[loops * 4 + 2] = b;
-		colors[loops * 4 + 3] = a;
+		colors[loops * 4] = red;
+		colors[loops * 4 + 1] = green;
+		colors[loops * 4 + 2] = blue;
+		colors[loops * 4 + 3] = alpha;
 
 		// Vertices, the order is not important. XYZW instead of XYZ
 		FloatBuffer verticesBuffer = BufferUtils.createFloatBuffer(vertices.length);
@@ -284,13 +294,13 @@ public class RenderingUtils {
 		GL30.glBindVertexArray(0);
 	}
 
-	public static void RenderCircle(int x, int y, double radius, double pointSeperation, double rotation,
+	public static void RenderCircle(ScaledWindowCoordinates coordinates, double radius, double pointSeperation, double rotation,
 			Texture texture) {
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glColor3f(1, 1, 1);
 
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getAsTexture());
-		RenderCircle(x, y, radius, pointSeperation, rotation);
+		RenderCircle(coordinates, radius, pointSeperation, rotation);
 
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 	}
@@ -299,17 +309,13 @@ public class RenderingUtils {
 	 * Draws a texture region with the currently bound texture on specified
 	 * coordinates.
 	 */
-	public static void DrawTextureRegion(int x, int y, int regX, int regY, int regWidth, int regHeight, Color colour,
+	public static void DrawTextureRegion(ScaledWindowCoordinates coordinates, int regX, int regY, int regWidth, int regHeight, Color colour,
 			Texture texture) {
 		/* Vertex positions */
-		int vAX = x;
-		int vAY = y + regHeight;
-		int vBX = x + regWidth;
-		int vBY = y + regHeight;
-		int vCX = x + regWidth;
-		int vCY = y;
-		int vDX = x;
-		int vDY = y;
+		ScaledWindowCoordinates a = new ScaledWindowCoordinates(coordinates.getScaledWindowCoordinatesX(), coordinates.getScaledWindowCoordinatesY() + regHeight);
+		ScaledWindowCoordinates b = new ScaledWindowCoordinates(coordinates.getScaledWindowCoordinatesX() + regWidth, coordinates.getScaledWindowCoordinatesY() + regHeight);
+		ScaledWindowCoordinates c = new ScaledWindowCoordinates(coordinates.getScaledWindowCoordinatesX() + regWidth, coordinates.getScaledWindowCoordinatesY());
+		ScaledWindowCoordinates d = new ScaledWindowCoordinates(coordinates.getScaledWindowCoordinatesX(), coordinates.getScaledWindowCoordinatesY());
 
 		/* Texture coordinates */
 		float tAX = (float) (regX) / texture.getAsBufferedImage().getWidth();
@@ -321,7 +327,7 @@ public class RenderingUtils {
 		float tDX = (float) (regX) / texture.getAsBufferedImage().getWidth();
 		float tDY = (float) (regY) / texture.getAsBufferedImage().getHeight();
 
-		DrawTextureRegion(vAX, vAY, vBX, vBY, vCX, vCY, vDX, vDY, tAX, tAY, tBX, tBY, tCX, tCY, tDX, tDY, colour,
+		DrawTextureRegion(a, b, c, d, tAX, tAY, tBX, tBY, tCX, tCY, tDX, tDY, colour,
 				texture);
 	}
 
@@ -329,14 +335,23 @@ public class RenderingUtils {
 	 * Draws a texture region with the currently bound texture on specified
 	 * coordinates.
 	 */
-	public static void DrawTextureRegion(int vAX, int vAY, int vBX, int vBY, int vCX, int vCY, int vDX, int vDY,
+	public static void DrawTextureRegion(ScaledWindowCoordinates vA, ScaledWindowCoordinates vB, ScaledWindowCoordinates vC, ScaledWindowCoordinates vD,
 			float tAX, float tAY, float tBX, float tBY, float tCX, float tCY, float tDX, float tDY, Color colour,
 			Texture texture) {
+		
+		int vAX = (int) vA.getScaledWindowCoordinatesX();
+		int vAY = (int) vA.getScaledWindowCoordinatesY();
+		int vBX = (int) vB.getScaledWindowCoordinatesX();
+		int vBY = (int) vB.getScaledWindowCoordinatesY();
+		int vCX = (int) vC.getScaledWindowCoordinatesX();
+		int vCY = (int) vC.getScaledWindowCoordinatesY();
+		int vDX = (int) vD.getScaledWindowCoordinatesX();
+		int vDY = (int) vD.getScaledWindowCoordinatesY();
 		
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 
 		GL11.glColor4f((float) colour.getRed() / 255, (float) colour.getGreen() / 255,
-				(float) colour.getBlue() / 256, (float) colour.getAlpha() / 255);
+				(float) colour.getBlue() / 255, (float) colour.getAlpha() / 255);
 
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getAsTexture());
 
@@ -354,18 +369,18 @@ public class RenderingUtils {
 		FloatBuffer currentColour = BufferUtils.createFloatBuffer(4);
 		GL11.glGetFloatv(GL11.GL_CURRENT_COLOR, currentColour);
 
-		float r = currentColour.get();
-		float g = currentColour.get();
-		float b = currentColour.get();
-		float a = currentColour.get();
+		float red = currentColour.get();
+		float green = currentColour.get();
+		float blue = currentColour.get();
+		float alpha = currentColour.get();
 
 		currentColour.clear();
 
 		float[] colors = {
-				r, g, b, a,
-				r, g, b, a,
-				r, g, b, a,
-				r, g, b, a
+				red, green, blue, alpha,
+				red, green, blue, alpha,
+				red, green, blue, alpha,
+				red, green, blue, alpha
 		};
 		FloatBuffer colorsBuffer = BufferUtils.createFloatBuffer(colors.length);
 		colorsBuffer.put(colors);

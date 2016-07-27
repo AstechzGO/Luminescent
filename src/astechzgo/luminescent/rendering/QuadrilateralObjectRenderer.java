@@ -5,6 +5,8 @@ import java.awt.geom.Line2D;
 
 import org.lwjgl.opengl.GL11;
 
+import astechzgo.luminescent.coordinates.ScaledWindowCoordinates;
+import astechzgo.luminescent.coordinates.WindowCoordinates;
 import astechzgo.luminescent.main.Luminescent;
 import astechzgo.luminescent.textures.Texture;
 import astechzgo.luminescent.utils.DisplayUtils;
@@ -16,61 +18,28 @@ public class QuadrilateralObjectRenderer implements IObjectRenderer {
 
 	protected Texture texture;
 
-	protected double aX;
-	protected double aY;
-	
-	protected double bX;
-	protected double bY;
-	
-	protected double cX;
-	protected double cY;
-	
-	protected double dX;
-	protected double dY;
-
-	protected int scaledAX;
-	protected int scaledAY;
-	
-	protected int scaledBX;
-	protected int scaledBY;
-	
-	protected int scaledCX;
-	protected int scaledCY;
-	
-	protected int scaledDX;
-	protected int scaledDY;
+	protected WindowCoordinates a;
+	protected WindowCoordinates b;
+	protected WindowCoordinates c;
+	protected WindowCoordinates d;
 
 	protected int oldGameWidth = DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2;
 	protected int oldGameHeight = DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2;
 
-	public QuadrilateralObjectRenderer(double aX, double aY, double bX, double bY, double cX, double cY, double dX, double dY, Texture texture) {
+	public QuadrilateralObjectRenderer(WindowCoordinates a,WindowCoordinates b, WindowCoordinates c, WindowCoordinates d, Texture texture) {
 		this.texture = texture;
 		
-		this.aX = aX;
-		this.aY = aY;
-		
-		this.bX = bX;
-		this.bY = bY;
-		
-		this.cX = cX;
-		this.cY = cY;
-		
-		this.dX = dX;
-		this.dY = dY;
+		this.a = a;
+		this.b = b;
+		this.c = c;
+		this.d = d;
 	}
 
-	public QuadrilateralObjectRenderer(double aX, double aY, double bX, double bY, double cX, double cY, double dX, double dY) {
-		this.aX = aX;
-		this.aY = aY;
-		
-		this.bX = bX;
-		this.bY = bY;
-		
-		this.cX = cX;
-		this.cY = cY;
-		
-		this.dX = dX;
-		this.dY = dY;
+	public QuadrilateralObjectRenderer(WindowCoordinates a,WindowCoordinates b, WindowCoordinates c, WindowCoordinates d) {
+		this.a = a;
+		this.b = b;
+		this.c = c;
+		this.d = d;
 	}
 
 	@Override
@@ -82,11 +51,11 @@ public class QuadrilateralObjectRenderer implements IObjectRenderer {
 		if (texture != null) {
 			Luminescent.defaultShader.applyShader();
 			Luminescent.defaultShader.updateTransMatrix();
-			RenderingUtils.RenderQuad(scaledAX, scaledAY, scaledBX, scaledBY, scaledCX, scaledCY, scaledDX, scaledDY, texture);
+			RenderingUtils.RenderQuad(new ScaledWindowCoordinates(a), new ScaledWindowCoordinates(b), new ScaledWindowCoordinates(c), new ScaledWindowCoordinates(d), texture);
 			Luminescent.defaultShader.withdrawShader();
 		} 
 		else {
-			RenderingUtils.RenderQuad(scaledAX, scaledAY, scaledBX, scaledBY, scaledCX, scaledCY, scaledDX, scaledDY);
+			RenderingUtils.RenderQuad(new ScaledWindowCoordinates(a), new ScaledWindowCoordinates(b), new ScaledWindowCoordinates(c), new ScaledWindowCoordinates(d));
 		}
 	}
 
@@ -112,62 +81,56 @@ public class QuadrilateralObjectRenderer implements IObjectRenderer {
 
 	@Override
 	public void resize() {
-		int scaledCamX = ((int) Math
-				.round((double)((Camera.CAMERA_WIDTH / 2) - Camera.getX()) / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)));
-		int scaledCamY = ((int) Math
-				.round((double)((Camera.CAMERA_HEIGHT / 2) - Camera.getY()) / Camera.CAMERA_HEIGHT * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2)));
-		
-		scaledAX = ((int) Math
-				.round(aX / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)))
-				+ DisplayUtils.widthOffset + scaledCamX;
-		scaledAY = (int) Math
-				.round(aY / Camera.CAMERA_HEIGHT * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2))
-				+ DisplayUtils.heightOffset + scaledCamY;
-		scaledBX = ((int) Math
-				.round(bX / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)))
-				+ DisplayUtils.widthOffset + scaledCamX;
-		scaledBY = (int) Math
-				.round(bY / Camera.CAMERA_HEIGHT * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2))
-				+ DisplayUtils.heightOffset + scaledCamY;
-		scaledCX = ((int) Math
-				.round(cX / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)))
-				+ DisplayUtils.widthOffset + scaledCamX;
-		scaledCY = (int) Math
-				.round(cY / Camera.CAMERA_HEIGHT * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2))
-				+ DisplayUtils.heightOffset + scaledCamY;
-		scaledDX = ((int) Math
-				.round(dX / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)))
-				+ DisplayUtils.widthOffset + scaledCamX;
-		scaledDY = (int) Math
-				.round(dY / Camera.CAMERA_HEIGHT * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2))
-				+ DisplayUtils.heightOffset + scaledCamY;
-
 		oldGameWidth = DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2;
 		oldGameHeight = DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2;
 	}
 
 	@Override
 	public boolean isTouching(IObjectRenderer object) {
+		double aX = a.getWindowCoordinatesX();
+		double aY = a.getAbsoluteY();
+		
+		double bX = b.getWindowCoordinatesX();
+		double bY = b.getAbsoluteY();
+		
+		double cX = c.getWindowCoordinatesX();
+		double cY = c.getAbsoluteY();
+		
+		double dX = d.getWindowCoordinatesX();
+		double dY = d.getAbsoluteY();
+		
 		if (object instanceof QuadrilateralObjectRenderer) {
 			QuadrilateralObjectRenderer casted = (QuadrilateralObjectRenderer) object;
 			
+			double castedaX = casted.a.getWindowCoordinatesX();
+			double castedaY = casted.a.getAbsoluteY();
+			
+			double castedbX = casted.b.getWindowCoordinatesX();
+			double castedbY = casted.b.getAbsoluteY();
+			
+			double castedcX = casted.c.getWindowCoordinatesX();
+			double castedcY = casted.c.getAbsoluteY();
+			
+			double casteddX = casted.d.getWindowCoordinatesX();
+			double casteddY = casted.d.getAbsoluteY();
+			
 			if(
-					Line2D.linesIntersect(aX, aY, bX, bY, casted.aX, casted.aY, casted.bX, casted.bY) ||	
-					Line2D.linesIntersect(aX, aY, bX, bY, casted.bX, casted.bY, casted.cX, casted.cY) ||	
-					Line2D.linesIntersect(aX, aY, bX, bY, casted.cX, casted.cY, casted.dX, casted.dY) ||
-					Line2D.linesIntersect(aX, aY, bX, bY, casted.dX, casted.dY, casted.aX, casted.aY) ||
-					Line2D.linesIntersect(bX, bY, cX, cY, casted.aX, casted.aY, casted.bX, casted.bY) ||	
-					Line2D.linesIntersect(bX, bY, cX, cY, casted.bX, casted.bY, casted.cX, casted.cY) ||	
-					Line2D.linesIntersect(bX, bY, cX, cY, casted.cX, casted.cY, casted.dX, casted.dY) ||
-					Line2D.linesIntersect(bX, bY, cX, cY, casted.dX, casted.dY, casted.aX, casted.aY) ||
-					Line2D.linesIntersect(cX, cY, dX, dY, casted.aX, casted.aY, casted.bX, casted.bY) ||	
-					Line2D.linesIntersect(cX, cY, dX, dY, casted.bX, casted.bY, casted.cX, casted.cY) ||	
-					Line2D.linesIntersect(cX, cY, dX, dY, casted.cX, casted.cY, casted.dX, casted.dY) ||
-					Line2D.linesIntersect(cX, cY, dX, dY, casted.dX, casted.dY, casted.aX, casted.aY) ||
-					Line2D.linesIntersect(dX, dY, aX, aY, casted.aX, casted.aY, casted.bX, casted.bY) ||	
-					Line2D.linesIntersect(dX, dY, aX, aY, casted.bX, casted.bY, casted.cX, casted.cY) ||	
-					Line2D.linesIntersect(dX, dY, aX, aY, casted.cX, casted.cY, casted.dX, casted.dY) ||
-					Line2D.linesIntersect(dX, dY, aX, aY, casted.dX, casted.dY, casted.aX, casted.aY)
+					Line2D.linesIntersect(aX, aY, bX, bY, castedaX, castedaY, castedbX, castedbY) ||	
+					Line2D.linesIntersect(aX, aY, bX, bY, castedbX, castedbY, castedcX, castedcY) ||	
+					Line2D.linesIntersect(aX, aY, bX, bY, castedcX, castedcY, casteddX, casteddY) ||
+					Line2D.linesIntersect(aX, aY, bX, bY, casteddX, casteddY, castedaX, castedaY) ||
+					Line2D.linesIntersect(bX, bY, cX, cY, castedaX, castedaY, castedbX, castedbY) ||	
+					Line2D.linesIntersect(bX, bY, cX, cY, castedbX, castedbY, castedcX, castedcY) ||	
+					Line2D.linesIntersect(bX, bY, cX, cY, castedcX, castedcY, casteddX, casteddY) ||
+					Line2D.linesIntersect(bX, bY, cX, cY, casteddX, casteddY, castedaX, castedaY) ||
+					Line2D.linesIntersect(cX, cY, dX, dY, castedaX, castedaY, castedbX, castedbY) ||	
+					Line2D.linesIntersect(cX, cY, dX, dY, castedbX, castedbY, castedcX, castedcY) ||	
+					Line2D.linesIntersect(cX, cY, dX, dY, castedcX, castedcY, casteddX, casteddY) ||
+					Line2D.linesIntersect(cX, cY, dX, dY, casteddX, casteddY, castedaX, castedaY) ||
+					Line2D.linesIntersect(dX, dY, aX, aY, castedaX, castedaY, castedbX, castedbY) ||	
+					Line2D.linesIntersect(dX, dY, aX, aY, castedbX, castedbY, castedcX, castedcY) ||	
+					Line2D.linesIntersect(dX, dY, aX, aY, castedcX, castedcY, casteddX, casteddY) ||
+					Line2D.linesIntersect(dX, dY, aX, aY, casteddX, casteddY, castedaX, castedaY)
 					)
 			return true;
 		}
@@ -192,9 +155,9 @@ public class QuadrilateralObjectRenderer implements IObjectRenderer {
 
 			// Determine quadrant of each corner
 			for (int x = 0; x < 2; x++) {
-				int quadX = (xQuads[x] >= casted.x) ? 0 : 1;
+				int quadX = (xQuads[x] >= casted.getCoordinates().getWindowCoordinatesX()) ? 0 : 1;
 				for (int y = 0; y < 2; y++) {
-					int quadY = (yQuads[y] >= casted.y) ? 0 : 1;
+					int quadY = (yQuads[y] >= casted.getCoordinates().getWindowCoordinatesY()) ? 0 : 1;
 					quadrant[quadX][quadY] = true;
 				}
 			}
@@ -212,9 +175,9 @@ public class QuadrilateralObjectRenderer implements IObjectRenderer {
 			case 1: // Check each rectangle corner against circle radius
 				float radiusSquared = (float) (casted.radius * casted.radius);
 				for (int x = 0; x < 2; x++) {
-					float dx = (float) (xQuads[x] - casted.x);
+					float dx = (float) (xQuads[x] - casted.getCoordinates().getWindowCoordinatesX());
 					for (int y = 0; y < 2; y++) {
-						float dy = (float) (yQuads[y] - casted.y);
+						float dy = (float) (yQuads[y] - casted.getCoordinates().getWindowCoordinatesY());
 						if (dx * dx + dy * dy <= radiusSquared)
 							collision = true;
 					}
@@ -222,8 +185,8 @@ public class QuadrilateralObjectRenderer implements IObjectRenderer {
 				break;
 			case 2: // Check for intersection between rectangle and bounding box
 					// of the circle
-				boolean intersectX = !(xQuads[1] < casted.x - casted.radius || xQuads[0] > casted.x + casted.radius);
-				boolean intersectY = !(yQuads[1] < casted.x - casted.radius || yQuads[0] > casted.x + casted.radius);
+				boolean intersectX = !(xQuads[1] < casted.getCoordinates().getWindowCoordinatesX() - casted.radius || xQuads[0] > casted.getCoordinates().getWindowCoordinatesX() + casted.radius);
+				boolean intersectY = !(yQuads[1] < casted.getCoordinates().getWindowCoordinatesX() - casted.radius || yQuads[0] > casted.getCoordinates().getWindowCoordinatesX() + casted.radius);
 				if (intersectX && intersectY)
 					collision = true;
 				break;
@@ -249,14 +212,14 @@ public class QuadrilateralObjectRenderer implements IObjectRenderer {
 	public boolean doesContain(double x, double y) {
 		boolean b1, b2, b3;
 
-		double aX = this.aX;
-		double aY = this.aY;
+		double aX = this.a.getWindowCoordinatesX();
+		double aY = this.a.getWindowCoordinatesY();
 		
-		double bX = this.bX;
-		double bY = this.bY;
+		double bX = this.b.getWindowCoordinatesX();
+		double bY = this.b.getWindowCoordinatesY();
 		
-		double cX = this.cX;
-		double cY = this.cY;
+		double cX = this.c.getWindowCoordinatesX();
+		double cY = this.c.getWindowCoordinatesY();
 		
 	    b1 = ((x - bX) * (aY - bY) - (aX - bX) * (y - bY)) < 0.0f;
 	    b2 = ((x - cX) * (bY - cY) - (bX - cX) * (y - cY)) < 0.0f;
@@ -265,14 +228,14 @@ public class QuadrilateralObjectRenderer implements IObjectRenderer {
 	    boolean a = ((b1 == b2) && (b2 == b3));
 	    
 
-		aX = this.aX;
-		aY = this.aY;
+		aX = this.a.getWindowCoordinatesX();
+		aY = this.a.getWindowCoordinatesY();
 		
-		bX = this.dX;
-		bY = this.dY;
+		bX = this.d.getWindowCoordinatesX();
+		bY = this.d.getWindowCoordinatesY();
 		
-		cX = this.cX;
-		cY = this.cY;
+		cX = this.c.getWindowCoordinatesX();
+		cY = this.c.getWindowCoordinatesY();
 		
 	    b1 = ((x - bX) * (aY - bY) - (aX - bX) * (y - bY)) < 0.0f;
 	    b2 = ((x - cX) * (bY - cY) - (bX - cX) * (y - cY)) < 0.0f;
@@ -284,22 +247,15 @@ public class QuadrilateralObjectRenderer implements IObjectRenderer {
 	}
 
 	@Override
-	public double getX() {
-		return aX;
+	public WindowCoordinates getCoordinates() {
+		// Same as rectangle (bottom left corner)
+		return d;
 	}
 
 	@Override
-	public double getY() {
-		return aY;
-	}
-
-	@Override
-	public void setX(double x) {
-		aX = x;
-	}
-
-	@Override
-	public void setY(double y) {
-		aY = y;
+	public void setCoordinates(WindowCoordinates coordinates) {
+		// Same as rectangle (bottom left corner)
+		// Won't do much except stretch a corner
+		this.d = coordinates;
 	}
 }

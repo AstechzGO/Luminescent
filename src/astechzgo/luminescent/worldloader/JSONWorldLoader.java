@@ -13,6 +13,7 @@ import javax.script.ScriptException;
 
 import com.google.gson.Gson;
 
+import astechzgo.luminescent.coordinates.GameCoordinates;
 import astechzgo.luminescent.gameobject.Room;
 import astechzgo.luminescent.rendering.Camera;
 import astechzgo.luminescent.textures.TextureList;
@@ -52,11 +53,15 @@ public class JSONWorldLoader {
 		return rooms;
 	}
 	
-	public int getX() {
+	public GameCoordinates getCoordinates() {
+		return new GameCoordinates(getX(), getY());
+	}
+	
+	private int getX() {
 		return parseString(x);
 	}
 	
-	public int getY() {
+	private int getY() {
 		return parseString(y);
 	}
 	

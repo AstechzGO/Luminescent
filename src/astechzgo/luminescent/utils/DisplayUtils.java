@@ -39,6 +39,7 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLCapabilities;
 
+import astechzgo.luminescent.coordinates.ScaledWindowCoordinates;
 import astechzgo.luminescent.textures.TextureList;
 
 public class DisplayUtils {	
@@ -524,12 +525,12 @@ public class DisplayUtils {
 	public static void renderResolutionBorder() {
 		GL11.glColor3f(0, 0, 0);
 		if(widthOffset != 0) {
-			RenderingUtils.RenderQuad(0, 0, 0, displayHeight, widthOffset, displayHeight, widthOffset, 0);
-			RenderingUtils.RenderQuad(displayWidth - widthOffset, 0, displayWidth - widthOffset, displayHeight, displayWidth, displayHeight, displayWidth, 0);
+			RenderingUtils.RenderQuad(new ScaledWindowCoordinates(0, 0), new ScaledWindowCoordinates(0, displayHeight), new ScaledWindowCoordinates(widthOffset, displayHeight), new ScaledWindowCoordinates(widthOffset, 0));
+			RenderingUtils.RenderQuad(new ScaledWindowCoordinates(displayWidth - widthOffset, 0), new ScaledWindowCoordinates(displayWidth - widthOffset, displayHeight), new ScaledWindowCoordinates(displayWidth, displayHeight), new ScaledWindowCoordinates(displayWidth, 0));
 		}
 		if(heightOffset != 0) {
-			RenderingUtils.RenderQuad(0, displayHeight - heightOffset, 0, displayHeight, displayWidth, displayHeight, displayWidth, displayHeight - heightOffset);
-			RenderingUtils.RenderQuad(0, 0, 0, heightOffset, displayWidth, heightOffset, displayWidth, 0);
+			RenderingUtils.RenderQuad(new ScaledWindowCoordinates(0, displayHeight - heightOffset), new ScaledWindowCoordinates(0, displayHeight), new ScaledWindowCoordinates(displayWidth, displayHeight), new ScaledWindowCoordinates(displayWidth, displayHeight - heightOffset));
+			RenderingUtils.RenderQuad(new ScaledWindowCoordinates(0, 0), new ScaledWindowCoordinates(0, heightOffset), new ScaledWindowCoordinates(displayWidth, heightOffset), new ScaledWindowCoordinates(displayWidth, 0));
 		}
 	}
 	
@@ -581,5 +582,34 @@ public class DisplayUtils {
 			System.out.println("Unable to setup mode " + width + "x" + height + e);
 			e.printStackTrace();
 		}
+	}
+	
+	public static int getDisplayX() {
+		IntBuffer xpos = BufferUtils.createIntBuffer(1);
+		IntBuffer ypos = BufferUtils.createIntBuffer(1);
+		
+		GLFW.glfwGetWindowPos(DisplayUtils.getHandle(), xpos, ypos);
+		
+		int x = xpos.get(0);
+		
+		xpos.clear();
+		ypos.clear();
+		
+		return x;
+		
+	}
+	
+	public static int getDisplayY() {
+		IntBuffer xpos = BufferUtils.createIntBuffer(1);
+		IntBuffer ypos = BufferUtils.createIntBuffer(1);
+		
+		GLFW.glfwGetWindowPos(DisplayUtils.getHandle(), xpos, ypos);
+		
+		int y = DisplayUtils.getDisplayHeight() - ypos.get(0);	
+		
+		xpos.clear();
+		ypos.clear();
+		
+		return y;
 	}
 }

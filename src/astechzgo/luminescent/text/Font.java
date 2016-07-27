@@ -39,6 +39,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import astechzgo.luminescent.coordinates.ScaledWindowCoordinates;
 import astechzgo.luminescent.textures.Texture;
 import astechzgo.luminescent.utils.RenderingUtils;
 
@@ -408,7 +409,7 @@ public class Font {
                 continue;
             }
             Glyph g = glyphs.get(ch);
-            RenderingUtils.DrawTextureRegion(drawX, drawY, g.x, g.y, g.width, g.height, colour, texture);
+            RenderingUtils.DrawTextureRegion(new ScaledWindowCoordinates(drawX, drawY), g.x, g.y, g.width, g.height, colour, texture);
             drawX += g.width;
         }
     }

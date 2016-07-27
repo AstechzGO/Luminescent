@@ -71,8 +71,7 @@ public class Luminescent
 	{
 		Key.updateKeys();
 		
-		Camera.setX(thePlayer.getPosX());
-		Camera.setY(thePlayer.getPosY());
+		Camera.setCameraCoordinates(thePlayer.getCoordinates());
 		
 
 		for(Room room : rooms)

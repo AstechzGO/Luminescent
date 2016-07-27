@@ -2,6 +2,7 @@ package astechzgo.luminescent.rendering;
 
 import java.awt.Color;
 
+import astechzgo.luminescent.coordinates.WindowCoordinates;
 import astechzgo.luminescent.textures.Texture;
 
 
@@ -20,9 +21,7 @@ public interface IObjectRenderer
 	public boolean isTouching(IObjectRenderer object);
 	public boolean doesContain(double x, double y);
 	
-	public double getX();
-	public double getY();
+	public WindowCoordinates getCoordinates();
 	
-	public void setX(double x);
-	public void setY(double y);
+	public void setCoordinates(WindowCoordinates coordinates);
 }

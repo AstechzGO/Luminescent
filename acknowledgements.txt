@@ -9,6 +9,17 @@ Project Developers:
 Code sources that we have used:
 
 astechzgo.luminescent:
+	coordinates:
+		AbsoluteCoordinates:
+			(Nothing)
+		GameCoordinates:
+			(Nothing)
+		ScaledWindowCoordinates():
+			(Nothing)
+		ScaledWindowInvertedYAxisCoordinates:
+			(Nothing)
+		WindowCoordinates:
+			(Nothing)
 	entity:
 		Entity:
 			(Nothing)

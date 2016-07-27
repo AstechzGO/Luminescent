@@ -1,5 +1,6 @@
 package astechzgo.luminescent.entity;
 
+import astechzgo.luminescent.coordinates.GameCoordinates;
 import astechzgo.luminescent.rendering.IObjectRenderer;
 
 public interface Entity {
@@ -13,6 +14,5 @@ public interface Entity {
 	
 	public void updateRenderer();
 	
-	public double getX();
-	public double getY();
+	public GameCoordinates getCoordinates();
 }

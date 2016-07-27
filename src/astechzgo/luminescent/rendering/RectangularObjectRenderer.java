@@ -1,5 +1,6 @@
 package astechzgo.luminescent.rendering;
 
+import astechzgo.luminescent.coordinates.WindowCoordinates;
 import astechzgo.luminescent.textures.Texture;
 import astechzgo.luminescent.utils.DisplayUtils;
 
@@ -7,14 +8,10 @@ public class RectangularObjectRenderer extends QuadrilateralObjectRenderer {
 
 	protected Texture texture;
 
-	protected double x;
-	protected double y;
+	protected WindowCoordinates coordinates;
 
 	protected double width;
 	protected double height;
-
-	protected int scaledX;
-	protected int scaledY;
 
 	protected int scaledWidth;
 	protected int scaledHeight;
@@ -22,58 +19,41 @@ public class RectangularObjectRenderer extends QuadrilateralObjectRenderer {
 	protected int oldGameWidth = DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2;
 	protected int oldGameHeight = DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2;
 
-	public RectangularObjectRenderer(double x, double y, double width, double height, Texture texture) {
-		super(x, y + height, x + width, y + height, x + width, y, x, y, texture);
+	public RectangularObjectRenderer(WindowCoordinates coordinates, double width, double height, Texture texture) {
+		super(new WindowCoordinates(coordinates.getWindowCoordinatesX(), coordinates.getWindowCoordinatesY() + height), new WindowCoordinates(coordinates.getWindowCoordinatesX() + width, coordinates.getWindowCoordinatesY() + height), new WindowCoordinates(coordinates.getWindowCoordinatesX() + width, coordinates.getWindowCoordinatesY()), new WindowCoordinates(coordinates.getWindowCoordinatesX(), coordinates.getWindowCoordinatesY()), texture);
 		
 		this.texture = texture;
 
-		this.x = x;
-		this.y = y;
+		this.coordinates = coordinates;
 
 		this.width = width;
 		this.height = height;
 	}
 
-	public RectangularObjectRenderer(double x, double y, double width, double height) {
-		super(x, y + height, x + width, y + height, x + width, y, x, y);
+	public RectangularObjectRenderer(WindowCoordinates coordinates, double width, double height) {
+		super(new WindowCoordinates(coordinates.getWindowCoordinatesX(), coordinates.getWindowCoordinatesY() + height), new WindowCoordinates(coordinates.getWindowCoordinatesX() + width, coordinates.getWindowCoordinatesY() + height), new WindowCoordinates(coordinates.getWindowCoordinatesX() + width, coordinates.getWindowCoordinatesY()), new WindowCoordinates(coordinates.getWindowCoordinatesX(), coordinates.getWindowCoordinatesY()));
 		
-		this.x = x;
-		this.y = y;
+		this.coordinates = coordinates;
 
 		this.width = width;
 		this.height = height;
 	}
 	public void render() {
-		super.aX = x;
-		super. aY = y + height;
-		super .bX = x + width;
-		super .bY = y + height;
-		super.cX = x + width;
-		super.cY = y;
-		super.dX = x;
-		super.dY = y;
+		super.a = new WindowCoordinates(coordinates.getWindowCoordinatesX(), coordinates.getWindowCoordinatesY() + height);
+		super.b = new WindowCoordinates(coordinates.getWindowCoordinatesX() + width, coordinates.getWindowCoordinatesY() + height);
+		super.c = new WindowCoordinates(coordinates.getWindowCoordinatesX() + width, coordinates.getWindowCoordinatesY());
+		super.d = new WindowCoordinates(coordinates.getWindowCoordinatesX(), coordinates.getWindowCoordinatesY());
 				
 		super.render();
-		
+	}
+	
+	@Override
+	public WindowCoordinates getCoordinates() {
+		return coordinates;
 	}
 
 	@Override
-	public double getX() {
-		return x;
-	}
-
-	@Override
-	public double getY() {
-		return y;
-	}
-
-	@Override
-	public void setX(double x) {
-		this.x = x;
-	}
-
-	@Override
-	public void setY(double y) {
-		this.y = y;
+	public void setCoordinates(WindowCoordinates coordinates) {
+		this.coordinates = coordinates;
 	}
 }

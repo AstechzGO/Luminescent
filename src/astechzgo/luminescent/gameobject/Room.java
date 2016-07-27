@@ -2,13 +2,14 @@ package astechzgo.luminescent.gameobject;
 
 import java.awt.Color;
 
+import astechzgo.luminescent.coordinates.WindowCoordinates;
 import astechzgo.luminescent.rendering.RectangularObjectRenderer;
 import astechzgo.luminescent.worldloader.JSONWorldLoader;
 
 public class Room extends RectangularObjectRenderer {
 
 	public Room(JSONWorldLoader loader) {
-		super(loader.getX(), loader.getY(), loader.getWidth(), loader.getHeight());
+		super(new WindowCoordinates(loader.getCoordinates()), loader.getWidth(), loader.getHeight());
 		super.setColour(new Color(0.15f, 0.15f, 0.15f));
 	}
 
@@ -22,12 +23,8 @@ public class Room extends RectangularObjectRenderer {
 		super.render();
 	}
 	
-	public double getPosX() {
-		return super.x;
-	}
-	
-	public double getPosY() {
-		return super.y;
+	public WindowCoordinates getCoordinates() {
+		return super.coordinates;
 	}
 	
 	public double getWidth() {
