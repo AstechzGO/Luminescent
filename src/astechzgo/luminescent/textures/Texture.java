@@ -11,8 +11,8 @@ import java.nio.ByteBuffer;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
-import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.system.MemoryStack;
 
 public class Texture {
 	
@@ -21,6 +21,8 @@ public class Texture {
 	private final int textureNumber;
 	
 	private final String name;
+	
+	private MemoryStack stack;
 	
 	public Texture(String textureName, boolean slick) {
 		this(textureName, slick, toImage(textureName));
@@ -52,7 +54,10 @@ public class Texture {
 		int[] pixels = new int[image.getWidth() * image.getHeight()];
         image.getRGB(0, 0, image.getWidth(), image.getHeight(), pixels, 0, image.getWidth());
 
-        ByteBuffer buffer = BufferUtils.createByteBuffer(image.getWidth() * image.getHeight() * 4); //4 for RGBA, 3 for RGB
+        stack = MemoryStack.create(image.getWidth() * image.getHeight() * 4);
+        stack.push();
+        
+        ByteBuffer buffer = stack.malloc(image.getWidth() * image.getHeight() * 4); //4 for RGBA, 3 for RGB
         
         for(int y = 0; y < image.getHeight(); y++){
             for(int x = 0; x < image.getWidth(); x++){
@@ -161,5 +166,9 @@ public class Texture {
         g.dispose();
 
         return flipped;
+    }
+    
+    void dispose() {
+    	stack.close();
     }
 }

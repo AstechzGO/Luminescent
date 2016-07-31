@@ -29,7 +29,6 @@ import java.nio.IntBuffer;
 
 import javax.imageio.ImageIO;
 
-import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.glfw.GLFWVidMode;
@@ -39,6 +38,7 @@ import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLCapabilities;
+import org.lwjgl.system.MemoryStack;
 
 import astechzgo.luminescent.coordinates.ScaledWindowCoordinates;
 import astechzgo.luminescent.textures.TextureList;
@@ -264,7 +264,11 @@ public class DisplayUtils {
 		int width = displayWidth;
 		int height= displayHeight;
 		int bpp = (monitorBitPerPixel / 8) + 1;  //For alpha
-		ByteBuffer buffer = BufferUtils.createByteBuffer((width - DisplayUtils.widthOffset) * (height - DisplayUtils.heightOffset) * bpp);
+		
+		MemoryStack stack = MemoryStack.create((width - DisplayUtils.widthOffset) * (height - DisplayUtils.heightOffset) * bpp);
+		stack.push();
+		
+		ByteBuffer buffer = stack.malloc((width - DisplayUtils.widthOffset) * (height - DisplayUtils.heightOffset) * bpp);
 		GL11.glReadPixels(DisplayUtils.widthOffset, DisplayUtils.heightOffset, width - DisplayUtils.widthOffset, height - DisplayUtils.heightOffset, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
 		String format = "png";
 		BufferedImage image = new BufferedImage(width - DisplayUtils.widthOffset * 2, height - DisplayUtils.heightOffset * 2, BufferedImage.TYPE_INT_RGB);
@@ -281,6 +285,8 @@ public class DisplayUtils {
 		    }
 		}
 		   
+		stack.close();
+		
 		image = getFlippedImage(image);
 		
 		try {
@@ -350,11 +356,13 @@ public class DisplayUtils {
 		displayWidth = mode.WIDTH;
 		displayHeight = mode.HEIGHT;
 		
-		IntBuffer fbw = BufferUtils.createIntBuffer(1);	
-		IntBuffer fbh = BufferUtils.createIntBuffer(1);
-		GLFW.glfwGetFramebufferSize(handle, fbw, fbh);
-		displayFramebufferWidth = fbw.get(0);
-		displayFramebufferHeight = fbh.get(0);
+		try(MemoryStack stack = MemoryStack.stackPush()) {
+			IntBuffer fbw = stack.callocInt(1);
+			IntBuffer fbh = stack.callocInt(1);
+			GLFW.glfwGetFramebufferSize(handle, fbw, fbh);
+			displayFramebufferWidth = fbw.get(0);
+			displayFramebufferHeight = fbh.get(0);
+		}
 		
 		int monitorWidthOffset = getMonitorOffsetWidth(DisplayUtils.monitor);
 		int monitorHeightOffset = getMonitorOffsetHeight(DisplayUtils.monitor);
@@ -429,31 +437,25 @@ public class DisplayUtils {
 	}
 	
 	public static int getMonitorOffsetWidth(long monitor) {
-		IntBuffer xpos = BufferUtils.createIntBuffer(1);
-		IntBuffer ypos = BufferUtils.createIntBuffer(1);
+		try(MemoryStack stack = MemoryStack.stackPush()) {
+			IntBuffer xpos = stack.mallocInt(1);
+			IntBuffer ypos = stack.mallocInt(1);
+	
+			GLFW.glfwGetMonitorPos(monitor, xpos, ypos);
 		
-		GLFW.glfwGetMonitorPos(monitor, xpos, ypos);
-		
-		int monitorOffsetWidth = xpos.get();
-		
-		xpos.clear();
-		ypos.clear();
-		
-		return monitorOffsetWidth;
+			return xpos.get();
+		}
 	}
 	
 	public static int getMonitorOffsetHeight(long monitor) {
-		IntBuffer xpos = BufferUtils.createIntBuffer(1);
-		IntBuffer ypos = BufferUtils.createIntBuffer(1);
+		try(MemoryStack stack = MemoryStack.stackPush()) {
+			IntBuffer xpos = stack.mallocInt(1);
+			IntBuffer ypos = stack.mallocInt(1);
+	
+			GLFW.glfwGetMonitorPos(monitor, xpos, ypos);
 		
-		GLFW.glfwGetMonitorPos(monitor, xpos, ypos);
-		
-		int monitorOffsetHeight = ypos.get();
-		
-		xpos.clear();
-		ypos.clear();
-		
-		return monitorOffsetHeight;
+			return ypos.get();
+		}
 	}
 	
 	public static void nextMonitor() {
@@ -474,10 +476,6 @@ public class DisplayUtils {
 		
 		int secondMonitorWidth = 0;
 		int secondMonitorHeight = 0;
-		
-
-		IntBuffer xpos = BufferUtils.createIntBuffer(1);
-		IntBuffer ypos = BufferUtils.createIntBuffer(1);
 
 		for(int i = 0; i < monitors.length; i++) {
 				
@@ -505,17 +503,16 @@ public class DisplayUtils {
 		changeMonitor(monitors[nextMonitorIdx]);
 		
 
-		xpos = BufferUtils.createIntBuffer(1);
-		ypos = BufferUtils.createIntBuffer(1);
+		try(MemoryStack stack = MemoryStack.stackPush()) {
+			IntBuffer xpos = stack.mallocInt(1);
+			IntBuffer ypos = stack.mallocInt(1);
 			
-		GLFW.glfwGetMonitorPos(monitors[nextMonitorIdx], xpos, ypos);
+			GLFW.glfwGetMonitorPos(monitors[nextMonitorIdx], xpos, ypos);
 			
-		monitorOffsetWidth = xpos.get();
-		monitorOffsetHeight = ypos.get();
-			
-		xpos.clear();
-		ypos.clear();
-			
+			monitorOffsetWidth = xpos.get();
+			monitorOffsetHeight = ypos.get();
+		}
+		
 		displayX = monitorOffsetWidth + (DisplayUtils.vidmode.width() / 2) - (getDisplayWidth() / 2);
 		displayY = monitorOffsetHeight + (DisplayUtils.vidmode.height() / 2) - (getDisplayHeight() / 2);
 		
@@ -561,15 +558,16 @@ public class DisplayUtils {
 	};
 	
 	public static void changeSize() {
-
-		IntBuffer w = BufferUtils.createIntBuffer(1);	
-		IntBuffer h = BufferUtils.createIntBuffer(1);
-		GLFW.glfwGetWindowSize(handle, w, h);
-		int width = w.get(0);
-		int height = h.get(0);
+		int width = 0;
+		int height = 0;
 		
-		w.clear();
-		h.clear();
+		try(MemoryStack stack = MemoryStack.stackPush()) {
+			IntBuffer w = stack.mallocInt(1);
+			IntBuffer h = stack.mallocInt(1);
+			GLFW.glfwGetWindowSize(handle, w, h);
+			width = w.get(0);
+			height = h.get(0);
+		}
 		
 		// return if requested DisplayMode is already set
 		if ((displayWidth == width)

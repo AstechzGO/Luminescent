@@ -64,6 +64,7 @@ public class Luminescent
 		Callbacks.glfwFreeCallbacks(DisplayUtils.getHandle());
 		GLFW.glfwDestroyWindow(DisplayUtils.getHandle());
 		Sound.cleanup();
+		TextureList.cleanup();
 		Animation.cleanup();
 	}
 	

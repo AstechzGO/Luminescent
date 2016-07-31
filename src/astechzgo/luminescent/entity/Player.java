@@ -10,8 +10,8 @@ import java.nio.DoubleBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.system.MemoryStack;
 
 import astechzgo.luminescent.coordinates.GameCoordinates;
 import astechzgo.luminescent.coordinates.ScaledWindowInvertedYAxisCoordinates;
@@ -81,21 +81,24 @@ public class Player extends LivingEntity {
 			return rotation;
 		}
 
-		DoubleBuffer mxpos = BufferUtils.createDoubleBuffer(1);
-		DoubleBuffer mypos = BufferUtils.createDoubleBuffer(1);
+		ScaledWindowInvertedYAxisCoordinates mouseCoords = null;
 		
-		GLFW.glfwGetCursorPos(DisplayUtils.getHandle(), mxpos, mypos);
+		try(MemoryStack stack = MemoryStack.stackPush()) {	
+			DoubleBuffer mxpos = stack.mallocDouble(1);
+			DoubleBuffer mypos = stack.mallocDouble(1);
 		
-		ScaledWindowInvertedYAxisCoordinates mouseCoords = new ScaledWindowInvertedYAxisCoordinates(mxpos.get(0), mypos.get(0));
+			GLFW.glfwGetCursorPos(DisplayUtils.getHandle(), mxpos, mypos);
 		
-		if(mouseCoords.equals(lastMouseCoords)) 
-			return rotation;
+			mouseCoords = new ScaledWindowInvertedYAxisCoordinates(mxpos.get(0), mypos.get(0));
 		
-		lastMouseCoords = mouseCoords;
+			if(mouseCoords.equals(lastMouseCoords)) 
+				return rotation;
 		
-		mxpos.clear();
-		mypos.clear();
-
+			lastMouseCoords = mouseCoords;
+		
+			mxpos.clear();
+			mypos.clear();
+		}
 		double m = (coordinates.getAbsoluteY() - mouseCoords.getAbsoluteY()) / (coordinates.getAbsoluteX() - mouseCoords.getAbsoluteX());
 		
 		if(m == Double.POSITIVE_INFINITY) {
