@@ -18,13 +18,10 @@ import astechzgo.luminescent.gameobject.Room;
 import astechzgo.luminescent.rendering.Camera;
 import astechzgo.luminescent.textures.TextureList;
 
-/*
- * TODO: Expand to allow for multi-room loading
- */
 public class JSONWorldLoader {
 	
 	private String x;
-	private String y;
+	private String z;
 	
 	public String width;
 	public String height;
@@ -54,15 +51,15 @@ public class JSONWorldLoader {
 	}
 	
 	public GameCoordinates getCoordinates() {
-		return new GameCoordinates(getX(), getY());
+		return new GameCoordinates(getX(), getZ());
 	}
 	
 	private int getX() {
 		return parseString(x);
 	}
 	
-	private int getY() {
-		return parseString(y);
+	private int getZ() {
+		return parseString(z);
 	}
 	
 	public int getWidth() {
