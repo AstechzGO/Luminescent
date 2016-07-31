@@ -9,7 +9,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
-import org.lwjgl.system.MemoryStack;
+import org.lwjgl.system.MemoryUtil;
 
 import astechzgo.luminescent.coordinates.ScaledWindowCoordinates;
 import astechzgo.luminescent.textures.Texture;
@@ -30,8 +30,6 @@ public class RenderingUtils {
 		int cY = (int) c.getScaledWindowCoordinatesY();
 		int dX = (int) d.getScaledWindowCoordinatesX();
 		int dY = (int) d.getScaledWindowCoordinatesY();
-
-		MemoryStack stack = MemoryStack.create(184);
 		
 		// Vertices, the order is not important. XYZW instead of XYZ
 		float[] vertices = {
@@ -40,13 +38,12 @@ public class RenderingUtils {
 				cX, cY, 0f, 1f,
 				dX, dY, 0f, 1f 
 		};
-		stack.push();
-		FloatBuffer verticesBuffer = stack.mallocFloat(vertices.length);
+		
+		FloatBuffer verticesBuffer = MemoryUtil.memAllocFloat(vertices.length);
 		verticesBuffer.put(vertices);
 		verticesBuffer.flip();
 
-		stack.push();
-		FloatBuffer currentColour = stack.mallocFloat(4);
+		FloatBuffer currentColour = MemoryUtil.memAllocFloat(4);
 		GL11.glGetFloatv(GL11.GL_CURRENT_COLOR, currentColour);
 
 		float red = currentColour.get();
@@ -61,10 +58,8 @@ public class RenderingUtils {
 				red, green, blue, alpha,
 				red, green, blue, alpha,
 				red, green, blue, alpha
-		};
-		
-		stack.push();
-		FloatBuffer colorsBuffer = stack.mallocFloat(colors.length);
+		};	
+		FloatBuffer colorsBuffer = MemoryUtil.memAllocFloat(colors.length);
 		colorsBuffer.put(colors);
 		colorsBuffer.flip();
 
@@ -74,8 +69,7 @@ public class RenderingUtils {
 				1, 0,
 				0, 0
 		};
-		stack.push();
-		FloatBuffer textureCoordsBuffer = stack.mallocFloat(textureCoords.length);
+		FloatBuffer textureCoordsBuffer = MemoryUtil.memAllocFloat(textureCoords.length);
 		textureCoordsBuffer.put(textureCoords);
 		textureCoordsBuffer.flip();
 
@@ -85,8 +79,7 @@ public class RenderingUtils {
 				2, 3, 0
 		};
 		int indicesCount = indices.length;
-		stack.push();
-		ByteBuffer indicesBuffer = stack.malloc(indicesCount);
+		ByteBuffer indicesBuffer = MemoryUtil.memAlloc(indicesCount);
 		indicesBuffer.put(indices);
 		indicesBuffer.flip();
 
@@ -146,11 +139,11 @@ public class RenderingUtils {
 		GL20.glDisableVertexAttribArray(2);
 		GL30.glBindVertexArray(0);
 		
-		stack.pop();
-		stack.pop();
-		stack.pop();
-		stack.pop();
-		stack.pop();
+		MemoryUtil.memFree(verticesBuffer);
+		MemoryUtil.memFree(currentColour);
+		MemoryUtil.memFree(colorsBuffer);
+		MemoryUtil.memFree(textureCoordsBuffer);
+		MemoryUtil.memFree(indicesBuffer);
 	}
 
 	public static void RenderQuad(ScaledWindowCoordinates a, ScaledWindowCoordinates b, ScaledWindowCoordinates c, ScaledWindowCoordinates d, Texture texture) {
@@ -168,17 +161,13 @@ public class RenderingUtils {
 
 	public static void RenderCircle(ScaledWindowCoordinates coordinates, double radius, double pointSeperation, double rotation) {
 		int loops = (int) (360 / pointSeperation);
-
-		// Trust me, it works
-		MemoryStack stack = MemoryStack.create(loops * 52 + 56);
 		
 		// Add vertex for root of circle
 		float[] vertices = new float[(loops + 1) * 4];
 		float[] colors = new float[(loops + 1) * 4];
 		float[] texCoords = new float[(loops + 1) * 2];
 
-		stack.push();
-		FloatBuffer currentColour = stack.mallocFloat(4);
+		FloatBuffer currentColour = MemoryUtil.memAllocFloat(4);
 		GL11.glGetFloatv(GL11.GL_CURRENT_COLOR, currentColour);
 
 		float red = currentColour.get();
@@ -230,18 +219,15 @@ public class RenderingUtils {
 		colors[loops * 4 + 3] = alpha;
 
 		// Vertices, the order is not important. XYZW instead of XYZ
-		stack.push();
-		FloatBuffer verticesBuffer = stack.mallocFloat(vertices.length);
+		FloatBuffer verticesBuffer = MemoryUtil.memAllocFloat(vertices.length);
 		verticesBuffer.put(vertices);
 		verticesBuffer.flip();
 
-		stack.push();
-		FloatBuffer colorsBuffer = stack.mallocFloat(colors.length);
+		FloatBuffer colorsBuffer = MemoryUtil.memAllocFloat(colors.length);
 		colorsBuffer.put(colors);
 		colorsBuffer.flip();
 
-		stack.push();
-		FloatBuffer textureCoordsBuffer = stack.mallocFloat(texCoords.length);
+		FloatBuffer textureCoordsBuffer = MemoryUtil.memAllocFloat(texCoords.length);
 		textureCoordsBuffer.put(texCoords);
 		textureCoordsBuffer.flip();
 
@@ -254,8 +240,7 @@ public class RenderingUtils {
 		}
 
 		int indicesCount = indices.length;
-		stack.push();
-		IntBuffer indicesBuffer = stack.mallocInt(indicesCount);
+		IntBuffer indicesBuffer = MemoryUtil.memAllocInt(indicesCount);
 		indicesBuffer.put(indices);
 		indicesBuffer.flip();
 
@@ -315,11 +300,11 @@ public class RenderingUtils {
 		GL20.glDisableVertexAttribArray(2);
 		GL30.glBindVertexArray(0);
 		
-		stack.pop();
-		stack.pop();
-		stack.pop();
-		stack.pop();
-		stack.pop();
+		MemoryUtil.memFree(verticesBuffer);
+		MemoryUtil.memFree(currentColour);
+		MemoryUtil.memFree(colorsBuffer);
+		MemoryUtil.memFree(textureCoordsBuffer);
+		MemoryUtil.memFree(indicesBuffer);
 	}
 
 	public static void RenderCircle(ScaledWindowCoordinates coordinates, double radius, double pointSeperation, double rotation,
@@ -375,9 +360,7 @@ public class RenderingUtils {
 		int vCY = (int) vC.getScaledWindowCoordinatesY();
 		int vDX = (int) vD.getScaledWindowCoordinatesX();
 		int vDY = (int) vD.getScaledWindowCoordinatesY();
-		
-		MemoryStack stack = MemoryStack.create(184);
-		
+
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 
 		GL11.glColor4f((float) colour.getRed() / 255, (float) colour.getGreen() / 255,
@@ -392,13 +375,11 @@ public class RenderingUtils {
 				vCX, vCY, 0f, 1f,
 				vDX, vDY, 0f, 1f
 		};
-		stack.push();
-		FloatBuffer verticesBuffer = stack.mallocFloat(vertices.length);
+		FloatBuffer verticesBuffer = MemoryUtil.memAllocFloat(vertices.length);
 		verticesBuffer.put(vertices);
 		verticesBuffer.flip();
 
-		stack.push();
-		FloatBuffer currentColour = stack.mallocFloat(4);
+		FloatBuffer currentColour = MemoryUtil.memAllocFloat(4);
 		GL11.glGetFloatv(GL11.GL_CURRENT_COLOR, currentColour);
 
 		float red = currentColour.get();
@@ -414,8 +395,7 @@ public class RenderingUtils {
 				red, green, blue, alpha,
 				red, green, blue, alpha
 		};
-		stack.push();
-		FloatBuffer colorsBuffer = stack.mallocFloat(colors.length);
+		FloatBuffer colorsBuffer = MemoryUtil.memAllocFloat(colors.length);
 		colorsBuffer.put(colors);
 		colorsBuffer.flip();
 
@@ -425,8 +405,7 @@ public class RenderingUtils {
 				tCX, tCY,
 				tDX, tDY
 		};
-		stack.push();
-		FloatBuffer textureCoordsBuffer = stack.mallocFloat(textureCoords.length);
+		FloatBuffer textureCoordsBuffer = MemoryUtil.memAllocFloat(textureCoords.length);
 		textureCoordsBuffer.put(textureCoords);
 		textureCoordsBuffer.flip();
 
@@ -436,8 +415,7 @@ public class RenderingUtils {
 				2, 3, 0
 		};
 		int indicesCount = indices.length;
-		stack.push();
-		ByteBuffer indicesBuffer = stack.malloc(indicesCount);
+		ByteBuffer indicesBuffer = MemoryUtil.memAlloc(indicesCount);
 		indicesBuffer.put(indices);
 		indicesBuffer.flip();
 
@@ -499,10 +477,10 @@ public class RenderingUtils {
 		
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		
-		stack.pop();
-		stack.pop();
-		stack.pop();
-		stack.pop();
-		stack.pop();
+		MemoryUtil.memFree(verticesBuffer);
+		MemoryUtil.memFree(currentColour);
+		MemoryUtil.memFree(colorsBuffer);
+		MemoryUtil.memFree(textureCoordsBuffer);
+		MemoryUtil.memFree(indicesBuffer);
 	}
 }

@@ -39,6 +39,7 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLCapabilities;
 import org.lwjgl.system.MemoryStack;
+import org.lwjgl.system.MemoryUtil;
 
 import astechzgo.luminescent.coordinates.ScaledWindowCoordinates;
 import astechzgo.luminescent.textures.TextureList;
@@ -265,10 +266,7 @@ public class DisplayUtils {
 		int height= displayHeight;
 		int bpp = (monitorBitPerPixel / 8) + 1;  //For alpha
 		
-		MemoryStack stack = MemoryStack.create((width - DisplayUtils.widthOffset) * (height - DisplayUtils.heightOffset) * bpp);
-		stack.push();
-		
-		ByteBuffer buffer = stack.malloc((width - DisplayUtils.widthOffset) * (height - DisplayUtils.heightOffset) * bpp);
+		ByteBuffer buffer = MemoryUtil.memAlloc((width - DisplayUtils.widthOffset) * (height - DisplayUtils.heightOffset) * bpp);
 		GL11.glReadPixels(DisplayUtils.widthOffset, DisplayUtils.heightOffset, width - DisplayUtils.widthOffset, height - DisplayUtils.heightOffset, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
 		String format = "png";
 		BufferedImage image = new BufferedImage(width - DisplayUtils.widthOffset * 2, height - DisplayUtils.heightOffset * 2, BufferedImage.TYPE_INT_RGB);
@@ -285,7 +283,7 @@ public class DisplayUtils {
 		    }
 		}
 		   
-		stack.close();
+		MemoryUtil.memFree(buffer);
 		
 		image = getFlippedImage(image);
 		
@@ -357,8 +355,8 @@ public class DisplayUtils {
 		displayHeight = mode.HEIGHT;
 		
 		try(MemoryStack stack = MemoryStack.stackPush()) {
-			IntBuffer fbw = stack.callocInt(1);
-			IntBuffer fbh = stack.callocInt(1);
+			IntBuffer fbw = stack.mallocInt(1);
+			IntBuffer fbh = stack.mallocInt(1);
 			GLFW.glfwGetFramebufferSize(handle, fbw, fbh);
 			displayFramebufferWidth = fbw.get(0);
 			displayFramebufferHeight = fbh.get(0);
