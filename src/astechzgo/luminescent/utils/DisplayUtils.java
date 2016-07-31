@@ -34,6 +34,7 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.glfw.GLFWVidMode.Buffer;
+import org.lwjgl.glfw.GLFWWindowPosCallback;
 import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
@@ -71,6 +72,9 @@ public class DisplayUtils {
 	
 	public static int oldGameWidth = getDisplayWidth() - widthOffset * 2;
 	public static int oldGameHeight = getDisplayHeight() - heightOffset * 2;
+	
+	public static int displayX;
+	public static int displayY;
 	
 	private static GLFWImage.Buffer icons;
 	
@@ -189,10 +193,13 @@ public class DisplayUtils {
 	            int monitorWidthOffset = getMonitorOffsetWidth(DisplayUtils.monitor);
 	    		int monitorHeightOffset = getMonitorOffsetHeight(DisplayUtils.monitor);
 	            
+	    		displayX = ((monitorWidth - mode.WIDTH) / 2) + monitorWidthOffset;
+	    		displayY = ((monitorHeight - mode.HEIGHT) / 2) + monitorHeightOffset;
+	    		
 	    		glfwSetWindowPos(
 	    				newWindow,
-	    				((monitorWidth - mode.WIDTH) / 2) + monitorWidthOffset,
-	    				((monitorHeight - mode.HEIGHT) / 2) + monitorHeightOffset
+	    				displayX,
+	    				displayY
 	    			);
 	    		
 	            glfwMakeContextCurrent( newWindow );
@@ -219,6 +226,7 @@ public class DisplayUtils {
 
 			GLFW.glfwSetKeyCallback(handle, KeyboardUtils.KEY_CALLBACK);
 			GLFW.glfwSetWindowSizeCallback(handle, RESIZED_CALLBACK);
+			GLFW.glfwSetWindowPosCallback(handle, REPOSITIONED_CALLBACK);
 			
 			GLFW.glfwSetWindowIcon(handle, icons);
 			
@@ -351,10 +359,13 @@ public class DisplayUtils {
 		int monitorWidthOffset = getMonitorOffsetWidth(DisplayUtils.monitor);
 		int monitorHeightOffset = getMonitorOffsetHeight(DisplayUtils.monitor);
 		
+		displayX = monitorWidthOffset + (DisplayUtils.monitorWidth / 2) - (displayWidth / 2);
+		displayY = monitorHeightOffset + (DisplayUtils.monitorHeight / 2) - (displayHeight / 2);
+		
 		glfwSetWindowPos(
 			handle,
-			monitorWidthOffset + (DisplayUtils.monitorWidth / 2) - (displayWidth / 2),
-			monitorHeightOffset + (DisplayUtils.monitorHeight / 2) - (displayHeight / 2)
+			displayX,
+			displayY
 		);
 		
 		glfwMakeContextCurrent(handle);
@@ -363,6 +374,7 @@ public class DisplayUtils {
 		GLFW.glfwSetWindowIcon(handle, icons);
 		
 		GLFW.glfwSetWindowSizeCallback(handle, RESIZED_CALLBACK);
+		GLFW.glfwSetWindowPosCallback(handle, REPOSITIONED_CALLBACK);
 		
 		GLFW.glfwSetWindowAspectRatio(handle, 16, 9);
 		
@@ -480,15 +492,7 @@ public class DisplayUtils {
 				
 			Rectangle r = new Rectangle(monitorOffsetWidth, monitorOffsetHeight, secondMonitorWidth, secondMonitorHeight);
 				
-			GLFW.glfwGetWindowPos(DisplayUtils.getWindow(), xpos, ypos);
-				
-			int x = xpos.get();
-			int y = ypos.get();
-				
-			xpos.clear();
-			ypos.clear();
-				
-			if(r.contains(x, y)) {
+			if(r.contains(displayX, displayY)) {
 				currentMonitorIdx = i;
 				if(currentMonitorIdx != (monitors.length - 1))
 					nextMonitorIdx = currentMonitorIdx + 1;
@@ -512,10 +516,13 @@ public class DisplayUtils {
 		xpos.clear();
 		ypos.clear();
 			
+		displayX = monitorOffsetWidth + (DisplayUtils.vidmode.width() / 2) - (getDisplayWidth() / 2);
+		displayY = monitorOffsetHeight + (DisplayUtils.vidmode.height() / 2) - (getDisplayHeight() / 2);
+		
 		GLFW.glfwSetWindowPos(
 				DisplayUtils.getWindow(), 
-				monitorOffsetWidth + (DisplayUtils.vidmode.width() / 2) - (getDisplayWidth() / 2),
-				monitorOffsetHeight + (DisplayUtils.vidmode.height() / 2) - (getDisplayHeight() / 2)
+				displayX,
+				displayY
 			);
 		
 		
@@ -539,6 +546,16 @@ public class DisplayUtils {
 		@Override
 		public void invoke(long window, int width, int height) {
 			DisplayUtils.changeSize();
+		}
+		
+	};
+	
+	public static final GLFWWindowPosCallback REPOSITIONED_CALLBACK = new GLFWWindowPosCallback() {
+
+		@Override
+		public void invoke(long window, int xpos, int ypos) {
+			displayX = xpos;
+			displayY = ypos;
 		}
 		
 	};
@@ -585,31 +602,10 @@ public class DisplayUtils {
 	}
 	
 	public static int getDisplayX() {
-		IntBuffer xpos = BufferUtils.createIntBuffer(1);
-		IntBuffer ypos = BufferUtils.createIntBuffer(1);
-		
-		GLFW.glfwGetWindowPos(DisplayUtils.getHandle(), xpos, ypos);
-		
-		int x = xpos.get(0);
-		
-		xpos.clear();
-		ypos.clear();
-		
-		return x;
-		
+		return displayX;
 	}
 	
 	public static int getDisplayY() {
-		IntBuffer xpos = BufferUtils.createIntBuffer(1);
-		IntBuffer ypos = BufferUtils.createIntBuffer(1);
-		
-		GLFW.glfwGetWindowPos(DisplayUtils.getHandle(), xpos, ypos);
-		
-		int y = DisplayUtils.getDisplayHeight() - ypos.get(0);	
-		
-		xpos.clear();
-		ypos.clear();
-		
-		return y;
+		return displayY;
 	}
 }
