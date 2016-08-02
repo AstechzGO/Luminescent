@@ -154,7 +154,8 @@ public class RenderingUtils {
 
 			GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getAsTexture());
 			RenderQuad(a, b, c, d);
-
+			GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
+			
 			GL11.glDisable(GL11.GL_TEXTURE_2D);
 		}
 	}
@@ -314,6 +315,7 @@ public class RenderingUtils {
 
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getAsTexture());
 		RenderCircle(coordinates, radius, pointSeperation, rotation);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 	}
@@ -474,6 +476,8 @@ public class RenderingUtils {
 		GL20.glDisableVertexAttribArray(1);
 		GL20.glDisableVertexAttribArray(2);
 		GL30.glBindVertexArray(0);
+		
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 		
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		
