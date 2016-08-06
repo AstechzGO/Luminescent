@@ -10,6 +10,11 @@ public interface Entity {
 		getRenderer().render();
 	}
 	
+	default public void queue() {
+		updateRenderer();
+		getRenderer().queue();
+	}
+	
 	public IObjectRenderer getRenderer();
 	
 	public void updateRenderer();

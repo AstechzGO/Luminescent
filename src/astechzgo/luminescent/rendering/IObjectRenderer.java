@@ -3,11 +3,16 @@ package astechzgo.luminescent.rendering;
 import java.awt.Color;
 
 import astechzgo.luminescent.coordinates.WindowCoordinates;
+import astechzgo.luminescent.main.Luminescent;
 import astechzgo.luminescent.textures.Texture;
 
 
 public interface IObjectRenderer
 {
+	default public void queue() {
+		Luminescent.renderingQueue.add(this);
+	}
+	
 	public void render();
 	
 	public void setColour(Color colour);

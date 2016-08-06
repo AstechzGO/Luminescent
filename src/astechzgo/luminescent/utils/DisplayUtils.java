@@ -534,15 +534,15 @@ public class DisplayUtils {
 			rect1 = new QuadrilateralObjectRenderer(new WindowCoordinates(new ScaledWindowCoordinates(0, 0)), new WindowCoordinates(new ScaledWindowCoordinates(0, displayHeight)), new WindowCoordinates(new ScaledWindowCoordinates(widthOffset, displayHeight)), new WindowCoordinates(new ScaledWindowCoordinates(widthOffset, 0)));
 			rect2 = new QuadrilateralObjectRenderer(new WindowCoordinates(new ScaledWindowCoordinates(displayWidth - widthOffset, 0)), new WindowCoordinates(new ScaledWindowCoordinates(displayWidth - widthOffset, displayHeight)), new WindowCoordinates(new ScaledWindowCoordinates(displayWidth, displayHeight)), new WindowCoordinates(new ScaledWindowCoordinates(displayWidth, 0)));
 			
-			rect1.render();
-			rect2.render();
+			rect1.queue();
+			rect2.queue();
 		}
 		if(heightOffset != 0) {
 			rect1 = new QuadrilateralObjectRenderer(new WindowCoordinates(new ScaledWindowCoordinates(0, displayHeight - heightOffset)), new WindowCoordinates(new ScaledWindowCoordinates(0, displayHeight)), new WindowCoordinates(new ScaledWindowCoordinates(displayWidth, displayHeight)), new WindowCoordinates(new ScaledWindowCoordinates(displayWidth, displayHeight - heightOffset)));
 			rect2 = new QuadrilateralObjectRenderer(new WindowCoordinates(new ScaledWindowCoordinates(0, 0)), new WindowCoordinates(new ScaledWindowCoordinates(0, heightOffset)), new WindowCoordinates(new ScaledWindowCoordinates(displayWidth, heightOffset)), new WindowCoordinates(new ScaledWindowCoordinates(displayWidth, 0)));
 			
-			rect1.render();
-			rect2.render();
+			rect1.queue();
+			rect2.queue();
 		}
 	}
 	

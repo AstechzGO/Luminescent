@@ -1,5 +1,7 @@
 package astechzgo.luminescent.keypress;
 
+import static astechzgo.luminescent.keypress.Key.KEYS_ACTION_SHOOT;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,8 +11,6 @@ import astechzgo.luminescent.coordinates.GameCoordinates;
 import astechzgo.luminescent.entity.Player;
 import astechzgo.luminescent.entity.Projectile;
 import astechzgo.luminescent.gameobject.Room;
-
-import static astechzgo.luminescent.keypress.Key.*;
 
 public class KeyPressGameplay {
 	
@@ -36,7 +36,7 @@ public class KeyPressGameplay {
 			
 			if(m.isAlive()) {
 				// If the bullet is in the room render it
-				m.render();
+				m.queue();
 			}
 			else {
 				// If the bullet is not it the room delete it

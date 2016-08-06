@@ -2,6 +2,7 @@ package astechzgo.luminescent.main;
 
 import static astechzgo.luminescent.utils.DisplayUtils.setDisplayMode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.lwjgl.glfw.Callbacks;
@@ -13,6 +14,7 @@ import astechzgo.luminescent.keypress.Key;
 import astechzgo.luminescent.keypress.KeyPressGameplay;
 import astechzgo.luminescent.keypress.KeyPressUtils;
 import astechzgo.luminescent.rendering.Camera;
+import astechzgo.luminescent.rendering.IObjectRenderer;
 import astechzgo.luminescent.shader.ShaderList;
 import astechzgo.luminescent.shader.ShaderProgram;
 //import astechzgo.luminescent.rendering.LightSource;
@@ -34,6 +36,8 @@ public class Luminescent
 	public static List<Room> rooms;
 	
 	public static ShaderProgram defaultShader;
+	
+	public static List<IObjectRenderer> renderingQueue;
 		
 	public static void Init()
 	{	
@@ -47,6 +51,8 @@ public class Luminescent
 		rooms = JSONWorldLoader.loadRooms();
 		defaultShader = new ShaderProgram(ShaderList.findShader("defaults.defaultVertexShader"), ShaderList.findShader("defaults.defaultPixelShader"));
 		thePlayer.getRenderer().setTexture(new Animation("player.frame", 16));
+		renderingQueue = new ArrayList<IObjectRenderer>();
+		
 		
 		if(Constants.getConstantAsBoolean(Constants.WINDOW_FULLSCREEN)) 
 		{	
@@ -76,10 +82,10 @@ public class Luminescent
 		
 
 		for(Room room : rooms)
-			room.render();
+			room.queue();
 		
 		thePlayer.move(rooms);
-		thePlayer.render();
+		thePlayer.queue();
 		
 		KeyPressUtils.checkUtils();		
 		KeyPressGameplay.checkGameActions(thePlayer, rooms);
@@ -87,5 +93,10 @@ public class Luminescent
 		ControllerUtils.updateJoysticks();
 		
 		DisplayUtils.renderResolutionBorder();
+		
+		for(IObjectRenderer object : renderingQueue)
+			object.render();
+		
+		renderingQueue.clear();
 	}
 }
