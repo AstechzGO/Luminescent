@@ -42,6 +42,8 @@ import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.MemoryUtil;
 
 import astechzgo.luminescent.coordinates.ScaledWindowCoordinates;
+import astechzgo.luminescent.coordinates.WindowCoordinates;
+import astechzgo.luminescent.rendering.QuadrilateralObjectRenderer;
 import astechzgo.luminescent.textures.TextureList;
 
 public class DisplayUtils {	
@@ -525,14 +527,22 @@ public class DisplayUtils {
 	}
 	
 	public static void renderResolutionBorder() {
+		QuadrilateralObjectRenderer rect1, rect2;
+		
 		GL11.glColor3f(0, 0, 0);
 		if(widthOffset != 0) {
-			RenderingUtils.RenderQuad(new ScaledWindowCoordinates(0, 0), new ScaledWindowCoordinates(0, displayHeight), new ScaledWindowCoordinates(widthOffset, displayHeight), new ScaledWindowCoordinates(widthOffset, 0));
-			RenderingUtils.RenderQuad(new ScaledWindowCoordinates(displayWidth - widthOffset, 0), new ScaledWindowCoordinates(displayWidth - widthOffset, displayHeight), new ScaledWindowCoordinates(displayWidth, displayHeight), new ScaledWindowCoordinates(displayWidth, 0));
+			rect1 = new QuadrilateralObjectRenderer(new WindowCoordinates(new ScaledWindowCoordinates(0, 0)), new WindowCoordinates(new ScaledWindowCoordinates(0, displayHeight)), new WindowCoordinates(new ScaledWindowCoordinates(widthOffset, displayHeight)), new WindowCoordinates(new ScaledWindowCoordinates(widthOffset, 0)));
+			rect2 = new QuadrilateralObjectRenderer(new WindowCoordinates(new ScaledWindowCoordinates(displayWidth - widthOffset, 0)), new WindowCoordinates(new ScaledWindowCoordinates(displayWidth - widthOffset, displayHeight)), new WindowCoordinates(new ScaledWindowCoordinates(displayWidth, displayHeight)), new WindowCoordinates(new ScaledWindowCoordinates(displayWidth, 0)));
+			
+			rect1.render();
+			rect2.render();
 		}
 		if(heightOffset != 0) {
-			RenderingUtils.RenderQuad(new ScaledWindowCoordinates(0, displayHeight - heightOffset), new ScaledWindowCoordinates(0, displayHeight), new ScaledWindowCoordinates(displayWidth, displayHeight), new ScaledWindowCoordinates(displayWidth, displayHeight - heightOffset));
-			RenderingUtils.RenderQuad(new ScaledWindowCoordinates(0, 0), new ScaledWindowCoordinates(0, heightOffset), new ScaledWindowCoordinates(displayWidth, heightOffset), new ScaledWindowCoordinates(displayWidth, 0));
+			rect1 = new QuadrilateralObjectRenderer(new WindowCoordinates(new ScaledWindowCoordinates(0, displayHeight - heightOffset)), new WindowCoordinates(new ScaledWindowCoordinates(0, displayHeight)), new WindowCoordinates(new ScaledWindowCoordinates(displayWidth, displayHeight)), new WindowCoordinates(new ScaledWindowCoordinates(displayWidth, displayHeight - heightOffset)));
+			rect2 = new QuadrilateralObjectRenderer(new WindowCoordinates(new ScaledWindowCoordinates(0, 0)), new WindowCoordinates(new ScaledWindowCoordinates(0, heightOffset)), new WindowCoordinates(new ScaledWindowCoordinates(displayWidth, heightOffset)), new WindowCoordinates(new ScaledWindowCoordinates(displayWidth, 0)));
+			
+			rect1.render();
+			rect2.render();
 		}
 	}
 	
