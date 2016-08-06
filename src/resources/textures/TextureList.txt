@@ -19,3 +19,5 @@ $icons.icon_128x128
 #player.frame$13
 #player.frame$14
 #player.frame$15
+
+#light.darkness

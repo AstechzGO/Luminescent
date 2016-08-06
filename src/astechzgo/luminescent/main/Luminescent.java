@@ -8,6 +8,7 @@ import java.util.List;
 import org.lwjgl.glfw.Callbacks;
 import org.lwjgl.glfw.GLFW;
 
+import astechzgo.luminescent.coordinates.WindowCoordinates;
 import astechzgo.luminescent.entity.Player;
 import astechzgo.luminescent.gameobject.Room;
 import astechzgo.luminescent.keypress.Key;
@@ -15,6 +16,7 @@ import astechzgo.luminescent.keypress.KeyPressGameplay;
 import astechzgo.luminescent.keypress.KeyPressUtils;
 import astechzgo.luminescent.rendering.Camera;
 import astechzgo.luminescent.rendering.IObjectRenderer;
+import astechzgo.luminescent.rendering.RectangularObjectRenderer;
 import astechzgo.luminescent.shader.ShaderList;
 import astechzgo.luminescent.shader.ShaderProgram;
 //import astechzgo.luminescent.rendering.LightSource;
@@ -38,6 +40,8 @@ public class Luminescent
 	public static ShaderProgram defaultShader;
 	
 	public static List<IObjectRenderer> renderingQueue;
+	
+	public static RectangularObjectRenderer darkness;
 		
 	public static void Init()
 	{	
@@ -52,7 +56,7 @@ public class Luminescent
 		defaultShader = new ShaderProgram(ShaderList.findShader("defaults.defaultVertexShader"), ShaderList.findShader("defaults.defaultPixelShader"));
 		thePlayer.getRenderer().setTexture(new Animation("player.frame", 16));
 		renderingQueue = new ArrayList<IObjectRenderer>();
-		
+		darkness = new RectangularObjectRenderer(new WindowCoordinates(0, 0), Camera.CAMERA_WIDTH, Camera.CAMERA_HEIGHT, TextureList.findTexture("light.darkness"));
 		
 		if(Constants.getConstantAsBoolean(Constants.WINDOW_FULLSCREEN)) 
 		{	
@@ -89,6 +93,8 @@ public class Luminescent
 		
 		KeyPressUtils.checkUtils();		
 		KeyPressGameplay.checkGameActions(thePlayer, rooms);
+		
+		darkness.queue();
 		
 		ControllerUtils.updateJoysticks();
 		
