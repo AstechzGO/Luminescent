@@ -29,25 +29,25 @@ public class ScaledWindowInvertedYAxisCoordinates extends AbsoluteCoordinates {
 		if(converted != null)
 			return converted.getAbsoluteX();
 		else
-			return scaledWindowInvertedYAxisCoordinatesX + DisplayUtils.getDisplayX();
+			return scaledWindowInvertedYAxisCoordinatesX + DisplayUtils.widthOffset + DisplayUtils.getDisplayX();
 	}
 	
 	public double getAbsoluteY() {
 		if(converted != null)
 			return converted.getAbsoluteY();
 		else
-			return DisplayUtils.getDisplayHeight() - scaledWindowInvertedYAxisCoordinatesY + DisplayUtils.getDisplayY();
+			return DisplayUtils.getDisplayHeight() - scaledWindowInvertedYAxisCoordinatesY + DisplayUtils.heightOffset + DisplayUtils.getDisplayY();
 	}
 	
 	public double getScaledWindowCoordinatesX() {
 		if(converted != null)
-			return converted.getAbsoluteX() - DisplayUtils.getDisplayX();
+			return converted.getAbsoluteX() - DisplayUtils.getDisplayX() - DisplayUtils.widthOffset;
 		return scaledWindowInvertedYAxisCoordinatesX;
 	}
 	
 	public double getScaledWindowCoordinatesY() {
 		if(converted != null)
-			return  -(converted.getAbsoluteY() - DisplayUtils.getDisplayY() - DisplayUtils.getDisplayHeight());
+			return  -(converted.getAbsoluteY() - DisplayUtils.getDisplayY() - DisplayUtils.heightOffset - DisplayUtils.getDisplayHeight());
 		return scaledWindowInvertedYAxisCoordinatesY;
 	}
 }

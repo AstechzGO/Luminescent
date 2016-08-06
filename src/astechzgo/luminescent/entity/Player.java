@@ -89,7 +89,7 @@ public class Player extends LivingEntity {
 		
 			GLFW.glfwGetCursorPos(DisplayUtils.getHandle(), mxpos, mypos);
 		
-			mouseCoords = new ScaledWindowInvertedYAxisCoordinates(mxpos.get(0), mypos.get(0));
+			mouseCoords = new ScaledWindowInvertedYAxisCoordinates(mxpos.get(0) - DisplayUtils.widthOffset, mypos.get(0) - DisplayUtils.heightOffset);
 		
 			if(mouseCoords.equals(lastMouseCoords)) 
 				return rotation;

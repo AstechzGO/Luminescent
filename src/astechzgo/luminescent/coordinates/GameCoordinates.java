@@ -30,26 +30,26 @@ public class GameCoordinates extends AbsoluteCoordinates {
 		if(converted != null)
 			return converted.getAbsoluteX();
 		else
-			return(gameCoordinatesX + (Camera.CAMERA_WIDTH / 2) - Camera.getCameraCoordinates().getGameCoordinatesX()) / Camera.CAMERA_WIDTH  * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)  + DisplayUtils.getDisplayX();
+			return(gameCoordinatesX + (Camera.CAMERA_WIDTH / 2) - Camera.getCameraCoordinates().getGameCoordinatesX()) / Camera.CAMERA_WIDTH  * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2) + DisplayUtils.widthOffset + DisplayUtils.getDisplayX();
 	}
 	
 	public double getAbsoluteY() {
 		if(converted != null)
 			return converted.getAbsoluteX();
 		else
-			return (gameCoordinatesZ + (Camera.CAMERA_HEIGHT / 2) - Camera.getCameraCoordinates().getGameCoordinatesZ()) / Camera.CAMERA_HEIGHT * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2)  + DisplayUtils.getDisplayY();
+			return (gameCoordinatesZ + (Camera.CAMERA_HEIGHT / 2) - Camera.getCameraCoordinates().getGameCoordinatesZ()) / Camera.CAMERA_HEIGHT * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2) + DisplayUtils.heightOffset + DisplayUtils.getDisplayY();
 	}
 	
 	public double getGameCoordinatesX() {
 		if(converted != null)
-			return (converted.getAbsoluteX() - DisplayUtils.getDisplayX()) / (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2) * Camera.CAMERA_WIDTH + Camera.getCameraCoordinates().getGameCoordinatesX() - (Camera.CAMERA_WIDTH / 2);
+			return (converted.getAbsoluteX() - DisplayUtils.getDisplayX() - DisplayUtils.widthOffset) / (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2) * Camera.CAMERA_WIDTH + Camera.getCameraCoordinates().getGameCoordinatesX() - (Camera.CAMERA_WIDTH / 2);
 		else
 			return gameCoordinatesX;
 	}
 	
 	public double getGameCoordinatesZ() {
 		if(converted != null)
-			return (converted.getAbsoluteY() - DisplayUtils.getDisplayY()) / (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2) * Camera.CAMERA_HEIGHT + Camera.getCameraCoordinates().getGameCoordinatesZ() - (Camera.CAMERA_HEIGHT / 2);
+			return (converted.getAbsoluteY() - DisplayUtils.getDisplayY() - DisplayUtils.heightOffset) / (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2) * Camera.CAMERA_HEIGHT + Camera.getCameraCoordinates().getGameCoordinatesZ() - (Camera.CAMERA_HEIGHT / 2);
 		else
 			return gameCoordinatesZ;
 	}

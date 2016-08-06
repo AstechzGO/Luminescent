@@ -30,26 +30,26 @@ public class WindowCoordinates extends AbsoluteCoordinates {
 		if(converted != null)
 			return converted.getAbsoluteX();
 		else
-			return (windowCoordinatesX + DisplayUtils.widthOffset) / Camera.CAMERA_WIDTH  * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)  + DisplayUtils.getDisplayX();
+			return (windowCoordinatesX + DisplayUtils.widthOffset) / Camera.CAMERA_WIDTH  * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2) + DisplayUtils.widthOffset + DisplayUtils.getDisplayX();
 	}
 	
 	public double getAbsoluteY() {
 		if(converted != null)
 			return converted.getAbsoluteY();
 		else
-			return windowCoordinatesY / Camera.CAMERA_HEIGHT * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2) + DisplayUtils.getDisplayY();
+			return windowCoordinatesY / Camera.CAMERA_HEIGHT * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2) + DisplayUtils.heightOffset + DisplayUtils.getDisplayY();
 	}
 	
 	public double getWindowCoordinatesX() {
 		if(converted != null)
-			return (converted.getAbsoluteX() - DisplayUtils.getDisplayX()) / (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2) * Camera.CAMERA_WIDTH;
+			return (converted.getAbsoluteX() - DisplayUtils.getDisplayX() - DisplayUtils.widthOffset) / (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2) * Camera.CAMERA_WIDTH;
 		else
 			return windowCoordinatesX;
 	}
 	
 	public double getWindowCoordinatesY() {
 		if(converted != null)
-			return (converted.getAbsoluteY() - DisplayUtils.getDisplayY()) / (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2) * Camera.CAMERA_HEIGHT;
+			return (converted.getAbsoluteY() - DisplayUtils.getDisplayY() - DisplayUtils.heightOffset) / (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2) * Camera.CAMERA_HEIGHT;
 		else
 			return windowCoordinatesY;
 	}
