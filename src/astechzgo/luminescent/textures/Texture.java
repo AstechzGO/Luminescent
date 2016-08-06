@@ -11,8 +11,8 @@ import java.nio.ByteBuffer;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
-import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.system.MemoryUtil;
 
 public class Texture {
 	
@@ -23,15 +23,19 @@ public class Texture {
 	private final String name;
 	
 	public Texture(String textureName, boolean slick) {
+		this(textureName, slick, toImage(textureName));
+	}
+	
+	public Texture(String textureName, boolean slick, Image asImage) {
 		name = textureName;
 		
 		if(!slick) {
 			textureNumber = -1;
-			asBufferedImage = toBufferedImage(textureName);
+			asBufferedImage = toBufferedImage(asImage);
 			asByteBuffer = toByteBuffer(asBufferedImage);
 		}
 		else {
-			asBufferedImage = toBufferedImage(textureName);
+			asBufferedImage = toBufferedImage(asImage);
 			asByteBuffer = toByteBuffer(asBufferedImage);
 			textureNumber = loadTexture();
 		}
@@ -47,8 +51,8 @@ public class Texture {
 	private ByteBuffer toByteBuffer(BufferedImage image) {
 		int[] pixels = new int[image.getWidth() * image.getHeight()];
         image.getRGB(0, 0, image.getWidth(), image.getHeight(), pixels, 0, image.getWidth());
-
-        ByteBuffer buffer = BufferUtils.createByteBuffer(image.getWidth() * image.getHeight() * 4); //4 for RGBA, 3 for RGB
+        
+        ByteBuffer buffer = MemoryUtil.memAlloc(image.getWidth() * image.getHeight() * 4); //4 for RGBA, 3 for RGB
         
         for(int y = 0; y < image.getHeight(); y++){
             for(int x = 0; x < image.getWidth(); x++){
@@ -65,11 +69,11 @@ public class Texture {
         return buffer;
 	}
 	
-	private BufferedImage toBufferedImage(String imageLoc) {
+	private static Image toImage(String imageLoc) {
 		imageLoc = imageLoc.replaceAll("\\.", "/");
-		Image img = new ImageIcon(this.getClass().getResource(
+		Image img = new ImageIcon(Texture.class.getResource(
 				"/resources/textures/" + imageLoc + ".png")).getImage();
-		return toBufferedImage(img);
+		return img;
 	}
 	
 	public BufferedImage getAsBufferedImage() {
@@ -157,5 +161,9 @@ public class Texture {
         g.dispose();
 
         return flipped;
+    }
+    
+    void dispose() {
+    	MemoryUtil.memFree(asByteBuffer);
     }
 }

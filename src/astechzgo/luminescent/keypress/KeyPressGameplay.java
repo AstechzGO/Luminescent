@@ -1,15 +1,16 @@
 package astechzgo.luminescent.keypress;
 
+import static astechzgo.luminescent.keypress.Key.KEYS_ACTION_SHOOT;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import org.lwjgl.glfw.GLFW;
 
+import astechzgo.luminescent.coordinates.GameCoordinates;
 import astechzgo.luminescent.entity.Player;
 import astechzgo.luminescent.entity.Projectile;
 import astechzgo.luminescent.gameobject.Room;
-
-import static astechzgo.luminescent.keypress.Key.*;
 
 public class KeyPressGameplay {
 	
@@ -22,7 +23,7 @@ public class KeyPressGameplay {
 		
 		if(KEYS_ACTION_SHOOT.isKeyDown() && deltaShot > 250) {
 			// Creates Projectile and adds it to array list
-			Projectile projectile = new Projectile(thePlayer.getPosX(), thePlayer.getPosY());
+			Projectile projectile = new Projectile(thePlayer.getCoordinates());
 			projectiles.add(projectile);	
 			
 			lastShot = (GLFW.glfwGetTime() * 1000);
@@ -35,7 +36,7 @@ public class KeyPressGameplay {
 			
 			if(m.isAlive()) {
 				// If the bullet is in the room render it
-				m.render();
+				m.queue();
 			}
 			else {
 				// If the bullet is not it the room delete it
@@ -48,8 +49,8 @@ public class KeyPressGameplay {
 		List<Double> verticalEdges = new ArrayList<Double>();
 	
 		for(Room room : rooms) {
-			verticalEdges.add(room.getPosX());
-			verticalEdges.add(room.getPosX() + room.getWidth());
+			verticalEdges.add(new GameCoordinates(room.getCoordinates()).getGameCoordinatesX());
+			verticalEdges.add(new GameCoordinates(room.getCoordinates()).getGameCoordinatesX() + room.getWidth());
 		}
 		
 		return verticalEdges;
@@ -59,8 +60,8 @@ public class KeyPressGameplay {
 		List<Double> horizontalEdges = new ArrayList<Double>();
 		
 		for(Room room : rooms) {
-			horizontalEdges.add(room.getPosY() + room.getHeight());
-			horizontalEdges.add(room.getPosY());
+			horizontalEdges.add(new GameCoordinates(room.getCoordinates()).getGameCoordinatesZ() + room.getHeight());
+			horizontalEdges.add(new GameCoordinates(room.getCoordinates()).getGameCoordinatesZ());
 		}
 		
 		return horizontalEdges;

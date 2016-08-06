@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.lwjgl.opengl.GL11;
 
+import astechzgo.luminescent.coordinates.WindowCoordinates;
 import astechzgo.luminescent.textures.Texture;
 
 public class MultipleObjectRenderer implements IObjectRenderer {
@@ -20,7 +21,7 @@ public class MultipleObjectRenderer implements IObjectRenderer {
 	@Override
 	public void render() {
 		for(IObjectRenderer object : objects) {
-			GL11.glColor3f((float)colour.getRed() / 256, (float)colour.getGreen() / 256, (float)colour.getBlue() / 256);
+			GL11.glColor4f((float) colour.getRed() / 255, (float) colour.getGreen() / 255, (float) colour.getBlue() / 255, (float) colour.getAlpha() / 255);
 			object.render();
 		}
 
@@ -79,25 +80,12 @@ public class MultipleObjectRenderer implements IObjectRenderer {
 	}
 
 	@Override
-	public double getX() {
-		//Redundant
-		return 0;
+	public WindowCoordinates getCoordinates() {
+		return new WindowCoordinates(0, 0);
 	}
 
 	@Override
-	public double getY() {
-		//Redundant
-		return 0;
-	}
-
-	@Override
-	public void setX(double x) {
-		//Redundant
-		
-	}
-
-	@Override
-	public void setY(double y) {
-		//Redundant
+	public void setCoordinates(WindowCoordinates coordinates) {
+		// Redundant
 	}
 }

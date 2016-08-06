@@ -1,13 +1,21 @@
 package astechzgo.luminescent.entity;
 
+import static astechzgo.luminescent.keypress.Key.KEYS_MOVEMENT_DOWN;
+import static astechzgo.luminescent.keypress.Key.KEYS_MOVEMENT_FASTER;
+import static astechzgo.luminescent.keypress.Key.KEYS_MOVEMENT_LEFT;
+import static astechzgo.luminescent.keypress.Key.KEYS_MOVEMENT_RIGHT;
+import static astechzgo.luminescent.keypress.Key.KEYS_MOVEMENT_UP;
+
 import java.nio.DoubleBuffer;
-import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.system.MemoryStack;
 
+import astechzgo.luminescent.coordinates.GameCoordinates;
+import astechzgo.luminescent.coordinates.ScaledWindowInvertedYAxisCoordinates;
+import astechzgo.luminescent.coordinates.WindowCoordinates;
 import astechzgo.luminescent.gameobject.Room;
 import astechzgo.luminescent.rendering.Camera;
 import astechzgo.luminescent.rendering.CircularObjectRenderer;
@@ -17,8 +25,6 @@ import astechzgo.luminescent.utils.Constants;
 import astechzgo.luminescent.utils.ControllerUtils;
 import astechzgo.luminescent.utils.DisplayUtils;
 import astechzgo.luminescent.utils.KeyboardUtils;
-
-import static astechzgo.luminescent.keypress.Key.*;
 
 public class Player extends LivingEntity {
 
@@ -33,33 +39,24 @@ public class Player extends LivingEntity {
 	private double lastDelta;
 	
 	private double lastControllerDelta = 0;
-	private double lastMouseX = 0;
-	private double lastMouseY = 0;	
+	private ScaledWindowInvertedYAxisCoordinates lastMouseCoords;
 	
 	public Player() {
-		renderer = new PlayerRenderer(Camera.CAMERA_WIDTH / 2, Camera.CAMERA_HEIGHT / 2, 40, 1);
+		renderer = new PlayerRenderer(new WindowCoordinates(new GameCoordinates(Camera.CAMERA_WIDTH / 2, Camera.CAMERA_HEIGHT / 2)), 40, 1);
 		lastDelta = GLFW.glfwGetTime() * 1000;
 		lastControllerDelta = GLFW.glfwGetTime() * 1000;
 		
 		radius = 40;
-		x = Camera.CAMERA_WIDTH / 2;
-		y = Camera.CAMERA_HEIGHT / 2;
+		coordinates = new GameCoordinates(Camera.CAMERA_WIDTH / 2, Camera.CAMERA_HEIGHT / 2);
 	}
 	
-	public double getPosX() {
-		return super.x;
+	@Override
+	public GameCoordinates getCoordinates() {
+		return coordinates;
 	}
 	
-	public double getPosY() {
-		return super.y;
-	}
-	
-	public void setPosX(double position) {
-		super.x = position;
-	}
-	
-	public void setPosY(double position) {
-		super.y = position;
+	public void setCoordinates(GameCoordinates coordinates) {
+		super.coordinates = coordinates;
 	}
 	
 	public void setRadius(double radius) {
@@ -84,35 +81,25 @@ public class Player extends LivingEntity {
 			return rotation;
 		}
 
-		DoubleBuffer mxpos = BufferUtils.createDoubleBuffer(1);
-		DoubleBuffer mypos = BufferUtils.createDoubleBuffer(1);
+		ScaledWindowInvertedYAxisCoordinates mouseCoords = null;
 		
-		GLFW.glfwGetCursorPos(DisplayUtils.getHandle(), mxpos, mypos);
+		try(MemoryStack stack = MemoryStack.stackPush()) {	
+			DoubleBuffer mxpos = stack.mallocDouble(1);
+			DoubleBuffer mypos = stack.mallocDouble(1);
 		
-		double x = mxpos.get(0);
-		double y = mypos.get(0);
+			GLFW.glfwGetCursorPos(DisplayUtils.getHandle(), mxpos, mypos);
 		
-		if(x == lastMouseX && y == lastMouseY) 
-			return rotation;
+			mouseCoords = new ScaledWindowInvertedYAxisCoordinates(mxpos.get(0) - DisplayUtils.widthOffset, mypos.get(0) - DisplayUtils.heightOffset);
 		
-		lastMouseX = x;
-		lastMouseY = y;
+			if(mouseCoords.equals(lastMouseCoords)) 
+				return rotation;
 		
-		mxpos.clear();
-		mypos.clear();
+			lastMouseCoords = mouseCoords;
 		
-		IntBuffer xpos = BufferUtils.createIntBuffer(1);
-		IntBuffer ypos = BufferUtils.createIntBuffer(1);
-		
-		
-		GLFW.glfwGetWindowPos(DisplayUtils.getHandle(), xpos, ypos);
-		
-		y = DisplayUtils.getDisplayHeight() - y;
-		
-		xpos.clear();
-		ypos.clear();
-		
-		double m = (renderer.getScaledY() - y) / (renderer.getScaledX() - x);
+			mxpos.clear();
+			mypos.clear();
+		}
+		double m = (coordinates.getAbsoluteY() - mouseCoords.getAbsoluteY()) / (coordinates.getAbsoluteX() - mouseCoords.getAbsoluteX());
 		
 		if(m == Double.POSITIVE_INFINITY) {
 			rotation = 0;
@@ -123,11 +110,11 @@ public class Player extends LivingEntity {
 			rotation = 180;
 			return rotation;
 		}
-		if(x == renderer.getScaledX() && y == renderer.getScaledY()) {
+		if(mouseCoords.getAbsoluteX() == coordinates.getAbsoluteX() && mouseCoords.getAbsoluteY() == coordinates.getAbsoluteY()) {
 			return rotation;
 		}
 
-		if(x < renderer.getScaledX())
+		if(mouseCoords.getAbsoluteX() < coordinates.getAbsoluteX())
 			rotation = 90 - Math.toDegrees(Math.atan(m));
 		else {
 			if(270 - Math.toDegrees(Math.atan(m)) > 360)
@@ -194,18 +181,18 @@ public class Player extends LivingEntity {
 		List<Double> horizontalEdges = getHorizontalEdges(rooms);
 		
 		double x = 0;
-		double y = 0;
+		double z = 0;
 		
 		boolean bx = false;
-		boolean by = false;
+		boolean bz = false;
 		
 		boolean initX = true;
-		boolean initY = true;
+		boolean initZ = true;
 		
 		for(double verticalEdge : verticalEdges) {
-			double projectedX = this.getPosX() + speed * Math.cos(Math.toRadians(angle));
+			double projectedX = this.getCoordinates().getGameCoordinatesX() + speed * Math.cos(Math.toRadians(angle));
 			
-			if(!(this.getPosX() > verticalEdge - this.radius) && (projectedX >= verticalEdge - this.radius)) {
+			if(!(this.getCoordinates().getGameCoordinatesX() > verticalEdge - this.radius) && (projectedX >= verticalEdge - this.radius)) {
 				bx = true;
 				
 				double temp = verticalEdge - this.radius;
@@ -214,7 +201,7 @@ public class Player extends LivingEntity {
 					initX = false;
 				}
 			}
-			else if(!(this.getPosX() < verticalEdge + this.getRadius()) && (projectedX <= verticalEdge + this.getRadius())) {
+			else if(!(this.getCoordinates().getGameCoordinatesX() < verticalEdge + this.getRadius()) && (projectedX <= verticalEdge + this.getRadius())) {
 				bx = true;
 				
 				double temp = verticalEdge + this.radius;
@@ -225,10 +212,14 @@ public class Player extends LivingEntity {
 			}					
 		}
 		
-		if(bx)
-			this.setPosX(x);
-		else
-			this.setPosX(this.getPosX() + speed * Math.cos(Math.toRadians(angle)));
+		if(bx) {
+			double tempz = getCoordinates().getGameCoordinatesZ();
+			this.setCoordinates(new GameCoordinates(x, tempz));
+		}
+		else {
+			double tempz = getCoordinates().getGameCoordinatesZ();
+			this.setCoordinates(new GameCoordinates(getCoordinates().getGameCoordinatesX() + speed * Math.cos(Math.toRadians(angle)), tempz));
+		}
 		
 		/*for(Room room : rooms) {
 			if(this.getPosY() - speed * Math.sin(Math.toRadians(angle)) >= room.getPosY() + room.getHeight() - this.getRadius()) {
@@ -251,33 +242,38 @@ public class Player extends LivingEntity {
 		}*/
 		
 		for(double horizontalEdge : horizontalEdges) {
-			double projectedY = this.getPosY() - speed * Math.sin(Math.toRadians(angle));
+			double projectedZ = getCoordinates().getGameCoordinatesZ() - speed * Math.sin(Math.toRadians(angle));
 			
-			if(!(this.getPosY() > horizontalEdge - this.radius) && (projectedY >= horizontalEdge - this.radius)) {
-				by = true;
+			if(!(getCoordinates().getGameCoordinatesZ() > horizontalEdge - this.radius) && (projectedZ >= horizontalEdge - this.radius)) {
+				bz = true;
 				
 				double temp = horizontalEdge - this.radius;
-				if(temp > y || initY) {
-					y = temp;
-					initY = false;
+				if(temp > z || initZ) {
+					z = temp;
+					initZ = false;
 				}
 			}
-			else if(!(this.getPosY() < horizontalEdge + this.getRadius()) && (projectedY <= horizontalEdge + this.getRadius())) {
-				by = true;
+			else if(!(getCoordinates().getGameCoordinatesZ() < horizontalEdge + this.getRadius()) && (projectedZ <= horizontalEdge + this.getRadius())) {
+				bz = true;
 				
 				double temp = horizontalEdge + this.radius;
-				if(temp > y || initY) {
-					y = temp;
-					initY = false;
+				if(temp > z || initZ) {
+					z = temp;
+					initZ = false;
 				}
 			}					
 		}
 		
-		if(by)
-			this.setPosY(y);
-		else
-			this.setPosY(this.getPosY() - speed * Math.sin(Math.toRadians(angle)));
-		
+		if(bz) {
+			double tempx = getCoordinates().getGameCoordinatesX();
+			setCoordinates(new GameCoordinates(tempx, z));
+		}
+		else {
+			//this.setPosY(this.getPosY() - speed * Math.sin(Math.toRadians(angle)));
+			double tempx = getCoordinates().getGameCoordinatesX();
+			setCoordinates(new GameCoordinates(tempx, getCoordinates().getGameCoordinatesZ() - speed * Math.sin(Math.toRadians(angle))));
+		}
+			
 		/*if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_UP)) {
 
 			if((this.getPosY() + speed) >= room.getPosY() + room.getHeight() - this.getRadius())
@@ -314,8 +310,8 @@ public class Player extends LivingEntity {
 		List<Double> verticalEdges = new ArrayList<Double>();
 	
 		for(Room room : rooms) {
-			verticalEdges.add(room.getPosX());
-			verticalEdges.add(room.getPosX() + room.getWidth());
+			verticalEdges.add(new GameCoordinates(room.getCoordinates()).getGameCoordinatesX());
+			verticalEdges.add(new GameCoordinates(room.getCoordinates()).getGameCoordinatesX() + room.getWidth());
 		}
 		
 		return verticalEdges;
@@ -325,8 +321,8 @@ public class Player extends LivingEntity {
 		List<Double> horizontalEdges = new ArrayList<Double>();
 		
 		for(Room room : rooms) {
-			horizontalEdges.add(room.getPosY() + room.getHeight());
-			horizontalEdges.add(room.getPosY());
+			horizontalEdges.add(new GameCoordinates(room.getCoordinates()).getGameCoordinatesZ() + room.getHeight());
+			horizontalEdges.add(new GameCoordinates(room.getCoordinates()).getGameCoordinatesZ());
 		}
 		
 		return horizontalEdges;
@@ -339,44 +335,31 @@ public class Player extends LivingEntity {
 	
 	private class PlayerRenderer extends CircularObjectRenderer {
 		
-		private PlayerRenderer(double x, double y, double radius) {
-			super(x, y, radius);
+		private PlayerRenderer(WindowCoordinates coordinates, double radius) {
+			super(coordinates, radius);
 		}
 		
-		private PlayerRenderer(double x, double y, double radius, int pointSeperation) {
-			super(x, y, radius, pointSeperation);
+		private PlayerRenderer(WindowCoordinates coordinates, double radius, int pointSeperation) {
+			super(coordinates, radius, pointSeperation);
 		}
 		
-		private PlayerRenderer(double x, double y, double radius, int pointSeperation, Texture texture) {
-			super(x, y, radius, pointSeperation, texture);
+		private PlayerRenderer(WindowCoordinates coordinates, double radius, int pointSeperation, Texture texture) {
+			super(coordinates, radius, pointSeperation, texture);
 		}
 		
-		private PlayerRenderer(double x, double y, double radius, Texture texture) {
-			super(x, y, radius, texture);
+		private PlayerRenderer(WindowCoordinates coordinates, double radius, Texture texture) {
+			super(coordinates, radius, texture);
 		}
 		
 		@Override
 		public void resize() {
-			scaledX = ((int) Math
-					.round((double) (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)) / 2)
-					+ DisplayUtils.widthOffset;
-			scaledY = ((int) Math
-					.round((double) (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2)) / 2)
-					+ DisplayUtils.heightOffset;
+			coordinates = new WindowCoordinates(Camera.CAMERA_WIDTH / 2, Camera.CAMERA_HEIGHT / 2);
 					
 			scaledRadius = (int) Math
 					.round((double) radius / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2));
 
 			oldGameWidth = DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2;
 			oldGameHeight = DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2;
-		}
-		
-		private double getScaledX() {
-			return scaledX;
-		}
-		
-		private double getScaledY() {
-			return scaledY;
 		}
 		
 		private void setRotation(double rotation) {
@@ -387,7 +370,6 @@ public class Player extends LivingEntity {
 	@Override
 	public void updateRenderer() {
 		renderer.setRotation(rotation);
-		renderer.setX(x);
-		renderer.setY(y);
+		renderer.setCoordinates(new WindowCoordinates(coordinates));
 	}
 }
