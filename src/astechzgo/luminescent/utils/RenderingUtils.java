@@ -22,14 +22,14 @@ public class RenderingUtils {
 	 * D--C
 	 */
 	public static void RenderQuad(ScaledWindowCoordinates a, ScaledWindowCoordinates b, ScaledWindowCoordinates c, ScaledWindowCoordinates d) {
-		int aX = (int) a.getScaledWindowCoordinatesX();
-		int aY = (int) a.getScaledWindowCoordinatesY();
-		int bX = (int) b.getScaledWindowCoordinatesX();
-		int bY = (int) b.getScaledWindowCoordinatesY();
-		int cX = (int) c.getScaledWindowCoordinatesX();
-		int cY = (int) c.getScaledWindowCoordinatesY();
-		int dX = (int) d.getScaledWindowCoordinatesX();
-		int dY = (int) d.getScaledWindowCoordinatesY();
+		int aX = (int) a.getScaledWindowCoordinatesX() + DisplayUtils.widthOffset;
+		int aY = (int) a.getScaledWindowCoordinatesY() + DisplayUtils.heightOffset;
+		int bX = (int) b.getScaledWindowCoordinatesX() + DisplayUtils.widthOffset;
+		int bY = (int) b.getScaledWindowCoordinatesY() + DisplayUtils.heightOffset;
+		int cX = (int) c.getScaledWindowCoordinatesX() + DisplayUtils.widthOffset;
+		int cY = (int) c.getScaledWindowCoordinatesY() + DisplayUtils.heightOffset;
+		int dX = (int) d.getScaledWindowCoordinatesX() + DisplayUtils.widthOffset;
+		int dY = (int) d.getScaledWindowCoordinatesY() + DisplayUtils.heightOffset;
 		
 		// Vertices, the order is not important. XYZW instead of XYZ
 		float[] vertices = {
@@ -183,8 +183,8 @@ public class RenderingUtils {
 
 			double xcos = (double) Math.cos(radian);
 			double ysin = (float) Math.sin(radian);
-			double tempx = xcos * radius + coordinates.getScaledWindowCoordinatesX();
-			double tempy = ysin * radius + coordinates.getScaledWindowCoordinatesY();
+			double tempx = xcos * radius + coordinates.getScaledWindowCoordinatesX() + DisplayUtils.widthOffset;
+			double tempy = ysin * radius + coordinates.getScaledWindowCoordinatesY() + DisplayUtils.heightOffset;
 			double tx = Math.cos(Math.toRadians(angle + rotation)) * 0.5 + 0.5;
 			double ty = Math.sin(Math.toRadians(angle + rotation)) * 0.5 + 0.5;
 
@@ -206,8 +206,8 @@ public class RenderingUtils {
 		}
 
 		// Root of circle
-		vertices[loops * 4] = (int) coordinates.getScaledWindowCoordinatesX();
-		vertices[loops * 4 + 1] = (int) coordinates.getScaledWindowCoordinatesY();
+		vertices[loops * 4] = (int) coordinates.getScaledWindowCoordinatesX() + DisplayUtils.widthOffset;
+		vertices[loops * 4 + 1] = (int) coordinates.getScaledWindowCoordinatesY() + DisplayUtils.heightOffset;
 		vertices[loops * 4 + 2] = 0.0f;
 		vertices[loops * 4 + 3] = 1.0f;
 
@@ -327,10 +327,10 @@ public class RenderingUtils {
 	public static void DrawTextureRegion(ScaledWindowCoordinates coordinates, int regX, int regY, int regWidth, int regHeight, Color colour,
 			Texture texture) {
 		/* Vertex positions */
-		ScaledWindowCoordinates a = new ScaledWindowCoordinates(coordinates.getScaledWindowCoordinatesX(), coordinates.getScaledWindowCoordinatesY() + regHeight);
-		ScaledWindowCoordinates b = new ScaledWindowCoordinates(coordinates.getScaledWindowCoordinatesX() + regWidth, coordinates.getScaledWindowCoordinatesY() + regHeight);
-		ScaledWindowCoordinates c = new ScaledWindowCoordinates(coordinates.getScaledWindowCoordinatesX() + regWidth, coordinates.getScaledWindowCoordinatesY());
-		ScaledWindowCoordinates d = new ScaledWindowCoordinates(coordinates.getScaledWindowCoordinatesX(), coordinates.getScaledWindowCoordinatesY());
+		ScaledWindowCoordinates a = new ScaledWindowCoordinates(coordinates.getScaledWindowCoordinatesX() + DisplayUtils.widthOffset, coordinates.getScaledWindowCoordinatesY() + DisplayUtils.heightOffset + regHeight);
+		ScaledWindowCoordinates b = new ScaledWindowCoordinates(coordinates.getScaledWindowCoordinatesX() + DisplayUtils.widthOffset + regWidth, coordinates.getScaledWindowCoordinatesY() + DisplayUtils.heightOffset + regHeight);
+		ScaledWindowCoordinates c = new ScaledWindowCoordinates(coordinates.getScaledWindowCoordinatesX() + DisplayUtils.widthOffset + regWidth, coordinates.getScaledWindowCoordinatesY() + DisplayUtils.heightOffset);
+		ScaledWindowCoordinates d = new ScaledWindowCoordinates(coordinates.getScaledWindowCoordinatesX() + DisplayUtils.widthOffset, coordinates.getScaledWindowCoordinatesY() + DisplayUtils.heightOffset);
 
 		/* Texture coordinates */
 		float tAX = (float) (regX) / texture.getAsBufferedImage().getWidth();
@@ -354,14 +354,14 @@ public class RenderingUtils {
 			float tAX, float tAY, float tBX, float tBY, float tCX, float tCY, float tDX, float tDY, Color colour,
 			Texture texture) {
 		
-		int vAX = (int) vA.getScaledWindowCoordinatesX();
-		int vAY = (int) vA.getScaledWindowCoordinatesY();
-		int vBX = (int) vB.getScaledWindowCoordinatesX();
-		int vBY = (int) vB.getScaledWindowCoordinatesY();
-		int vCX = (int) vC.getScaledWindowCoordinatesX();
-		int vCY = (int) vC.getScaledWindowCoordinatesY();
-		int vDX = (int) vD.getScaledWindowCoordinatesX();
-		int vDY = (int) vD.getScaledWindowCoordinatesY();
+		int vAX = (int) vA.getScaledWindowCoordinatesX() + DisplayUtils.widthOffset;
+		int vAY = (int) vA.getScaledWindowCoordinatesY() + DisplayUtils.heightOffset;
+		int vBX = (int) vB.getScaledWindowCoordinatesX() + DisplayUtils.widthOffset;
+		int vBY = (int) vB.getScaledWindowCoordinatesY() + DisplayUtils.heightOffset;
+		int vCX = (int) vC.getScaledWindowCoordinatesX() + DisplayUtils.widthOffset;
+		int vCY = (int) vC.getScaledWindowCoordinatesY() + DisplayUtils.heightOffset;
+		int vDX = (int) vD.getScaledWindowCoordinatesX() + DisplayUtils.widthOffset;
+		int vDY = (int) vD.getScaledWindowCoordinatesY() + DisplayUtils.heightOffset;
 
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 

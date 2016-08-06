@@ -30,7 +30,7 @@ public class WindowCoordinates extends AbsoluteCoordinates {
 		if(converted != null)
 			return converted.getAbsoluteX();
 		else
-			return (windowCoordinatesX + DisplayUtils.widthOffset) / Camera.CAMERA_WIDTH  * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2) + DisplayUtils.widthOffset + DisplayUtils.getDisplayX();
+			return windowCoordinatesX / Camera.CAMERA_WIDTH  * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2) + DisplayUtils.widthOffset + DisplayUtils.getDisplayX();
 	}
 	
 	public double getAbsoluteY() {
