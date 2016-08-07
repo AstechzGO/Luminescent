@@ -1,9 +1,10 @@
 package astechzgo.luminescent.entity;
 
+import astechzgo.luminescent.coordinates.GameCoordinates;
+
 public abstract class LivingEntity implements Entity {	
 	
-	protected double x;
-	protected double y;
+	protected GameCoordinates coordinates;
 	
 	protected int health;
 	protected boolean isAlive;
@@ -22,12 +23,8 @@ public abstract class LivingEntity implements Entity {
 	public void setAlive(boolean alive) {
 		isAlive = alive;
 	}
-
-	public double getX() {
-		return x;
-	}
 	
-	public double getY() {
-		return y;
+	public GameCoordinates getCoordinates() {
+		return coordinates;
 	}
 }

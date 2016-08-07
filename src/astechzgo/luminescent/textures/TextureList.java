@@ -84,4 +84,9 @@ public class TextureList {
 		
 		TextureList.addTextures(textures);
 	}
+	
+	public static void cleanup() {
+		for(Texture texture : textures)
+			texture.dispose();
+	}
 }

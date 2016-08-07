@@ -4,6 +4,9 @@ import java.awt.Color;
 
 import org.lwjgl.opengl.GL11;
 
+import astechzgo.luminescent.coordinates.ScaledWindowCoordinates;
+import astechzgo.luminescent.coordinates.WindowCoordinates;
+import astechzgo.luminescent.main.Luminescent;
 import astechzgo.luminescent.textures.Texture;
 import astechzgo.luminescent.utils.DisplayUtils;
 import astechzgo.luminescent.utils.RenderingUtils;
@@ -14,11 +17,7 @@ public class CircularObjectRenderer implements IObjectRenderer {
 	protected int pointSeperation;
 	protected double radius;
 
-	protected double x;
-	protected double y;
-
-	protected int scaledX;
-	protected int scaledY;
+	protected WindowCoordinates coordinates;
 
 	protected int scaledRadius;
 
@@ -29,25 +28,24 @@ public class CircularObjectRenderer implements IObjectRenderer {
 
 	protected double rotation = 0.0;
 	
-	public CircularObjectRenderer(double x, double y, double radius) {
-		this(x, y, radius, 1);
+	public CircularObjectRenderer(WindowCoordinates coordinates, double radius) {
+		this(coordinates, radius, 1);
 	}
 
-	public CircularObjectRenderer(double x, double y, double radius, int pointSeperation) {
-		this.x = x;
-		this.y = y;
+	public CircularObjectRenderer(WindowCoordinates coordinates, double radius, int pointSeperation) {
+		this.coordinates = coordinates;
 
 		this.radius = radius;
 
 		this.pointSeperation = pointSeperation;
 	}
 
-	public CircularObjectRenderer(double x, double y, double radius, Texture texture) {
-		this(x, y, radius, 1, texture);
+	public CircularObjectRenderer(WindowCoordinates coordinates, double radius, Texture texture) {
+		this(coordinates, radius, 1, texture);
 	}
 
-	public CircularObjectRenderer(double x, double y, double radius, int pointSeperation, Texture texture) {
-		this(x, y, radius, pointSeperation);
+	public CircularObjectRenderer(WindowCoordinates coordinates, double radius, int pointSeperation, Texture texture) {
+		this(coordinates, radius, pointSeperation);
 
 		this.texture = texture;
 	}
@@ -56,13 +54,16 @@ public class CircularObjectRenderer implements IObjectRenderer {
 	public void render() {
 		resize();
 
-		GL11.glColor4f((float) colour.getRed() / 256, (float) colour.getGreen() / 256, (float) colour.getBlue() / 256, (float) colour.getAlpha() / 256);
+		GL11.glColor4f((float) colour.getRed() / 255, (float) colour.getGreen() / 255, (float) colour.getBlue() / 255, (float) colour.getAlpha() / 255);
 
 		if (texture != null) {
-			RenderingUtils.RenderCircle(scaledX, scaledY, scaledRadius, pointSeperation, rotation, texture);
+			Luminescent.defaultShader.applyShader();
+			Luminescent.defaultShader.updateTransMatrix();
+			RenderingUtils.RenderCircle(new ScaledWindowCoordinates(coordinates), scaledRadius, pointSeperation, rotation, texture);
+			Luminescent.defaultShader.withdrawShader();
 		}
 		else {
-			RenderingUtils.RenderCircle(scaledX, scaledY, scaledRadius, pointSeperation, rotation);
+			RenderingUtils.RenderCircle(new ScaledWindowCoordinates(coordinates), scaledRadius, pointSeperation, rotation);
 		}
 	}
 
@@ -78,18 +79,6 @@ public class CircularObjectRenderer implements IObjectRenderer {
 
 	@Override
 	public void resize() {
-		int scaledCamX = (int) (Math
-				.round((Camera.CAMERA_WIDTH / 2) - Camera.getX()) / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2));
-		int scaledCamY = (int) (Math
-				.round((Camera.CAMERA_HEIGHT / 2) - Camera.getY()) / Camera.CAMERA_HEIGHT * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2));
-
-		scaledX = ((int) Math
-				.round( x / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)))
-				+ DisplayUtils.widthOffset + scaledCamX;
-		scaledY = ((int) Math
-				.round(y / Camera.CAMERA_HEIGHT * (DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2)))
-				+ DisplayUtils.heightOffset + scaledCamY;
-
 		scaledRadius = (int) Math
 				.round(radius / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2));
 
@@ -114,13 +103,13 @@ public class CircularObjectRenderer implements IObjectRenderer {
 			QuadrilateralObjectRenderer casted = (QuadrilateralObjectRenderer) object;
 
 			double[] xQuads = { 
-				(casted.aX), 
-				(casted.bX)
+				(casted.a.getWindowCoordinatesX()), 
+				(casted.b.getWindowCoordinatesX())
 			};
 
 			double[] yQuads = { 
-				(casted.dY), 
-				(casted.aY) 
+				(casted.d.getWindowCoordinatesY()), 
+				(casted.a.getWindowCoordinatesY()) 
 			};
 
 			boolean[][] quadrant = new boolean[2][2];
@@ -131,9 +120,9 @@ public class CircularObjectRenderer implements IObjectRenderer {
 
 			// Determine quadrant of each corner
 			for (int x = 0; x < 2; x++) {
-				int quadX = (xQuads[x] >= this.x) ? 0 : 1;
+				int quadX = (xQuads[x] >= getCoordinates().getWindowCoordinatesX()) ? 0 : 1;
 				for (int y = 0; y < 2; y++) {
-					int quadY = (yQuads[y] >= this.y) ? 0 : 1;
+					int quadY = (yQuads[y] >= getCoordinates().getWindowCoordinatesY()) ? 0 : 1;
 					quadrant[quadX][quadY] = true;
 				}
 			}
@@ -151,9 +140,9 @@ public class CircularObjectRenderer implements IObjectRenderer {
 			case 1: // Check each rectangle corner against circle radius
 				float radiusSquared = (float) (this.radius * this.radius);
 				for (int x = 0; x < 2; x++) {
-					float dx = (float) (xQuads[x] - this.x);
+					float dx = (float) (xQuads[x] - getCoordinates().getWindowCoordinatesX());
 					for (int y = 0; y < 2; y++) {
-						float dy = (float) (yQuads[y] - this.y);
+						float dy = (float) (yQuads[y] - getCoordinates().getWindowCoordinatesY());
 						if (dx * dx + dy * dy <= radiusSquared)
 							collision = true;
 					}
@@ -161,8 +150,8 @@ public class CircularObjectRenderer implements IObjectRenderer {
 				break;
 			case 2: // Check for intersection between rectangle and bounding box
 					// of the circle
-				boolean intersectX = !(xQuads[1] < this.x - this.radius || xQuads[0] > this.x + this.radius);
-				boolean intersectY = !(yQuads[1] < this.x - this.radius || yQuads[0] > this.x + this.radius);
+				boolean intersectX = !(xQuads[1] < getCoordinates().getWindowCoordinatesX() - this.radius || xQuads[0] > getCoordinates().getWindowCoordinatesX() + this.radius);
+				boolean intersectY = !(yQuads[1] < getCoordinates().getWindowCoordinatesX() - this.radius || yQuads[0] > getCoordinates().getWindowCoordinatesX() + this.radius);
 				if (intersectX && intersectY)
 					collision = true;
 				break;
@@ -174,8 +163,8 @@ public class CircularObjectRenderer implements IObjectRenderer {
 		else if (object instanceof CircularObjectRenderer) {
 			CircularObjectRenderer casted = (CircularObjectRenderer) object;
 
-			int a = (int) (this.y - casted.y);
-			int b = (int) (this.x - casted.x);
+			int a = (int) (getCoordinates().getWindowCoordinatesY() - casted.getCoordinates().getWindowCoordinatesY());
+			int b = (int) (getCoordinates().getWindowCoordinatesX()- casted.getCoordinates().getWindowCoordinatesX());
 
 			double c = Math.sqrt((a * a) + (b * b));
 
@@ -201,8 +190,8 @@ public class CircularObjectRenderer implements IObjectRenderer {
 
 	@Override
 	public boolean doesContain(double x, double y) {
-		double a = this.y - y;
-		double b = this.x - x;
+		double a = getCoordinates().getWindowCoordinatesY() - y;
+		double b = getCoordinates().getWindowCoordinatesX() - x;
 
 		double c = Math.sqrt((a * a) + (b * b));
 
@@ -213,22 +202,12 @@ public class CircularObjectRenderer implements IObjectRenderer {
 	}
 
 	@Override
-	public double getX() {
-		return x;
+	public WindowCoordinates getCoordinates() {
+		return coordinates;
 	}
 
 	@Override
-	public double getY() {
-		return y;
-	}
-
-	@Override
-	public void setX(double x) {
-		this.x = x;
-	}
-
-	@Override
-	public void setY(double y) {
-		this.y = y;
+	public void setCoordinates(WindowCoordinates coordinates) {
+		this.coordinates = coordinates;
 	}
 }
