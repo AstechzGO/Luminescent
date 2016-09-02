@@ -240,6 +240,8 @@ astechzgo.luminescent:
 							Mark Rotteveel				(http://stackoverflow.com/users/466862/mark-rotteveel)
 						Answer:
 							Abdennour TOUMI				(http://stackoverflow.com/users/747579/abdennour-toumi)
+com.seisw.util.geom:
+	http://web.archive.org/web/20090213122910/http://www.seisw.com/GPCJ/GPCJ.html
 resources:
 	shaders:
 		defaults:

@@ -16,6 +16,7 @@ import astechzgo.luminescent.keypress.KeyPressGameplay;
 import astechzgo.luminescent.keypress.KeyPressUtils;
 import astechzgo.luminescent.rendering.Camera;
 import astechzgo.luminescent.rendering.IObjectRenderer;
+import astechzgo.luminescent.rendering.QuadrilateralObjectRenderer;
 import astechzgo.luminescent.rendering.RectangularObjectRenderer;
 import astechzgo.luminescent.shader.ShaderList;
 import astechzgo.luminescent.shader.ShaderProgram;
@@ -97,6 +98,10 @@ public class Luminescent
 		darkness.queue();
 		
 		ControllerUtils.updateJoysticks();
+		
+		for(QuadrilateralObjectRenderer line : JSONWorldLoader.lines) {
+			line.queue();
+		}
 		
 		DisplayUtils.renderResolutionBorder();
 		
