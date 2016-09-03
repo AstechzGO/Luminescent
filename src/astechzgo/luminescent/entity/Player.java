@@ -176,10 +176,6 @@ public class Player extends LivingEntity {
 		if(tempAngle == -1) tempAngle = 90;
 		
 		double angle = setRotation() + tempAngle;
-		
-		List<Double> verticalEdges = getVerticalEdges(rooms);
-		List<Double> horizontalEdges = getHorizontalEdges(rooms);
-		
 		double x = 0;
 		double z = 0;
 		
@@ -188,121 +184,51 @@ public class Player extends LivingEntity {
 		
 		boolean initX = true;
 		boolean initZ = true;
-		
-		for(double verticalEdge : verticalEdges) {
+		for(Room room : rooms) {
 			double projectedX = this.getCoordinates().getGameCoordinatesX() + speed * Math.cos(Math.toRadians(angle));
+			if(projectedX > getCoordinates().getGameCoordinatesX()) {
+				projectedX += this.radius;
+			}
+			else {
+				projectedX -= this.radius;
+			}
+		
+			double projectedY = getCoordinates().getGameCoordinatesZ() - speed * Math.sin(Math.toRadians(angle));	
+			if(projectedY > getCoordinates().getGameCoordinatesZ()) {
+				projectedY += this.radius;
+			}
+			else {
+				projectedY -= this.radius;
+			}
+			double roomx = new GameCoordinates(room.getCoordinates()).getGameCoordinatesX();
+			double roomy = new GameCoordinates(room.getCoordinates()).getGameCoordinatesZ();
+			if((projectedX < roomx  || projectedX > roomx + room.getWidth() ) || (projectedY < roomy|| projectedY > roomy + room.getHeight())) {
 			
-			if(!(this.getCoordinates().getGameCoordinatesX() > verticalEdge - this.radius) && (projectedX >= verticalEdge - this.radius)) {
+				if(projectedY > roomy && projectedY < roomy + room.getHeight() && getCoordinates().getGameCoordinatesX() > roomx - 0.1 && getCoordinates().getGameCoordinatesX() < roomx + room.getWidth() + 0.1) {
 				bx = true;
-				
-				double temp = verticalEdge - this.radius;
-				if(temp > x || initX) {
-					x = temp;
-					initX = false;
 				}
-			}
-			else if(!(this.getCoordinates().getGameCoordinatesX() < verticalEdge + this.getRadius()) && (projectedX <= verticalEdge + this.getRadius())) {
-				bx = true;
-				
-				double temp = verticalEdge + this.radius;
-				if(temp > x || initX) {
-					x = temp;
-					initX = false;
-				}
-			}					
-		}
-		
-		if(bx) {
-			double tempz = getCoordinates().getGameCoordinatesZ();
-			this.setCoordinates(new GameCoordinates(x, tempz));
-		}
-		else {
-			double tempz = getCoordinates().getGameCoordinatesZ();
-			this.setCoordinates(new GameCoordinates(getCoordinates().getGameCoordinatesX() + speed * Math.cos(Math.toRadians(angle)), tempz));
-		}
-		
-		/*for(Room room : rooms) {
-			if(this.getPosY() - speed * Math.sin(Math.toRadians(angle)) >= room.getPosY() + room.getHeight() - this.getRadius()) {
-				double temp = room.getPosY() + room.getHeight() - this.getRadius();
-				if(temp > y || initY) {
-					y = temp;
-					initY = false;
-				}
-			}
-			else if(this.getPosY() - speed * Math.sin(Math.toRadians(angle)) <= room.getPosY() + this.getRadius()) {
-				double temp = room.getPosY() + this.getRadius();
-				if(temp < y || initY) {
-					y = temp;
-					initY = false;
+	if(projectedX > roomx && projectedX < roomx + room.getWidth() && getCoordinates().getGameCoordinatesZ() > roomy -0.1 && getCoordinates().getGameCoordinatesZ() < roomy + room.getHeight() + 0.1) {	
+		bz = true;
 				}
 			}
 			else {
-				by = true;
+				double tempz = getCoordinates().getGameCoordinatesZ();
+				this.setCoordinates(new GameCoordinates(getCoordinates().getGameCoordinatesX() + speed * Math.cos(Math.toRadians(angle)), tempz));
+				double tempx = getCoordinates().getGameCoordinatesX();
+				setCoordinates(new GameCoordinates(tempx, getCoordinates().getGameCoordinatesZ() - speed * Math.sin(Math.toRadians(angle))));
+				bx = false;
+				bz = false;
+			break;
 			}
-		}*/
-		
-		for(double horizontalEdge : horizontalEdges) {
-			double projectedZ = getCoordinates().getGameCoordinatesZ() - speed * Math.sin(Math.toRadians(angle));
-			
-			if(!(getCoordinates().getGameCoordinatesZ() > horizontalEdge - this.radius) && (projectedZ >= horizontalEdge - this.radius)) {
-				bz = true;
-				
-				double temp = horizontalEdge - this.radius;
-				if(temp > z || initZ) {
-					z = temp;
-					initZ = false;
-				}
-			}
-			else if(!(getCoordinates().getGameCoordinatesZ() < horizontalEdge + this.getRadius()) && (projectedZ <= horizontalEdge + this.getRadius())) {
-				bz = true;
-				
-				double temp = horizontalEdge + this.radius;
-				if(temp > z || initZ) {
-					z = temp;
-					initZ = false;
-				}
-			}					
 		}
-		
-		if(bz) {
-			double tempx = getCoordinates().getGameCoordinatesX();
-			setCoordinates(new GameCoordinates(tempx, z));
-		}
-		else {
-			//this.setPosY(this.getPosY() - speed * Math.sin(Math.toRadians(angle)));
-			double tempx = getCoordinates().getGameCoordinatesX();
-			setCoordinates(new GameCoordinates(tempx, getCoordinates().getGameCoordinatesZ() - speed * Math.sin(Math.toRadians(angle))));
-		}
-			
-		/*if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_UP)) {
-
-			if((this.getPosY() + speed) >= room.getPosY() + room.getHeight() - this.getRadius())
-				this.setPosY(room.getPosY() + room.getHeight() - this.getRadius());	
-			else
-				this.setPosY(this.getPosY() + speed);
-		}
-		
-		if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_DOWN)) {
-		
-			if((this.getPosY() - speed) <= room.getPosY() + this.getRadius())
-				this.setPosY(room.getPosY() + this.getRadius());
-			else
-				this.setPosY(this.getPosY() - speed);
-		}
-		if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_RIGHT)) {
-	
-			if((this.getPosX() + speed) >= room.getPosX() + room.getWidth() - this.getRadius())
-				this.setPosX(room.getPosX() + room.getWidth() - this.getRadius());
-			else
-				this.setPosX(this.getPosX() + speed);
-		}
-		if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_LEFT)) {
-		
-			if((this.getPosX() - speed) <= room.getPosX() + this.getRadius())
-				this.setPosX(room.getPosX() + this.getRadius());
-			else
-				this.setPosX(this.getPosX() - speed);
-		}*/	
+	if(bx) {
+		double tempx = getCoordinates().getGameCoordinatesX();
+		setCoordinates(new GameCoordinates(tempx, getCoordinates().getGameCoordinatesZ() - speed * Math.sin(Math.toRadians(angle))));
+	}
+	if(bz) {
+		double tempz = getCoordinates().getGameCoordinatesZ();
+		this.setCoordinates(new GameCoordinates(getCoordinates().getGameCoordinatesX() + speed * Math.cos(Math.toRadians(angle)), tempz));
+	}
 	}
 	
 	// TODO: Simplify edges
