@@ -1,4 +1,83 @@
-apply plugin: 'java'
-apply plugin: 'eclipse'
+// Apply the java plugin to add support for Java & add eclipse plugin
+apply plugin: "java"
+apply plugin: "eclipse"
 
-apply from: 'buildtools/build.gradle'
+// In this section you declare where to find the dependencies of your project
+repositories {
+	mavenCentral()
+	flatDir {
+		dirs "libs/paulscode"
+	}
+}
+
+// In this section you declare the dependencies for your production and test code
+dependencies {
+	compile "com.google.code.gson:gson:2.5"
+
+	// LWJGL dependencies START
+	compile "org.lwjgl:lwjgl:3.1.0"
+	compile "org.lwjgl:lwjgl-glfw:3.1.0"
+	compile "org.lwjgl:lwjgl-jemalloc:3.1.0"
+	compile "org.lwjgl:lwjgl-openal:3.1.0"
+	compile "org.lwjgl:lwjgl-opengl:3.1.0"
+	// LWJGL natives
+	compile "org.lwjgl:lwjgl:3.1.0:natives-windows"
+	compile "org.lwjgl:lwjgl:3.1.0:natives-linux"
+	compile "org.lwjgl:lwjgl:3.1.0:natives-macos"
+	compile "org.lwjgl:lwjgl-glfw:3.1.0:natives-windows"
+	compile "org.lwjgl:lwjgl-glfw:3.1.0:natives-linux"
+	compile "org.lwjgl:lwjgl-glfw:3.1.0:natives-macos"
+	compile "org.lwjgl:lwjgl-jemalloc:3.1.0:natives-windows"
+	compile "org.lwjgl:lwjgl-jemalloc:3.1.0:natives-linux"
+	compile "org.lwjgl:lwjgl-jemalloc:3.1.0:natives-macos"
+	compile "org.lwjgl:lwjgl-openal:3.1.0:natives-windows"
+	compile "org.lwjgl:lwjgl-openal:3.1.0:natives-linux"
+	compile "org.lwjgl:lwjgl-openal:3.1.0:natives-macos"
+	// LWJGL dependencies END
+	
+	compile name: "SoundSystem"
+	compile name: "CodecMP3"
+	compile name: "LibraryLWJGL3OpenAL"
+}
+
+// Workaround for putting resources in resources folder
+jar {
+	from("src/main/resources"){
+		into ("resources")
+	}
+}
+
+// Don"t add resources to JAR again
+sourceSets {
+	main {
+		resources {
+			exclude "*"
+		}
+	}
+}
+
+//create a single Jar with all dependencies
+task deploy(type: Jar) {
+	manifest {
+		attributes("Main-Class": "astechzgo.luminescent.main.Main")
+	}
+	
+	baseName = project.name
+	from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+	with jar
+	
+	// Copy to base directory
+	copy {
+		from "build/libs/Luminescent.jar"
+		into "/"
+	}
+}
+
+task run(dependsOn:deploy) << {
+	javaexec { 
+		main="-jar";
+		args = [
+			"Luminescent.jar",
+		]
+	} 
+}
