@@ -1,1 +1,0 @@
-#keys.util.screenshot.CameraClick
