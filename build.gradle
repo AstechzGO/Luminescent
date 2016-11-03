@@ -65,13 +65,17 @@ task deploy(type: Jar) {
 	baseName = project.name
 	from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 	with jar
-	
-	// Copy to base directory
+}
+
+// Copy to base directory
+task copyToRoot << {
 	copy {
 		from "build/libs/Luminescent.jar"
 		into "/"
 	}
 }
+
+deploy.finalizedBy copyToRoot
 
 task run(dependsOn:deploy) << {
 	javaexec { 
