@@ -1,8 +1,0 @@
-ant.importBuild 'buildtools/build.xml'
-
-task Main(overwrite: true, type: JavaExec) { 
-    main = "-jar" 
-    args relativePath("luminescent.jar") 
-}
-
-Main.dependsOn deploy_jar
