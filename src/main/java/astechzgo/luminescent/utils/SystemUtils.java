@@ -1,12 +1,15 @@
 package astechzgo.luminescent.utils;
 
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import org.lwjgl.system.Platform;
 
 public class SystemUtils {
 
 	private static String userHome = System.getProperty("user.home", ".");
+	private static File oldWorkingDirectory;
 	private static File workingDirectory;
 	
 	/**
@@ -34,8 +37,9 @@ public class SystemUtils {
 			System.exit(-1);
 		}
 
-		setWorkingDirectory(workingDirectory.getPath());
+		oldWorkingDirectory = new File(System.getProperty("user.dir"));
 		
+		setWorkingDirectory(workingDirectory.getPath());	
 	}
 	
 	private static boolean setWorkingDirectory(String directoryName) {
@@ -52,5 +56,23 @@ public class SystemUtils {
 	
 	public static File newFile(String relativeLoc) {
 		return new File(new File(relativeLoc).getAbsolutePath());
+	}
+	
+	public static URL getResourceAsURL(String relativeLoc) {
+	    if(isJar()) {
+	        return SystemUtils.class.getResource("/resources/" + relativeLoc);
+	    }
+	    else {
+	        try {
+                return new File(oldWorkingDirectory, "src/main/resources/" + relativeLoc).toURI().toURL();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+	        return SystemUtils.class.getResource("/resources/" + relativeLoc);
+	    }
+	}
+	
+	public static boolean isJar() {
+	    return SystemUtils.class.getResource("SystemUtils.class").getProtocol().equalsIgnoreCase("JAR");
 	}
 }

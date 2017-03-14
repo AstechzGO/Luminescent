@@ -1,5 +1,7 @@
 package astechzgo.luminescent.worldloader;
 
+import static astechzgo.luminescent.utils.SystemUtils.getResourceAsURL;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,7 +18,6 @@ import com.google.gson.Gson;
 import astechzgo.luminescent.coordinates.GameCoordinates;
 import astechzgo.luminescent.gameobject.Room;
 import astechzgo.luminescent.rendering.Camera;
-import astechzgo.luminescent.textures.TextureList;
 
 public class JSONWorldLoader {
 	
@@ -29,7 +30,15 @@ public class JSONWorldLoader {
 	public static List<Room> loadRooms() {
 		Gson g = new Gson();
 		String parse = "";
-		InputStream in = new TextureList().getClass().getResourceAsStream("/resources/world/DefaultWorld.json");
+		
+		InputStream in = null;
+		
+        try {
+            in = getResourceAsURL("world/DefaultWorld.json").openStream();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
 		BufferedReader input = new BufferedReader(new InputStreamReader(in));
 		String line = "";
 		try {

@@ -1,5 +1,7 @@
 package astechzgo.luminescent.shader;
 
+import static astechzgo.luminescent.utils.SystemUtils.getResourceAsURL;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,7 +31,14 @@ public class ShaderList {
 	private static List<String> getShadersForPackage() {
 		List<String> names = new ArrayList<String>();
 		
-		InputStream in = new ShaderList().getClass().getResourceAsStream("/resources/shaders/ShaderList.txt");
+		InputStream in = null;
+		
+        try {
+            in = getResourceAsURL("shaders/ShaderList.txt").openStream();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
 		BufferedReader input = new BufferedReader(new InputStreamReader(in));
 		String line = "";
 		try {

@@ -1,6 +1,9 @@
 package astechzgo.luminescent.shader;
 
+import static astechzgo.luminescent.utils.SystemUtils.getResourceAsURL;
+
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
@@ -33,7 +36,14 @@ public class Shader {
 
 	private String getSource(String shaderLoc) throws Exception {
 		shaderLoc = shaderLoc.replaceAll("\\.", "/");
-		InputStream in = Shader.class.getResourceAsStream("/resources/shaders/" + shaderLoc + ".glsl");
+		
+	    InputStream in = null;
+	        
+	    try {
+	        in = getResourceAsURL("shaders/" + shaderLoc + ".glsl").openStream();
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
 
 		StringBuilder vertexCode = new StringBuilder();
 		String line = null;
