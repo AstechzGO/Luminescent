@@ -1,5 +1,7 @@
 package astechzgo.luminescent.sound;
 
+import static astechzgo.luminescent.utils.SystemUtils.getResourceAsURL;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,7 +23,14 @@ public class SoundList {
 	private static List<String> getSoundsForPackage() {
 		List<String> names = new ArrayList<String>();
 		
-		InputStream in = new SoundList().getClass().getResourceAsStream("/resources/sounds/SoundList.txt");
+		InputStream in = null;
+		
+        try {
+            in = getResourceAsURL("sounds/SoundList.txt").openStream();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
 		BufferedReader input = new BufferedReader(new InputStreamReader(in));
 		String line = "";
 		try {

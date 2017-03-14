@@ -1,5 +1,7 @@
 package astechzgo.luminescent.textures;
 
+import static astechzgo.luminescent.utils.SystemUtils.getResourceAsURL;
+
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.geom.AffineTransform;
@@ -9,7 +11,6 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryUtil;
@@ -71,9 +72,13 @@ public class Texture {
 	
 	private static Image toImage(String imageLoc) {
 		imageLoc = imageLoc.replaceAll("\\.", "/");
-		Image img = new ImageIcon(Texture.class.getResource(
-				"/resources/textures/" + imageLoc + ".png")).getImage();
-		return img;
+        try {
+            return ImageIO.read(getResourceAsURL("textures/" + imageLoc + ".png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+		return null;
 	}
 	
 	public BufferedImage getAsBufferedImage() {
@@ -91,11 +96,11 @@ public class Texture {
 	 *            The Image to be converted
 	 * @return The converted BufferedImage
 	 */
-	private BufferedImage toBufferedImage(Image img) {
+    private BufferedImage toBufferedImage(Image img) {
 		if (img instanceof BufferedImage) {
 			return (BufferedImage) img;
 		}
-
+		
 		// Create a buffered image with transparency
 		BufferedImage bimage = new BufferedImage(img.getWidth(null),
 				img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
@@ -104,7 +109,7 @@ public class Texture {
 		Graphics2D bGr = bimage.createGraphics();
 		bGr.drawImage(img, 0, 0, null);
 		bGr.dispose();
-
+		
 		// Return the buffered image
 		if(textureNumber == -1)
 			return bimage;

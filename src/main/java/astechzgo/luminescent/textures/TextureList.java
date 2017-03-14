@@ -1,5 +1,7 @@
 package astechzgo.luminescent.textures;
 
+import static astechzgo.luminescent.utils.SystemUtils.getResourceAsURL;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,7 +19,14 @@ public class TextureList {
 		List<String> nonSlick = new ArrayList<String>();
 		List<String> slick = new ArrayList<String>();
 		
-		InputStream in = new TextureList().getClass().getResourceAsStream("/resources/textures/TextureList.txt");
+		InputStream in = null;
+		
+        try {
+            in = getResourceAsURL("textures/TextureList.txt").openStream();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+		
 		BufferedReader input = new BufferedReader(new InputStreamReader(in));
 		String line = "";
 		try {
