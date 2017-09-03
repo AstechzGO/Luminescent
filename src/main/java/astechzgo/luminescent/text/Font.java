@@ -39,7 +39,8 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import astechzgo.luminescent.coordinates.ScaledWindowCoordinates;
+import astechzgo.luminescent.coordinates.WindowCoordinates;
+import astechzgo.luminescent.rendering.RectangularObjectRenderer;
 import astechzgo.luminescent.textures.Texture;
 import astechzgo.luminescent.utils.RenderingUtils;
 
@@ -387,11 +388,13 @@ public class Font {
      * @param y        Y coordinate of the text position
      * @param c        Color to use
      */
-    public void drawText(CharSequence text, int x, int y, Color colour) {
+    public RectangularObjectRenderer[] drawText(CharSequence text, WindowCoordinates coordinates, Color colour) {
+        RectangularObjectRenderer[] characters = new RectangularObjectRenderer[text.length()];
+        
         int textHeight = getHeight(text);
 
-        int drawX = x;
-        int drawY = y;
+        int drawX = (int) coordinates.getWindowCoordinatesX();
+        int drawY = (int) coordinates.getWindowCoordinatesY();
         if (textHeight > fontHeight) {
             drawY += textHeight - fontHeight;
         }
@@ -400,8 +403,8 @@ public class Font {
             char ch = text.charAt(i);
             if (ch == '\n') {
                 /* Line feed, set x and y to draw at the next line */
-                drawY -= fontHeight;
-                drawX = x;
+                drawY += fontHeight;
+                drawX = (int) coordinates.getWindowCoordinatesX();
                 continue;
             }
             if (ch == '\r') {
@@ -409,9 +412,14 @@ public class Font {
                 continue;
             }
             Glyph g = glyphs.get(ch);
-            RenderingUtils.DrawTextureRegion(new ScaledWindowCoordinates(drawX, drawY), g.x, g.y, g.width, g.height, colour, texture);
+            characters[i] = new RectangularObjectRenderer(new WindowCoordinates(drawX, drawY), g.width, g.height, texture);
+            characters[i].setColour(colour);
+            RenderingUtils.createTextureRegion(new WindowCoordinates(drawX, drawY), g.x, g.y, g.width, g.height, colour, texture, characters[i]::getModelMatrix);
+            
             drawX += g.width;
         }
+        
+        return characters;
     }
 
     /**
@@ -422,8 +430,8 @@ public class Font {
      * @param x        X coordinate of the text position
      * @param y        Y coordinate of the text position
      */
-    public void drawText(CharSequence text, int x, int y) {
-        drawText(text, x, y, Color.WHITE);
+    public void drawText(CharSequence text, WindowCoordinates coordinates) {
+        drawText(text, coordinates, Color.WHITE);
     }
     
     public String getFontName() {

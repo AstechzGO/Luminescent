@@ -3,18 +3,18 @@ package astechzgo.luminescent.rendering;
 import java.awt.Color;
 import java.awt.geom.Line2D;
 
-import org.lwjgl.opengl.GL11;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
 
 import astechzgo.luminescent.coordinates.ScaledWindowCoordinates;
 import astechzgo.luminescent.coordinates.WindowCoordinates;
-import astechzgo.luminescent.main.Luminescent;
 import astechzgo.luminescent.textures.Texture;
 import astechzgo.luminescent.utils.DisplayUtils;
 import astechzgo.luminescent.utils.RenderingUtils;
 
 public class QuadrilateralObjectRenderer implements IObjectRenderer {
 
-	private Color colour = new Color(0, 0, 0);
+	private Color colour = new Color(0, 0, 0, 0);
 
 	protected Texture texture;
 
@@ -25,6 +25,8 @@ public class QuadrilateralObjectRenderer implements IObjectRenderer {
 
 	protected int oldGameWidth = DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2;
 	protected int oldGameHeight = DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2;
+	
+	protected Matrix4f model = new Matrix4f();
 
 	public QuadrilateralObjectRenderer(WindowCoordinates a,WindowCoordinates b, WindowCoordinates c, WindowCoordinates d, Texture texture) {
 		this.texture = texture;
@@ -40,23 +42,6 @@ public class QuadrilateralObjectRenderer implements IObjectRenderer {
 		this.b = b;
 		this.c = c;
 		this.d = d;
-	}
-
-	@Override
-	public void render() {
-		resize();
-
-		GL11.glColor4f((float) colour.getRed() / 255, (float) colour.getGreen() / 255, (float) colour.getBlue() / 255, (float) colour.getAlpha() / 255);
-
-		if (texture != null) {
-			Luminescent.defaultShader.applyShader();
-			Luminescent.defaultShader.updateTransMatrix();
-			RenderingUtils.RenderQuad(new ScaledWindowCoordinates(a), new ScaledWindowCoordinates(b), new ScaledWindowCoordinates(c), new ScaledWindowCoordinates(d), texture);
-			Luminescent.defaultShader.withdrawShader();
-		} 
-		else {
-			RenderingUtils.RenderQuad(new ScaledWindowCoordinates(a), new ScaledWindowCoordinates(b), new ScaledWindowCoordinates(c), new ScaledWindowCoordinates(d));
-		}
 	}
 
 	@Override
@@ -83,6 +68,12 @@ public class QuadrilateralObjectRenderer implements IObjectRenderer {
 	public void resize() {
 		oldGameWidth = DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2;
 		oldGameHeight = DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2;
+		
+        ScaledWindowCoordinates loc = new ScaledWindowCoordinates(this.getCoordinates());
+        Vector3f location = new Vector3f((float)loc.getScaledWindowCoordinatesX() + DisplayUtils.widthOffset, (float)loc.getScaledWindowCoordinatesY()  + DisplayUtils.heightOffset, 0.0f);
+        
+        Matrix4f model = new Matrix4f().translation(location).scale((float) (1.0 / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)));
+        this.model = model;
 	}
 
 	@Override
@@ -195,16 +186,6 @@ public class QuadrilateralObjectRenderer implements IObjectRenderer {
 			}
 			return collision;
 		} 
-		else if (object instanceof MultipleObjectRenderer) {
-			MultipleObjectRenderer casted = (MultipleObjectRenderer) object;
-
-			for (IObjectRenderer i : casted.getAll()) {
-				if (this.isTouching(i))
-					return true;
-			}
-
-			return false;
-		} 
 		return false;
 	}
 
@@ -249,13 +230,24 @@ public class QuadrilateralObjectRenderer implements IObjectRenderer {
 	@Override
 	public WindowCoordinates getCoordinates() {
 		// Same as rectangle (bottom left corner)
-		return d;
+		return a;
 	}
 
 	@Override
 	public void setCoordinates(WindowCoordinates coordinates) {
 		// Same as rectangle (bottom left corner)
 		// Won't do much except stretch a corner
-		this.d = coordinates;
+		this.a = coordinates;
 	}
+	
+	@Override
+	public Matrix4f getModelMatrix() {
+	    resize();
+	    return model;
+	}
+
+    @Override
+    public void upload() {
+        RenderingUtils.createQuad(a, b, c, d, colour, texture, this::getModelMatrix);
+    }
 }

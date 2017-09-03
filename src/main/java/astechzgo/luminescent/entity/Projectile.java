@@ -3,21 +3,27 @@ package astechzgo.luminescent.entity;
 import java.awt.Color;
 import java.util.List;
 
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 
 import astechzgo.luminescent.coordinates.GameCoordinates;
+import astechzgo.luminescent.coordinates.ScaledWindowCoordinates;
 import astechzgo.luminescent.coordinates.WindowCoordinates;
 import astechzgo.luminescent.main.Luminescent;
+import astechzgo.luminescent.rendering.Camera;
 import astechzgo.luminescent.rendering.IObjectRenderer;
 import astechzgo.luminescent.rendering.RectangularObjectRenderer;
+import astechzgo.luminescent.textures.Texture;
+import astechzgo.luminescent.utils.DisplayUtils;
 
 public class Projectile extends LivingEntity {
 	
 	private static final double speed = 2.5;
 	
 	// Used to get Direction for Shooting
-	private double lastDelta;
-	private final double rotation;
+	private double lastDelta = -1;
+	private double rotation;
 	
 	private final double width;
 	private final double height;
@@ -27,20 +33,21 @@ public class Projectile extends LivingEntity {
 	// The Class
 	// Constructor for projectile
 	public Projectile(GameCoordinates coordinates) {
-		renderer = new RectangularObjectRenderer(new WindowCoordinates(coordinates), 5, 5);
+		renderer = new ProjectileRenderer(new WindowCoordinates(coordinates), 5, 5);
 		renderer.setColour(new Color(0.5f, 0.6f, 0.2f));
 		
-		lastDelta = GLFW.glfwGetTime() * 1000;
-		rotation = Luminescent.thePlayer.setRotation();
+		
 		
 		this.width = 5;
 		this.height = 5;
-		
-		this.coordinates = new GameCoordinates(coordinates.getGameCoordinatesX() + (22.5 + width / 2) * Math.cos(Math.toRadians(270 - rotation)), coordinates.getGameCoordinatesZ() + (22.5 + height / 2)  * Math.sin(Math.toRadians(270 - rotation)));
 	}
 
 	// Called every tick from Luminescent class, shoots bullet in direction
 	public void fireBullet(List<Double> verticalEdges, List<Double> horizontalEdges) {
+	    if(lastDelta == -1) {
+	        lastDelta = GLFW.glfwGetTime() * 1000;
+	    }
+	    
 		double delta = ((GLFW.glfwGetTime() * 1000) - lastDelta);
 		
 		lastDelta = GLFW.glfwGetTime() * 1000;
@@ -133,5 +140,43 @@ public class Projectile extends LivingEntity {
 	@Override
 	public void updateRenderer() {
 		renderer.setCoordinates(new WindowCoordinates(coordinates));
+	}
+	
+	private class ProjectileRenderer extends RectangularObjectRenderer {
+
+        public ProjectileRenderer(WindowCoordinates coordinates, double width, double height) {
+            super(coordinates, width, height);
+        }
+        
+        public ProjectileRenderer(WindowCoordinates coordinates, double width, double height, Texture texture) {
+            super(coordinates, width, height, texture);
+        }
+        
+        @Override
+        public void resize() {
+            super.resize();
+            
+            oldGameWidth = DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2;
+            oldGameHeight = DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2;
+            
+            ScaledWindowCoordinates loc = new ScaledWindowCoordinates(this.getCoordinates());
+            Vector3f location = new Vector3f((float)loc.getScaledWindowCoordinatesX() + DisplayUtils.widthOffset, (float)loc.getScaledWindowCoordinatesY()  + DisplayUtils.heightOffset, 0.0f);
+            
+            Matrix4f model = new Matrix4f().translation(location).scale(isAlive ? (float) (1.0 / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)) : 0);
+            this.model = model;
+        }
+	    
+        
+        @Override
+        public void setCoordinates(WindowCoordinates coords) {
+            super.setCoordinates(coords);
+        }
+	}
+	
+	public void init(GameCoordinates coordinates) {
+	    rotation = Luminescent.thePlayer.setRotation();
+	    setAlive(true);
+	    
+	    this.coordinates = new GameCoordinates(coordinates.getGameCoordinatesX() + (22.5 + width / 2) * Math.cos(Math.toRadians(270 - rotation)), coordinates.getGameCoordinatesZ() + (22.5 + height / 2)  * Math.sin(Math.toRadians(270 - rotation)));
 	}
 }

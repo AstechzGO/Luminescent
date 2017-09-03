@@ -17,11 +17,6 @@ public class Room extends RectangularObjectRenderer {
 		super.width = width;
 		super.height = height;
 	}
-
-	@Override
-	public void render() {
-		super.render();
-	}
 	
 	public WindowCoordinates getCoordinates() {
 		return super.coordinates;

@@ -42,15 +42,15 @@ public class SoundManager {
 		}
 
 		try {
-		    try {
+		    if(SystemUtils.isJar()) {
 		        SoundSystemConfig.setSoundFilesPackage(getResourceAsURL("sounds/").toString().split("\\!")[1].replaceFirst("/", ""));
 		    }
-		    catch(IndexOutOfBoundsException e) {
+		    else {
 		        SoundSystemConfig.setSoundFilesPackage("");
 		    }
 		    
 		    SoundSystemConfig.setCodec("mp3", CodecJLayerMP3.class);
-		    SoundSystemConfig.PREFIX_URL = "^[fF][iI][lL][eE]:/.*";
+		    SoundSystemConfig.PREFIX_URL = "^[fF][iI][lL][eE]:\\/.*";
 		} catch (SoundSystemException e) {
 			System.err.println("error linking with the CodecWav plug-in");
 		}
@@ -67,8 +67,9 @@ public class SoundManager {
 		
 		URL resourceLoc = getResourceAsURL("sounds/" + filename);
 		
-		if(SystemUtils.isJar())
+		if(!SystemUtils.isJar()) {
 		    filename = resourceLoc.toString();
+		}
 		
 		boolean priority = false;
 		float x = 0;

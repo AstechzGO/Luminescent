@@ -13,6 +13,7 @@ import java.util.Date;
 
 import org.lwjgl.glfw.GLFW;
 
+import astechzgo.luminescent.rendering.Vulkan;
 import astechzgo.luminescent.sound.Sound;
 import astechzgo.luminescent.utils.DisplayUtils;
 import astechzgo.luminescent.utils.KeyboardUtils;
@@ -57,16 +58,17 @@ public class KeyPressUtils {
 			cameraClick.restart();
 		}
 		if(KEYS_UTIL_NEXTWINDOW.isKeyDownOnce()) {
-			if(GLFW.glfwGetMonitors().capacity() > 1) {
-				if(DisplayUtils.isFullscreen()) {
-					setDisplayMode(848, 477, false);
-					DisplayUtils.nextMonitor();
-					setDisplayMode(DisplayUtils.monitorWidth, DisplayUtils.monitorHeight, true);
-				}
-				else {
-					DisplayUtils.nextMonitor();
-				}
-			}
+//			if(GLFW.glfwGetMonitors().capacity() > 1) {
+//				if(DisplayUtils.isFullscreen()) {
+//					setDisplayMode(848, 477, false);
+//					DisplayUtils.nextMonitor();
+//					setDisplayMode(DisplayUtils.monitorWidth, DisplayUtils.monitorHeight, true);
+//				}
+//				else {
+//					DisplayUtils.nextMonitor();
+//				}
+//			}
+		    Vulkan.constructBuffers();
 		}
 	}	
 }

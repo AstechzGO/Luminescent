@@ -11,6 +11,8 @@ import astechzgo.luminescent.coordinates.GameCoordinates;
 import astechzgo.luminescent.entity.Player;
 import astechzgo.luminescent.entity.Projectile;
 import astechzgo.luminescent.gameobject.Room;
+import astechzgo.luminescent.main.Luminescent;
+import astechzgo.luminescent.rendering.Vulkan;
 
 public class KeyPressGameplay {
 	
@@ -23,7 +25,8 @@ public class KeyPressGameplay {
 		
 		if(KEYS_ACTION_SHOOT.isKeyDown() && deltaShot > 250) {
 			// Creates Projectile and adds it to array list
-			Projectile projectile = new Projectile(thePlayer.getCoordinates());
+			Projectile projectile = getUnused();
+			projectile.init(thePlayer.getCoordinates());
 			projectiles.add(projectile);	
 			
 			lastShot = (GLFW.glfwGetTime() * 1000);
@@ -32,17 +35,33 @@ public class KeyPressGameplay {
 		// For every shot render it and keep shooting it forwards
 		for(int i = 0; i < projectiles.size(); i++) {
 			Projectile m = projectiles.get(i);
+			m.updateRenderer();
 			m.fireBullet(getVerticalEdges(rooms), getHorizontalEdges(rooms));
 			
-			if(m.isAlive()) {
-				// If the bullet is in the room render it
-				m.queue();
-			}
-			else {
+			if(!m.isAlive()) {
 				// If the bullet is not it the room delete it
 				projectiles.remove(i);
 			}
 		}
+	}
+	
+	private static Projectile getUnused() {
+	    for(Projectile p : Luminescent.projectilePool) {
+	        if(!p.isAlive()) {
+	            return p;
+	        }
+	    }
+	    
+	    int first = Luminescent.projectilePool.size();
+	    for(int i = 0; i < 32; i++) {
+	        Projectile p = new Projectile(new GameCoordinates(0, 0));
+	        Luminescent.projectilePool.add(p);
+	        p.upload();
+	    }
+	    
+	    Vulkan.recreateBuffers();
+	    
+	    return Luminescent.projectilePool.get(first);
 	}
 	
 	private static List<Double> getVerticalEdges(List<Room> rooms) {

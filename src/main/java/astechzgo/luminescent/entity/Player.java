@@ -10,11 +10,14 @@ import java.nio.DoubleBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.joml.Matrix4f;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.system.MemoryStack;
 
 import astechzgo.luminescent.coordinates.GameCoordinates;
-import astechzgo.luminescent.coordinates.ScaledWindowInvertedYAxisCoordinates;
+import astechzgo.luminescent.coordinates.ScaledWindowCoordinates;
 import astechzgo.luminescent.coordinates.WindowCoordinates;
 import astechzgo.luminescent.gameobject.Room;
 import astechzgo.luminescent.rendering.Camera;
@@ -39,7 +42,7 @@ public class Player extends LivingEntity {
 	private double lastDelta;
 	
 	private double lastControllerDelta = 0;
-	private ScaledWindowInvertedYAxisCoordinates lastMouseCoords;
+	private ScaledWindowCoordinates lastMouseCoords;
 	
 	public Player() {
 		renderer = new PlayerRenderer(new WindowCoordinates(new GameCoordinates(Camera.CAMERA_WIDTH / 2, Camera.CAMERA_HEIGHT / 2)), 40, 1);
@@ -81,7 +84,7 @@ public class Player extends LivingEntity {
 			return rotation;
 		}
 
-		ScaledWindowInvertedYAxisCoordinates mouseCoords = null;
+		ScaledWindowCoordinates mouseCoords = null;
 		
 		try(MemoryStack stack = MemoryStack.stackPush()) {	
 			DoubleBuffer mxpos = stack.mallocDouble(1);
@@ -89,7 +92,7 @@ public class Player extends LivingEntity {
 		
 			GLFW.glfwGetCursorPos(DisplayUtils.getHandle(), mxpos, mypos);
 		
-			mouseCoords = new ScaledWindowInvertedYAxisCoordinates(mxpos.get(0) - DisplayUtils.widthOffset, mypos.get(0) - DisplayUtils.heightOffset);
+			mouseCoords = new ScaledWindowCoordinates(mxpos.get(0) - DisplayUtils.widthOffset, mypos.get(0) - DisplayUtils.heightOffset);
 		
 			if(mouseCoords.equals(lastMouseCoords)) 
 				return rotation;
@@ -127,6 +130,8 @@ public class Player extends LivingEntity {
 	}
 	public void move(List<Room> rooms) {
 
+	    updateRenderer();
+	    
 		double delta = ((GLFW.glfwGetTime() * 1000) - lastDelta);
 		lastDelta = GLFW.glfwGetTime() * 1000;
 		
@@ -354,12 +359,17 @@ public class Player extends LivingEntity {
 		@Override
 		public void resize() {
 			coordinates = new WindowCoordinates(Camera.CAMERA_WIDTH / 2, Camera.CAMERA_HEIGHT / 2);
-					
-			scaledRadius = (int) Math
-					.round((double) radius / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2));
 
 			oldGameWidth = DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2;
 			oldGameHeight = DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2;
+			
+			ScaledWindowCoordinates loc = new ScaledWindowCoordinates(coordinates);
+			Vector3f location = new Vector3f((float)loc.getScaledWindowCoordinatesX() + DisplayUtils.widthOffset, (float)loc.getScaledWindowCoordinatesY()  + DisplayUtils.heightOffset, 0.0f);
+			
+			Quaternionf rotate = new Quaternionf().rotateZ((float) Math.toRadians(-180 - rotation));
+			
+			Matrix4f model = new Matrix4f().translation(location).rotateAround(rotate, 0, 0, 0).scale((float) (1.0 / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)));
+			this.model = model;
 		}
 		
 		private void setRotation(double rotation) {

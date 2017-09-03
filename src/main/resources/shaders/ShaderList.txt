@@ -1,2 +1,2 @@
-#0defaults.defaultVertexShader
-#1defaults.defaultPixelShader
+#0defaults.defaultVertShader
+#4defaults.defaultFragShader

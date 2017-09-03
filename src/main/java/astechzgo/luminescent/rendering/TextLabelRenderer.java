@@ -2,16 +2,13 @@ package astechzgo.luminescent.rendering;
 
 import astechzgo.luminescent.coordinates.WindowCoordinates;
 import astechzgo.luminescent.text.Font;
-import astechzgo.luminescent.utils.DisplayUtils;
 
 public class TextLabelRenderer extends RectangularObjectRenderer {
 
-	private Font font;
-	private String text;
+	private final Font font;
+	private final String text;
 	
-	private Font scaledFont;
-	
-	private int oldFontSize;
+	//private RectangularObjectRenderer[] characters;
 	
 	public TextLabelRenderer(WindowCoordinates coordinates, String text) {
 		this(coordinates, Font.NORMAL_FONT, text);
@@ -25,44 +22,15 @@ public class TextLabelRenderer extends RectangularObjectRenderer {
 	}
 	
 	@Override
-	public void resize() {
-		super.resize();
-		
-		int size = (int) Math
-				.round(font.getFontSize() / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2));
-		
-		if(oldFontSize != size) {
-			oldFontSize = size;
-			scaledFont = new Font(new java.awt.Font(font.getFontName(), font.getFontStyle(), size));
-		}
-	}
-	
-	@Override
-	public void render() {	
-		resize();
-		
-		scaledFont.drawText(text, (int) coordinates.getWindowCoordinatesX(), (int) coordinates.getWindowCoordinatesY(), getColour());
+	public void upload() {	
+	    font.drawText(text, coordinates, getColour());
 	}
 	
 	public Font getFont() {
 		return font;
 	}
 	
-	public void setFont(Font font) {
-		this.font = font;
-		
-		width = font.getWidth(text);
-		height = font.getHeight(text);
-	}
-	
 	public String getText() {
 		return text;
-	}
-	
-	public void setText(String text) {
-		this.text = text;
-		
-		width = font.getWidth(text);
-		height = font.getHeight(text);
 	}
 }

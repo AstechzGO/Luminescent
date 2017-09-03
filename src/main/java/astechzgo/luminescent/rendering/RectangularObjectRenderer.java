@@ -20,7 +20,7 @@ public class RectangularObjectRenderer extends QuadrilateralObjectRenderer {
 	protected int oldGameHeight = DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2;
 
 	public RectangularObjectRenderer(WindowCoordinates coordinates, double width, double height, Texture texture) {
-		super(new WindowCoordinates(coordinates.getWindowCoordinatesX(), coordinates.getWindowCoordinatesY() + height), new WindowCoordinates(coordinates.getWindowCoordinatesX() + width, coordinates.getWindowCoordinatesY() + height), new WindowCoordinates(coordinates.getWindowCoordinatesX() + width, coordinates.getWindowCoordinatesY()), new WindowCoordinates(coordinates.getWindowCoordinatesX(), coordinates.getWindowCoordinatesY()), texture);
+		super(new WindowCoordinates(coordinates.getWindowCoordinatesX(), coordinates.getWindowCoordinatesY()),  new WindowCoordinates(coordinates.getWindowCoordinatesX() + width, coordinates.getWindowCoordinatesY()), new WindowCoordinates(coordinates.getWindowCoordinatesX() + width, coordinates.getWindowCoordinatesY() + height), new WindowCoordinates(coordinates.getWindowCoordinatesX(), coordinates.getWindowCoordinatesY() + height), texture);
 		
 		this.texture = texture;
 
@@ -31,29 +31,41 @@ public class RectangularObjectRenderer extends QuadrilateralObjectRenderer {
 	}
 
 	public RectangularObjectRenderer(WindowCoordinates coordinates, double width, double height) {
-		super(new WindowCoordinates(coordinates.getWindowCoordinatesX(), coordinates.getWindowCoordinatesY() + height), new WindowCoordinates(coordinates.getWindowCoordinatesX() + width, coordinates.getWindowCoordinatesY() + height), new WindowCoordinates(coordinates.getWindowCoordinatesX() + width, coordinates.getWindowCoordinatesY()), new WindowCoordinates(coordinates.getWindowCoordinatesX(), coordinates.getWindowCoordinatesY()));
+        super(new WindowCoordinates(coordinates.getWindowCoordinatesX(), coordinates.getWindowCoordinatesY()),  new WindowCoordinates(coordinates.getWindowCoordinatesX() + width, coordinates.getWindowCoordinatesY()), new WindowCoordinates(coordinates.getWindowCoordinatesX() + width, coordinates.getWindowCoordinatesY() + height), new WindowCoordinates(coordinates.getWindowCoordinatesX(), coordinates.getWindowCoordinatesY() + height));
 		
 		this.coordinates = coordinates;
 
 		this.width = width;
 		this.height = height;
 	}
-	public void render() {
-		super.a = new WindowCoordinates(coordinates.getWindowCoordinatesX(), coordinates.getWindowCoordinatesY() + height);
-		super.b = new WindowCoordinates(coordinates.getWindowCoordinatesX() + width, coordinates.getWindowCoordinatesY() + height);
-		super.c = new WindowCoordinates(coordinates.getWindowCoordinatesX() + width, coordinates.getWindowCoordinatesY());
-		super.d = new WindowCoordinates(coordinates.getWindowCoordinatesX(), coordinates.getWindowCoordinatesY());
+	
+	@Override
+	public void upload() {
+		super.a = new WindowCoordinates(coordinates.getWindowCoordinatesX(), coordinates.getWindowCoordinatesY());
+		super.b = new WindowCoordinates(coordinates.getWindowCoordinatesX() + width, coordinates.getWindowCoordinatesY());
+		super.c = new WindowCoordinates(coordinates.getWindowCoordinatesX() + width, coordinates.getWindowCoordinatesY() + height);
+		super.d = new WindowCoordinates(coordinates.getWindowCoordinatesX(), coordinates.getWindowCoordinatesY() + height);
 				
-		super.render();
+		super.upload();
+	}
+	
+	@Override
+	public void resize() {
+	    super.a = new WindowCoordinates(coordinates.getWindowCoordinatesX(), coordinates.getWindowCoordinatesY());
+	    super.b = new WindowCoordinates(coordinates.getWindowCoordinatesX() + width, coordinates.getWindowCoordinatesY());
+	    super.c = new WindowCoordinates(coordinates.getWindowCoordinatesX() + width, coordinates.getWindowCoordinatesY() + height);
+	    super.d = new WindowCoordinates(coordinates.getWindowCoordinatesX(), coordinates.getWindowCoordinatesY() + height);
+	
+	    super.resize();
+	}
+	
+	@Override
+	public void setCoordinates(WindowCoordinates coordinates) {
+	    this.coordinates = coordinates;
 	}
 	
 	@Override
 	public WindowCoordinates getCoordinates() {
 		return coordinates;
-	}
-
-	@Override
-	public void setCoordinates(WindowCoordinates coordinates) {
-		this.coordinates = coordinates;
 	}
 }

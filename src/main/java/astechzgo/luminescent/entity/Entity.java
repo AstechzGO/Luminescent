@@ -5,13 +5,11 @@ import astechzgo.luminescent.rendering.IObjectRenderer;
 
 public interface Entity {
 
-	default public void render() {
-		updateRenderer();
-		getRenderer().render();
+	default public void upload() {
+		getRenderer().upload();
 	}
 	
 	default public void queue() {
-		updateRenderer();
 		getRenderer().queue();
 	}
 	

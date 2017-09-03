@@ -2,6 +2,8 @@ package astechzgo.luminescent.rendering;
 
 import java.awt.Color;
 
+import org.joml.Matrix4f;
+
 import astechzgo.luminescent.coordinates.WindowCoordinates;
 import astechzgo.luminescent.main.Luminescent;
 import astechzgo.luminescent.textures.Texture;
@@ -13,7 +15,7 @@ public interface IObjectRenderer
 		Luminescent.renderingQueue.add(this);
 	}
 	
-	public void render();
+	public void upload();
 	
 	public void setColour(Color colour);
 	public Color getColour();
@@ -29,4 +31,6 @@ public interface IObjectRenderer
 	public WindowCoordinates getCoordinates();
 	
 	public void setCoordinates(WindowCoordinates coordinates);
+	
+	public Matrix4f getModelMatrix();
 }

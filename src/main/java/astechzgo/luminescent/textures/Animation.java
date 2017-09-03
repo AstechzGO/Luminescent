@@ -1,7 +1,9 @@
 package astechzgo.luminescent.textures;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -12,6 +14,8 @@ public class Animation extends Texture {
 	private static int idx = 0;
 	
 	private static final Timer t;
+	
+	private static final List<Animation> cleanupList = new ArrayList<>();
 	
 	static {		
 		TimerTask tt = new TimerTask() {
@@ -27,34 +31,70 @@ public class Animation extends Texture {
 	
 	public static void cleanup() {
 		t.cancel();
+		
+		for(Animation animation : cleanupList) {
+		    animation.dispose();
+		}
 	}
 	
 	private static void updateIndex() {
 		idx++;
 	}
 	
-	private List<Texture> frames = new ArrayList<Texture>();	
+	private List<Texture> frames = new ArrayList<Texture>();
 	
 	public Animation(String textureName, int count) {
-		super(textureName + "$0", true);
+		super(textureName, true, toCombinedImage(textureName, count));
 
 		for(int i = 0; i < count; i++) {
 			frames.add(TextureList.findTexture(textureName + "$" + i));
 		}
+		
+		cleanupList.add(this);
+	}
+	
+	private static BufferedImage toCombinedImage(String imageLoc, int count) {
+	    if(count <= 0) {
+	        return null;
+	    }
+	    
+	    Image[] images = new BufferedImage[count];
+	    
+        for(int i = 0; i < count; i++) {
+            images[i] = toImage(imageLoc + "$" + i);
+        }
+        
+        int wid = images[0].getWidth(null) * count;
+        int height = images[0].getHeight(null);
+        //create a new buffer and draw two image into the new image
+        BufferedImage newImage = new BufferedImage(wid,height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2 = newImage.createGraphics();
+        Color oldColor = g2.getColor();
+        //fill background
+        g2.setPaint(new Color(0.0f, 0.0f, 0.0f, 0.0f));
+        g2.fillRect(0, 0, wid, height);
+        //draw image
+        g2.setColor(oldColor);
+        
+        for(int i = 0; i < count; i++) {
+            g2.drawImage(images[i], i * images[0].getWidth(null), 0, null);
+        }
+        g2.dispose();
+        
+        return newImage;
+	}
+	
+	public Texture getCurrent() {
+		return frames.get(getCurrentFrame());
 	}
 	
 	@Override
-	public BufferedImage getAsBufferedImage() {
-		return frames.get(idx % frames.size()).getAsBufferedImage();
+	public int getCurrentFrame() {
+	    return idx % count();
 	}
 	
 	@Override
-	public ByteBuffer getAsByteBuffer() {
-		return frames.get(idx % frames.size()).getAsByteBuffer();
-	}
-	
-	@Override
-	public int getAsTexture() {
-		return frames.get(idx % frames.size()).getAsTexture();
+	public int count() {
+	    return frames.size();
 	}
 }
