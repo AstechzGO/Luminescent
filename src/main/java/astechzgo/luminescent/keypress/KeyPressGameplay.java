@@ -53,13 +53,14 @@ public class KeyPressGameplay {
 	    }
 	    
 	    int first = Luminescent.projectilePool.size();
+	    
 	    for(int i = 0; i < 32; i++) {
 	        Projectile p = new Projectile(new GameCoordinates(0, 0));
 	        Luminescent.projectilePool.add(p);
-	        p.upload();
+	        Vulkan.addMatrices(Luminescent.projectileIndex, p.getRenderer()::getModelMatrix);
 	    }
 	    
-	    Vulkan.recreateBuffers();
+	    Vulkan.recreateCommandAndUniformBuffers();
 	    
 	    return Luminescent.projectilePool.get(first);
 	}

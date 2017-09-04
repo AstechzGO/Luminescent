@@ -105,12 +105,12 @@ public class Player extends LivingEntity {
 		double m = (coordinates.getAbsoluteY() - mouseCoords.getAbsoluteY()) / (coordinates.getAbsoluteX() - mouseCoords.getAbsoluteX());
 		
 		if(m == Double.POSITIVE_INFINITY) {
-			rotation = 0;
+			rotation = 180;
 			return rotation;
 		}
 		
 		if(m == Double.NEGATIVE_INFINITY) {
-			rotation = 180;
+			rotation = 0;
 			return rotation;
 		}
 		if(mouseCoords.getAbsoluteX() == coordinates.getAbsoluteX() && mouseCoords.getAbsoluteY() == coordinates.getAbsoluteY()) {
@@ -118,12 +118,15 @@ public class Player extends LivingEntity {
 		}
 
 		if(mouseCoords.getAbsoluteX() < coordinates.getAbsoluteX())
-			rotation = 90 - Math.toDegrees(Math.atan(m));
+	         if(90 + Math.toDegrees(Math.atan(m)) > 360)
+	                rotation = Math.toDegrees(Math.atan(m)) + 90 - 360;
+	         else
+	                rotation = Math.toDegrees(Math.atan(m)) + 90;
 		else {
-			if(270 - Math.toDegrees(Math.atan(m)) > 360)
-				rotation = 270 - Math.toDegrees(Math.atan(m)) - 360;
+			if(Math.toDegrees(Math.atan(m)) - 90 > 360)
+				rotation = Math.toDegrees(Math.atan(m)) - 90 - 360;
 			else
-				rotation = 270 - Math.toDegrees(Math.atan(m));
+				rotation = Math.toDegrees(Math.atan(m)) - 90;
 		}
 		
 		return rotation;
@@ -247,7 +250,7 @@ public class Player extends LivingEntity {
 		}*/
 		
 		for(double horizontalEdge : horizontalEdges) {
-			double projectedZ = getCoordinates().getGameCoordinatesZ() - speed * Math.sin(Math.toRadians(angle));
+			double projectedZ = getCoordinates().getGameCoordinatesZ() + speed * Math.sin(Math.toRadians(angle));
 			
 			if(!(getCoordinates().getGameCoordinatesZ() > horizontalEdge - this.radius) && (projectedZ >= horizontalEdge - this.radius)) {
 				bz = true;
@@ -276,7 +279,7 @@ public class Player extends LivingEntity {
 		else {
 			//this.setPosY(this.getPosY() - speed * Math.sin(Math.toRadians(angle)));
 			double tempx = getCoordinates().getGameCoordinatesX();
-			setCoordinates(new GameCoordinates(tempx, getCoordinates().getGameCoordinatesZ() - speed * Math.sin(Math.toRadians(angle))));
+			setCoordinates(new GameCoordinates(tempx, getCoordinates().getGameCoordinatesZ() + speed * Math.sin(Math.toRadians(angle))));
 		}
 			
 		/*if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_UP)) {
@@ -366,7 +369,7 @@ public class Player extends LivingEntity {
 			ScaledWindowCoordinates loc = new ScaledWindowCoordinates(coordinates);
 			Vector3f location = new Vector3f((float)loc.getScaledWindowCoordinatesX() + DisplayUtils.widthOffset, (float)loc.getScaledWindowCoordinatesY()  + DisplayUtils.heightOffset, 0.0f);
 			
-			Quaternionf rotate = new Quaternionf().rotateZ((float) Math.toRadians(-180 - rotation));
+			Quaternionf rotate = new Quaternionf().rotateZ((float) Math.toRadians(rotation));
 			
 			Matrix4f model = new Matrix4f().translation(location).rotateAround(rotate, 0, 0, 0).scale((float) (1.0 / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)));
 			this.model = model;

@@ -99,7 +99,7 @@ public class Projectile extends LivingEntity {
 		}
 		
 		for(double horizontalEdge : horizontalEdges) {
-			double projectedZ = this.getCoordinates().getGameCoordinatesZ() - speed * Math.sin(Math.toRadians(rotation - 270));
+			double projectedZ = this.getCoordinates().getGameCoordinatesZ() + speed * Math.sin(Math.toRadians(rotation - 270));
 			
 			if(!(getCoordinates().getGameCoordinatesZ() > horizontalEdge - height) && (projectedZ >= horizontalEdge - height)) {
 				bz = true;
@@ -128,7 +128,7 @@ public class Projectile extends LivingEntity {
 		}
 		else {
 			double tempx = getCoordinates().getGameCoordinatesX();
-			coordinates = new GameCoordinates(tempx, getCoordinates().getGameCoordinatesZ() - speed * Math.sin(Math.toRadians(rotation - 270)));	
+			coordinates = new GameCoordinates(tempx, getCoordinates().getGameCoordinatesZ() + speed * Math.sin(Math.toRadians(rotation - 270)));	
 		}
 	}
 
@@ -177,6 +177,6 @@ public class Projectile extends LivingEntity {
 	    rotation = Luminescent.thePlayer.setRotation();
 	    setAlive(true);
 	    
-	    this.coordinates = new GameCoordinates(coordinates.getGameCoordinatesX() + (22.5 + width / 2) * Math.cos(Math.toRadians(270 - rotation)), coordinates.getGameCoordinatesZ() + (22.5 + height / 2)  * Math.sin(Math.toRadians(270 - rotation)));
+	    this.coordinates = new GameCoordinates(coordinates.getGameCoordinatesX() + (22.5 + width / 2) * Math.cos(Math.toRadians(rotation - 270)), coordinates.getGameCoordinatesZ() + (22.5 + height / 2)  * Math.sin(Math.toRadians(rotation - 270)));
 	}
 }

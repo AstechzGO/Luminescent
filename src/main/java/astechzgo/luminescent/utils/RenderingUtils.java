@@ -19,7 +19,8 @@ public class RenderingUtils {
 	 * |QD|
 	 * D--C
 	 */
-    public static void createQuad(WindowCoordinates a, WindowCoordinates b, WindowCoordinates c, WindowCoordinates d, Color color, Texture texture, Supplier<Matrix4f> matrix) {
+    @SafeVarargs
+    public static void createQuad(WindowCoordinates a, WindowCoordinates b, WindowCoordinates c, WindowCoordinates d, Color color, Texture texture, Supplier<Matrix4f>... matrices) {
         int vAX = ((int) a.getWindowCoordinatesX())
                 - ((int) a.getWindowCoordinatesX());
         int vAY = ((int) a.getWindowCoordinatesY())
@@ -60,10 +61,11 @@ public class RenderingUtils {
         
         int[] indices = new int[] { 0, 2, 1, 3, 2, 0 };
         
-        Vulkan.addObject(vertices, indices, texture, matrix);
+        Vulkan.addObject(vertices, indices, texture, matrices);
     }
 
-	public static void createCircle(double radius, double pointSeperation, Color color, Texture texture, Supplier<Matrix4f> matrix) {
+	@SafeVarargs
+    public static void createCircle(double radius, double pointSeperation, Color color, Texture texture, Supplier<Matrix4f>... matrices) {
 		int loops = (int) (360 / pointSeperation);
 		
 		Vertex[] vertices = new Vertex[loops + 1];
@@ -99,15 +101,16 @@ public class RenderingUtils {
             indices[i * 3 + 2] = (i + 1) % loops;
 		}
 		
-		Vulkan.addObject(vertices, indices, texture, matrix);
+		Vulkan.addObject(vertices, indices, texture, matrices);
 	}
 
 	/**
 	 * Draws a texture region with the currently bound texture on specified
 	 * coordinates.
 	 */
-	public static void createTextureRegion(WindowCoordinates coordinates, int regX, int regY, int regWidth, int regHeight, Color colour,
-			Texture texture, Supplier<Matrix4f> matrix) {
+	@SafeVarargs
+    public static void createTextureRegion(WindowCoordinates coordinates, int regX, int regY, int regWidth, int regHeight, Color colour,
+			Texture texture, Supplier<Matrix4f>... matrices) {
 		/* Vertex positions */
 	    WindowCoordinates a = new WindowCoordinates(coordinates.getWindowCoordinatesX() + DisplayUtils.widthOffset, coordinates.getWindowCoordinatesY() + DisplayUtils.heightOffset + regHeight);
 	    WindowCoordinates b = new WindowCoordinates(coordinates.getWindowCoordinatesX() + DisplayUtils.widthOffset + regWidth, coordinates.getWindowCoordinatesY() + DisplayUtils.heightOffset + regHeight);
@@ -125,16 +128,17 @@ public class RenderingUtils {
 		float tDY = (float) (regY) / texture.getAsBufferedImage().getHeight();
 
 		createTextureRegion(a, b, c, d, tAX, tAY, tBX, tBY, tCX, tCY, tDX, tDY, colour,
-				texture, matrix);
+				texture, matrices);
 	}
 
 	/**
 	 * Draws a texture region with the currently bound texture on specified
 	 * coordinates.
 	 */
-	public static void createTextureRegion(WindowCoordinates vA, WindowCoordinates vB, WindowCoordinates vC, WindowCoordinates vD,
+	@SafeVarargs
+    public static void createTextureRegion(WindowCoordinates vA, WindowCoordinates vB, WindowCoordinates vC, WindowCoordinates vD,
 			float tAX, float tAY, float tBX, float tBY, float tCX, float tCY, float tDX, float tDY, Color colour,
-			Texture texture, Supplier<Matrix4f> matrix) {
+			Texture texture, Supplier<Matrix4f>... matrices) {
 		
 		int vAX = (int) vA.getWindowCoordinatesX() + DisplayUtils.widthOffset;
 		int vAY = (int) vA.getWindowCoordinatesX() + DisplayUtils.heightOffset;
@@ -159,6 +163,6 @@ public class RenderingUtils {
         
         int[] indices = new int[] { 0, 2, 1, 3, 2, 0 };
         
-        Vulkan.addObject(vertices, indices, texture, matrix);
+        Vulkan.addObject(vertices, indices, texture, matrices);
 	}
 }

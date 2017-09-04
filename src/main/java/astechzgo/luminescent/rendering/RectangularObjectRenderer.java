@@ -1,5 +1,9 @@
 package astechzgo.luminescent.rendering;
 
+import java.util.function.Supplier;
+
+import org.joml.Matrix4f;
+
 import astechzgo.luminescent.coordinates.WindowCoordinates;
 import astechzgo.luminescent.textures.Texture;
 import astechzgo.luminescent.utils.DisplayUtils;
@@ -40,13 +44,13 @@ public class RectangularObjectRenderer extends QuadrilateralObjectRenderer {
 	}
 	
 	@Override
-	public void upload() {
+	public void upload(@SuppressWarnings("unchecked") Supplier<Matrix4f>... matrices) {
 		super.a = new WindowCoordinates(coordinates.getWindowCoordinatesX(), coordinates.getWindowCoordinatesY());
 		super.b = new WindowCoordinates(coordinates.getWindowCoordinatesX() + width, coordinates.getWindowCoordinatesY());
 		super.c = new WindowCoordinates(coordinates.getWindowCoordinatesX() + width, coordinates.getWindowCoordinatesY() + height);
 		super.d = new WindowCoordinates(coordinates.getWindowCoordinatesX(), coordinates.getWindowCoordinatesY() + height);
 				
-		super.upload();
+		super.upload(matrices);
 	}
 	
 	@Override

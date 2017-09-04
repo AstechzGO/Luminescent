@@ -4,7 +4,9 @@ import static astechzgo.luminescent.utils.DisplayUtils.setDisplayMode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
+import org.joml.Matrix4f;
 import org.lwjgl.glfw.Callbacks;
 import org.lwjgl.glfw.GLFW;
 
@@ -17,7 +19,6 @@ import astechzgo.luminescent.keypress.Key;
 import astechzgo.luminescent.keypress.KeyPressGameplay;
 import astechzgo.luminescent.keypress.KeyPressUtils;
 import astechzgo.luminescent.rendering.Camera;
-import astechzgo.luminescent.rendering.IObjectRenderer;
 import astechzgo.luminescent.rendering.QuadrilateralObjectRenderer;
 import astechzgo.luminescent.rendering.RectangularObjectRenderer;
 import astechzgo.luminescent.rendering.ResolutionBorderRenderer;
@@ -41,11 +42,10 @@ public class Luminescent
 	
 	public static List<Room> rooms;
 	
-	public static List<IObjectRenderer> renderingQueue;
-	
 	public static RectangularObjectRenderer darkness;
 	
 	public static List<Projectile> projectilePool;
+	public static int projectileIndex;
 	
 	public static QuadrilateralObjectRenderer[] resBorders;
 	
@@ -61,7 +61,6 @@ public class Luminescent
 		lastDelta = GLFW.glfwGetTime() * 1000;
 		rooms = JSONWorldLoader.loadRooms();
 		thePlayer.getRenderer().setTexture(new Animation("player.frame", 16));
-		renderingQueue = new ArrayList<IObjectRenderer>();
 		darkness = new RectangularObjectRenderer(new WindowCoordinates(0, 0), Camera.CAMERA_WIDTH, Camera.CAMERA_HEIGHT, TextureList.findTexture("light.darkness"));
 		projectilePool = new ArrayList<>(32);
 		for(int i = 0; i < 32; i++) {
@@ -86,24 +85,25 @@ public class Luminescent
 		}
 		
 		for(Room room : rooms)
-		    room.queue();
+		    room.upload();
         
-        thePlayer.queue();
+        thePlayer.upload();
          
+        List<Supplier<Matrix4f>> projectileMatrices = new ArrayList<>(projectilePool.size());
         for(Projectile projectile : projectilePool) {
-            projectile.queue();
+            projectileMatrices.add(projectile.getRenderer()::getModelMatrix);
         }
-      
-        darkness.queue();
+        
+        @SuppressWarnings("unchecked")
+        Supplier<Matrix4f>[] projectileMatricesArray = (Supplier<Matrix4f>[]) projectileMatrices.toArray(new Supplier<?>[0]);
+        projectilePool.get(0).upload(projectileMatricesArray);
+        projectileIndex = Vulkan.getInstances() - 1;
+        
+        darkness.upload();
         
         
         for(QuadrilateralObjectRenderer resBorder : resBorders) {
-            resBorder.queue();
-        }
-        
-        
-        for(IObjectRenderer object : renderingQueue) {
-            object.upload();
+            resBorder.upload();
         }
         
         Vulkan.constructBuffers();

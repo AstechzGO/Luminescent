@@ -1,6 +1,7 @@
 package astechzgo.luminescent.rendering;
 
 import java.awt.Color;
+import java.util.function.Supplier;
 
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
@@ -71,7 +72,7 @@ public class CircularObjectRenderer implements IObjectRenderer {
         ScaledWindowCoordinates loc = new ScaledWindowCoordinates(coordinates);
         Vector3f location = new Vector3f((float)loc.getScaledWindowCoordinatesX() + DisplayUtils.widthOffset, (float)loc.getScaledWindowCoordinatesY()  + DisplayUtils.heightOffset, 0.0f);
         
-        Quaternionf rotate = new Quaternionf().rotateZ((float) Math.toRadians(-180 - rotation));
+        Quaternionf rotate = new Quaternionf().rotateZ((float) Math.toRadians(rotation));
         
         Matrix4f model = new Matrix4f().translation(location).rotateAround(rotate, 0, 0, 0).scale((float) (1.0 / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)));
         this.model = model;
@@ -199,7 +200,7 @@ public class CircularObjectRenderer implements IObjectRenderer {
 	}
 
     @Override
-    public void upload() {
-        RenderingUtils.createCircle(radius, pointSeperation, colour, texture, this::getModelMatrix);
+    public void upload(@SuppressWarnings("unchecked") Supplier<Matrix4f>... matrices) {
+        RenderingUtils.createCircle(radius, pointSeperation, colour, texture, matrices);
     }
 }

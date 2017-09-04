@@ -1,5 +1,9 @@
 package astechzgo.luminescent.rendering;
 
+import java.util.function.Supplier;
+
+import org.joml.Matrix4f;
+
 import astechzgo.luminescent.coordinates.WindowCoordinates;
 import astechzgo.luminescent.text.Font;
 
@@ -22,7 +26,7 @@ public class TextLabelRenderer extends RectangularObjectRenderer {
 	}
 	
 	@Override
-	public void upload() {	
+	public void upload(@SuppressWarnings("unchecked") Supplier<Matrix4f>... matrices) {	
 	    font.drawText(text, coordinates, getColour());
 	}
 	

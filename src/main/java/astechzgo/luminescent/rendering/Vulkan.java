@@ -219,11 +219,8 @@ public class Vulkan {
     private List<List<Integer>> indices = new ArrayList<>();
     private List<Texture> textures = new ArrayList<>();
     private List<Integer> frameCount = new ArrayList<>();
-    private List<Supplier<Matrix4f>> matrices = new ArrayList<>();
+    private List<List<Supplier<Matrix4f>>> matrices = new ArrayList<>();
     private List<Supplier<Integer>> currentFrames = new ArrayList<>();
-    
-    private int instances = 0;
-    private int recordedInstances = 0;
     
     private long vertexBuffer;
     private long vertexBufferMemory;
@@ -677,7 +674,7 @@ public class Vulkan {
         
         dynamicAlignment = (instanceUBOSize / uboAlignment) * uboAlignment + ((instanceUBOSize % uboAlignment) > 0 ? uboAlignment : 0);
         
-        long modelBufferSize = instances * dynamicAlignment; 
+        long modelBufferSize = flatSize(matrices) * dynamicAlignment; 
         
         long[] uniformModelBufferAddress = new long[] { 0 };
         long[] uniformModelBufferMemoryAddress = new long[] { 0 };
@@ -925,16 +922,7 @@ public class Vulkan {
             VK10.vkDestroyFramebuffer(device, swapChainFramebuffers[i], null);
         }
         
-        if(commandBuffers != null) {
-            try(MemoryStack stack = MemoryStack.stackPush()) {
-                PointerBuffer commandBuffersBuffer = stack.mallocPointer(commandBuffers.length);
-                for(VkCommandBuffer commandBuffer : commandBuffers) {
-                    commandBuffersBuffer.put(commandBuffer.address());
-                }
-                commandBuffersBuffer.flip();
-                VK10.vkFreeCommandBuffers(device, commandPool, commandBuffersBuffer);
-            }
-        }
+        cleanupCommandBuffers();
         
         VK10.vkDestroyPipeline(device, graphicsPipeline, null);
         VK10.vkDestroyPipelineLayout(device, pipelineLayout, null);
@@ -957,6 +945,21 @@ public class Vulkan {
         createGraphicsPipeline();
         createFramebuffers();
         createCommandBuffers();
+    }
+    
+    private void cleanupCommandBuffers() {
+        VK10.vkDeviceWaitIdle(device);
+        
+        if(commandBuffers != null) {
+            try(MemoryStack stack = MemoryStack.stackPush()) {
+                PointerBuffer commandBuffersBuffer = stack.mallocPointer(commandBuffers.length);
+                for(VkCommandBuffer commandBuffer : commandBuffers) {
+                    commandBuffersBuffer.put(commandBuffer.address());
+                }
+                commandBuffersBuffer.flip();
+                VK10.vkFreeCommandBuffers(device, commandPool, commandBuffersBuffer);
+            }
+        }
     }
     
     private void createSynchronizationPrimitives() {
@@ -1041,15 +1044,21 @@ public class Vulkan {
                 VK10.vkCmdBindIndexBuffer(commandBuffers[j], indexBuffer, 0, VK10.VK_INDEX_TYPE_UINT32);
                 
                 int index = 0;
-                for(int k = 0; k < instances; k++) {
-                    int dynamicOffset = k * (int)dynamicAlignment;
+                for(int k = 0; k < matrices.size(); k++) {
+                    int listOffset = 0;
+                    for(int l = 0; l < k; l++) {
+                        listOffset += matrices.get(l).size();
+                    }
                     
-                    VK10.vkCmdBindDescriptorSets(commandBuffers[j], VK10.VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, new long[] { descriptorSets[k] }, new int[] { dynamicOffset });
+                    for(int l = 0; l < matrices.get(k).size(); l++) {
+                        int dynamicOffset = (listOffset + l) * (int)dynamicAlignment;
+                        
+                        VK10.vkCmdBindDescriptorSets(commandBuffers[j], VK10.VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, new long[] { descriptorSets[k] }, new int[] { dynamicOffset });
+                        
+                        VK10.vkCmdDrawIndexed(commandBuffers[j], indices.get(k).size(), 1, index, 0, 0);
+                    }
                     
-                    VK10.vkCmdDrawIndexed(commandBuffers[j], indices.get(k).size(), 1, index, 0, 0);
                     index += indices.get(k).size();
-                    
-                    recordedInstances = instances;
                 }
                 
                 VK10.vkCmdEndRenderPass(commandBuffers[j]);
@@ -1778,7 +1787,7 @@ public class Vulkan {
         try(MemoryStack stack = MemoryStack.stackPush()) {
             VkApplicationInfo appInfo = VkApplicationInfo.callocStack(stack)
                 .sType(VK10.VK_STRUCTURE_TYPE_APPLICATION_INFO)
-                .pApplicationName(stack.UTF8("Hello Triangle"))
+                .pApplicationName(stack.UTF8("Luminescent"))
                 .applicationVersion(VK10.VK_MAKE_VERSION(1, 0, 0))
                 .pEngineName(stack.UTF8("No Engine"))
                 .engineVersion(VK10.VK_MAKE_VERSION(1, 0, 0))
@@ -1916,8 +1925,10 @@ public class Vulkan {
     
     private void updateUniformBuffer() {
         UniformBufferObjectModel modelUBO = new UniformBufferObjectModel();
-        for(int i = 0; i < recordedInstances; i++) {
-            modelUBO.model.add(matrices.get(i).get());
+        for(List<Supplier<Matrix4f>> matricess : matrices) {
+            for(Supplier<Matrix4f> matrix : matricess) {
+                modelUBO.model.add(matrix.get());
+            }
         }
         
         UniformBufferObjectView viewUBO = new UniformBufferObjectView();
@@ -1938,24 +1949,29 @@ public class Vulkan {
                     floatData.flip();
             VK10.vkUnmapMemory(device, uniformViewBufferMemory);
                 
-            VK10.vkMapMemory(device, uniformModelBufferMemory, 0, recordedInstances * dynamicAlignment, 0, data);
-                ByteBuffer byteData = data.getByteBuffer((int) (recordedInstances * dynamicAlignment));
+            VK10.vkMapMemory(device, uniformModelBufferMemory, 0, flatSize(matrices) * dynamicAlignment, 0, data);
+                ByteBuffer byteData = data.getByteBuffer((int) (flatSize(matrices) * dynamicAlignment));
                 
+                
+                int idx = 0;
                 // Put data for each instance
-                for(int i = 0; i < recordedInstances; i++) {
-                    
-                    // Get model data for each instance
-                    float[] modelFloat = new float[4 * 4];
-                    modelUBO.model.get(i).get(modelFloat);
-                    
-                    int j = 0;
-                    // Add matrix to mapped memory
-                    for(float f : modelFloat) {
-                        byteData.putFloat((int) (i * dynamicAlignment) + j * 4, f);
-                        j++;
+                for(int i = 0; i < matrices.size(); i++) {
+                    for(int k = 0; k < matrices.get(i).size(); k++) {
+                        // Get model data for each instance
+                        float[] modelFloat = new float[4 * 4];
+                        modelUBO.model.get(idx).get(modelFloat);
+                        
+                        int j = 0;
+                        // Add matrix to mapped memory
+                        for(float f : modelFloat) {
+                            byteData.putFloat((int) (idx * dynamicAlignment) + j * 4, f);
+                            j++;
+                        }
+                        byteData.putInt((int) (idx * dynamicAlignment) + j * 4, currentFrames.get(i).get());
+                        byteData.putInt((int) (idx * dynamicAlignment) + (j + 1) * 4, frameCount.get(i));
+                        
+                        idx++;
                     }
-                    byteData.putInt((int) (i * dynamicAlignment) + j * 4, currentFrames.get(i).get());
-                    byteData.putInt((int) (i * dynamicAlignment) + (j + 1) * 4, frameCount.get(i));
                 }
                 
                 byteData.flip();
@@ -1963,7 +1979,7 @@ public class Vulkan {
                 VkMappedMemoryRange memoryRange = VkMappedMemoryRange.callocStack(stack)
                     .sType(VK10.VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE)
                     .memory(uniformModelBufferMemory)
-                    .size(recordedInstances * dynamicAlignment)
+                    .size(flatSize(matrices) * dynamicAlignment)
                     .offset(0)
                     .pNext(VK10.VK_NULL_HANDLE);
                 
@@ -2183,12 +2199,20 @@ public class Vulkan {
                 VK10.vkCmdBindIndexBuffer(commandBuffer, indexBuffer, 0, VK10.VK_INDEX_TYPE_UINT32);
                 
                 int index = 0;
-                for(int k = 0; k < instances; k++) {
-                    int dynamicOffset = k * (int)dynamicAlignment;
+                for(int k = 0; k < matrices.size(); k++) {
+                    int listOffset = 0;
+                    for(int l = 0; l < k; l++) {
+                        listOffset += matrices.get(l).size();
+                    }
                     
-                    VK10.vkCmdBindDescriptorSets(commandBuffer, VK10.VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, new long[] { descriptorSets[k] }, new int[] { dynamicOffset });
+                    for(int l = 0; l < matrices.get(k).size(); l++) {
+                        int dynamicOffset = (listOffset + l) * (int)dynamicAlignment;
+                        
+                        VK10.vkCmdBindDescriptorSets(commandBuffer, VK10.VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, new long[] { descriptorSets[k] }, new int[] { dynamicOffset });
+                        
+                        VK10.vkCmdDrawIndexed(commandBuffer, indices.get(k).size(), 1, index, 0, 0);
+                    }
                     
-                    VK10.vkCmdDrawIndexed(commandBuffer, indices.get(k).size(), 1, index, 0, 0);
                     index += indices.get(k).size();
                 }
                 
@@ -2264,7 +2288,17 @@ public class Vulkan {
         }
     }
     
-    public static void addObject(Vertex[] vertices, int[] indices, Texture texture, Supplier<Matrix4f> matrix) {
+    private <T> int flatSize(List<List<T>> lists) {
+        int count = 0;
+        for(List<?> list : lists) {
+            count += list.size();
+        }
+        
+        return count;
+    }
+    
+    @SafeVarargs
+    public static void addObject(Vertex[] vertices, int[] indices, Texture texture, Supplier<Matrix4f>... matrices) {
         int offset = 0;
         for(List<Vertex> verts : vulkanInstance.vertices) {
             offset += verts.size();
@@ -2279,10 +2313,8 @@ public class Vulkan {
         vulkanInstance.indices.add(indicesList);
         vulkanInstance.textures.add(texture);
         vulkanInstance.frameCount.add(texture == null ? 1 : texture.count());
-        vulkanInstance.matrices.add(matrix);
+        vulkanInstance.matrices.add(new ArrayList<>(Arrays.asList(matrices)));
         vulkanInstance.currentFrames.add(texture == null ? () -> 0 : texture::getCurrentFrame);
-        
-        vulkanInstance.instances++;
     }
     
     public static void constructBuffers() {
@@ -2297,34 +2329,35 @@ public class Vulkan {
         vulkanInstance.recreateSwapChain();
     }
     
-    private void cleanupVertices() {
-        for(long textureImageView : textureImageViews)
-            VK10.vkDestroyImageView(device, textureImageView, null);
-        
-        for(long textureImage : textureImages)
-            VK10.vkDestroyImage(device, textureImage, null);
-        
-        for(long textureImageMemory : textureImagesMemory)
-            VK10.vkFreeMemory(device, textureImageMemory, null);
-        
-        VK10.vkDestroyDescriptorPool(device, descriptorPool, null);
-        
+    private void cleanupUniformBuffers() {
         VK10.vkDestroyBuffer(device, uniformModelBuffer, null);
         VK10.vkFreeMemory(device, uniformModelBufferMemory, null);
         
         VK10.vkDestroyBuffer(device, uniformViewBuffer, null);
         VK10.vkFreeMemory(device, uniformViewBufferMemory, null);
-        
-        VK10.vkDestroyBuffer(device, indexBuffer, null);
-        VK10.vkFreeMemory(device, indexBufferMemory, null);
-        
-        VK10.vkDestroyBuffer(device, vertexBuffer, null);
-        VK10.vkFreeMemory(device, vertexBufferMemory, null);
     }
     
-    public static void recreateBuffers() {
-        vulkanInstance.cleanupVertices();
+    private void cleanupDescriptorPool() {
+        VK10.vkDestroyDescriptorPool(device, descriptorPool, null);
+    }
+    
+    public static void recreateCommandAndUniformBuffers() {
+        vulkanInstance.cleanupCommandBuffers();
+        vulkanInstance.cleanupDescriptorPool();
+        vulkanInstance.cleanupUniformBuffers();
         
-        constructBuffers();
+        vulkanInstance.createUniformBuffer();
+        vulkanInstance.createDescriptorPool();
+        vulkanInstance.createDescriptorSet();
+        vulkanInstance.createCommandBuffers();
+    }
+    
+    public static int getInstances() {
+        return vulkanInstance.matrices.size();
+    }
+    
+    @SafeVarargs
+    public static void addMatrices(int index, Supplier<Matrix4f>... matrices) {
+        vulkanInstance.matrices.get(index).addAll(new ArrayList<>(Arrays.asList(matrices)));
     }
 }
