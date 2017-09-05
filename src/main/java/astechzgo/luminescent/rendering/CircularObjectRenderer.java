@@ -1,18 +1,20 @@
 package astechzgo.luminescent.rendering;
 
 import java.awt.Color;
+import java.util.function.Supplier;
 
-import org.lwjgl.opengl.GL11;
+import org.joml.Matrix4f;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 import astechzgo.luminescent.coordinates.ScaledWindowCoordinates;
 import astechzgo.luminescent.coordinates.WindowCoordinates;
-import astechzgo.luminescent.main.Luminescent;
 import astechzgo.luminescent.textures.Texture;
 import astechzgo.luminescent.utils.DisplayUtils;
 import astechzgo.luminescent.utils.RenderingUtils;
 
 public class CircularObjectRenderer implements IObjectRenderer {
-	private Color colour = new Color(0, 0, 0);
+	private Color colour = new Color(0, 0, 0, 0);
 
 	protected int pointSeperation;
 	protected double radius;
@@ -27,6 +29,8 @@ public class CircularObjectRenderer implements IObjectRenderer {
 	protected Texture texture;
 
 	protected double rotation = 0.0;
+	
+	protected Matrix4f model = new Matrix4f();;
 	
 	public CircularObjectRenderer(WindowCoordinates coordinates, double radius) {
 		this(coordinates, radius, 1);
@@ -51,23 +55,6 @@ public class CircularObjectRenderer implements IObjectRenderer {
 	}
 
 	@Override
-	public void render() {
-		resize();
-
-		GL11.glColor4f((float) colour.getRed() / 255, (float) colour.getGreen() / 255, (float) colour.getBlue() / 255, (float) colour.getAlpha() / 255);
-
-		if (texture != null) {
-			Luminescent.defaultShader.applyShader();
-			Luminescent.defaultShader.updateTransMatrix();
-			RenderingUtils.RenderCircle(new ScaledWindowCoordinates(coordinates), scaledRadius, pointSeperation, rotation, texture);
-			Luminescent.defaultShader.withdrawShader();
-		}
-		else {
-			RenderingUtils.RenderCircle(new ScaledWindowCoordinates(coordinates), scaledRadius, pointSeperation, rotation);
-		}
-	}
-
-	@Override
 	public void setColour(Color colour) {
 		this.colour = colour;
 	}
@@ -79,11 +66,16 @@ public class CircularObjectRenderer implements IObjectRenderer {
 
 	@Override
 	public void resize() {
-		scaledRadius = (int) Math
-				.round(radius / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2));
-
 		oldGameWidth = DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2;
 		oldGameHeight = DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2;
+		
+        ScaledWindowCoordinates loc = new ScaledWindowCoordinates(coordinates);
+        Vector3f location = new Vector3f((float)loc.getScaledWindowCoordinatesX() + DisplayUtils.widthOffset, (float)loc.getScaledWindowCoordinatesY()  + DisplayUtils.heightOffset, 0.0f);
+        
+        Quaternionf rotate = new Quaternionf().rotateZ((float) Math.toRadians(rotation));
+        
+        Matrix4f model = new Matrix4f().translation(location).rotateAround(rotate, 0, 0, 0).scale((float) (1.0 / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)));
+        this.model = model;
 	}
 
 	@Override
@@ -173,16 +165,6 @@ public class CircularObjectRenderer implements IObjectRenderer {
 			else
 				return false;
 		} 
-		else if (object instanceof MultipleObjectRenderer) {
-			MultipleObjectRenderer casted = (MultipleObjectRenderer) object;
-
-			for (IObjectRenderer i : casted.getAll()) {
-				if (this.isTouching(i))
-					return true;
-			}
-
-			return false;
-		}
 		else {
 			return false;
 		}
@@ -210,4 +192,15 @@ public class CircularObjectRenderer implements IObjectRenderer {
 	public void setCoordinates(WindowCoordinates coordinates) {
 		this.coordinates = coordinates;
 	}
+	
+	@Override
+	public Matrix4f getModelMatrix() {
+	    resize();
+	    return model;
+	}
+
+    @Override
+    public void upload(@SuppressWarnings("unchecked") Supplier<Matrix4f>... matrices) {
+        RenderingUtils.createCircle(radius, pointSeperation, colour, texture, matrices);
+    }
 }

@@ -32,15 +32,17 @@ import java.awt.FontFormatException;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import astechzgo.luminescent.coordinates.ScaledWindowCoordinates;
+import astechzgo.luminescent.coordinates.WindowCoordinates;
+import astechzgo.luminescent.rendering.RectangularObjectRenderer;
 import astechzgo.luminescent.textures.Texture;
+import astechzgo.luminescent.textures.TextureList;
 import astechzgo.luminescent.utils.RenderingUtils;
 
 /**
@@ -257,7 +259,10 @@ public class Font {
 //        /* Do not forget to flip the buffer! */
 //        buffer.flip();
 
-        return new Texture(TEXTURE_NAME, true, image);
+        Texture atlas = new Texture(TEXTURE_NAME, true, image);
+        TextureList.addTextures(Arrays.asList(atlas));
+        return atlas;
+        
     }
 
     /**
@@ -299,24 +304,7 @@ public class Font {
         g.setPaint(java.awt.Color.WHITE);
         g.drawString(String.valueOf(c), 0, metrics.getAscent());
         g.dispose();
-        return getFlippedImage(image);
-    }
-
-    private BufferedImage getFlippedImage(BufferedImage bi) {
-        BufferedImage flipped = new BufferedImage(
-                bi.getWidth(),
-                bi.getHeight(),
-                bi.getType());
-        AffineTransform tran = AffineTransform.getTranslateInstance(0, bi.getHeight());
-        AffineTransform flip = AffineTransform.getScaleInstance(1d, -1d);
-        tran.concatenate(flip);
-
-        Graphics2D g = flipped.createGraphics();
-        g.setTransform(tran);
-        g.drawImage(bi, 0, 0, null);
-        g.dispose();
-
-        return flipped;
+        return image;
     }
     
     /**
@@ -387,11 +375,13 @@ public class Font {
      * @param y        Y coordinate of the text position
      * @param c        Color to use
      */
-    public void drawText(CharSequence text, int x, int y, Color colour) {
+    public RectangularObjectRenderer[] drawText(CharSequence text, WindowCoordinates coordinates, Color colour) {
+        RectangularObjectRenderer[] characters = new RectangularObjectRenderer[text.length()];
+        
         int textHeight = getHeight(text);
 
-        int drawX = x;
-        int drawY = y;
+        int drawX = (int) coordinates.getWindowCoordinatesX();
+        int drawY = (int) coordinates.getWindowCoordinatesY();
         if (textHeight > fontHeight) {
             drawY += textHeight - fontHeight;
         }
@@ -400,8 +390,8 @@ public class Font {
             char ch = text.charAt(i);
             if (ch == '\n') {
                 /* Line feed, set x and y to draw at the next line */
-                drawY -= fontHeight;
-                drawX = x;
+                drawY += fontHeight;
+                drawX = (int) coordinates.getWindowCoordinatesX();
                 continue;
             }
             if (ch == '\r') {
@@ -409,9 +399,14 @@ public class Font {
                 continue;
             }
             Glyph g = glyphs.get(ch);
-            RenderingUtils.DrawTextureRegion(new ScaledWindowCoordinates(drawX, drawY), g.x, g.y, g.width, g.height, colour, texture);
+            characters[i] = new RectangularObjectRenderer(new WindowCoordinates(drawX, drawY), g.width, g.height, texture);
+            characters[i].setColour(colour);
+            RenderingUtils.createTextureRegion(new WindowCoordinates(drawX, drawY), g.x, g.y, g.width, g.height, colour, texture, characters[i]::getModelMatrix);
+            
             drawX += g.width;
         }
+        
+        return characters;
     }
 
     /**
@@ -422,8 +417,8 @@ public class Font {
      * @param x        X coordinate of the text position
      * @param y        Y coordinate of the text position
      */
-    public void drawText(CharSequence text, int x, int y) {
-        drawText(text, x, y, Color.WHITE);
+    public void drawText(CharSequence text, WindowCoordinates coordinates) {
+        drawText(text, coordinates, Color.WHITE);
     }
     
     public String getFontName() {

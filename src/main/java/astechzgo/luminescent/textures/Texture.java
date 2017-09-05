@@ -1,24 +1,21 @@
 package astechzgo.luminescent.textures;
 
+import static astechzgo.luminescent.utils.SystemUtils.getResourceAsURL;
+
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 
-import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryUtil;
 
 public class Texture {
 	
 	private final BufferedImage asBufferedImage;
 	private final ByteBuffer asByteBuffer;
-	private final int textureNumber;
 	
 	private final String name;
 	
@@ -30,14 +27,12 @@ public class Texture {
 		name = textureName;
 		
 		if(!slick) {
-			textureNumber = -1;
 			asBufferedImage = toBufferedImage(asImage);
 			asByteBuffer = toByteBuffer(asBufferedImage);
 		}
 		else {
 			asBufferedImage = toBufferedImage(asImage);
 			asByteBuffer = toByteBuffer(asBufferedImage);
-			textureNumber = loadTexture();
 		}
 	}
 	
@@ -69,11 +64,15 @@ public class Texture {
         return buffer;
 	}
 	
-	private static Image toImage(String imageLoc) {
+	protected static Image toImage(String imageLoc) {
 		imageLoc = imageLoc.replaceAll("\\.", "/");
-		Image img = new ImageIcon(Texture.class.getResource(
-				"/resources/textures/" + imageLoc + ".png")).getImage();
-		return img;
+        try {
+            return ImageIO.read(getResourceAsURL("textures/" + imageLoc + ".png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+		return null;
 	}
 	
 	public BufferedImage getAsBufferedImage() {
@@ -91,11 +90,12 @@ public class Texture {
 	 *            The Image to be converted
 	 * @return The converted BufferedImage
 	 */
-	private BufferedImage toBufferedImage(Image img) {
+    private BufferedImage toBufferedImage(Image img) {
 		if (img instanceof BufferedImage) {
-			return (BufferedImage) img;
+		     // Return the buffered image
+	         return (BufferedImage) img;
 		}
-
+		
 		// Create a buffered image with transparency
 		BufferedImage bimage = new BufferedImage(img.getWidth(null),
 				img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
@@ -104,66 +104,24 @@ public class Texture {
 		Graphics2D bGr = bimage.createGraphics();
 		bGr.drawImage(img, 0, 0, null);
 		bGr.dispose();
-
+		
 		// Return the buffered image
-		if(textureNumber == -1)
-			return bimage;
-		else
-			return getFlippedImage(bimage);
+		return bimage;
 	}
-	
-	private int loadTexture() {
-		try {
-			ByteArrayOutputStream os = new ByteArrayOutputStream();
-			ImageIO.write(asBufferedImage,"png", os); 
-			
-			int textureID = GL11.glGenTextures(); //Generate texture ID
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID); //Bind texture ID
-
-            //Setup texture scaling filtering
-			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
-			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
-			
-            //Send texel data to OpenGL
-			GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, asBufferedImage.getWidth(), asBufferedImage.getHeight(), 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, asByteBuffer);
-
-			
-			
-            //Return the texture ID so we can bind it later again
-          return textureID;
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return 0;
-	}
-	
-	public int getAsTexture() {
-		return textureNumber;
-	}
-	
+    
 	public String getName() {
 		return name;
 	}
-	
-    private BufferedImage getFlippedImage(BufferedImage bi) {
-        BufferedImage flipped = new BufferedImage(
-                bi.getWidth(),
-                bi.getHeight(),
-                bi.getType());
-        AffineTransform tran = AffineTransform.getTranslateInstance(0, bi.getHeight());
-        AffineTransform flip = AffineTransform.getScaleInstance(1d, -1d);
-        tran.concatenate(flip);
-
-        Graphics2D g = flipped.createGraphics();
-        g.setTransform(tran);
-        g.drawImage(bi, 0, 0, null);
-        g.dispose();
-
-        return flipped;
-    }
     
     void dispose() {
     	MemoryUtil.memFree(asByteBuffer);
+    }
+    
+    public int getCurrentFrame() {
+        return 0;
+    }
+    
+    public int count() {
+        return 1;
     }
 }

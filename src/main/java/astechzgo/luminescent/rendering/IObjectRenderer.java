@@ -1,19 +1,23 @@
 package astechzgo.luminescent.rendering;
 
 import java.awt.Color;
+import java.util.function.Supplier;
+
+import org.joml.Matrix4f;
 
 import astechzgo.luminescent.coordinates.WindowCoordinates;
-import astechzgo.luminescent.main.Luminescent;
 import astechzgo.luminescent.textures.Texture;
 
 
 public interface IObjectRenderer
 {
-	default public void queue() {
-		Luminescent.renderingQueue.add(this);
+    @SuppressWarnings("unchecked")
+    default public void upload() {
+	    upload(this::getModelMatrix);
 	}
 	
-	public void render();
+	//TODO: Uncomment when updated to Java 9- @SafeVarargs
+    public void upload(@SuppressWarnings("unchecked") Supplier<Matrix4f>... matrices);
 	
 	public void setColour(Color colour);
 	public Color getColour();
@@ -29,4 +33,6 @@ public interface IObjectRenderer
 	public WindowCoordinates getCoordinates();
 	
 	public void setCoordinates(WindowCoordinates coordinates);
+	
+	public Matrix4f getModelMatrix();
 }

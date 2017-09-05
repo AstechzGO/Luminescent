@@ -2,6 +2,9 @@
 apply plugin: "java"
 apply plugin: "eclipse"
 
+project.ext.lwjglVersion = "3.1.2"
+project.ext.jomlVersion = "1.9.3"
+
 // In this section you declare where to find the dependencies of your project
 repositories {
 	mavenCentral()
@@ -14,26 +17,28 @@ repositories {
 dependencies {
 	compile "com.google.code.gson:gson:2.5"
 
-	// LWJGL dependencies START
-	compile "org.lwjgl:lwjgl:3.1.0"
-	compile "org.lwjgl:lwjgl-glfw:3.1.0"
-	compile "org.lwjgl:lwjgl-jemalloc:3.1.0"
-	compile "org.lwjgl:lwjgl-openal:3.1.0"
-	compile "org.lwjgl:lwjgl-opengl:3.1.0"
-	// LWJGL natives
-	compile "org.lwjgl:lwjgl:3.1.0:natives-windows"
-	compile "org.lwjgl:lwjgl:3.1.0:natives-linux"
-	compile "org.lwjgl:lwjgl:3.1.0:natives-macos"
-	compile "org.lwjgl:lwjgl-glfw:3.1.0:natives-windows"
-	compile "org.lwjgl:lwjgl-glfw:3.1.0:natives-linux"
-	compile "org.lwjgl:lwjgl-glfw:3.1.0:natives-macos"
-	compile "org.lwjgl:lwjgl-jemalloc:3.1.0:natives-windows"
-	compile "org.lwjgl:lwjgl-jemalloc:3.1.0:natives-linux"
-	compile "org.lwjgl:lwjgl-jemalloc:3.1.0:natives-macos"
-	compile "org.lwjgl:lwjgl-openal:3.1.0:natives-windows"
-	compile "org.lwjgl:lwjgl-openal:3.1.0:natives-linux"
-	compile "org.lwjgl:lwjgl-openal:3.1.0:natives-macos"
-	// LWJGL dependencies END
+	compile "org.lwjgl:lwjgl:${lwjglVersion}"
+	compile "org.lwjgl:lwjgl-glfw:${lwjglVersion}"
+	compile "org.lwjgl:lwjgl-jemalloc:${lwjglVersion}"
+	compile "org.lwjgl:lwjgl-openal:${lwjglVersion}"
+	compile "org.lwjgl:lwjgl-stb:${lwjglVersion}"
+	compile "org.lwjgl:lwjgl-vulkan:${lwjglVersion}"
+	compile "org.lwjgl:lwjgl:${lwjglVersion}:natives-windows"
+	compile "org.lwjgl:lwjgl:${lwjglVersion}:natives-linux"
+	compile "org.lwjgl:lwjgl:${lwjglVersion}:natives-macos"
+	compile "org.lwjgl:lwjgl-glfw:${lwjglVersion}:natives-windows"
+	compile "org.lwjgl:lwjgl-glfw:${lwjglVersion}:natives-linux"
+	compile "org.lwjgl:lwjgl-glfw:${lwjglVersion}:natives-macos"
+	compile "org.lwjgl:lwjgl-jemalloc:${lwjglVersion}:natives-windows"
+	compile "org.lwjgl:lwjgl-jemalloc:${lwjglVersion}:natives-linux"
+	compile "org.lwjgl:lwjgl-jemalloc:${lwjglVersion}:natives-macos"	
+	compile "org.lwjgl:lwjgl-openal:${lwjglVersion}:natives-windows"
+	compile "org.lwjgl:lwjgl-openal:${lwjglVersion}:natives-linux"
+	compile "org.lwjgl:lwjgl-openal:${lwjglVersion}:natives-macos"	
+	compile "org.lwjgl:lwjgl-stb:${lwjglVersion}:natives-windows"
+	compile "org.lwjgl:lwjgl-stb:${lwjglVersion}:natives-linux"
+	compile "org.lwjgl:lwjgl-stb:${lwjglVersion}:natives-macos"
+	compile "org.joml:joml:${jomlVersion}"
 	
 	compile name: "SoundSystem"
 	compile name: "CodecMP3"

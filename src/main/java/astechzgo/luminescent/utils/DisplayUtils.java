@@ -1,6 +1,5 @@
 package astechzgo.luminescent.utils;
 
-import static org.lwjgl.glfw.GLFW.GLFW_OPENGL_DEBUG_CONTEXT;
 import static org.lwjgl.glfw.GLFW.GLFW_RESIZABLE;
 import static org.lwjgl.glfw.GLFW.GLFW_VISIBLE;
 import static org.lwjgl.glfw.GLFW.glfwCreateWindow;
@@ -14,8 +13,6 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowPos;
 import static org.lwjgl.glfw.GLFW.glfwShowWindow;
 import static org.lwjgl.glfw.GLFW.glfwSwapInterval;
 import static org.lwjgl.glfw.GLFW.glfwWindowHint;
-import static org.lwjgl.opengl.GL11.GL_FALSE;
-import static org.lwjgl.opengl.GL11.GL_TRUE;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 import java.awt.Graphics2D;
@@ -35,15 +32,10 @@ import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.glfw.GLFWVidMode.Buffer;
 import org.lwjgl.glfw.GLFWWindowPosCallback;
 import org.lwjgl.glfw.GLFWWindowSizeCallback;
-import org.lwjgl.opengl.GL;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GLCapabilities;
 import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.MemoryUtil;
 
-import astechzgo.luminescent.coordinates.ScaledWindowCoordinates;
-import astechzgo.luminescent.coordinates.WindowCoordinates;
-import astechzgo.luminescent.rendering.QuadrilateralObjectRenderer;
+import astechzgo.luminescent.rendering.Vulkan;
 import astechzgo.luminescent.textures.TextureList;
 
 public class DisplayUtils {	
@@ -80,8 +72,6 @@ public class DisplayUtils {
 	public static int displayY;
 	
 	private static GLFWImage.Buffer icons;
-	
-	public static GLCapabilities caps;
 
 	static {
 		if (!glfwInit())
@@ -188,10 +178,10 @@ public class DisplayUtils {
 		 long newWindow;
 	        displayFullscreen = fullscreen;
 	        if(displayFullscreen){
-	            newWindow = glfwCreateWindow(mode.WIDTH, mode.HEIGHT, displayTitle, monitor, handle);
+	            newWindow = glfwCreateWindow(mode.WIDTH, mode.HEIGHT, displayTitle, monitor, NULL);
 	            glfwMakeContextCurrent( newWindow );	            
 	        }else{
-	            newWindow = glfwCreateWindow(mode.WIDTH, mode.HEIGHT, displayTitle, NULL, handle);
+	            newWindow = glfwCreateWindow(mode.WIDTH, mode.HEIGHT, displayTitle, NULL, NULL);
 	            
 	            int monitorWidthOffset = getMonitorOffsetWidth(DisplayUtils.monitor);
 	    		int monitorHeightOffset = getMonitorOffsetHeight(DisplayUtils.monitor);
@@ -217,15 +207,10 @@ public class DisplayUtils {
 			if(widthOffset == 0) heightOffset = Math.max(0, (displayHeight - (displayWidth / 16 * 9)) / 2);
 	        
 	        glfwSwapInterval(1);
-	        glfwShowWindow(handle);
-	        caps = GL.createCapabilities();
-
-	        GL11.glMatrixMode(GL11.GL_PROJECTION);
-			GL11.glLoadIdentity();
-			GL11.glOrtho(0, mode.WIDTH, 0, mode.HEIGHT, 1, -1);
-			GL11.glMatrixMode(GL11.GL_MODELVIEW);
-			GL11.glEnable(GL11.GL_BLEND);
-			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+	        
+	        Vulkan.createWindowSurface();
+	        
+	        Vulkan.recreate();
 
 			GLFW.glfwSetKeyCallback(handle, KeyboardUtils.KEY_CALLBACK);
 			GLFW.glfwSetWindowSizeCallback(handle, RESIZED_CALLBACK);
@@ -234,6 +219,8 @@ public class DisplayUtils {
 			GLFW.glfwSetWindowIcon(handle, icons);
 			
 			GLFW.glfwSetWindowAspectRatio(handle, 16, 9);
+			
+			GLFW.glfwShowWindow(handle);
 			
 		} catch (Exception e) {
 			System.out.println("Unable to setup mode " + width + "x" + height
@@ -248,6 +235,13 @@ public class DisplayUtils {
 	 * @param nIcon The locations of the icons
 	 */
 	public static void setIcons(String[] nIcon) {
+	    if(nIcon == null) {
+	        if(icons != null) {
+	            icons.free();
+	        }
+	        return;
+	    }
+	    
 		GLFWImage.Buffer icons = GLFWImage.calloc(nIcon.length);
 		
 		int i = 0;
@@ -263,13 +257,13 @@ public class DisplayUtils {
 	}
 
 	public static void takeScreenshot(File file) throws Exception {
-		GL11.glReadBuffer(GL11.GL_FRONT);
+		//GL11.glReadBuffer(GL11.GL_FRONT);
 		int width = displayWidth;
 		int height= displayHeight;
 		int bpp = (monitorBitPerPixel / 8) + 1;  //For alpha
 		
 		ByteBuffer buffer = MemoryUtil.memAlloc((width - DisplayUtils.widthOffset) * (height - DisplayUtils.heightOffset) * bpp);
-		GL11.glReadPixels(DisplayUtils.widthOffset, DisplayUtils.heightOffset, width - DisplayUtils.widthOffset, height - DisplayUtils.heightOffset, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+		buffer.put(Vulkan.readPixels(DisplayUtils.widthOffset, DisplayUtils.heightOffset, width - DisplayUtils.widthOffset, height - DisplayUtils.heightOffset));
 		String format = "png";
 		BufferedImage image = new BufferedImage(width - DisplayUtils.widthOffset * 2, height - DisplayUtils.heightOffset * 2, BufferedImage.TYPE_INT_RGB);
 		
@@ -311,9 +305,26 @@ public class DisplayUtils {
         g.drawImage(bi, 0, 0, null);
         g.dispose();
 
-        return flipped;
+        return getFlipped2Image(flipped);
     }
 	
+    private static BufferedImage getFlipped2Image(BufferedImage bi) {
+        BufferedImage flipped = new BufferedImage(
+                bi.getWidth(),
+                bi.getHeight(),
+                bi.getType());
+        AffineTransform tran = AffineTransform.getTranslateInstance(0, bi.getHeight());
+        AffineTransform flip = AffineTransform.getScaleInstance(1d, -1d);
+        tran.concatenate(flip);
+
+        Graphics2D g = flipped.createGraphics();
+        g.setTransform(tran);
+        g.drawImage(bi, 0, 0, null);
+        g.dispose();
+
+        return flipped;
+    }
+    
 	private static class DisplayMode {
 		private final int WIDTH, HEIGHT, BPP, FREQ;
 		public DisplayMode(int width, int height, int bpp, int freq) {
@@ -344,10 +355,9 @@ public class DisplayUtils {
 		desktopDisplayMode = new DisplayMode(monitorWidth, monitorHeight, monitorBitPerPixel, monitorRefreshRate);
 
 		glfwDefaultWindowHints();
-		glfwWindowHint(GLFW_VISIBLE, GL_FALSE);
-		glfwWindowHint(GLFW_RESIZABLE, displayResizable ? GL_TRUE : GL_FALSE);
-		glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
-
+		glfwWindowHint(GLFW.GLFW_CLIENT_API, GLFW.GLFW_NO_API);
+		glfwWindowHint(GLFW_VISIBLE, GLFW.GLFW_FALSE);
+		glfwWindowHint(GLFW_RESIZABLE, displayResizable ? GLFW.GLFW_TRUE : GLFW.GLFW_FALSE);
 		
 		handle = glfwCreateWindow(mode.WIDTH, mode.HEIGHT,  displayTitle, NULL, NULL);
 		if ( handle == 0L )
@@ -377,7 +387,6 @@ public class DisplayUtils {
 		);
 		
 		glfwMakeContextCurrent(handle);
-		caps = GL.createCapabilities();
 		
 		GLFW.glfwSetWindowIcon(handle, icons);
 		
@@ -405,10 +414,6 @@ public class DisplayUtils {
 	public static int getDisplayFramebufferHeight() {
 		return displayFramebufferHeight;
 	}	
-	
-	public static GLCapabilities getCapabilities() {
-		return caps;
-	}
 	
 	public static int getDisplayWidth() {
 		return displayWidth;
@@ -526,26 +531,6 @@ public class DisplayUtils {
 		KeyboardUtils.resetKeys();
 	}
 	
-	public static void renderResolutionBorder() {
-		QuadrilateralObjectRenderer rect1, rect2;
-		
-		GL11.glColor3f(0, 0, 0);
-		if(widthOffset != 0) {
-			rect1 = new QuadrilateralObjectRenderer(new WindowCoordinates(new ScaledWindowCoordinates(-widthOffset, 0)), new WindowCoordinates(new ScaledWindowCoordinates(-widthOffset, displayHeight)), new WindowCoordinates(new ScaledWindowCoordinates(0, displayHeight)), new WindowCoordinates(new ScaledWindowCoordinates(0, 0)));
-			rect2 = new QuadrilateralObjectRenderer(new WindowCoordinates(new ScaledWindowCoordinates(displayWidth - widthOffset * 2, 0)), new WindowCoordinates(new ScaledWindowCoordinates(displayWidth - widthOffset * 2, displayHeight)), new WindowCoordinates(new ScaledWindowCoordinates(displayWidth - widthOffset, displayHeight)), new WindowCoordinates(new ScaledWindowCoordinates(displayWidth - widthOffset, 0)));
-			
-			rect1.queue();
-			rect2.queue();
-		}
-		if(heightOffset != 0) {
-			rect1 = new QuadrilateralObjectRenderer(new WindowCoordinates(new ScaledWindowCoordinates(0, displayHeight - heightOffset * 2)), new WindowCoordinates(new ScaledWindowCoordinates(0, displayHeight - heightOffset)), new WindowCoordinates(new ScaledWindowCoordinates(displayWidth, displayHeight - heightOffset)), new WindowCoordinates(new ScaledWindowCoordinates(displayWidth, displayHeight - heightOffset * 2)));
-			rect2 = new QuadrilateralObjectRenderer(new WindowCoordinates(new ScaledWindowCoordinates(0, -heightOffset)), new WindowCoordinates(new ScaledWindowCoordinates(0, 0)), new WindowCoordinates(new ScaledWindowCoordinates(displayWidth, 0)), new WindowCoordinates(new ScaledWindowCoordinates(displayWidth, -heightOffset)));
-			
-			rect1.queue();
-			rect2.queue();
-		}
-	}
-	
 	public static final GLFWWindowSizeCallback RESIZED_CALLBACK = new GLFWWindowSizeCallback() {
 
 		@Override
@@ -594,11 +579,7 @@ public class DisplayUtils {
 	        widthOffset = Math.max(0, (displayWidth - (displayHeight / 9 * 16)) / 2);
 			if(widthOffset == 0) heightOffset = Math.max(0, (displayHeight - (displayWidth / 16 * 9)) / 2);
 
-	        GL11.glMatrixMode(GL11.GL_PROJECTION);
-			GL11.glLoadIdentity();
-			GL11.glOrtho(0, mode.WIDTH, 0, mode.HEIGHT, 1, -1);
-
-			GL11.glViewport(0, 0, DisplayUtils.getDisplayWidth(), DisplayUtils.getDisplayHeight());
+			Vulkan.recreate();
 			
 			
 		} catch (Exception e) {

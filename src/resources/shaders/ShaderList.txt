@@ -1,2 +1,0 @@
-#0defaults.defaultVertexShader
-#1defaults.defaultPixelShader

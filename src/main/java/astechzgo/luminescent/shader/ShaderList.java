@@ -1,5 +1,7 @@
 package astechzgo.luminescent.shader;
 
+import static astechzgo.luminescent.utils.SystemUtils.getResourceAsURL;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,9 +9,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL32;
-import org.lwjgl.opengl.GL40;
+import org.lwjgl.vulkan.VK10;
 
 public class ShaderList {
 	
@@ -29,7 +29,14 @@ public class ShaderList {
 	private static List<String> getShadersForPackage() {
 		List<String> names = new ArrayList<String>();
 		
-		InputStream in = new ShaderList().getClass().getResourceAsStream("/resources/shaders/ShaderList.txt");
+		InputStream in = null;
+		
+        try {
+            in = getResourceAsURL("shaders/ShaderList.txt").openStream();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
 		BufferedReader input = new BufferedReader(new InputStreamReader(in));
 		String line = "";
 		try {
@@ -58,15 +65,21 @@ public class ShaderList {
 	private static int getShaderTypeValue(int shaderTypeIdx) {
 		switch(shaderTypeIdx) {
 			case 0:
-				return GL20.GL_VERTEX_SHADER;
+				return VK10.VK_SHADER_STAGE_VERTEX_BIT;
 			case 1:
-				return GL20.GL_FRAGMENT_SHADER;
+				return VK10.VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT;
 			case 2:
-				return GL32.GL_GEOMETRY_SHADER;
+				return VK10.VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT;
 			case 3:
-				return GL40.GL_TESS_EVALUATION_SHADER ;
+				return VK10.VK_SHADER_STAGE_GEOMETRY_BIT;
 			case 4:
-				return GL40.GL_TESS_EVALUATION_SHADER;
+				return VK10.VK_SHADER_STAGE_FRAGMENT_BIT;
+            case 5:
+                return VK10.VK_SHADER_STAGE_COMPUTE_BIT;
+            case 6:
+                return VK10.VK_SHADER_STAGE_ALL_GRAPHICS;
+            case 7:
+                return VK10.VK_SHADER_STAGE_ALL;
 			default:
 				throw new IllegalArgumentException("Unknown shader type");
 		}

@@ -1,13 +1,31 @@
 package astechzgo.luminescent.utils;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 
+import org.lwjgl.system.Configuration;
 import org.lwjgl.system.Platform;
+
+import astechzgo.luminescent.main.Luminescent;
 
 public class SystemUtils {
 
 	private static String userHome = System.getProperty("user.home", ".");
+	private static File oldWorkingDirectory;
 	private static File workingDirectory;
+	
+	public static void setUpDebug() {
+        if(Luminescent.DEBUG) {
+            Configuration.DEBUG.set(true);
+            Configuration.DEBUG_FUNCTIONS.set(true);
+            Configuration.DEBUG_STACK.set(true);
+            Configuration.DEBUG_LOADER.set(true);
+            Configuration.DEBUG_MEMORY_ALLOCATOR.set(true);
+        }
+	}
 	
 	/**
 	 * When not deployed, this game only supports windows in the Eclipse IDE
@@ -34,8 +52,9 @@ public class SystemUtils {
 			System.exit(-1);
 		}
 
-		setWorkingDirectory(workingDirectory.getPath());
+		oldWorkingDirectory = new File(System.getProperty("user.dir"));
 		
+		setWorkingDirectory(workingDirectory.getPath());	
 	}
 	
 	private static boolean setWorkingDirectory(String directoryName) {
@@ -52,5 +71,44 @@ public class SystemUtils {
 	
 	public static File newFile(String relativeLoc) {
 		return new File(new File(relativeLoc).getAbsolutePath());
+	}
+	
+	public static URL getResourceAsURL(String relativeLoc) {
+	    if(isJar()) {
+	        return SystemUtils.class.getResource("/resources/" + relativeLoc);
+	    }
+	    else {
+	        try {
+                return new File(oldWorkingDirectory, "src/main/resources/" + relativeLoc).toURI().toURL();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+	        return SystemUtils.class.getResource("/resources/" + relativeLoc);
+	    }
+	}
+	
+    public static byte[] readFile(String file) {
+        InputStream is = null;
+        
+        try {
+            is = getResourceAsURL(file).openStream();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        byte[] bytes = new byte[0];
+        try {
+            bytes = new byte[is.available()];
+            is.read(bytes);
+            is.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+        return bytes;
+    }
+	
+	public static boolean isJar() {
+	    return SystemUtils.class.getResource("SystemUtils.class").getProtocol().equalsIgnoreCase("JAR");
 	}
 }

@@ -1,5 +1,7 @@
 package astechzgo.luminescent.utils;
 
+import static astechzgo.luminescent.utils.SystemUtils.getResourceAsURL;
+
 import static astechzgo.luminescent.utils.SystemUtils.newFile;
 
 import java.io.File;
@@ -118,7 +120,7 @@ public class ControllerUtils {
 		if(!defaultConf.isFile()) {
 			try {
 				defaultConf.createNewFile();
-				InputStream confIn = (new ControllerUtils()).getClass().getResourceAsStream("/resources/properties/default.properties");
+				InputStream confIn = getResourceAsURL("properties/default.properties").openStream();
 				Files.copy(confIn, defaultConf.toPath(), StandardCopyOption.REPLACE_EXISTING);
 			} catch (IOException e) {
 				e.printStackTrace();

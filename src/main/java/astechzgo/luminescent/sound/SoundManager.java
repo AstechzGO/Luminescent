@@ -1,7 +1,11 @@
 package astechzgo.luminescent.sound;
 
+import static astechzgo.luminescent.utils.SystemUtils.getResourceAsURL;
+
+import java.net.URL;
 import java.util.HashMap;
 
+import astechzgo.luminescent.utils.SystemUtils;
 import de.cuina.fireandfuel.CodecJLayerMP3;
 import paulscode.sound.FilenameURL;
 import paulscode.sound.Library;
@@ -38,8 +42,15 @@ public class SoundManager {
 		}
 
 		try {
-			SoundSystemConfig.setSoundFilesPackage("resources/sounds/");
-			SoundSystemConfig.setCodec("mp3", CodecJLayerMP3.class);
+		    if(SystemUtils.isJar()) {
+		        SoundSystemConfig.setSoundFilesPackage(getResourceAsURL("sounds/").toString().split("\\!")[1].replaceFirst("/", ""));
+		    }
+		    else {
+		        SoundSystemConfig.setSoundFilesPackage("");
+		    }
+		    
+		    SoundSystemConfig.setCodec("mp3", CodecJLayerMP3.class);
+		    SoundSystemConfig.PREFIX_URL = "^[fF][iI][lL][eE]:\\/.*";
 		} catch (SoundSystemException e) {
 			System.err.println("error linking with the CodecWav plug-in");
 		}
@@ -53,6 +64,12 @@ public class SoundManager {
 		String oldS = s;
 		
 		String filename = s.replaceAll("\\.", "/") + ".mp3";
+		
+		URL resourceLoc = getResourceAsURL("sounds/" + filename);
+		
+		if(!SystemUtils.isJar()) {
+		    filename = resourceLoc.toString();
+		}
 		
 		boolean priority = false;
 		float x = 0;

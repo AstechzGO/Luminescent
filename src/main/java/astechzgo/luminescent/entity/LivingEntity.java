@@ -24,6 +24,10 @@ public abstract class LivingEntity implements Entity {
 		isAlive = alive;
 	}
 	
+	public void setCoordinates(GameCoordinates coordinates) {
+	    this.coordinates = coordinates;
+	}
+	
 	public GameCoordinates getCoordinates() {
 		return coordinates;
 	}

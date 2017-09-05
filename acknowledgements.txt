@@ -16,8 +16,6 @@ astechzgo.luminescent:
 			(Nothing)
 		ScaledWindowCoordinates():
 			(Nothing)
-		ScaledWindowInvertedYAxisCoordinates:
-			(Nothing)
 		WindowCoordinates:
 			(Nothing)
 	entity:
@@ -57,17 +55,8 @@ astechzgo.luminescent:
 		CircularObjectRenderer:
 			isTouching():
 				http://www.java-gaming.org/index.php/topic,10265.
-		FrameBuffer:
-			https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/graphics/glutils/GLFrameBuffer.java
 		IObjectRenderer:
 			(Nothing)
-		MultipleObjectRenderer:
-			(Nothing)
-		OpenGL:
-			Tick():
-				http://wiki.lwjgl.org/wiki/LWJGL_Basics_3_(The_Quad)#Example
-			ChangeResolution():
-				http://wiki.lwjgl.org/wiki/LWJGL_Basics_3_(The_Quad)#Example
 		Options:
 			(Nothing)
 		QuadrilateralObjectRenderer:
@@ -84,17 +73,18 @@ astechzgo.luminescent:
 							msrd0						(http://stackoverflow.com/users/3755692/msrd0)		
 		RectangularObjectRenderer:
 			(Nothing)	
+		ResolutionBorderRenderer:
+			(Nothing)
+		Vulkan:
+			Based on tutorial at https://vulkan-tutorial.com/.
+			Dynamic uniform buffers based on tutorial at https://github.com/SaschaWillems/Vulkan/tree/master/dynamicuniformbuffer
+			readPixelsToArray():
+				https://forums.khronos.org/showthread.php/13008-quot-readPixels-quot-on-vulkan
 	shader:
 		Shader:
-			loadAndCompileShader():
-				http://wiki.lwjgl.org/wiki/The_Quad_textured
+			(Nothing)
 		ShaderList:
-			(Nothing):
-		ShaderProgram:
-			ShaderProgram():
-				http://wiki.lwjgl.org/wiki/The_Quad_textured
-			updateTransMatrix():
-					https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/graphics/glutils/ShaderProgram.java
+			(Nothing)
 	sound:
 		Sound:
 			(Nothing)
@@ -112,7 +102,13 @@ astechzgo.luminescent:
 			https://github.com/SilverTiger/lwjgl3-tutorial/blob/master/src/silvertiger/tutorial/lwjgl/text/Glyph.java
 	textures:
 		Animation:
-			(Nothing)
+			StackOverflow:
+				https://stackoverflow.com/questions/20826216/copy-two-buffered-image-into-one-image-side-by-side:
+					Question:
+						oooss 							(https://stackoverflow.com/users/1889911/oooss)
+						Andrew Thompson					(https://stackoverflow.com/users/418556/andrew-thompson)
+					Answer:
+						wangdq							(https://stackoverflow.com/users/3135546/wangdq)
 		Texture:
 			toByteBuffer():
 				http://www.java-gaming.org/index.php?topic=25516.0
@@ -243,7 +239,7 @@ astechzgo.luminescent:
 resources:
 	shaders:
 		defaults:
-			defaultPixelShader.glsl:
-				http://www.alcove-games.com/opengl-es-2-tutorials/lightmap-shader-fire-effect-glsl/
-			defaultVertexShader:
-				http://www.alcove-games.com/opengl-es-2-tutorials/lightmap-shader-fire-effect-glsl/
+			source.frag:
+				https://vulkan-tutorial.com/
+			source.vert:
+				https://vulkan-tutorial.com/
