@@ -33,7 +33,7 @@ import astechzgo.luminescent.worldloader.JSONWorldLoader;
 
 public class Luminescent
 {
-	public static final boolean DEBUG = true;
+	public static final boolean DEBUG = false;
     
 	public static Player thePlayer;
 

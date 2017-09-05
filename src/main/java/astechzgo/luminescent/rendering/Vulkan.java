@@ -1925,8 +1925,8 @@ public class Vulkan {
     
     private void updateUniformBuffer() {
         UniformBufferObjectModel modelUBO = new UniformBufferObjectModel();
-        for(List<Supplier<Matrix4f>> matricess : matrices) {
-            for(Supplier<Matrix4f> matrix : matricess) {
+        for(List<Supplier<Matrix4f>> matrices : matrices) {
+            for(Supplier<Matrix4f> matrix : matrices) {
                 modelUBO.model.add(matrix.get());
             }
         }
