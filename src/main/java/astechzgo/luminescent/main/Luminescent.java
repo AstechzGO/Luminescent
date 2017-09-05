@@ -22,7 +22,6 @@ import astechzgo.luminescent.rendering.Camera;
 import astechzgo.luminescent.rendering.QuadrilateralObjectRenderer;
 import astechzgo.luminescent.rendering.RectangularObjectRenderer;
 import astechzgo.luminescent.rendering.ResolutionBorderRenderer;
-import astechzgo.luminescent.rendering.TextLabelRenderer;
 import astechzgo.luminescent.rendering.Vulkan;
 import astechzgo.luminescent.sound.Sound;
 import astechzgo.luminescent.textures.Animation;
@@ -48,8 +47,6 @@ public class Luminescent
 	public static int projectileIndex;
 	
 	public static QuadrilateralObjectRenderer[] resBorders;
-	
-	public static TextLabelRenderer text;
 		
 	public static void Init()
 	{	

@@ -32,7 +32,6 @@ import java.awt.FontFormatException;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -300,24 +299,7 @@ public class Font {
         g.setPaint(java.awt.Color.WHITE);
         g.drawString(String.valueOf(c), 0, metrics.getAscent());
         g.dispose();
-        return getFlippedImage(image);
-    }
-
-    private BufferedImage getFlippedImage(BufferedImage bi) {
-        BufferedImage flipped = new BufferedImage(
-                bi.getWidth(),
-                bi.getHeight(),
-                bi.getType());
-        AffineTransform tran = AffineTransform.getTranslateInstance(0, bi.getHeight());
-        AffineTransform flip = AffineTransform.getScaleInstance(1d, -1d);
-        tran.concatenate(flip);
-
-        Graphics2D g = flipped.createGraphics();
-        g.setTransform(tran);
-        g.drawImage(bi, 0, 0, null);
-        g.dispose();
-
-        return flipped;
+        return image;
     }
     
     /**

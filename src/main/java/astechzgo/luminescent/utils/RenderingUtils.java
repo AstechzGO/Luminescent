@@ -112,20 +112,20 @@ public class RenderingUtils {
     public static void createTextureRegion(WindowCoordinates coordinates, int regX, int regY, int regWidth, int regHeight, Color colour,
 			Texture texture, Supplier<Matrix4f>... matrices) {
 		/* Vertex positions */
-	    WindowCoordinates a = new WindowCoordinates(coordinates.getWindowCoordinatesX() + DisplayUtils.widthOffset, coordinates.getWindowCoordinatesY() + DisplayUtils.heightOffset + regHeight);
-	    WindowCoordinates b = new WindowCoordinates(coordinates.getWindowCoordinatesX() + DisplayUtils.widthOffset + regWidth, coordinates.getWindowCoordinatesY() + DisplayUtils.heightOffset + regHeight);
-	    WindowCoordinates c = new WindowCoordinates(coordinates.getWindowCoordinatesX() + DisplayUtils.widthOffset + regWidth, coordinates.getWindowCoordinatesY() + DisplayUtils.heightOffset);
-	    WindowCoordinates d = new WindowCoordinates(coordinates.getWindowCoordinatesX() + DisplayUtils.widthOffset, coordinates.getWindowCoordinatesY() + DisplayUtils.heightOffset);
+	    WindowCoordinates a = new WindowCoordinates(coordinates.getWindowCoordinatesX(), coordinates.getWindowCoordinatesY());
+	    WindowCoordinates b = new WindowCoordinates(coordinates.getWindowCoordinatesX() + regWidth, coordinates.getWindowCoordinatesY());
+	    WindowCoordinates c = new WindowCoordinates(coordinates.getWindowCoordinatesX() + regWidth, coordinates.getWindowCoordinatesY() + regHeight);
+	    WindowCoordinates d = new WindowCoordinates(coordinates.getWindowCoordinatesX(), coordinates.getWindowCoordinatesY() + regHeight);
 
 		/* Texture coordinates */
 		float tAX = (float) (regX) / texture.getAsBufferedImage().getWidth();
-		float tAY = (float) (regY + regHeight) / texture.getAsBufferedImage().getHeight();
+		float tAY = (float) (regY) / texture.getAsBufferedImage().getHeight();
 		float tBX = (float) (regX + regWidth) / texture.getAsBufferedImage().getWidth();
-		float tBY = (float) (regY + regHeight) / texture.getAsBufferedImage().getHeight();
+		float tBY = (float) (regY) / texture.getAsBufferedImage().getHeight();
 		float tCX = (float) (regX + regWidth) / texture.getAsBufferedImage().getWidth();
-		float tCY = (float) (regY) / texture.getAsBufferedImage().getHeight();
+		float tCY = (float) (regY + regHeight) / texture.getAsBufferedImage().getHeight();
 		float tDX = (float) (regX) / texture.getAsBufferedImage().getWidth();
-		float tDY = (float) (regY) / texture.getAsBufferedImage().getHeight();
+		float tDY = (float) (regY + regHeight) / texture.getAsBufferedImage().getHeight();
 
 		createTextureRegion(a, b, c, d, tAX, tAY, tBX, tBY, tCX, tCY, tDX, tDY, colour,
 				texture, matrices);
@@ -140,14 +140,22 @@ public class RenderingUtils {
 			float tAX, float tAY, float tBX, float tBY, float tCX, float tCY, float tDX, float tDY, Color colour,
 			Texture texture, Supplier<Matrix4f>... matrices) {
 		
-		int vAX = (int) vA.getWindowCoordinatesX() + DisplayUtils.widthOffset;
-		int vAY = (int) vA.getWindowCoordinatesX() + DisplayUtils.heightOffset;
-		int vBX = (int) vB.getWindowCoordinatesX() + DisplayUtils.widthOffset;
-		int vBY = (int) vB.getWindowCoordinatesX() + DisplayUtils.heightOffset;
-		int vCX = (int) vC.getWindowCoordinatesX() + DisplayUtils.widthOffset;
-		int vCY = (int) vC.getWindowCoordinatesX() + DisplayUtils.heightOffset;
-		int vDX = (int) vD.getWindowCoordinatesX() + DisplayUtils.widthOffset;
-		int vDY = (int) vD.getWindowCoordinatesX() + DisplayUtils.heightOffset;
+        int vAX = ((int) vA.getWindowCoordinatesX())
+                - ((int) vA.getWindowCoordinatesX());
+        int vAY = ((int) vA.getWindowCoordinatesY())
+                - ((int) vA.getWindowCoordinatesY());
+        int vBX = ((int) vB.getWindowCoordinatesX())
+                - ((int) vA.getWindowCoordinatesX());
+        int vBY = ((int) vB.getWindowCoordinatesY())
+                - ((int) vA.getWindowCoordinatesY());
+        int vCX = ((int) vC.getWindowCoordinatesX())
+                - ((int) vA.getWindowCoordinatesX());
+        int vCY = ((int) vC.getWindowCoordinatesY())
+                - ((int) vA.getWindowCoordinatesY());
+        int vDX = ((int) vD.getWindowCoordinatesX())
+                - ((int) vA.getWindowCoordinatesX());
+        int vDY = ((int) vD.getWindowCoordinatesY())
+                - ((int) vA.getWindowCoordinatesY());
 		
         float red = colour.getRed() / 255.0f;
         float green = colour.getGreen() / 255.0f;

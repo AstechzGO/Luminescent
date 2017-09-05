@@ -12,8 +12,6 @@ public class TextLabelRenderer extends RectangularObjectRenderer {
 	private final Font font;
 	private final String text;
 	
-	//private RectangularObjectRenderer[] characters;
-	
 	public TextLabelRenderer(WindowCoordinates coordinates, String text) {
 		this(coordinates, Font.NORMAL_FONT, text);
 	}
