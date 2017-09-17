@@ -34,6 +34,8 @@ public class Texture {
 			asBufferedImage = toBufferedImage(asImage);
 			asByteBuffer = toByteBuffer(asBufferedImage);
 		}
+		
+		TextureList.addTexture(this);
 	}
 	
 	/**
@@ -115,6 +117,7 @@ public class Texture {
     
     void dispose() {
     	MemoryUtil.memFree(asByteBuffer);
+    	TextureList.removeTexture(this);
     }
     
     public int getCurrentFrame() {

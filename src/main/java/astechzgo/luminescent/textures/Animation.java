@@ -15,8 +15,6 @@ public class Animation extends Texture {
 	
 	private static final Timer t;
 	
-	private static final List<Animation> cleanupList = new ArrayList<>();
-	
 	static {		
 		TimerTask tt = new TimerTask() {
 			@Override
@@ -31,10 +29,6 @@ public class Animation extends Texture {
 	
 	public static void cleanup() {
 		t.cancel();
-		
-		for(Animation animation : cleanupList) {
-		    animation.dispose();
-		}
 	}
 	
 	private static void updateIndex() {
@@ -49,8 +43,6 @@ public class Animation extends Texture {
 		for(int i = 0; i < count; i++) {
 			frames.add(TextureList.findTexture(textureName + "$" + i));
 		}
-		
-		cleanupList.add(this);
 	}
 	
 	private static BufferedImage toCombinedImage(String imageLoc, int count) {

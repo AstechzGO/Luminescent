@@ -35,14 +35,12 @@ import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 import astechzgo.luminescent.coordinates.WindowCoordinates;
 import astechzgo.luminescent.rendering.RectangularObjectRenderer;
 import astechzgo.luminescent.textures.Texture;
-import astechzgo.luminescent.textures.TextureList;
 import astechzgo.luminescent.utils.RenderingUtils;
 
 /**
@@ -260,7 +258,6 @@ public class Font {
 //        buffer.flip();
 
         Texture atlas = new Texture(TEXTURE_NAME, true, image);
-        TextureList.addTextures(Arrays.asList(atlas));
         return atlas;
         
     }

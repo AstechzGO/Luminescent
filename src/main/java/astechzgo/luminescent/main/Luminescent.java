@@ -22,6 +22,7 @@ import astechzgo.luminescent.rendering.Camera;
 import astechzgo.luminescent.rendering.QuadrilateralObjectRenderer;
 import astechzgo.luminescent.rendering.RectangularObjectRenderer;
 import astechzgo.luminescent.rendering.ResolutionBorderRenderer;
+import astechzgo.luminescent.rendering.TextLabelRenderer;
 import astechzgo.luminescent.rendering.Vulkan;
 import astechzgo.luminescent.sound.Sound;
 import astechzgo.luminescent.textures.Animation;
@@ -46,6 +47,8 @@ public class Luminescent
 	public static List<Projectile> projectilePool;
 	public static int projectileIndex;
 	
+	private static TextLabelRenderer text;
+	
 	public static QuadrilateralObjectRenderer[] resBorders;
 		
 	public static void Init()
@@ -63,6 +66,8 @@ public class Luminescent
 		for(int i = 0; i < 32; i++) {
 		    projectilePool.add(new Projectile(new GameCoordinates(0, 0)));
 		}
+		
+		text = new TextLabelRenderer(new WindowCoordinates(0, 0), "Luminescent");
 		
 		resBorders = new QuadrilateralObjectRenderer[] {
 		    new ResolutionBorderRenderer(ResolutionBorderRenderer.LEFT_RECTANGLE),
@@ -98,6 +103,7 @@ public class Luminescent
         
         darkness.upload();
         
+        text.upload();
         
         for(QuadrilateralObjectRenderer resBorder : resBorders) {
             resBorder.upload();
