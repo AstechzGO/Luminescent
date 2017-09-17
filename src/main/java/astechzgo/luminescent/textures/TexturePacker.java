@@ -58,7 +58,8 @@ public class TexturePacker {
             byWidth.remove(th);
             byHeight.remove(th);
             
-            int levelX = th.getAsBufferedImage().getWidth();
+            // XXX: Texture bleed if width doesn't have an extra space
+            int levelX = th.getAsBufferedImage().getWidth() + 1;
             int i = 0;
             while(byWidth.size() != i) {
                 Texture tw = byWidth.get(i);
@@ -67,7 +68,7 @@ public class TexturePacker {
                     byWidth.remove(tw);
                     byHeight.remove(tw);
                     
-                    levelX += tw.getAsBufferedImage().getWidth();
+                    levelX += tw.getAsBufferedImage().getWidth() + 1;
                 }
                 else {
                     i++;

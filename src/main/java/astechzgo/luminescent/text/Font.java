@@ -31,12 +31,16 @@ import java.awt.Color;
 import java.awt.FontFormatException;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.RenderingHints;
+import java.awt.font.FontRenderContext;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+import java.util.function.Supplier;
 
 import astechzgo.luminescent.coordinates.WindowCoordinates;
 import astechzgo.luminescent.rendering.RectangularObjectRenderer;
@@ -61,7 +65,7 @@ public class Font {
     /**
      * Contains the font texture.
      */
-    private final Texture texture;
+    private final CharTexture texture;
 
     /**
      * Height of the font.
@@ -155,7 +159,13 @@ public class Font {
     	if(font.getSize() == 0)
     		font = font.deriveFont(1.0f);
     		
-    	this.font = font;
+    	FontRenderContext frc = new FontRenderContext(null, RenderingHints.VALUE_TEXT_ANTIALIAS_DEFAULT, RenderingHints.VALUE_FRACTIONALMETRICS_DEFAULT);
+    	if(font.getStringBounds("i", frc).getWidth() != font.getStringBounds("m", frc).getWidth()) {
+    	    this.font = new java.awt.Font(MONOSPACED, PLAIN, font.getSize());
+    	}
+    	else {
+    	    this.font = font;
+    	}
     	
         glyphs = new HashMap<>();
         texture = createFontTexture(font, antiAlias);
@@ -169,7 +179,7 @@ public class Font {
      *
      * @return Font texture
      */
-    private Texture createFontTexture(java.awt.Font font, boolean antiAlias) {
+    private CharTexture createFontTexture(java.awt.Font font, boolean antiAlias) {
         /* Loop through the characters to get charWidth and charHeight */
         int imageWidth = 0;
         int imageHeight = 0;
@@ -257,7 +267,7 @@ public class Font {
 //        /* Do not forget to flip the buffer! */
 //        buffer.flip();
 
-        Texture atlas = new Texture(TEXTURE_NAME, true, image);
+        CharTexture atlas = new CharTexture(TEXTURE_NAME, true, image);
         return atlas;
         
     }
@@ -372,8 +382,8 @@ public class Font {
      * @param y        Y coordinate of the text position
      * @param c        Color to use
      */
-    public RectangularObjectRenderer[] drawText(CharSequence text, WindowCoordinates coordinates, Color colour) {
-        RectangularObjectRenderer[] characters = new RectangularObjectRenderer[text.length()];
+    public CharRenderer[] drawText(CharSequence text, WindowCoordinates coordinates, Color colour) {
+        CharRenderer[] characters = new CharRenderer[text.length()];
         
         int textHeight = getHeight(text);
 
@@ -396,9 +406,16 @@ public class Font {
                 continue;
             }
             Glyph g = glyphs.get(ch);
-            characters[i] = new RectangularObjectRenderer(new WindowCoordinates(drawX, drawY), g.width, g.height, texture);
+            characters[i] = new CharRenderer(new WindowCoordinates(drawX, drawY), g.width, g.height, texture, ch);
             characters[i].setColour(colour);
-            RenderingUtils.createTextureRegion(new WindowCoordinates(drawX, drawY), g.x, g.y, g.width, g.height, colour, texture, characters[i]::getModelMatrix);
+            
+            WindowCoordinates a = new WindowCoordinates(drawX, drawY);
+            WindowCoordinates b = new WindowCoordinates(drawX + g.width, drawY);
+            WindowCoordinates c = new WindowCoordinates(drawX + g.width, drawY + g.height);
+            WindowCoordinates d = new WindowCoordinates(drawX, drawY + g.height);
+            
+            final Supplier<Character> character = characters[i]::getCharacter;
+            RenderingUtils.createQuad(a, b, c, d, colour, texture, Optional.of(() -> texture.getCurrentFrame(character)), characters[i]::getModelMatrix);
             
             drawX += g.width;
         }
@@ -428,5 +445,51 @@ public class Font {
     
     public int getFontSize() {
     	return font.getSize();
+    }
+    
+    private class CharTexture extends Texture {
+        
+        public CharTexture(String textureName, boolean slick) {
+            super(textureName, slick);
+        }
+        
+        public CharTexture(String textureName, boolean slick, Image image) {
+            super(textureName, slick, image);
+        }
+        
+        public int getCurrentFrame(Supplier<Character> character) {
+            return (int) ((float)glyphs.get(character.get()).x / this.getAsBufferedImage().getWidth() * glyphs.size());
+        }
+        
+        @Override
+        public int count() {
+            return glyphs.size();
+        }
+        
+    }
+    
+    public class CharRenderer extends RectangularObjectRenderer {
+        
+        private char character;
+        
+        public CharRenderer(WindowCoordinates coordinates, double width, double height, char character) {
+            super(coordinates, width, height);
+            
+            this.character = character;
+        }
+        
+        public CharRenderer(WindowCoordinates coordinates, double width, double height, Texture texture, char character) {
+            super(coordinates, width, height, texture);
+            
+            this.character = character;
+        }
+        
+        public char getCharacter() {
+            return character;
+        }
+        
+        public void setCharacter(char character) {
+            this.character = character;
+        }
     }
 }

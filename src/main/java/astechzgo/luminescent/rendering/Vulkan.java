@@ -270,7 +270,7 @@ public class Vulkan {
                 .sType(VK10.VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO)
                 .magFilter(VK10.VK_FILTER_NEAREST)
                 .minFilter(VK10.VK_FILTER_NEAREST)
-                .addressModeU(VK10.VK_SAMPLER_ADDRESS_MODE_REPEAT)
+                .addressModeU(VK10.VK_SAMPLER_MIPMAP_MODE_NEAREST)
                 .addressModeV(VK10.VK_SAMPLER_ADDRESS_MODE_REPEAT)
                 .addressModeW(VK10.VK_SAMPLER_ADDRESS_MODE_REPEAT)
                 .anisotropyEnable(true)
@@ -279,7 +279,7 @@ public class Vulkan {
                 .unnormalizedCoordinates(false)
                 .compareEnable(false)
                 .compareOp(VK10.VK_COMPARE_OP_ALWAYS)
-                .mipmapMode(VK10.VK_SAMPLER_MIPMAP_MODE_LINEAR)
+                .mipmapMode(VK10.VK_SAMPLER_MIPMAP_MODE_NEAREST)
                 .mipLodBias(0.0f)
                 .minLod(0.0f)
                 .maxLod(0.0f)
@@ -2301,6 +2301,11 @@ public class Vulkan {
     
     @SafeVarargs
     public static void addObject(Vertex[] vertices, int[] indices, Texture texture, Supplier<Matrix4f>... matrices) {
+        addObject(vertices, indices, texture, texture == null ? () -> 0 : texture::getCurrentFrame, matrices);
+    }
+    
+    @SafeVarargs
+    public static void addObject(Vertex[] vertices, int[] indices, Texture texture, Supplier<Integer> currentFrame, Supplier<Matrix4f>... matrices) {
         int offset = 0;
         for(List<Vertex> verts : vulkanInstance.vertices) {
             offset += verts.size();
@@ -2316,7 +2321,7 @@ public class Vulkan {
         vulkanInstance.textures.add(texture);
         vulkanInstance.frameCount.add(texture == null ? 1 : texture.count());
         vulkanInstance.matrices.add(new ArrayList<>(Arrays.asList(matrices)));
-        vulkanInstance.currentFrames.add(texture == null ? () -> 0 : texture::getCurrentFrame);
+        vulkanInstance.currentFrames.add(currentFrame);
     }
     
     public static void constructBuffers() {

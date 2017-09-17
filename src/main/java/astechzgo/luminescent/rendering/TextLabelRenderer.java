@@ -10,7 +10,9 @@ import astechzgo.luminescent.text.Font;
 public class TextLabelRenderer extends RectangularObjectRenderer {
 
 	private final Font font;
-	private final String text;
+	private String text;
+	
+	private Font.CharRenderer[] chars;
 	
 	public TextLabelRenderer(WindowCoordinates coordinates, String text) {
 		this(coordinates, Font.NORMAL_FONT, text);
@@ -25,7 +27,7 @@ public class TextLabelRenderer extends RectangularObjectRenderer {
 	
 	@Override
 	public void upload(@SuppressWarnings("unchecked") Supplier<Matrix4f>... matrices) {	
-	    font.drawText(text, coordinates, getColour());
+	    chars = font.drawText(text, coordinates, getColour());
 	}
 	
 	public Font getFont() {
@@ -34,5 +36,28 @@ public class TextLabelRenderer extends RectangularObjectRenderer {
 	
 	public String getText() {
 		return text;
+	}
+	
+	public String setText(String text) {
+	    if(chars == null) {
+	        this.text = text;
+	        return this.text;
+	    }
+	    
+	    if(this.text.length() - text.length() > 0) {
+	        text = new String(text);
+	        int diff = this.text.length() - text.length();
+	        for(int i = 0; i < diff; i++) {
+	            text += " ";
+	        }
+	    }
+	    
+	    this.text = text.substring(0, this.text.length());
+	    
+	    for(int i = 0; i < this.text.length(); i++) {
+	        chars[i].setCharacter(this.text.charAt(i));
+	    }
+	    
+	    return this.text;
 	}
 }
