@@ -38,6 +38,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -415,7 +416,7 @@ public class Font {
             WindowCoordinates d = new WindowCoordinates(drawX, drawY + g.height);
             
             final Supplier<Character> character = characters[i]::getCharacter;
-            RenderingUtils.createQuad(a, b, c, d, colour, texture, Optional.of(() -> texture.getCurrentFrame(character)), characters[i]::getModelMatrix);
+            RenderingUtils.createQuad(a, b, c, d, colour, texture, Optional.of(() -> texture.getCurrentFrame(character)), List.of(characters[i]::getModelMatrix));
             
             drawX += g.width;
         }

@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -17,7 +16,7 @@ public class TexturePacker {
     private Set<Texture> textures = new HashSet<>();
     
     public void addTextures(Texture... textures) {
-        addTextures(Arrays.asList(textures));
+        addTextures(List.of(textures));
     }
     
     public void addTextures(List<Texture> textures) {

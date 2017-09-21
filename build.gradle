@@ -73,20 +73,24 @@ task deploy(type: Jar) {
 }
 
 // Copy to base directory
-task copyToRoot << {
-	copy {
-		from "build/libs/Luminescent.jar"
-		into "/"
+task copyToRoot {
+	doLast {
+		copy {
+			from "build/libs/Luminescent.jar"
+			into "/"
+		}
 	}
 }
 
 deploy.finalizedBy copyToRoot
 
-task run(dependsOn:deploy) << {
-	javaexec { 
-		main="-jar";
-		args = [
-			"Luminescent.jar",
-		]
-	} 
+task run(dependsOn:deploy) {
+	doLast {
+		javaexec { 
+			main="-jar";
+			args = [
+				"Luminescent.jar",
+			]
+		}
+	}
 }

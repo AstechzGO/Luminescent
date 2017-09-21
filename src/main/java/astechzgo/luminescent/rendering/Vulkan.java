@@ -2299,13 +2299,11 @@ public class Vulkan {
         return count;
     }
     
-    @SafeVarargs
-    public static void addObject(Vertex[] vertices, int[] indices, Texture texture, Supplier<Matrix4f>... matrices) {
+    public static void addObject(Vertex[] vertices, int[] indices, Texture texture, List<Supplier<Matrix4f>> matrices) {
         addObject(vertices, indices, texture, texture == null ? () -> 0 : texture::getCurrentFrame, matrices);
     }
     
-    @SafeVarargs
-    public static void addObject(Vertex[] vertices, int[] indices, Texture texture, Supplier<Integer> currentFrame, Supplier<Matrix4f>... matrices) {
+    public static void addObject(Vertex[] vertices, int[] indices, Texture texture, Supplier<Integer> currentFrame, List<Supplier<Matrix4f>> matrices) {
         int offset = 0;
         for(List<Vertex> verts : vulkanInstance.vertices) {
             offset += verts.size();
@@ -2320,7 +2318,7 @@ public class Vulkan {
         vulkanInstance.indices.add(indicesList);
         vulkanInstance.textures.add(texture);
         vulkanInstance.frameCount.add(texture == null ? 1 : texture.count());
-        vulkanInstance.matrices.add(new ArrayList<>(Arrays.asList(matrices)));
+        vulkanInstance.matrices.add(matrices);
         vulkanInstance.currentFrames.add(currentFrame);
     }
     

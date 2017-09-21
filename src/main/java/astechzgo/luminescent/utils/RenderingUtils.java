@@ -1,6 +1,7 @@
 package astechzgo.luminescent.utils;
 
 import java.awt.Color;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -15,8 +16,7 @@ import astechzgo.luminescent.textures.Texture;
 
 public class RenderingUtils {
 
-    @SafeVarargs
-    public static void createQuad(WindowCoordinates a, WindowCoordinates b, WindowCoordinates c, WindowCoordinates d, Color color, Texture texture, Supplier<Matrix4f>... matrices) {
+    public static void createQuad(WindowCoordinates a, WindowCoordinates b, WindowCoordinates c, WindowCoordinates d, Color color, Texture texture, List<Supplier<Matrix4f>> matrices) {
         createQuad(a, b, c, d, color, texture, Optional.empty(), matrices);
     }
     
@@ -25,8 +25,7 @@ public class RenderingUtils {
 	 * |QD|
 	 * D--C
 	 */
-    @SafeVarargs
-    public static void createQuad(WindowCoordinates a, WindowCoordinates b, WindowCoordinates c, WindowCoordinates d, Color color, Texture texture, Optional<Supplier<Integer>> currentFrame, Supplier<Matrix4f>... matrices) {
+    public static void createQuad(WindowCoordinates a, WindowCoordinates b, WindowCoordinates c, WindowCoordinates d, Color color, Texture texture, Optional<Supplier<Integer>> currentFrame, List<Supplier<Matrix4f>> matrices) {
         int vAX = ((int) a.getWindowCoordinatesX())
                 - ((int) a.getWindowCoordinatesX());
         int vAY = ((int) a.getWindowCoordinatesY())
@@ -76,13 +75,11 @@ public class RenderingUtils {
         }
     }
 
-    @SafeVarargs
-    public static void createCircle(double radius, double pointSeperation, Color color, Texture texture, Supplier<Matrix4f>... matrices) {
+    public static void createCircle(double radius, double pointSeperation, Color color, Texture texture, List<Supplier<Matrix4f>> matrices) {
         createCircle(radius, pointSeperation, color, texture, Optional.empty(), matrices);
     }
     
-	@SafeVarargs
-    public static void createCircle(double radius, double pointSeperation, Color color, Texture texture, Optional<Supplier<Integer>> currentFrame, Supplier<Matrix4f>... matrices) {
+    public static void createCircle(double radius, double pointSeperation, Color color, Texture texture, Optional<Supplier<Integer>> currentFrame, List<Supplier<Matrix4f>> matrices) {
 		int loops = (int) (360 / pointSeperation);
 		
 		Vertex[] vertices = new Vertex[loops + 1];

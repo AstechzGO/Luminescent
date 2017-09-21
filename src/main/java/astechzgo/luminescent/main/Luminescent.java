@@ -100,7 +100,7 @@ public class Luminescent
         
         @SuppressWarnings("unchecked")
         Supplier<Matrix4f>[] projectileMatricesArray = (Supplier<Matrix4f>[]) projectileMatrices.toArray(new Supplier<?>[0]);
-        projectilePool.get(0).upload(projectileMatricesArray);
+        projectilePool.get(0).upload(List.of(projectileMatricesArray));
         projectileIndex = Vulkan.getInstances() - 1;
         
         darkness.upload();
