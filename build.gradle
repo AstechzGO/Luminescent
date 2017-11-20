@@ -2,8 +2,8 @@
 apply plugin: "java"
 apply plugin: "eclipse"
 
-project.ext.lwjglVersion = "3.1.2"
-project.ext.jomlVersion = "1.9.3"
+project.ext.lwjglVersion = "3.1.4"
+project.ext.jomlVersion = "1.9.6"
 
 // In this section you declare where to find the dependencies of your project
 repositories {
@@ -15,7 +15,7 @@ repositories {
 
 // In this section you declare the dependencies for your production and test code
 dependencies {
-	compile "com.google.code.gson:gson:2.5"
+	compile "com.google.code.gson:gson:2.8.2"
 
 	compile "org.lwjgl:lwjgl:${lwjglVersion}"
 	compile "org.lwjgl:lwjgl-glfw:${lwjglVersion}"

@@ -923,6 +923,8 @@ public class Vulkan {
             VK10.vkDestroyFramebuffer(device, swapChainFramebuffers[i], null);
         }
         
+        swapChainExtent.free();
+        
         cleanupCommandBuffers();
         
         VK10.vkDestroyPipeline(device, graphicsPipeline, null);
@@ -1687,7 +1689,14 @@ public class Vulkan {
     
     private VkExtent2D chooseSwapExtent(VkSurfaceCapabilitiesKHR capabilities) {
         if(capabilities.currentExtent().width() != Integer.MAX_VALUE) {
-            return capabilities.currentExtent();
+            int width = capabilities.currentExtent().width();
+            int height = capabilities.currentExtent().height();
+            
+            VkExtent2D actualExtent = VkExtent2D.malloc()
+                .width(width)
+                .height(height);
+            
+            return actualExtent;
         }
         else {
             int width = DisplayUtils.getDisplayWidth(), height = DisplayUtils.getDisplayHeight();
