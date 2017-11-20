@@ -1,6 +1,8 @@
 package astechzgo.luminescent.utils;
 
 import java.awt.Color;
+import java.util.List;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import org.joml.Matrix4f;
@@ -14,13 +16,16 @@ import astechzgo.luminescent.textures.Texture;
 
 public class RenderingUtils {
 
+    public static void createQuad(WindowCoordinates a, WindowCoordinates b, WindowCoordinates c, WindowCoordinates d, Color color, Texture texture, List<Supplier<Matrix4f>> matrices) {
+        createQuad(a, b, c, d, color, texture, Optional.empty(), matrices);
+    }
+    
     /*
 	 * A--B
 	 * |QD|
 	 * D--C
 	 */
-    @SafeVarargs
-    public static void createQuad(WindowCoordinates a, WindowCoordinates b, WindowCoordinates c, WindowCoordinates d, Color color, Texture texture, Supplier<Matrix4f>... matrices) {
+    public static void createQuad(WindowCoordinates a, WindowCoordinates b, WindowCoordinates c, WindowCoordinates d, Color color, Texture texture, Optional<Supplier<Integer>> currentFrame, List<Supplier<Matrix4f>> matrices) {
         int vAX = ((int) a.getWindowCoordinatesX())
                 - ((int) a.getWindowCoordinatesX());
         int vAY = ((int) a.getWindowCoordinatesY())
@@ -38,14 +43,16 @@ public class RenderingUtils {
         int vDY = ((int) d.getWindowCoordinatesY())
                 - ((int) a.getWindowCoordinatesY());
         
-        int tAX = 0;
-        int tAY = 0;
-        int tBX = 1;
-        int tBY = 0;
-        int tCX = 1;
-        int tCY = 1;
-        int tDX = 0;
-        int tDY = 1;
+        int count = texture == null ? 1 : texture.count();
+        
+        float tAX = 0.0f;
+        float tAY = 0.0f;
+        float tBX = 1.0f / count;
+        float tBY = 0.0f;
+        float tCX = 1.0f / count;
+        float tCY = 1.0f;
+        float tDX = 0.0f;
+        float tDY = 1.0f;
 
         float red = color.getRed() / 255.0f;
         float green = color.getGreen() / 255.0f;
@@ -61,11 +68,18 @@ public class RenderingUtils {
         
         int[] indices = new int[] { 0, 2, 1, 3, 2, 0 };
         
-        Vulkan.addObject(vertices, indices, texture, matrices);
+        if(currentFrame.isPresent())
+            Vulkan.addObject(vertices, indices, texture, currentFrame.get(), matrices);
+        else {
+            Vulkan.addObject(vertices, indices, texture, matrices);
+        }
     }
 
-	@SafeVarargs
-    public static void createCircle(double radius, double pointSeperation, Color color, Texture texture, Supplier<Matrix4f>... matrices) {
+    public static void createCircle(double radius, double pointSeperation, Color color, Texture texture, List<Supplier<Matrix4f>> matrices) {
+        createCircle(radius, pointSeperation, color, texture, Optional.empty(), matrices);
+    }
+    
+    public static void createCircle(double radius, double pointSeperation, Color color, Texture texture, Optional<Supplier<Integer>> currentFrame, List<Supplier<Matrix4f>> matrices) {
 		int loops = (int) (360 / pointSeperation);
 		
 		Vertex[] vertices = new Vertex[loops + 1];
@@ -75,6 +89,8 @@ public class RenderingUtils {
         float blue = color.getBlue() / 255.0f;
         float alpha = color.getAlpha() / 255.0f;
 
+        int count = texture == null ? 1 : texture.count();
+        
 		for (double angle = 0; angle < 360.0; angle += pointSeperation) {
 			double radian = Math.toRadians(angle);
 
@@ -87,11 +103,11 @@ public class RenderingUtils {
 			
 			int i = (int) (angle / pointSeperation);
 			
-			vertices[i] = new Vertex(new Vector2f((float)tempx, (float)tempy), new Vector4f(red, green, blue, alpha), new Vector2f((float)tx, (float)ty));
+			vertices[i] = new Vertex(new Vector2f((float)tempx, (float)tempy), new Vector4f(red, green, blue, alpha), new Vector2f((float)tx/count, (float)ty));
 		}
 
 		// Root of circle
-		vertices[loops] = new Vertex(new Vector2f(0, 0), new Vector4f(red, green, blue, alpha), new Vector2f(0.5f, 0.5f));
+		vertices[loops] = new Vertex(new Vector2f(0, 0), new Vector4f(red, green, blue, alpha), new Vector2f(0.5f/count, 0.5f));
 
 		int[] indices = new int[loops * 3];
 
@@ -101,76 +117,10 @@ public class RenderingUtils {
             indices[i * 3 + 2] = (i + 1) % loops;
 		}
 		
-		Vulkan.addObject(vertices, indices, texture, matrices);
-	}
-
-	/**
-	 * Draws a texture region with the currently bound texture on specified
-	 * coordinates.
-	 */
-	@SafeVarargs
-    public static void createTextureRegion(WindowCoordinates coordinates, int regX, int regY, int regWidth, int regHeight, Color colour,
-			Texture texture, Supplier<Matrix4f>... matrices) {
-		/* Vertex positions */
-	    WindowCoordinates a = new WindowCoordinates(coordinates.getWindowCoordinatesX(), coordinates.getWindowCoordinatesY());
-	    WindowCoordinates b = new WindowCoordinates(coordinates.getWindowCoordinatesX() + regWidth, coordinates.getWindowCoordinatesY());
-	    WindowCoordinates c = new WindowCoordinates(coordinates.getWindowCoordinatesX() + regWidth, coordinates.getWindowCoordinatesY() + regHeight);
-	    WindowCoordinates d = new WindowCoordinates(coordinates.getWindowCoordinatesX(), coordinates.getWindowCoordinatesY() + regHeight);
-
-		/* Texture coordinates */
-		float tAX = (float) (regX) / texture.getAsBufferedImage().getWidth();
-		float tAY = (float) (regY) / texture.getAsBufferedImage().getHeight();
-		float tBX = (float) (regX + regWidth) / texture.getAsBufferedImage().getWidth();
-		float tBY = (float) (regY) / texture.getAsBufferedImage().getHeight();
-		float tCX = (float) (regX + regWidth) / texture.getAsBufferedImage().getWidth();
-		float tCY = (float) (regY + regHeight) / texture.getAsBufferedImage().getHeight();
-		float tDX = (float) (regX) / texture.getAsBufferedImage().getWidth();
-		float tDY = (float) (regY + regHeight) / texture.getAsBufferedImage().getHeight();
-
-		createTextureRegion(a, b, c, d, tAX, tAY, tBX, tBY, tCX, tCY, tDX, tDY, colour,
-				texture, matrices);
-	}
-
-	/**
-	 * Draws a texture region with the currently bound texture on specified
-	 * coordinates.
-	 */
-	@SafeVarargs
-    public static void createTextureRegion(WindowCoordinates vA, WindowCoordinates vB, WindowCoordinates vC, WindowCoordinates vD,
-			float tAX, float tAY, float tBX, float tBY, float tCX, float tCY, float tDX, float tDY, Color colour,
-			Texture texture, Supplier<Matrix4f>... matrices) {
-		
-        int vAX = ((int) vA.getWindowCoordinatesX())
-                - ((int) vA.getWindowCoordinatesX());
-        int vAY = ((int) vA.getWindowCoordinatesY())
-                - ((int) vA.getWindowCoordinatesY());
-        int vBX = ((int) vB.getWindowCoordinatesX())
-                - ((int) vA.getWindowCoordinatesX());
-        int vBY = ((int) vB.getWindowCoordinatesY())
-                - ((int) vA.getWindowCoordinatesY());
-        int vCX = ((int) vC.getWindowCoordinatesX())
-                - ((int) vA.getWindowCoordinatesX());
-        int vCY = ((int) vC.getWindowCoordinatesY())
-                - ((int) vA.getWindowCoordinatesY());
-        int vDX = ((int) vD.getWindowCoordinatesX())
-                - ((int) vA.getWindowCoordinatesX());
-        int vDY = ((int) vD.getWindowCoordinatesY())
-                - ((int) vA.getWindowCoordinatesY());
-		
-        float red = colour.getRed() / 255.0f;
-        float green = colour.getGreen() / 255.0f;
-        float blue = colour.getBlue() / 255.0f;
-        float alpha = colour.getAlpha() / 255.0f;
-        
-        Vertex[] vertices = new Vertex[] {
-            new Vertex(new Vector2f(vAX, vAY), new Vector4f(red, green, blue, alpha), new Vector2f(tAX, tAY)),
-            new Vertex(new Vector2f(vBX, vBY), new Vector4f(red, green, blue, alpha), new Vector2f(tBX, tBY)),
-            new Vertex(new Vector2f(vCX, vCY), new Vector4f(red, green, blue, alpha), new Vector2f(tCX, tCY)),
-            new Vertex(new Vector2f(vDX, vDY), new Vector4f(red, green, blue, alpha), new Vector2f(tDX, tDY))
-        };
-        
-        int[] indices = new int[] { 0, 2, 1, 3, 2, 0 };
-        
-        Vulkan.addObject(vertices, indices, texture, matrices);
+        if(currentFrame.isPresent())
+            Vulkan.addObject(vertices, indices, texture, currentFrame.get(), matrices);
+        else {
+            Vulkan.addObject(vertices, indices, texture, matrices);
+        }
 	}
 }

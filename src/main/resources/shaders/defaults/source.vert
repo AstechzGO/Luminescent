@@ -10,6 +10,7 @@ layout (binding = 1) uniform UboInstance {
 	mat4 model;
 	int frameIdx;
 	int frameCount;
+	float width;
 } uboInstance;
 
 layout(location = 0) in vec2 inPosition;
@@ -26,5 +27,6 @@ out gl_PerVertex {
 void main() {
 	gl_Position = uboView.projection * uboView.view * uboInstance.model * vec4(inPosition, 0.0, 1.0);
 	fragColor = inColor;
-	fragTexCoord = vec2((float(uboInstance.frameIdx) / uboInstance.frameCount) + (inTexCoord.s / uboInstance.frameCount), inTexCoord.t);
+	
+	fragTexCoord = vec2(inTexCoord.s + uboInstance.width * float(uboInstance.frameIdx) / uboInstance.frameCount, inTexCoord.t);
 }

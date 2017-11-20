@@ -72,6 +72,14 @@ public class TextureList {
 		TextureList.textures.addAll(textures);
 	}
 	
+	public static void addTexture(Texture texture) {
+	    TextureList.textures.add(texture);
+	}
+	
+	public static void removeTexture(Texture texture) {
+	    TextureList.textures.remove(texture);
+	}
+	
 	public static void loadNonSlickTextures() {
 		TextureList.getAllTextures();
 		
@@ -80,8 +88,6 @@ public class TextureList {
 		for(String f : TextureList.getNonSlickTextureNames()) {
 			textures.add(new Texture(f, false));
 		}
-		
-		TextureList.setTextures(textures);
 	}
 	
 	public static void loadSlickTextures() {
@@ -90,12 +96,11 @@ public class TextureList {
 		for(String f : getSlickTextureNames()) {
 			textures.add(new Texture(f, true));
 		}
-		
-		TextureList.addTextures(textures);
 	}
 	
 	public static void cleanup() {
-		for(Texture texture : textures)
-			texture.dispose();
+		while(textures.size() > 0) {
+			textures.get(0).dispose();
+		}
 	}
 }

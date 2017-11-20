@@ -1,6 +1,7 @@
 package astechzgo.luminescent.rendering;
 
 import java.awt.Color;
+import java.util.List;
 import java.util.function.Supplier;
 
 import org.joml.Matrix4f;
@@ -11,13 +12,15 @@ import astechzgo.luminescent.textures.Texture;
 
 public interface IObjectRenderer
 {
-    @SuppressWarnings("unchecked")
     default public void upload() {
 	    upload(this::getModelMatrix);
 	}
 	
-	//TODO: Uncomment when updated to Java 9- @SafeVarargs
-    public void upload(@SuppressWarnings("unchecked") Supplier<Matrix4f>... matrices);
+    default public void upload(Supplier<Matrix4f> matrix) {
+        upload(List.of(matrix));
+    }
+    
+    public void upload(List<Supplier<Matrix4f>> matrices);
 	
 	public void setColour(Color colour);
 	public Color getColour();

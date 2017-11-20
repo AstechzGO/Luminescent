@@ -2,6 +2,7 @@ package astechzgo.luminescent.rendering;
 
 import java.awt.Color;
 import java.awt.geom.Line2D;
+import java.util.List;
 import java.util.function.Supplier;
 
 import org.joml.Matrix4f;
@@ -248,7 +249,7 @@ public class QuadrilateralObjectRenderer implements IObjectRenderer {
 	}
 
     @Override
-    public void upload(@SuppressWarnings("unchecked") Supplier<Matrix4f>... matrices) {
+    public void upload(List<Supplier<Matrix4f>> matrices) {
         RenderingUtils.createQuad(a, b, c, d, colour, texture, matrices);
     }
 }
