@@ -36,7 +36,7 @@ public class SoundManager {
 			}
 		} catch (SoundSystemException e) {
 
-			// Shouldn’t happen, but it is best to prepare for anything
+			// Shouldnï¿½t happen, but it is best to prepare for anything
 			e.printStackTrace();
 			return;
 		}

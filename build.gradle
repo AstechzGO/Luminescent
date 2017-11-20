@@ -1,6 +1,6 @@
-// Apply the java plugin to add support for Java & add eclipse plugin
+// Apply the java plugin to add support for Java & add IntelliJ plugin
 apply plugin: "java"
-apply plugin: "eclipse"
+apply plugin: "idea"
 
 project.ext.lwjglVersion = "3.1.4"
 project.ext.jomlVersion = "1.9.6"
