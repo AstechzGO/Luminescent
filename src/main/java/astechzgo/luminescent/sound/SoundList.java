@@ -10,18 +10,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SoundList {
-	private static List<String> sounds;
-	
+
 	public static void initSoundList(SoundManager s) {
-		sounds = getSoundsForPackage();
+		List<String> sounds = getSoundsForPackage();
 		for(String f : sounds) {
-			String sourceName = f;
-			s.loadSound(sourceName, false);
+			s.loadSound(f, false);
 		}
 	}
 	
 	private static List<String> getSoundsForPackage() {
-		List<String> names = new ArrayList<String>();
+		List<String> names = new ArrayList<>();
 		
 		InputStream in = null;
 		

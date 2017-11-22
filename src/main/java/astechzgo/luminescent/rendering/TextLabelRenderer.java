@@ -46,12 +46,13 @@ public class TextLabelRenderer extends RectangularObjectRenderer {
 	    }
 	    
 	    if(this.text.length() - text.length() > 0) {
-	        text = new String(text);
-	        int diff = this.text.length() - text.length();
-	        for(int i = 0; i < diff; i++) {
-	            text += " ";
+			int diff = this.text.length() - text.length();
+			StringBuilder textBuilder = new StringBuilder(text);
+			for(int i = 0; i < diff; i++) {
+	            textBuilder.append(" ");
 	        }
-	    }
+			text = textBuilder.toString();
+		}
 	    
 	    this.text = text.substring(0, this.text.length());
 	    

@@ -17,8 +17,8 @@ import astechzgo.luminescent.utils.RenderingUtils;
 public class CircularObjectRenderer implements IObjectRenderer {
 	private Color colour = new Color(0, 0, 0, 0);
 
-	protected int pointSeperation;
-	protected double radius;
+	protected final int pointSeperation;
+	protected final double radius;
 
 	protected WindowCoordinates coordinates;
 
@@ -31,9 +31,9 @@ public class CircularObjectRenderer implements IObjectRenderer {
 
 	protected double rotation = 0.0;
 	
-	protected Matrix4f model = new Matrix4f();;
-	
-	public CircularObjectRenderer(WindowCoordinates coordinates, double radius) {
+	protected Matrix4f model = new Matrix4f();
+
+    public CircularObjectRenderer(WindowCoordinates coordinates, double radius) {
 		this(coordinates, radius, 1);
 	}
 
@@ -74,9 +74,8 @@ public class CircularObjectRenderer implements IObjectRenderer {
         Vector3f location = new Vector3f((float)loc.getScaledWindowCoordinatesX() + DisplayUtils.widthOffset, (float)loc.getScaledWindowCoordinatesY()  + DisplayUtils.heightOffset, 0.0f);
         
         Quaternionf rotate = new Quaternionf().rotateZ((float) Math.toRadians(rotation));
-        
-        Matrix4f model = new Matrix4f().translation(location).rotateAround(rotate, 0, 0, 0).scale((float) (1.0 / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)));
-        this.model = model;
+
+		this.model = new Matrix4f().translation(location).rotateAround(rotate, 0, 0, 0).scale((float) (1.0 / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)));
 	}
 
 	@Override
@@ -161,10 +160,7 @@ public class CircularObjectRenderer implements IObjectRenderer {
 
 			double c = Math.sqrt((a * a) + (b * b));
 
-			if (c < (this.radius + casted.radius))
-				return true;
-			else
-				return false;
+            return c < (this.radius + casted.radius);
 		} 
 		else {
 			return false;
@@ -178,10 +174,7 @@ public class CircularObjectRenderer implements IObjectRenderer {
 
 		double c = Math.sqrt((a * a) + (b * b));
 
-		if (c < (this.radius))
-			return true;
-		else
-			return false;
+        return c < (this.radius);
 	}
 
 	@Override

@@ -94,7 +94,7 @@ public class RenderingUtils {
 		for (double angle = 0; angle < 360.0; angle += pointSeperation) {
 			double radian = Math.toRadians(angle);
 
-			double xcos = (double) Math.cos(radian);
+			double xcos = Math.cos(radian);
 			double ysin = (float) Math.sin(radian);
 			double tempx = xcos * radius;
 			double tempy = ysin * radius;

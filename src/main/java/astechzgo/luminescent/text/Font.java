@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright © 2015, Heiko Brumme
+ * Copyright (C) 2015, Heiko Brumme
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -268,8 +268,7 @@ public class Font {
 //        /* Do not forget to flip the buffer! */
 //        buffer.flip();
 
-        CharTexture atlas = new CharTexture(TEXTURE_NAME, true, image);
-        return atlas;
+        return new CharTexture(TEXTURE_NAME, true, image);
         
     }
 
@@ -377,11 +376,9 @@ public class Font {
     /**
      * Draw text at the specified position and color.
      *
-     * @param renderer The renderer to use
      * @param text     Text to draw
-     * @param x        X coordinate of the text position
-     * @param y        Y coordinate of the text position
-     * @param c        Color to use
+     * @param coordinates        Coordinates of the text position
+     * @param colour        Color to use
      */
     public CharRenderer[] drawText(CharSequence text, WindowCoordinates coordinates, Color colour) {
         CharRenderer[] characters = new CharRenderer[text.length()];
@@ -427,10 +424,8 @@ public class Font {
     /**
      * Draw text at the specified position.
      *
-     * @param renderer The renderer to use
-     * @param text     Text to draw
-     * @param x        X coordinate of the text position
-     * @param y        Y coordinate of the text position
+     * @param text          Text to draw
+     * @param coordinates   Coordinates of the text position
      */
     public void drawText(CharSequence text, WindowCoordinates coordinates) {
         drawText(text, coordinates, Color.WHITE);

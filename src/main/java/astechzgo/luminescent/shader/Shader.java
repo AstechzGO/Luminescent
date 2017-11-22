@@ -25,7 +25,7 @@ public class Shader {
 		shaderAddress = Vulkan.getShaderHandle(value);
 	}
 
-	private byte[] getShaderCode(String shaderLoc) throws Exception {
+	private byte[] getShaderCode(String shaderLoc) {
 		shaderLoc = shaderLoc.replaceAll("\\.", "/");
 		
 	    return SystemUtils.readFile("shaders/" + shaderLoc + ".spv");

@@ -13,21 +13,20 @@ import org.lwjgl.vulkan.VK10;
 
 public class ShaderList {
 	
-	private static List<Shader> shaderList = new ArrayList<Shader>();
+	private static final List<Shader> shaderList = new ArrayList<>();
 	
 	public static void initShaderList() {
 		List<String> shaders = getShadersForPackage();
 		
 		for(String f : shaders) {
-			String shaderName = f;
-			int shaderType = getShaderTypeValue(Integer.parseInt(shaderName.substring(0, 1)));
+			int shaderType = getShaderTypeValue(Integer.parseInt(f.substring(0, 1)));
 			
-			shaderList.add(new Shader(shaderName.substring(1), shaderType));
+			shaderList.add(new Shader(f.substring(1), shaderType));
 		}
 	}
 	
 	private static List<String> getShadersForPackage() {
-		List<String> names = new ArrayList<String>();
+		List<String> names = new ArrayList<>();
 		
 		InputStream in = null;
 		

@@ -315,7 +315,7 @@ public class Player extends LivingEntity {
 	
 	// TODO: Simplify edges
 	private List<Double> getVerticalEdges(List<Room> rooms) {
-		List<Double> verticalEdges = new ArrayList<Double>();
+		List<Double> verticalEdges = new ArrayList<>();
 	
 		for(Room room : rooms) {
 			verticalEdges.add(new GameCoordinates(room.getCoordinates()).getGameCoordinatesX());
@@ -326,7 +326,7 @@ public class Player extends LivingEntity {
 	}
 	
 	private List<Double> getHorizontalEdges(List<Room> rooms) {
-		List<Double> horizontalEdges = new ArrayList<Double>();
+		List<Double> horizontalEdges = new ArrayList<>();
 		
 		for(Room room : rooms) {
 			horizontalEdges.add(new GameCoordinates(room.getCoordinates()).getGameCoordinatesZ() + room.getHeight());
@@ -370,9 +370,8 @@ public class Player extends LivingEntity {
 			Vector3f location = new Vector3f((float)loc.getScaledWindowCoordinatesX() + DisplayUtils.widthOffset, (float)loc.getScaledWindowCoordinatesY()  + DisplayUtils.heightOffset, 0.0f);
 			
 			Quaternionf rotate = new Quaternionf().rotateZ((float) Math.toRadians(rotation));
-			
-			Matrix4f model = new Matrix4f().translation(location).rotateAround(rotate, 0, 0, 0).scale((float) (1.0 / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)));
-			this.model = model;
+
+			this.model = new Matrix4f().translation(location).rotateAround(rotate, 0, 0, 0).scale((float) (1.0 / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)));
 		}
 		
 		private void setRotation(double rotation) {

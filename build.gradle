@@ -1,8 +1,8 @@
-// Apply the java plugin to add support for Java & add eclipse plugin
+// Apply the java plugin to add support for Java & add IntelliJ plugin
 apply plugin: "java"
-apply plugin: "eclipse"
+apply plugin: "idea"
 
-project.ext.lwjglVersion = "3.1.4"
+project.ext.lwjglVersion = "3.1.5"
 project.ext.jomlVersion = "1.9.6"
 
 // In this section you declare where to find the dependencies of your project
@@ -87,7 +87,7 @@ deploy.finalizedBy copyToRoot
 task run(dependsOn:deploy) {
 	doLast {
 		javaexec { 
-			main="-jar";
+			main="-jar"
 			args = [
 				"Luminescent.jar",
 			]

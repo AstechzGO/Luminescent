@@ -19,7 +19,7 @@ public class SoundManager {
 
 	private SoundSystem mySoundSystem;
 	
-	private HashMap<String, Source> sourceTypeMap = new HashMap<String, Source>();
+	private final HashMap<String, Source> sourceTypeMap = new HashMap<>();
 
 	public SoundManager() {
 		boolean aLCompatible = SoundSystem
@@ -36,14 +36,14 @@ public class SoundManager {
 			}
 		} catch (SoundSystemException e) {
 
-			// Shouldn’t happen, but it is best to prepare for anything
+			// Shouldn't happen, but it is best to prepare for anything
 			e.printStackTrace();
 			return;
 		}
 
 		try {
 		    if(SystemUtils.isJar()) {
-		        SoundSystemConfig.setSoundFilesPackage(getResourceAsURL("sounds/").toString().split("\\!")[1].replaceFirst("/", ""));
+		        SoundSystemConfig.setSoundFilesPackage(getResourceAsURL("sounds/").toString().split("!")[1].replaceFirst("/", ""));
 		    }
 		    else {
 		        SoundSystemConfig.setSoundFilesPackage("");
@@ -61,8 +61,7 @@ public class SoundManager {
 	}
 	
 	public void loadSound(String s, boolean loop) {
-		String oldS = s;
-		
+
 		String filename = s.replaceAll("\\.", "/") + ".mp3";
 		
 		URL resourceLoc = getResourceAsURL("sounds/" + filename);
@@ -77,7 +76,7 @@ public class SoundManager {
 		float z = 0;
 		int aModel = SoundSystemConfig.ATTENUATION_ROLLOFF;
 		float rFactor = SoundSystemConfig.getDefaultRolloff();
-		newSource(priority, oldS, filename, loop, x, y, z, aModel, rFactor);
+		newSource(priority, s, filename, loop, x, y, z, aModel, rFactor);
 	}
 	
 	public void newSource(boolean priority, String sourcename, String filename, boolean toLoop, float x, float y, float z, int attmodel, float distOrRoll) {

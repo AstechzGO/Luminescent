@@ -16,7 +16,7 @@ import astechzgo.luminescent.rendering.Vulkan;
 
 public class KeyPressGameplay {
 	
-	public static ArrayList<Projectile> projectiles = new ArrayList<>();
+	public static final ArrayList<Projectile> projectiles = new ArrayList<>();
 	private static double lastShot;
 	
 	public static void checkGameActions(Player thePlayer, List<Room> rooms) {
@@ -27,7 +27,7 @@ public class KeyPressGameplay {
 			// Creates Projectile and adds it to array list
 			Projectile projectile = getUnused();
 			projectile.init(thePlayer.getCoordinates());
-			projectiles.add(projectile);	
+			projectiles.add(projectile);
 			
 			lastShot = (GLFW.glfwGetTime() * 1000);
 		}
@@ -66,7 +66,7 @@ public class KeyPressGameplay {
 	}
 	
 	private static List<Double> getVerticalEdges(List<Room> rooms) {
-		List<Double> verticalEdges = new ArrayList<Double>();
+		List<Double> verticalEdges = new ArrayList<>();
 	
 		for(Room room : rooms) {
 			verticalEdges.add(new GameCoordinates(room.getCoordinates()).getGameCoordinatesX());
@@ -77,7 +77,7 @@ public class KeyPressGameplay {
 	}
 	
 	private static List<Double> getHorizontalEdges(List<Room> rooms) {
-		List<Double> horizontalEdges = new ArrayList<Double>();
+		List<Double> horizontalEdges = new ArrayList<>();
 		
 		for(Room room : rooms) {
 			horizontalEdges.add(new GameCoordinates(room.getCoordinates()).getGameCoordinatesZ() + room.getHeight());

@@ -35,7 +35,7 @@ public class Animation extends Texture {
 		idx++;
 	}
 	
-	private List<Texture> frames = new ArrayList<Texture>();
+	private final List<Texture> frames = new ArrayList<>();
 	
 	public Animation(String textureName, int count) {
 		super(textureName, true, toCombinedImage(textureName, count));

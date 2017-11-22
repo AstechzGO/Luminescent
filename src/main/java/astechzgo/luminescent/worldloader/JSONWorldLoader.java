@@ -29,7 +29,7 @@ public class JSONWorldLoader {
 	
 	public static List<Room> loadRooms() {
 		Gson g = new Gson();
-		String parse = "";
+		StringBuilder parse = new StringBuilder();
 		
 		InputStream in = null;
 		
@@ -43,14 +43,14 @@ public class JSONWorldLoader {
 		String line = "";
 		try {
 			while((line = input.readLine()) != null) {
-				parse = parse + line;
+				parse.append(line);
 			}	
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
-		JSONWorldLoader[] loaders = g.fromJson(parse, JSONWorldLoader[].class);
-		List<Room> rooms = new ArrayList<Room>();
+		JSONWorldLoader[] loaders = g.fromJson(parse.toString(), JSONWorldLoader[].class);
+		List<Room> rooms = new ArrayList<>();
 		
 		for(JSONWorldLoader loader : loaders) {
 			rooms.add(new Room(loader));

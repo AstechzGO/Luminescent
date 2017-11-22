@@ -25,7 +25,7 @@ import org.lwjgl.system.Platform;
 
 public class ControllerUtils {
 	
-	public static List<Integer> joysticks = new ArrayList<Integer>();
+	public static final List<Integer> joysticks = new ArrayList<>();
 	
 	public static final Map<Integer, String> JOYSTICK_SLOT_VALUES = APIUtil.apiClassTokens((field, value) -> field.getName().startsWith("GLFW_JOYSTICK_"), null, GLFW.class);
 	
@@ -48,10 +48,11 @@ public class ControllerUtils {
 	public static boolean isButtonPressed(String button) {
 		for(int joy : joysticks) {
 			List<List<List<Double>>> buttonNumbers = getButtons(joy, button);
-			if(isButtonPressed(joy, buttonNumbers)) 
-				return true;
-			else
-				return false;
+
+			boolean pressed = isButtonPressed(joy, buttonNumbers);
+			if(pressed) {
+			    return pressed;
+            }
 		}
 		return false;
 	}
@@ -153,35 +154,36 @@ public class ControllerUtils {
 	}
 	
 	private static List<List<List<Double>>> parse(String string) {
-			List<List<List<Double>>> buttons = new ArrayList<List<List<Double>>>(3);
+        List<List<List<Double>>> buttons = new ArrayList<>(3);
+
+        List<List<Double>> temp = new ArrayList<>();
+        buttons.add(0, temp);
+        buttons.add(1, temp);
+        buttons.add(2, temp);
+
+        Scanner scanner = new Scanner(string);
 			
-			List<List<Double>> temp = new ArrayList<List<Double>>();
-			buttons.add(0, temp);
-			buttons.add(1, temp);
-			buttons.add(2, temp);
-			
-			Scanner scanner = new Scanner(string);
-			
-			int q = Platform.get().ordinal();
-			for (String a; (a = scanner.findWithinHorizon("(?<=\\{\\{).*?(?=\\}\\})", 0)) != null;) {
-		    
-				a = "{" + a + "}";
-				
-				Scanner sc = new Scanner(a);
-				
-				int i = 0;
-				for (String s; (s = sc.findWithinHorizon("(?<=\\{).*?(?=\\})", 0)) != null; i++) {
-					buttons.get(q).add(i, new ArrayList<Double>());
-					s = s.replace(" ", "");
-					String[] unparsed = s.split(",");
-					for(String uNum : unparsed) {
-						buttons.get(q).get(i).add(Double.parseDouble(uNum));
-					}
-				}
-				sc.close();
-				break;
-			}
-			scanner.close();
-			return buttons;
-		}		
+        int q = Platform.get().ordinal();
+        String a = scanner.findWithinHorizon("(?<=\\{\\{).*?(?=}})", 0);
+
+        a = "{" + a + "}";
+
+        Scanner sc = new Scanner(a);
+
+        int i = 0;
+        String s;
+        while ((s = sc.findWithinHorizon("(?<=\\{).*?(?=})", 0)) != null) {
+            buttons.get(q).add(i, new ArrayList<>());
+            s = s.replace(" ", "");
+            String[] unparsed = s.split(",");
+            for(String uNum : unparsed) {
+                buttons.get(q).get(i).add(Double.parseDouble(uNum));
+            }
+            i++;
+        }
+        sc.close();
+        scanner.close();
+
+        return buttons;
+    }
 }

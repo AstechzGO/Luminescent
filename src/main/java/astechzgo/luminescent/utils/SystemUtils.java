@@ -13,7 +13,8 @@ import astechzgo.luminescent.main.Luminescent;
 
 public class SystemUtils {
 
-	private static String userHome = System.getProperty("user.home", ".");
+	private static final String userHome = System.getProperty("user.home", ".");
+
 	private static File oldWorkingDirectory;
 	private static File workingDirectory;
 	

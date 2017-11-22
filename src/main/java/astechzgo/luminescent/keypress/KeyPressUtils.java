@@ -20,7 +20,7 @@ import astechzgo.luminescent.utils.KeyboardUtils;
 
 public class KeyPressUtils {
 	
-	private static Sound cameraClick = new Sound("keys.util.screenshot.CameraClick");
+	private static final Sound cameraClick = new Sound("keys.util.screenshot.CameraClick");
 	
 	public static void checkUtils() {
 	

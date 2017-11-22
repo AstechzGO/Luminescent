@@ -1,0 +1,469 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <resourceExtensions>
+      <entry name=".+\.(properties|xml|html|dtd|tld)" />
+      <entry name=".+\.(gif|png|jpeg|jpg)" />
+    </resourceExtensions>
+    <wildcardResourcePatterns>
+      <entry name="!?*.class" />
+      <entry name="!?*.scala" />
+      <entry name="!?*.java" />
+      <entry name="!?*.groovy" />
+    </wildcardResourcePatterns>
+    <bytecodeTargetLevel target="1.9" />
+  </component>
+  <component name="CopyrightManager" default="" />
+  <component name="DependencyValidationManager">
+    <option name="SKIP_IMPORT_STATEMENTS" value="false" />
+  </component>
+  <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false" />
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleJvm" value="#JAVA_HOME" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+          </set>
+        </option>
+        <option name="resolveModulePerSourceSet" value="false" />
+        <option name="useAutoImport" value="true" />
+      </GradleProjectSettings>
+    </option>
+  </component>
+  <component name="GradleUISettings">
+    <setting name="root" />
+  </component>
+  <component name="GradleUISettings2">
+    <setting name="root" />
+  </component>
+  <component name="IdProvider" IDEtalkID="11DA1DB66DD62DDA1ED602B7079FE97C" />
+  <component name="InspectionProjectProfileManager">
+    <profile version="1.0">
+      <option name="myName" value="Project Default" />
+      <inspection_tool class="Annotator" enabled="true" level="WARNING" enabled_by_default="true" />
+      <inspection_tool class="ArrayEquals" enabled="false" level="WARNING" enabled_by_default="false" />
+      <inspection_tool class="ArrayHashCode" enabled="false" level="WARNING" enabled_by_default="false" />
+      <inspection_tool class="ArrayObjectsEquals" enabled="false" level="WARNING" enabled_by_default="false" />
+      <inspection_tool class="AssertWithSideEffects" enabled="false" level="WARNING" enabled_by_default="false" />
+      <inspection_tool class="BooleanMethodIsAlwaysInverted" enabled="false" level="WARNING" enabled_by_default="false" />
+      <inspection_tool class="CollectionAddedToSelf" enabled="false" level="WARNING" enabled_by_default="false" />
+      <inspection_tool class="ComparatorMethodParameterNotUsed" enabled="false" level="WARNING" enabled_by_default="false" />
+      <inspection_tool class="ComparatorResultComparison" enabled="false" level="WARNING" enabled_by_default="false" />
+      <inspection_tool class="ConstantConditions" enabled="false" level="WARNING" enabled_by_default="false">
+        <option name="SUGGEST_NULLABLE_ANNOTATIONS" value="false" />
+        <option name="DONT_REPORT_TRUE_ASSERT_STATEMENTS" value="false" />
+      </inspection_tool>
+      <inspection_tool class="Contract" enabled="false" level="WARNING" enabled_by_default="false" />
+      <inspection_tool class="EmptyStatementBody" enabled="false" level="WARNING" enabled_by_default="false">
+        <option name="m_reportEmptyBlocks" value="true" />
+      </inspection_tool>
+      <inspection_tool class="EqualsBetweenInconvertibleTypes" enabled="false" level="WARNING" enabled_by_default="false" />
+      <inspection_tool class="EqualsOnSuspiciousObject" enabled="false" level="WARNING" enabled_by_default="false" />
+      <inspection_tool class="EqualsWhichDoesntCheckParameterClass" enabled="false" level="WARNING" enabled_by_default="false" />
+      <inspection_tool class="EqualsWithItself" enabled="false" level="WARNING" enabled_by_default="false" />
+      <inspection_tool class="IgnoreResultOfCall" enabled="false" level="WARNING" enabled_by_default="false">
+        <option name="m_reportAllNonLibraryCalls" value="false" />
+        <option name="callCheckString" value="java.io.File,.*,java.io.InputStream,read|skip|available|markSupported,java.io.Reader,read|skip|ready|markSupported,java.lang.Boolean,.*,java.lang.Byte,.*,java.lang.Character,.*,java.lang.Double,.*,java.lang.Float,.*,java.lang.Integer,.*,java.lang.Long,.*,java.lang.Math,.*,java.lang.Object,equals|hashCode|toString,java.lang.Short,.*,java.lang.StrictMath,.*,java.lang.String,.*,java.math.BigInteger,.*,java.math.BigDecimal,.*,java.net.InetAddress,.*,java.net.URI,.*,java.util.List,of,java.util.Set,of,java.util.Map,of|ofEntries|entry,java.util.Collections,unmodifiable.*|singleton.*|checked.*|min|max|stream,java.util.UUID,.*,java.util.regex.Matcher,pattern|toMatchResult|start|end|group|groupCount|matches|find|lookingAt|quoteReplacement|replaceAll|replaceFirst|regionStart|regionEnd|hasTransparentBounds|hasAnchoringBounds|hitEnd|requireEnd,java.util.regex.Pattern,.*,java.util.stream.BaseStream,.*" />
+      </inspection_tool>
+      <inspection_tool class="ImplicitArrayToString" enabled="false" level="WARNING" enabled_by_default="false" />
+      <inspection_tool class="InfiniteRecursion" enabled="false" level="WARNING" enabled_by_default="false" />
+      <inspection_tool class="InvalidComparatorMethodReference" enabled="false" level="WARNING" enabled_by_default="false" />
+      <inspection_tool class="MagicConstant" enabled="false" level="WARNING" enabled_by_default="false" />
+      <inspection_tool class="MalformedFormatString" enabled="false" level="WARNING" enabled_by_default="false" />
+      <inspection_tool class="MalformedRegex" enabled="false" level="WARNING" enabled_by_default="false" />
+      <inspection_tool class="MalformedXPath" enabled="false" level="WARNING" enabled_by_default="false" />
+      <inspection_tool class="MathRandomCastToInt" enabled="false" level="WARNING" enabled_by_default="false" />
+      <inspection_tool class="MismatchedArrayReadWrite" enabled="false" level="WARNING" enabled_by_default="false" />
+      <inspection_tool class="MismatchedCollectionQueryUpdate" enabled="false" level="WARNING" enabled_by_default="false">
+        <option name="queryNames">
+          <value />
+        </option>
+        <option name="updateNames">
+          <value />
+        </option>
+        <option name="ignoredClasses">
+          <value />
+        </option>
+      </inspection_tool>
+      <inspection_tool class="MismatchedStringBuilderQueryUpdate" enabled="false" level="WARNING" enabled_by_default="false" />
+      <inspection_tool class="NewStringBufferWithCharArgument" enabled="false" level="WARNING" enabled_by_default="false" />
+      <inspection_tool class="NullArgumentToVariableArgMethod" enabled="false" level="WARNING" enabled_by_default="false" />
+      <inspection_tool class="NullableProblems" enabled="false" level="WARNING" enabled_by_default="false">
+        <option name="REPORT_NULLABLE_METHOD_OVERRIDES_NOTNULL" value="true" />
+        <option name="REPORT_NOT_ANNOTATED_METHOD_OVERRIDES_NOTNULL" value="true" />
+        <option name="REPORT_NOTNULL_PARAMETER_OVERRIDES_NULLABLE" value="true" />
+        <option name="REPORT_NOT_ANNOTATED_PARAMETER_OVERRIDES_NOTNULL" value="true" />
+        <option name="REPORT_NOT_ANNOTATED_GETTER" value="true" />
+        <option name="REPORT_NOT_ANNOTATED_SETTER_PARAMETER" value="true" />
+        <option name="REPORT_ANNOTATION_NOT_PROPAGATED_TO_OVERRIDERS" value="true" />
+        <option name="REPORT_NULLS_PASSED_TO_NON_ANNOTATED_METHOD" value="true" />
+      </inspection_tool>
+      <inspection_tool class="NumberEquality" enabled="false" level="WARNING" enabled_by_default="false" />
+      <inspection_tool class="NumericOverflow" enabled="false" level="WARNING" enabled_by_default="false" />
+      <inspection_tool class="ObjectEqualsNull" enabled="false" level="WARNING" enabled_by_default="false" />
+      <inspection_tool class="OptionalUsedAsFieldOrParameterType" enabled="false" level="WARNING" enabled_by_default="false" />
+      <inspection_tool class="PrimitiveArrayArgumentToVariableArgMethod" enabled="false" level="WARNING" enabled_by_default="false" />
+      <inspection_tool class="ReflectionForUnavailableAnnotation" enabled="false" level="WARNING" enabled_by_default="false" />
+      <inspection_tool class="ReplaceAllDot" enabled="false" level="WARNING" enabled_by_default="false" />
+      <inspection_tool class="SameParameterValue" enabled="false" level="WARNING" enabled_by_default="false" />
+      <inspection_tool class="SpellCheckingInspection" enabled="false" level="TYPO" enabled_by_default="false">
+        <option name="processCode" value="true" />
+        <option name="processLiterals" value="true" />
+        <option name="processComments" value="true" />
+      </inspection_tool>
+      <inspection_tool class="StringEquality" enabled="false" level="WARNING" enabled_by_default="false" />
+      <inspection_tool class="StringTokenizerDelimiter" enabled="false" level="WARNING" enabled_by_default="false" />
+      <inspection_tool class="SuspiciousArrayMethodCall" enabled="false" level="WARNING" enabled_by_default="false" />
+      <inspection_tool class="SuspiciousMethodCalls" enabled="false" level="WARNING" enabled_by_default="false">
+        <option name="REPORT_CONVERTIBLE_METHOD_CALLS" value="true" />
+      </inspection_tool>
+      <inspection_tool class="SuspiciousNameCombination" enabled="false" level="WARNING" enabled_by_default="false">
+        <group names="x,width,left,right" />
+        <group names="y,height,top,bottom" />
+        <ignored>
+          <option name="METHOD_MATCHER_CONFIG" value="java.io.PrintStream,println,java.io.PrintWriter,println,java.lang.System,identityHashCode,java.sql.PreparedStatement,set.*,java.sql.ResultSet,update.*,java.sql.SQLOutput,write.*,java.lang.Integer,compare.*,java.lang.Long,compare.*,java.lang.Short,compare,java.lang.Byte,compare,java.lang.Character,compare,java.lang.Boolean,compare,java.lang.Math,.*,java.lang.StrictMath,.*" />
+        </ignored>
+      </inspection_tool>
+      <inspection_tool class="SuspiciousSystemArraycopy" enabled="false" level="WARNING" enabled_by_default="false" />
+      <inspection_tool class="SuspiciousToArrayCall" enabled="false" level="WARNING" enabled_by_default="false" />
+      <inspection_tool class="ThrowableNotThrown" enabled="false" level="WARNING" enabled_by_default="false" />
+      <inspection_tool class="UnusedAssignment" enabled="false" level="WARNING" enabled_by_default="false">
+        <option name="REPORT_PREFIX_EXPRESSIONS" value="false" />
+        <option name="REPORT_POSTFIX_EXPRESSIONS" value="true" />
+        <option name="REPORT_REDUNDANT_INITIALIZER" value="true" />
+      </inspection_tool>
+      <inspection_tool class="UnusedReturnValue" enabled="false" level="WARNING" enabled_by_default="false" />
+      <inspection_tool class="WeakerAccess" enabled="false" level="WARNING" enabled_by_default="false">
+        <option name="SUGGEST_PACKAGE_LOCAL_FOR_MEMBERS" value="true" />
+        <option name="SUGGEST_PACKAGE_LOCAL_FOR_TOP_CLASSES" value="true" />
+        <option name="SUGGEST_PRIVATE_FOR_INNERS" value="false" />
+      </inspection_tool>
+      <inspection_tool class="WrongPackageStatement" enabled="false" level="ERROR" enabled_by_default="false" />
+      <inspection_tool class="unused" enabled="false" level="WARNING" enabled_by_default="false">
+        <option name="LOCAL_VARIABLE" value="true" />
+        <option name="FIELD" value="true" />
+        <option name="METHOD" value="true" />
+        <option name="CLASS" value="true" />
+        <option name="PARAMETER" value="true" />
+        <option name="REPORT_PARAMETER_FOR_PUBLIC_METHODS" value="true" />
+        <option name="ADD_MAINS_TO_ENTRIES" value="true" />
+        <option name="ADD_APPLET_TO_ENTRIES" value="true" />
+        <option name="ADD_SERVLET_TO_ENTRIES" value="true" />
+        <option name="ADD_NONJAVA_TO_ENTRIES" value="true" />
+      </inspection_tool>
+    </profile>
+    <version value="1.0" />
+  </component>
+  <component name="JavadocGenerationManager">
+    <option name="OUTPUT_DIRECTORY" />
+    <option name="OPTION_SCOPE" value="protected" />
+    <option name="OPTION_HIERARCHY" value="true" />
+    <option name="OPTION_NAVIGATOR" value="true" />
+    <option name="OPTION_INDEX" value="true" />
+    <option name="OPTION_SEPARATE_INDEX" value="true" />
+    <option name="OPTION_DOCUMENT_TAG_USE" value="false" />
+    <option name="OPTION_DOCUMENT_TAG_AUTHOR" value="false" />
+    <option name="OPTION_DOCUMENT_TAG_VERSION" value="false" />
+    <option name="OPTION_DOCUMENT_TAG_DEPRECATED" value="true" />
+    <option name="OPTION_DEPRECATED_LIST" value="true" />
+    <option name="OTHER_OPTIONS" value="" />
+    <option name="HEAP_SIZE" />
+    <option name="LOCALE" />
+    <option name="OPEN_IN_BROWSER" value="true" />
+  </component>
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Luminescent.iml" filepath="$PROJECT_DIR$/Luminescent.iml" />
+    </modules>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_9" default="false" project-jdk-name="9" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/bin" />
+  </component>
+  <component name="SvnBranchConfigurationManager">
+    <option name="mySupportsUserInfoFilter" value="true" />
+  </component>
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$" vcs="Git" />
+  </component>
+  <component name="libraryTable">
+    <library name="Gradle: :CodecMP3:">
+      <CLASSES>
+        <root url="jar://$PROJECT_DIR$/libs/paulscode/CodecMP3.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$PROJECT_DIR$/libs/paulscode/CodecMP3-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: :LibraryLWJGL3OpenAL:">
+      <CLASSES>
+        <root url="jar://$PROJECT_DIR$/libs/paulscode/LibraryLWJGL3OpenAL.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$PROJECT_DIR$/libs/paulscode/LibraryLWJGL3OpenAL-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: :SoundSystem:">
+      <CLASSES>
+        <root url="jar://$PROJECT_DIR$/libs/paulscode/SoundSystem.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$PROJECT_DIR$/libs/paulscode/SoundSystem-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: com.google.code.gson:gson:2.8.2">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.8.2/3edcfe49d2c6053a70a2a47e4e1c2f94998a49cf/gson-2.8.2.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.8.2/b2da9f8444128651758719856de579eacff7f387/gson-2.8.2-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: org.joml:joml:1.9.6">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.joml/joml/1.9.6/af24f1124d364785264c8bdcc6c8632c7e234192/joml-1.9.6.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.joml/joml/1.9.6/d3e24e34dc2fc1403f7308f7353acfdfaa19044e/joml-1.9.6-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: org.lwjgl:lwjgl-glfw:3.1.5">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-glfw/3.1.5/c5d004c6e19444cdca339bda284a764036ec5e5c/lwjgl-glfw-3.1.5.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-glfw/3.1.5/bbeb864deeeecbd8d48cc0fcb6a7f85aaa435d2c/lwjgl-glfw-3.1.5-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: org.lwjgl:lwjgl-glfw:3.1.5:natives-linux">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-glfw/3.1.5/156eac720af50f4f3b53ebff0ec304a8b60cdb3/lwjgl-glfw-3.1.5-natives-linux.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-glfw/3.1.5/bbeb864deeeecbd8d48cc0fcb6a7f85aaa435d2c/lwjgl-glfw-3.1.5-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: org.lwjgl:lwjgl-glfw:3.1.5:natives-macos">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-glfw/3.1.5/7dba5558162e397a72d53a8f7a80c545b68c6a97/lwjgl-glfw-3.1.5-natives-macos.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-glfw/3.1.5/bbeb864deeeecbd8d48cc0fcb6a7f85aaa435d2c/lwjgl-glfw-3.1.5-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: org.lwjgl:lwjgl-glfw:3.1.5:natives-windows">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-glfw/3.1.5/f5c3b5e90b10a079796cee82fbe9297a819d45ac/lwjgl-glfw-3.1.5-natives-windows.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-glfw/3.1.5/bbeb864deeeecbd8d48cc0fcb6a7f85aaa435d2c/lwjgl-glfw-3.1.5-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: org.lwjgl:lwjgl-jemalloc:3.1.5">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-jemalloc/3.1.5/a070816781732de80751c6ef308e239e35dc8fa6/lwjgl-jemalloc-3.1.5.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-jemalloc/3.1.5/876830aaee31313d4c1f5b96f03851b1b62b10d2/lwjgl-jemalloc-3.1.5-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: org.lwjgl:lwjgl-jemalloc:3.1.5:natives-linux">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-jemalloc/3.1.5/23640750f5e6b65305eeefffccf3dcee4eaf962e/lwjgl-jemalloc-3.1.5-natives-linux.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-jemalloc/3.1.5/876830aaee31313d4c1f5b96f03851b1b62b10d2/lwjgl-jemalloc-3.1.5-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: org.lwjgl:lwjgl-jemalloc:3.1.5:natives-macos">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-jemalloc/3.1.5/b093d8fed44a5f5622f9d5170ce89d8393e9d3d3/lwjgl-jemalloc-3.1.5-natives-macos.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-jemalloc/3.1.5/876830aaee31313d4c1f5b96f03851b1b62b10d2/lwjgl-jemalloc-3.1.5-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: org.lwjgl:lwjgl-jemalloc:3.1.5:natives-windows">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-jemalloc/3.1.5/2a60fe1f1fac8941d393e686affbf9250bea7b20/lwjgl-jemalloc-3.1.5-natives-windows.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-jemalloc/3.1.5/876830aaee31313d4c1f5b96f03851b1b62b10d2/lwjgl-jemalloc-3.1.5-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: org.lwjgl:lwjgl-openal:3.1.5">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-openal/3.1.5/645ccc44b661932b3e67792450dfa5c5d891d1a6/lwjgl-openal-3.1.5.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-openal/3.1.5/9355790af7463ad0d757455ffe80aecb1644a994/lwjgl-openal-3.1.5-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: org.lwjgl:lwjgl-openal:3.1.5:natives-linux">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-openal/3.1.5/15f391eea74477ed4518873e9cb1c71dc8ec7007/lwjgl-openal-3.1.5-natives-linux.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-openal/3.1.5/9355790af7463ad0d757455ffe80aecb1644a994/lwjgl-openal-3.1.5-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: org.lwjgl:lwjgl-openal:3.1.5:natives-macos">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-openal/3.1.5/b7bda29c1cbb8b0d1e7a9ce65da8a5548081e2dd/lwjgl-openal-3.1.5-natives-macos.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-openal/3.1.5/9355790af7463ad0d757455ffe80aecb1644a994/lwjgl-openal-3.1.5-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: org.lwjgl:lwjgl-openal:3.1.5:natives-windows">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-openal/3.1.5/a4543c19f8248bf714471317f4e01010fdd6c205/lwjgl-openal-3.1.5-natives-windows.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-openal/3.1.5/9355790af7463ad0d757455ffe80aecb1644a994/lwjgl-openal-3.1.5-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: org.lwjgl:lwjgl-stb:3.1.5">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-stb/3.1.5/fbbaba5003a2d5539ab1ce6daf7261b3458f1d1f/lwjgl-stb-3.1.5.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-stb/3.1.5/445fe3b8ebc8cf079fb690478e4f39c831d6e62b/lwjgl-stb-3.1.5-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: org.lwjgl:lwjgl-stb:3.1.5:natives-linux">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-stb/3.1.5/a7ffdbbf8545eecd758755a941ede31489f0a7c0/lwjgl-stb-3.1.5-natives-linux.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-stb/3.1.5/445fe3b8ebc8cf079fb690478e4f39c831d6e62b/lwjgl-stb-3.1.5-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: org.lwjgl:lwjgl-stb:3.1.5:natives-macos">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-stb/3.1.5/f030e6d488b5aa84ea759f8430c9048fe1d73acc/lwjgl-stb-3.1.5-natives-macos.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-stb/3.1.5/445fe3b8ebc8cf079fb690478e4f39c831d6e62b/lwjgl-stb-3.1.5-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: org.lwjgl:lwjgl-stb:3.1.5:natives-windows">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-stb/3.1.5/57a30db8ee437c5dc02252c5d35dbf401418138e/lwjgl-stb-3.1.5-natives-windows.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-stb/3.1.5/445fe3b8ebc8cf079fb690478e4f39c831d6e62b/lwjgl-stb-3.1.5-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: org.lwjgl:lwjgl-vulkan:3.1.5">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-vulkan/3.1.5/87532dcbba5fe786734d8661df81180f35ee341b/lwjgl-vulkan-3.1.5.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-vulkan/3.1.5/b3429a7c1d4af48fa24fa97c0808283441f1141c/lwjgl-vulkan-3.1.5-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: org.lwjgl:lwjgl:3.1.5">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl/3.1.5/f0183fbd89134edb7f387bd92787082b3d719d9b/lwjgl-3.1.5.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl/3.1.5/4f9a4c10fb40c744bd7b23b6435dc7d05c7604e6/lwjgl-3.1.5-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: org.lwjgl:lwjgl:3.1.5:natives-linux">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl/3.1.5/4f83f62b3fc845a7dda6aec82b37104412c885b5/lwjgl-3.1.5-natives-linux.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl/3.1.5/4f9a4c10fb40c744bd7b23b6435dc7d05c7604e6/lwjgl-3.1.5-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: org.lwjgl:lwjgl:3.1.5:natives-macos">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl/3.1.5/a24c8740292a26c13019e1955c57b8c811f3a0ce/lwjgl-3.1.5-natives-macos.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl/3.1.5/4f9a4c10fb40c744bd7b23b6435dc7d05c7604e6/lwjgl-3.1.5-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: org.lwjgl:lwjgl:3.1.5:natives-windows">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl/3.1.5/1814d39bc1d6ab0d679079632f86b06ca0273083/lwjgl-3.1.5-natives-windows.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl/3.1.5/4f9a4c10fb40c744bd7b23b6435dc7d05c7604e6/lwjgl-3.1.5-sources.jar!/" />
+      </SOURCES>
+    </library>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <UIState>
+          <splitter-proportions>
+            <SplitterProportionsDataImpl />
+          </splitter-proportions>
+          <settings />
+        </UIState>
+      </state>
+      <state key="Copyright.UI">
+        <UIState>
+          <splitter-proportions>
+            <SplitterProportionsDataImpl />
+          </splitter-proportions>
+        </UIState>
+      </state>
+      <state key="ProjectJDKs.UI">
+        <UIState>
+          <splitter-proportions>
+            <SplitterProportionsDataImpl>
+              <option name="proportions">
+                <list>
+                  <option value="0.2" />
+                </list>
+              </option>
+            </SplitterProportionsDataImpl>
+          </splitter-proportions>
+          <last-edited>1.6</last-edited>
+        </UIState>
+      </state>
+      <state key="ScopeChooserConfigurable.UI">
+        <UIState>
+          <splitter-proportions>
+            <SplitterProportionsDataImpl />
+          </splitter-proportions>
+          <settings />
+        </UIState>
+      </state>
+    </states>
+  </component>
+</project>
