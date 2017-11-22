@@ -11,8 +11,8 @@ public class Constants
 {
 	private static final String CONSTANTS_FILE_NAME = 							"conf.properties";
 	
-	private static Properties defaults = new Properties();
-	private static Properties constants = new Properties();
+	private static final Properties defaults = new Properties();
+	private static final Properties constants = new Properties();
 	
 	public static final String LOG_CONFIG =										"Log-Debug-Messages";
 	
@@ -63,8 +63,8 @@ public class Constants
 	
 	/**
 	 * Returns constant as a String
-	 * @param constant name
-	 * @return
+	 * @param name name
+	 * @return Constant as a String
 	 */
 	public static String getConstant(String name) {
 		return constants.getProperty(name);
@@ -76,8 +76,8 @@ public class Constants
 
 	/**
 	 * Returns constant as an int
-	 * @param constant name
-	 * @return
+	 * @param name name
+	 * @return Constant as an int
 	 */
 	public static int getConstantAsInt(String name) {
 		return Integer.parseInt(constants.getProperty(name));
@@ -85,8 +85,8 @@ public class Constants
 	
 	/**
 	 * Returns constant as a double
-	 * @param constant name
-	 * @return
+	 * @param name name
+	 * @return Constant as an double
 	 */
 	public static double getConstantAsDouble(String name) {
 		return Double.parseDouble(constants.getProperty(name));
@@ -94,16 +94,11 @@ public class Constants
 	
 	/**
 	 * Returns constant as a boolean
-	 * @param constant name
-	 * @return
+	 * @param name name
+	 * @return Constant as a boolean
 	 */
 	public static boolean getConstantAsBoolean(String name) {
-		if(constants.getProperty(name).toLowerCase().equals("true")) {
-			return true;
-		}
-		else {
-			return false;
-		}
+        return constants.getProperty(name).toLowerCase().equals("true");
 	}
 	
 	public static void readConstantPropertiesFromFile() {

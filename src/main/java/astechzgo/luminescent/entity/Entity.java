@@ -10,17 +10,17 @@ import astechzgo.luminescent.rendering.IObjectRenderer;
 
 public interface Entity {
 
-    default public void upload(List<Supplier<Matrix4f>> matrices) {
+    default void upload(List<Supplier<Matrix4f>> matrices) {
         getRenderer().upload(matrices);
     }
     
-	default public void upload() {
+	default void upload() {
 		getRenderer().upload();
 	}
 	
-	public IObjectRenderer getRenderer();
+	IObjectRenderer getRenderer();
 	
-	public void updateRenderer();
+	void updateRenderer();
 	
-	public GameCoordinates getCoordinates();
+	GameCoordinates getCoordinates();
 }

@@ -16,7 +16,7 @@ public class KeyboardUtils {
 	
 	private static final Map<Integer, String> KEY_CODES = APIUtil.apiClassTokens((field, value) -> field.getName().startsWith("GLFW_KEY_"), null, GLFW.class);
 	
-	private static final List<Integer> keysPressed = new ArrayList<Integer>();
+	private static final List<Integer> keysPressed = new ArrayList<>();
 	
 	public static final GLFWKeyCallback KEY_CALLBACK = new GLFWKeyCallback() {
 		@Override
@@ -59,12 +59,12 @@ public class KeyboardUtils {
 	
 
 	private static List<List<Integer>> getKeyCodes(String key) {
-		List<List<Integer>> keys = new ArrayList<List<Integer>>();
+		List<List<Integer>> keys = new ArrayList<>();
 		
 		Scanner sc = new Scanner(Constants.getConstant(key));
 	    int i = 0;
-	    for (String s; (s = sc.findWithinHorizon("(?<=\\{).*?(?=\\})", 0)) != null; i++) {
-	    	keys.add(i, new ArrayList<Integer>());
+	    for (String s; (s = sc.findWithinHorizon("(?<=\\{).*?(?=})", 0)) != null; i++) {
+	    	keys.add(i, new ArrayList<>());
 	    	s = s.replace(" ", "");
 	    	String[] unparsed = s.split(",");
 	    	for(String uNum : unparsed) {
@@ -93,7 +93,7 @@ public class KeyboardUtils {
 			}
 		}
 		
-		return false || ControllerUtils.isButtonPressed(name);
+		return ControllerUtils.isButtonPressed(name);
 	}
 	
 	public static void resetKeys() {

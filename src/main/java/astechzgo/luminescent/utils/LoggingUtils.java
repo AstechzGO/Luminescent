@@ -39,9 +39,8 @@ public class LoggingUtils {
 					threadName = t.getName();
 				}
 			}
-			String msg = S + " [" + threadName + "/" + (debug ? "DEBUG" : record.getLevel().getName()) + "]: " + record.getMessage() + "\n";
-			
-			return msg;
+
+			return S + " [" + threadName + "/" + (debug ? "DEBUG" : record.getLevel().getName()) + "]: " + record.getMessage() + "\n";
 		}
 		
 	};
@@ -71,20 +70,15 @@ public class LoggingUtils {
 				LOGGER.setLevel(Level.CONFIG);
 			}
 			
-			Runtime.getRuntime().addShutdownHook(new Thread()
-			{
-			    @Override
-			    public void run()
-			    {
-			    	fh.flush();
-			    	fh.close();
+			Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                fh.flush();
+                fh.close();
 
-			    	ch.flush();
-			    	ch.close();
-			    	
-			    	cleanupLogFilename();
-			    }
-			});
+                ch.flush();
+                ch.close();
+
+                cleanupLogFilename();
+            }));
 			
 		} catch (SecurityException | IOException e) {
 			e.printStackTrace();
@@ -123,8 +117,7 @@ public class LoggingUtils {
 		
 		int i = 1;
 		boolean exists = true;
-				;
-		while(exists) {
+        while(exists) {
 			datedFile = newFile("logs/" + S + i + ".log");
     	
 			if(datedFile.exists()) {

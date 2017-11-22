@@ -87,7 +87,7 @@ deploy.finalizedBy copyToRoot
 task run(dependsOn:deploy) {
 	doLast {
 		javaexec { 
-			main="-jar";
+			main="-jar"
 			args = [
 				"Luminescent.jar",
 			]

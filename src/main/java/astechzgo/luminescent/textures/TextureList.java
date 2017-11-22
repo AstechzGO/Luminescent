@@ -10,14 +10,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TextureList {
-	private static List<String> nonSlickTextures = new ArrayList<String>();
-	private static List<String> slickTextures = new ArrayList<String>();
+	private static List<String> nonSlickTextures = new ArrayList<>();
+	private static List<String> slickTextures = new ArrayList<>();
 	
-	private static List<Texture> textures = new ArrayList<Texture>();
+	private static List<Texture> textures = new ArrayList<>();
 	
 	public static void getAllTextures() {
-		List<String> nonSlick = new ArrayList<String>();
-		List<String> slick = new ArrayList<String>();
+		List<String> nonSlick = new ArrayList<>();
+		List<String> slick = new ArrayList<>();
 		
 		InputStream in = null;
 		
@@ -83,7 +83,7 @@ public class TextureList {
 	public static void loadNonSlickTextures() {
 		TextureList.getAllTextures();
 		
-		List<Texture> textures = new ArrayList<Texture>();
+		List<Texture> textures = new ArrayList<>();
 		
 		for(String f : TextureList.getNonSlickTextureNames()) {
 			textures.add(new Texture(f, false));
@@ -91,7 +91,7 @@ public class TextureList {
 	}
 	
 	public static void loadSlickTextures() {
-		List<Texture> textures = new ArrayList<Texture>();
+		List<Texture> textures = new ArrayList<>();
 		
 		for(String f : getSlickTextureNames()) {
 			textures.add(new Texture(f, true));

@@ -41,8 +41,7 @@ import astechzgo.luminescent.textures.TextureList;
 public class DisplayUtils {	
 	
 	private static long handle;
-	
-	private static boolean displayResizable = true;
+
 	private static boolean displayFullscreen = false;
 	
 	private static DisplayMode mode = new DisplayMode(848, 477);
@@ -133,16 +132,14 @@ public class DisplayUtils {
 				
 				int freq = 0;
 
-				for (int i = 0; i < displayModes.length; i++) {
-					DisplayMode current = displayModes[i];
-
+				for (DisplayMode current : displayModes) {
 					if ((current.WIDTH == width)
 							&& (current.HEIGHT == height)) {
 						if ((targetDisplayMode == null)
 								|| (current.FREQ >= freq)) {
 							if ((targetDisplayMode == null)
 									|| (current.BPP > targetDisplayMode
-											.BPP)) {
+									.BPP)) {
 								targetDisplayMode = current;
 								freq = targetDisplayMode.FREQ;
 							}
@@ -256,7 +253,7 @@ public class DisplayUtils {
 		DisplayUtils.icons = icons;
 	}
 
-	public static void takeScreenshot(File file) throws Exception {
+	public static void takeScreenshot(File file) {
 		//GL11.glReadBuffer(GL11.GL_FRONT);
 		int width = displayWidth;
 		int height= displayHeight;
@@ -357,6 +354,7 @@ public class DisplayUtils {
 		glfwDefaultWindowHints();
 		glfwWindowHint(GLFW.GLFW_CLIENT_API, GLFW.GLFW_NO_API);
 		glfwWindowHint(GLFW_VISIBLE, GLFW.GLFW_FALSE);
+		boolean displayResizable = true;
 		glfwWindowHint(GLFW_RESIZABLE, displayResizable ? GLFW.GLFW_TRUE : GLFW.GLFW_FALSE);
 		
 		handle = glfwCreateWindow(mode.WIDTH, mode.HEIGHT,  displayTitle, NULL, NULL);
@@ -569,9 +567,8 @@ public class DisplayUtils {
 		}
 
 		try {
-			DisplayMode targetDisplayMode = new DisplayMode(width, height);
 
-			mode = targetDisplayMode;
+			mode = new DisplayMode(width, height);
 
 	        displayWidth = mode.WIDTH;
 	        displayHeight = mode.HEIGHT;

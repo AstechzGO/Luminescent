@@ -79,10 +79,9 @@ public class Projectile extends LivingEntity {
 			}
 			else if(!(getCoordinates().getGameCoordinatesX() < verticalEdge) && (projectedX <= verticalEdge)) {
 				bx = true;
-				
-				double temp = verticalEdge;
-				if(temp > x || initX) {
-					x = temp;
+
+				if(verticalEdge > x || initX) {
+					x = verticalEdge;
 					initX = false;
 				}
 			}					
@@ -112,10 +111,9 @@ public class Projectile extends LivingEntity {
 			}
 			else if(!(getCoordinates().getGameCoordinatesZ() < horizontalEdge) && (projectedZ <= horizontalEdge)) {
 				bz = true;
-				
-				double temp = horizontalEdge;
-				if(temp > z || initZ) {
-					z = temp;
+
+				if(horizontalEdge > z || initZ) {
+					z = horizontalEdge;
 					initZ = false;
 				}
 			}					
@@ -161,15 +159,8 @@ public class Projectile extends LivingEntity {
             
             ScaledWindowCoordinates loc = new ScaledWindowCoordinates(this.getCoordinates());
             Vector3f location = new Vector3f((float)loc.getScaledWindowCoordinatesX() + DisplayUtils.widthOffset, (float)loc.getScaledWindowCoordinatesY()  + DisplayUtils.heightOffset, 0.0f);
-            
-            Matrix4f model = new Matrix4f().translation(location).scale(isAlive ? (float) (1.0 / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)) : 0);
-            this.model = model;
-        }
-	    
-        
-        @Override
-        public void setCoordinates(WindowCoordinates coords) {
-            super.setCoordinates(coords);
+
+			this.model = new Matrix4f().translation(location).scale(isAlive ? (float) (1.0 / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)) : 0);
         }
 	}
 	

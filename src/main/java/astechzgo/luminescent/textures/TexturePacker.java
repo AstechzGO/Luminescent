@@ -13,7 +13,7 @@ public class TexturePacker {
     private Texture atlas;
     
     private Set<AtlasMember> atlasMembers;
-    private Set<Texture> textures = new HashSet<>();
+    private final Set<Texture> textures = new HashSet<>();
     
     public void addTextures(Texture... textures) {
         addTextures(List.of(textures));
@@ -35,10 +35,10 @@ public class TexturePacker {
         List<Texture> byHeight = new ArrayList<>(textures.size());
         
         byWidth.addAll(textures);
-        Collections.sort(byWidth, (o1, o2) -> ((Texture)o2).getAsBufferedImage().getWidth() - ((Texture)o1).getAsBufferedImage().getWidth());
+        byWidth.sort((o1, o2) -> o2.getAsBufferedImage().getWidth() - o1.getAsBufferedImage().getWidth());
         
         byHeight.addAll(textures);
-        Collections.sort(byHeight, (o1, o2) -> ((Texture)o2).getAsBufferedImage().getHeight() - ((Texture)o1).getAsBufferedImage().getHeight());
+        byHeight.sort((o1, o2) -> o2.getAsBufferedImage().getHeight() - o1.getAsBufferedImage().getHeight());
         
         Set<AtlasMember> members = new HashSet<>();
         

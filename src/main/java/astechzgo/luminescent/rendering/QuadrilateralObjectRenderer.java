@@ -73,9 +73,8 @@ public class QuadrilateralObjectRenderer implements IObjectRenderer {
 		
         ScaledWindowCoordinates loc = new ScaledWindowCoordinates(this.getCoordinates());
         Vector3f location = new Vector3f((float)loc.getScaledWindowCoordinatesX() + DisplayUtils.widthOffset, (float)loc.getScaledWindowCoordinatesY()  + DisplayUtils.heightOffset, 0.0f);
-        
-        Matrix4f model = new Matrix4f().translation(location).scale((float) (1.0 / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)));
-        this.model = model;
+
+		this.model = new Matrix4f().translation(location).scale((float) (1.0 / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)));
 	}
 
 	@Override

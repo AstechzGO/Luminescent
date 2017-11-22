@@ -216,12 +216,12 @@ public class Vulkan {
     private long imageAvailableFence;
     private long renderFinishedSemaphore;
     
-    private List<List<Vertex>> vertices = new ArrayList<>();
-    private List<List<Integer>> indices = new ArrayList<>();
-    private List<Texture> textures = new ArrayList<>();
-    private List<Integer> frameCount = new ArrayList<>();
-    private List<List<Supplier<Matrix4f>>> matrices = new ArrayList<>();
-    private List<Supplier<Integer>> currentFrames = new ArrayList<>();
+    private final List<List<Vertex>> vertices = new ArrayList<>();
+    private final List<List<Integer>> indices = new ArrayList<>();
+    private final List<Texture> textures = new ArrayList<>();
+    private final List<Integer> frameCount = new ArrayList<>();
+    private final List<List<Supplier<Matrix4f>>> matrices = new ArrayList<>();
+    private final List<Supplier<Integer>> currentFrames = new ArrayList<>();
     
     private long vertexBuffer;
     private long vertexBufferMemory;
@@ -243,9 +243,7 @@ public class Vulkan {
     
     private long textureImageView;
     private long textureSampler;
-    
-    private int imageIndex;
-    
+
     private void initVulkan() {
         createInstance();
         setUpDebugCallback();
@@ -659,7 +657,7 @@ public class Vulkan {
             uboAlignment = deviceProperties.limits().minUniformBufferOffsetAlignment();
         }
         
-        int instanceUBOSize = (4 * 4 * Float.BYTES) + (2 * Integer.BYTES) + (1 * Float.BYTES);
+        int instanceUBOSize = (4 * 4 * Float.BYTES) + (2 * Integer.BYTES) + (Float.BYTES);
         
         dynamicAlignment = (instanceUBOSize / uboAlignment) * uboAlignment + ((instanceUBOSize % uboAlignment) > 0 ? uboAlignment : 0);
         
@@ -717,7 +715,7 @@ public class Vulkan {
     
     private void createIndexBuffer() {
         List<Integer> flatIndices = new ArrayList<>();
-        indices.forEach((e) -> flatIndices.addAll(e));
+        indices.forEach(flatIndices::addAll);
         
         long bufferSize = Integer.SIZE * flatIndices.size();
         
@@ -759,13 +757,11 @@ public class Vulkan {
         for(int i = 0; i < vertices.size(); i++) {
             List<Vertex> objectVertices = vertices.get(i);
             TexturePacker.AtlasMember member = texturePacker.getAtlasMember(textures.get(i) == null ? TextureList.findTexture("misc.blank") : textures.get(i));
-            
-            for(int j = 0; j < objectVertices.size(); j++) {
-                Vertex old = objectVertices.get(j);
-                
-                Vector2f coords = new Vector2f(((((float)member.x) / texturePacker.getAtlas().getAsBufferedImage().getWidth()) + (old.texCoord.x * member.width / texturePacker.getAtlas().getAsBufferedImage().getWidth())),
-                                               ((((float)member.y) / texturePacker.getAtlas().getAsBufferedImage().getHeight()) + (old.texCoord.y * member.height / texturePacker.getAtlas().getAsBufferedImage().getHeight())));
-                
+
+            for (Vertex old : objectVertices) {
+                Vector2f coords = new Vector2f(((((float) member.x) / texturePacker.getAtlas().getAsBufferedImage().getWidth()) + (old.texCoord.x * member.width / texturePacker.getAtlas().getAsBufferedImage().getWidth())),
+                        ((((float) member.y) / texturePacker.getAtlas().getAsBufferedImage().getHeight()) + (old.texCoord.y * member.height / texturePacker.getAtlas().getAsBufferedImage().getHeight())));
+
                 flatVertices.add(new Vertex(old.pos, old.color, coords));
             }
         }
@@ -919,8 +915,8 @@ public class Vulkan {
     }
     
     private void cleanupSwapChain() {
-        for(int i = 0; i < swapChainFramebuffers.length; i++) {
-            VK10.vkDestroyFramebuffer(device, swapChainFramebuffers[i], null);
+        for (long swapChainFramebuffer : swapChainFramebuffers) {
+            VK10.vkDestroyFramebuffer(device, swapChainFramebuffer, null);
         }
         
         swapChainExtent.free();
@@ -930,8 +926,8 @@ public class Vulkan {
         VK10.vkDestroyPipeline(device, graphicsPipeline, null);
         VK10.vkDestroyPipelineLayout(device, pipelineLayout, null);
         VK10.vkDestroyRenderPass(device, renderPass, null);
-        for(int i = 0; i < swapChainImageViews.length; i++) {
-            VK10.vkDestroyImageView(device, swapChainImageViews[i], null);
+        for (long swapChainImageView : swapChainImageViews) {
+            VK10.vkDestroyImageView(device, swapChainImageView, null);
         }
         
         KHRSwapchain.vkDestroySwapchainKHR(device, swapChain, null);
@@ -1691,21 +1687,17 @@ public class Vulkan {
         if(capabilities.currentExtent().width() != Integer.MAX_VALUE) {
             int width = capabilities.currentExtent().width();
             int height = capabilities.currentExtent().height();
-            
-            VkExtent2D actualExtent = VkExtent2D.malloc()
+
+            return VkExtent2D.malloc()
                 .width(width)
                 .height(height);
-            
-            return actualExtent;
         }
         else {
             int width = DisplayUtils.getDisplayWidth(), height = DisplayUtils.getDisplayHeight();
             try(MemoryStack stack = MemoryStack.stackGet()) {
-                VkExtent2D actualExtent = VkExtent2D.mallocStack(stack)
+                return VkExtent2D.mallocStack(stack)
                     .width(Math.max(capabilities.minImageExtent().width(), Math.min(capabilities.maxImageExtent().width(), width)))
                     .height(Math.max(capabilities.minImageExtent().height(), Math.min(capabilities.maxImageExtent().height(), height)));
-        
-                return actualExtent;
             }
         }
     }
@@ -1720,7 +1712,7 @@ public class Vulkan {
     }
     
     private static class SwapChainSupportDetails {
-        VkSurfaceCapabilitiesKHR capabilities;
+        final VkSurfaceCapabilitiesKHR capabilities;
         
         VkSurfaceFormatKHR[] formats;
         int[] presentModes;
@@ -1734,10 +1726,10 @@ public class Vulkan {
         }
     }
     
-    public static class Vertex {   
-        Vector2f pos;
-        Vector4f color;
-        Vector2f texCoord;
+    public static class Vertex {
+        final Vector2f pos;
+        final Vector4f color;
+        final Vector2f texCoord;
         
         public Vertex(Vector2f pos, Vector4f color, Vector2f texCoord) {
             this.pos = pos;
@@ -1746,13 +1738,12 @@ public class Vulkan {
         }
         
         private static VkVertexInputBindingDescription getBindingDescription(MemoryStack stack) {
-            VkVertexInputBindingDescription bindingDescription = VkVertexInputBindingDescription.mallocStack(stack)
+
+            return VkVertexInputBindingDescription.mallocStack(stack)
                 .binding(0)
                  // Vertex = (Vector2<float>, Vector4<float>, Vector2<float>)
                 .stride(Float.BYTES * 2 + Float.BYTES * 4 + Float.BYTES * 2)
                 .inputRate(VK10.VK_VERTEX_INPUT_RATE_VERTEX);
-                
-            return bindingDescription;
         }
         
         private static VkVertexInputAttributeDescription[] getAttributeDescriptions(MemoryStack stack) {
@@ -1762,7 +1753,7 @@ public class Vulkan {
                 .binding(0)
                 .location(0)
                 .format(VK10.VK_FORMAT_R32G32_SFLOAT)
-                .offset(Float.BYTES * 0);
+                .offset(0);
             
             attributeDescriptions[1] = VkVertexInputAttributeDescription.mallocStack(stack)
                 .binding(0)
@@ -1786,7 +1777,7 @@ public class Vulkan {
     }
     
     private static class UniformBufferObjectModel {
-        List<Matrix4f> model = new ArrayList<Matrix4f>();
+        final List<Matrix4f> model = new ArrayList<>();
     }
     
     private void createInstance() {
@@ -1982,7 +1973,7 @@ public class Vulkan {
                         
                         byteData.putInt((int) (idx * dynamicAlignment) + j * 4, currentFrames.get(i).get());
                         byteData.putInt((int) (idx * dynamicAlignment) + (j + 1) * 4, frameCount.get(i));
-                        byteData.putFloat((int) (idx * dynamicAlignment) + (j + 2) * 4, ((float)tm.getTexWidth()));
+                        byteData.putFloat((int) (idx * dynamicAlignment) + (j + 2) * 4, tm.getTexWidth());
                         
                         idx++;
                     }
@@ -2005,7 +1996,7 @@ public class Vulkan {
     private void drawFrame() {
         int[] imageIndexAddress = new int[] { 0 };
         int result = KHRSwapchain.vkAcquireNextImageKHR(device, swapChain, Long.MAX_VALUE, VK10.VK_NULL_HANDLE, imageAvailableFence, imageIndexAddress);
-        imageIndex = imageIndexAddress[0];
+        int imageIndex = imageIndexAddress[0];
         
         if(result == KHRSwapchain.VK_ERROR_OUT_OF_DATE_KHR) {
             recreateSwapChain();
@@ -2131,7 +2122,7 @@ public class Vulkan {
                 .pNext(VK10.VK_NULL_HANDLE)
                 .flags(0)
                 .renderPass(renderPass)
-                .pAttachments((LongBuffer)stack.mallocLong(1).put(imageSourceView).flip())
+                .pAttachments(stack.mallocLong(1).put(imageSourceView).flip())
                 .width(width)
                 .height(height)
                 .layers(1);
@@ -2289,9 +2280,9 @@ public class Vulkan {
             
             for(int i = 0; i < raw.length; i += 4) {
                 byte r = raw[i + 2];
-                byte b = raw[i + 0];
+                byte b = raw[i];
                 
-                raw[i + 0] = r;
+                raw[i] = r;
                 raw[i + 2] = b;
             }
             

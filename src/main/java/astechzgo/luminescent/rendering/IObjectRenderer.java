@@ -12,30 +12,30 @@ import astechzgo.luminescent.textures.Texture;
 
 public interface IObjectRenderer
 {
-    default public void upload() {
+    default void upload() {
 	    upload(this::getModelMatrix);
 	}
 	
-    default public void upload(Supplier<Matrix4f> matrix) {
+    default void upload(Supplier<Matrix4f> matrix) {
         upload(List.of(matrix));
     }
     
-    public void upload(List<Supplier<Matrix4f>> matrices);
+    void upload(List<Supplier<Matrix4f>> matrices);
 	
-	public void setColour(Color colour);
-	public Color getColour();
+	void setColour(Color colour);
+	Color getColour();
 	
-	public void resize();
+	void resize();
 	
-	public Texture getTexture();
-	public void setTexture(Texture texture);
+	Texture getTexture();
+	void setTexture(Texture texture);
 	
-	public boolean isTouching(IObjectRenderer object);
-	public boolean doesContain(double x, double y);
+	boolean isTouching(IObjectRenderer object);
+	boolean doesContain(double x, double y);
 	
-	public WindowCoordinates getCoordinates();
+	WindowCoordinates getCoordinates();
 	
-	public void setCoordinates(WindowCoordinates coordinates);
+	void setCoordinates(WindowCoordinates coordinates);
 	
-	public Matrix4f getModelMatrix();
+	Matrix4f getModelMatrix();
 }
