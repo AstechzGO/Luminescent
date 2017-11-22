@@ -16,79 +16,79 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: com.google.code.gson:gson:2.8.2" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.lwjgl:lwjgl-glfw:3.1.4" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.lwjgl:lwjgl-glfw:3.1.4:natives-windows" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.lwjgl:lwjgl-glfw:3.1.4:natives-linux" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.lwjgl:lwjgl-glfw:3.1.4:natives-macos" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.lwjgl:lwjgl-jemalloc:3.1.4" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.lwjgl:lwjgl-jemalloc:3.1.4:natives-windows" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.lwjgl:lwjgl-jemalloc:3.1.4:natives-linux" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.lwjgl:lwjgl-jemalloc:3.1.4:natives-macos" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.lwjgl:lwjgl-openal:3.1.4" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.lwjgl:lwjgl-openal:3.1.4:natives-windows" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.lwjgl:lwjgl-openal:3.1.4:natives-linux" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.lwjgl:lwjgl-openal:3.1.4:natives-macos" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.lwjgl:lwjgl-stb:3.1.4" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.lwjgl:lwjgl-stb:3.1.4:natives-windows" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.lwjgl:lwjgl-stb:3.1.4:natives-linux" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.lwjgl:lwjgl-stb:3.1.4:natives-macos" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.lwjgl:lwjgl-vulkan:3.1.4" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.lwjgl:lwjgl:3.1.4" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.lwjgl:lwjgl:3.1.4:natives-windows" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.lwjgl:lwjgl:3.1.4:natives-linux" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.lwjgl:lwjgl:3.1.4:natives-macos" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.lwjgl:lwjgl-glfw:3.1.5" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.lwjgl:lwjgl-glfw:3.1.5:natives-windows" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.lwjgl:lwjgl-glfw:3.1.5:natives-linux" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.lwjgl:lwjgl-glfw:3.1.5:natives-macos" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.lwjgl:lwjgl-jemalloc:3.1.5" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.lwjgl:lwjgl-jemalloc:3.1.5:natives-windows" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.lwjgl:lwjgl-jemalloc:3.1.5:natives-linux" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.lwjgl:lwjgl-jemalloc:3.1.5:natives-macos" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.lwjgl:lwjgl-openal:3.1.5" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.lwjgl:lwjgl-openal:3.1.5:natives-windows" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.lwjgl:lwjgl-openal:3.1.5:natives-linux" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.lwjgl:lwjgl-openal:3.1.5:natives-macos" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.lwjgl:lwjgl-stb:3.1.5" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.lwjgl:lwjgl-stb:3.1.5:natives-windows" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.lwjgl:lwjgl-stb:3.1.5:natives-linux" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.lwjgl:lwjgl-stb:3.1.5:natives-macos" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.lwjgl:lwjgl-vulkan:3.1.5" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.lwjgl:lwjgl:3.1.5" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.lwjgl:lwjgl:3.1.5:natives-windows" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.lwjgl:lwjgl:3.1.5:natives-linux" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.lwjgl:lwjgl:3.1.5:natives-macos" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.joml:joml:1.9.6" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: :SoundSystem:" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: :CodecMP3:" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: :LibraryLWJGL3OpenAL:" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.code.gson:gson:2.8.2" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl-glfw:3.1.4" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl-glfw:3.1.4:natives-windows" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl-glfw:3.1.4:natives-linux" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl-glfw:3.1.4:natives-macos" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl-jemalloc:3.1.4" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl-jemalloc:3.1.4:natives-windows" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl-jemalloc:3.1.4:natives-linux" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl-jemalloc:3.1.4:natives-macos" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl-openal:3.1.4" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl-openal:3.1.4:natives-windows" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl-openal:3.1.4:natives-linux" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl-openal:3.1.4:natives-macos" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl-stb:3.1.4" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl-stb:3.1.4:natives-windows" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl-stb:3.1.4:natives-linux" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl-stb:3.1.4:natives-macos" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl-vulkan:3.1.4" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl:3.1.4" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl:3.1.4:natives-windows" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl:3.1.4:natives-linux" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl:3.1.4:natives-macos" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl-glfw:3.1.5" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl-glfw:3.1.5:natives-windows" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl-glfw:3.1.5:natives-linux" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl-glfw:3.1.5:natives-macos" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl-jemalloc:3.1.5" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl-jemalloc:3.1.5:natives-windows" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl-jemalloc:3.1.5:natives-linux" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl-jemalloc:3.1.5:natives-macos" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl-openal:3.1.5" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl-openal:3.1.5:natives-windows" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl-openal:3.1.5:natives-linux" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl-openal:3.1.5:natives-macos" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl-stb:3.1.5" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl-stb:3.1.5:natives-windows" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl-stb:3.1.5:natives-linux" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl-stb:3.1.5:natives-macos" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl-vulkan:3.1.5" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl:3.1.5" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl:3.1.5:natives-windows" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl:3.1.5:natives-linux" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl:3.1.5:natives-macos" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.joml:joml:1.9.6" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: :SoundSystem:" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: :CodecMP3:" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: :LibraryLWJGL3OpenAL:" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.google.code.gson:gson:2.8.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl-glfw:3.1.4" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl-glfw:3.1.4:natives-windows" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl-glfw:3.1.4:natives-linux" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl-glfw:3.1.4:natives-macos" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl-jemalloc:3.1.4" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl-jemalloc:3.1.4:natives-windows" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl-jemalloc:3.1.4:natives-linux" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl-jemalloc:3.1.4:natives-macos" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl-openal:3.1.4" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl-openal:3.1.4:natives-windows" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl-openal:3.1.4:natives-linux" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl-openal:3.1.4:natives-macos" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl-stb:3.1.4" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl-stb:3.1.4:natives-windows" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl-stb:3.1.4:natives-linux" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl-stb:3.1.4:natives-macos" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl-vulkan:3.1.4" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl:3.1.4" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl:3.1.4:natives-windows" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl:3.1.4:natives-linux" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl:3.1.4:natives-macos" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl-glfw:3.1.5" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl-glfw:3.1.5:natives-windows" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl-glfw:3.1.5:natives-linux" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl-glfw:3.1.5:natives-macos" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl-jemalloc:3.1.5" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl-jemalloc:3.1.5:natives-windows" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl-jemalloc:3.1.5:natives-linux" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl-jemalloc:3.1.5:natives-macos" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl-openal:3.1.5" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl-openal:3.1.5:natives-windows" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl-openal:3.1.5:natives-linux" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl-openal:3.1.5:natives-macos" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl-stb:3.1.5" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl-stb:3.1.5:natives-windows" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl-stb:3.1.5:natives-linux" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl-stb:3.1.5:natives-macos" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl-vulkan:3.1.5" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl:3.1.5" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl:3.1.5:natives-windows" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl:3.1.5:natives-linux" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl:3.1.5:natives-macos" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.joml:joml:1.9.6" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: :SoundSystem:" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: :CodecMP3:" level="project" />
