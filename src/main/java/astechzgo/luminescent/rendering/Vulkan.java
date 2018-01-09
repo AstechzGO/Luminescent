@@ -1864,7 +1864,7 @@ public class Vulkan {
             throw new RuntimeException("failed to create window surface!");
         surface = surfaceAddress[0]; 
     }
-    
+
     private PointerBuffer getRequiredExtensions(MemoryStack stack) {
         PointerBuffer glfwExtensions;
         
@@ -2318,7 +2318,7 @@ public class Vulkan {
         vulkanInstance.indices.add(indicesList);
         vulkanInstance.textures.add(texture);
         vulkanInstance.frameCount.add(texture == null ? 1 : texture.count());
-        vulkanInstance.matrices.add(matrices);
+        vulkanInstance.matrices.add(new ArrayList<>(matrices));
         vulkanInstance.currentFrames.add(currentFrame);
     }
     

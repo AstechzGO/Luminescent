@@ -23,7 +23,7 @@ public class KeyPressGameplay {
 		
 		double deltaShot = (GLFW.glfwGetTime() * 1000) - lastShot;
 		
-		if(KEYS_ACTION_SHOOT.isKeyDown() && deltaShot > 250) {
+		if(KEYS_ACTION_SHOOT.isKeyDown() && deltaShot > 5) {
 			// Creates Projectile and adds it to array list
 			Projectile projectile = getUnused();
 			projectile.init(thePlayer.getCoordinates());

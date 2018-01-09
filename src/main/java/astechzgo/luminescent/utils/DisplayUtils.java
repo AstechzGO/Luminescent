@@ -204,9 +204,9 @@ public class DisplayUtils {
 			if(widthOffset == 0) heightOffset = Math.max(0, (displayHeight - (displayWidth / 16 * 9)) / 2);
 	        
 	        glfwSwapInterval(1);
-	        
+
 	        Vulkan.createWindowSurface();
-	        
+
 	        Vulkan.recreate();
 
 			GLFW.glfwSetKeyCallback(handle, KeyboardUtils.KEY_CALLBACK);

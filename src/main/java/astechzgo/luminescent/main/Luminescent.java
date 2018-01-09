@@ -37,13 +37,14 @@ import astechzgo.luminescent.worldloader.JSONWorldLoader;
 
 public class Luminescent
 {
-	public static final boolean DEBUG = false;
+	public static final boolean DEBUG = true;
     
 	public static Player thePlayer;
+	public static Player theEnemy;
 	
 	public static List<Room> rooms;
 	
-	public static RectangularObjectRenderer darkness;
+//	public static RectangularObjectRenderer darkness;
 	
 	public static List<Projectile> projectilePool;
 	public static int projectileIndex;
@@ -60,9 +61,10 @@ public class Luminescent
 		Sound.init();
 		
 		thePlayer = new Player();
+
 		rooms = JSONWorldLoader.loadRooms();
 		thePlayer.getRenderer().setTexture(new Animation("player.frame", 16));
-		darkness = new RectangularObjectRenderer(new WindowCoordinates(0, 0), Camera.CAMERA_WIDTH, Camera.CAMERA_HEIGHT, TextureList.findTexture("light.darkness"));
+		//darkness = new RectangularObjectRenderer(new WindowCoordinates(0, 0), Camera.CAMERA_WIDTH, Camera.CAMERA_HEIGHT, TextureList.findTexture("light.darkness"));
 		projectilePool = new ArrayList<>(32);
 		for(int i = 0; i < 32; i++) {
 		    projectilePool.add(new Projectile(new GameCoordinates(0, 0)));
@@ -103,7 +105,7 @@ public class Luminescent
         projectilePool.get(0).upload(List.of(projectileMatricesArray));
         projectileIndex = Vulkan.getInstances() - 1;
         
-        darkness.upload();
+       // darkness.upload();
         
         fpsText.upload();
         

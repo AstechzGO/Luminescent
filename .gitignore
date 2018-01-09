@@ -1,5 +1,8 @@
 /build/
 /bin/
+/out/
+/.idea/workspace.xml
+/.idea/libraries/
 .gradle/
 Luminescent.iws
 Luminescent.jar
