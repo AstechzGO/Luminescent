@@ -67,6 +67,10 @@ public class Luminescent
 		
 		thePlayer = new AIPlayer(new GameCoordinates(Camera.CAMERA_WIDTH / 3, Camera.CAMERA_HEIGHT / 2));
 		theEnemy = new AIPlayer(new GameCoordinates(Camera.CAMERA_WIDTH * 2 / 3, Camera.CAMERA_HEIGHT / 2));
+		thePlayerNet = new NeuralNet(2,5,3);
+		theEnemyNet = new NeuralNet(2,5,3);
+		thePlayerNet.player = (AIPlayer)thePlayer;
+		theEnemyNet.player = (AIPlayer)theEnemy;
 
 		rooms = JSONWorldLoader.loadRooms();
 		thePlayer.getRenderer().setTexture(new Animation("player.frame", 16));
@@ -144,7 +148,8 @@ public class Luminescent
 		
 		thePlayer.move(rooms);
 		theEnemy.move(rooms);
-		
+		thePlayerNet.updateNetwork();
+		theEnemyNet.updateNetwork();
 		KeyPressUtils.checkUtils();		
 		KeyPressGameplay.checkGameActions(rooms);
 		

@@ -45,9 +45,20 @@ public class NeuralNet {
     public void updateNetwork() {
         double[] inputs = {rotationInput(), distanceInput()};
         setInputs(inputs);
+        setNodes(hiddenLayer.toArray(new Node[0]), inputLayer.toArray(new Node[0]));
+        setNodes(outputLayer.toArray(new Node[0]), hiddenLayer.toArray(new Node[0]));
+        useOutputs(outputLayer.toArray(new Node[0]));
     }
     public void retrainNetworks(boolean win, double timeTaken) {
-
+        for(Node n : inputLayer) {
+            n.adjustToError(timeTaken, win);
+        }
+        for(Node n : hiddenLayer) {
+            n.adjustToError(timeTaken, win);
+        }
+        for(Node n : outputLayer) {
+            n.adjustToError(timeTaken, win);
+        }
     }
 
     public double rotationInput() {
