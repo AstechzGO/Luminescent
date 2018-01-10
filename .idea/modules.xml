@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Luminescent.iml" filepath="$PROJECT_DIR$/.idea/modules/Luminescent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Luminescent_main.iml" filepath="$PROJECT_DIR$/.idea/modules/Luminescent_main.iml" group="Luminescent" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Luminescent_test.iml" filepath="$PROJECT_DIR$/.idea/modules/Luminescent_test.iml" group="Luminescent" />
+      <module fileurl="file://$PROJECT_DIR$/src/main/main.iml" filepath="$PROJECT_DIR$/src/main/main.iml" />
+    </modules>
+  </component>
+</project>
