@@ -201,4 +201,5 @@ public class CircularObjectRenderer implements IObjectRenderer {
     public void setRotation(double rotation) {
     	this.rotation = rotation;
 	}
+	public double getRotation(){return rotation;}
 }

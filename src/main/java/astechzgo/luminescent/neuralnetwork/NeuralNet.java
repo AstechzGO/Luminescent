@@ -1,8 +1,12 @@
 package astechzgo.luminescent.neuralnetwork;
 
+import astechzgo.luminescent.entity.AIPlayer;
+import astechzgo.luminescent.rendering.CircularObjectRenderer;
+
 import java.util.ArrayList;
 
 public class NeuralNet {
+    public AIPlayer player;
     ArrayList<Node> inputLayer = new ArrayList<Node>();
     ArrayList<Node> hiddenLayer = new ArrayList<Node>();
     ArrayList<Node> outputLayer = new ArrayList<Node>();
@@ -28,12 +32,24 @@ public class NeuralNet {
         }
     }
     public void useOutputs(Node[] outputNodes) {
-      //  if(outputNodes[0] < 0.5)
+        if(outputNodes[0].getOutput() > 0.5) {
+            player.turnRight();
+        }
+        if(outputNodes[1].getOutput() > 0.5) {
+            player.shoot();
+        }
+        if(outputNodes[2].getOutput() > 0.5) {
+            player.moveForward();
+        }
     }
     public void updateNetwork() {
         double[] inputs = {rotationInput(), distanceInput()};
         setInputs(inputs);
     }
+    public void retrainNetworks(boolean win, double timeTaken) {
+
+    }
+
     public double rotationInput() {
         return 0;
     }

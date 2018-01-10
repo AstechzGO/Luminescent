@@ -28,15 +28,15 @@ public class AIPlayer extends Player {
         return move;
     }
 
-    private void turnRight() {
+    public void turnRight() {
         turning = true;
     }
 
-    private void shoot() {
+    public void shoot() {
         shooting = true;
     }
 
-    private void moveForward() {
+    public void moveForward() {
         movingForward = true;
     }
 }

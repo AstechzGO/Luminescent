@@ -9,6 +9,7 @@ import java.util.function.Supplier;
 
 import astechzgo.luminescent.entity.AIPlayer;
 import astechzgo.luminescent.entity.HumanPlayer;
+import astechzgo.luminescent.neuralnetwork.NeuralNet;
 import org.joml.Matrix4f;
 import org.lwjgl.glfw.Callbacks;
 import org.lwjgl.glfw.GLFW;
@@ -43,6 +44,8 @@ public class Luminescent
     
 	public static Player thePlayer;
 	public static Player theEnemy;
+	public static NeuralNet thePlayerNet;
+	public static NeuralNet theEnemyNet;
 	
 	public static List<Room> rooms;
 	
