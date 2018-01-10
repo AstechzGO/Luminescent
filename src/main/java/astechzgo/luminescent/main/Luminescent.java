@@ -10,6 +10,7 @@ import java.util.function.Supplier;
 import astechzgo.luminescent.entity.AIPlayer;
 import astechzgo.luminescent.entity.HumanPlayer;
 import astechzgo.luminescent.neuralnetwork.NeuralNet;
+import astechzgo.luminescent.rendering.*;
 import org.joml.Matrix4f;
 import org.lwjgl.glfw.Callbacks;
 import org.lwjgl.glfw.GLFW;
@@ -22,13 +23,6 @@ import astechzgo.luminescent.gameobject.Room;
 import astechzgo.luminescent.keypress.Key;
 import astechzgo.luminescent.keypress.KeyPressGameplay;
 import astechzgo.luminescent.keypress.KeyPressUtils;
-import astechzgo.luminescent.rendering.Camera;
-import astechzgo.luminescent.rendering.FPSCalculator;
-import astechzgo.luminescent.rendering.QuadrilateralObjectRenderer;
-import astechzgo.luminescent.rendering.RectangularObjectRenderer;
-import astechzgo.luminescent.rendering.ResolutionBorderRenderer;
-import astechzgo.luminescent.rendering.TextLabelRenderer;
-import astechzgo.luminescent.rendering.Vulkan;
 import astechzgo.luminescent.sound.Sound;
 import astechzgo.luminescent.text.Font;
 import astechzgo.luminescent.textures.Animation;
@@ -65,12 +59,15 @@ public class Luminescent
 		
 		Sound.init();
 		
-		thePlayer = new AIPlayer(new GameCoordinates(Camera.CAMERA_WIDTH / 3, Camera.CAMERA_HEIGHT / 2));
+		thePlayer = new AIPlayer(new GameCoordinates(Camera.CAMERA_WIDTH * 1 / 3, Camera.CAMERA_HEIGHT / 2));
 		theEnemy = new AIPlayer(new GameCoordinates(Camera.CAMERA_WIDTH * 2 / 3, Camera.CAMERA_HEIGHT / 2));
 		thePlayerNet = new NeuralNet(2,5,3);
 		theEnemyNet = new NeuralNet(2,5,3);
 		thePlayerNet.player = (AIPlayer)thePlayer;
 		theEnemyNet.player = (AIPlayer)theEnemy;
+
+		thePlayerNet.targettedEntity = theEnemy;
+		theEnemyNet.targettedEntity = thePlayer;
 
 		rooms = JSONWorldLoader.loadRooms();
 		thePlayer.getRenderer().setTexture(new Animation("player.frame", 16));
@@ -148,8 +145,20 @@ public class Luminescent
 		
 		thePlayer.move(rooms);
 		theEnemy.move(rooms);
+
 		thePlayerNet.updateNetwork();
 		theEnemyNet.updateNetwork();
+
+		for(Projectile projectile : projectilePool) {
+			if(thePlayer.getRenderer().isTouching(projectile.getRenderer())) {
+				thePlayerNet.retrainNetworks(false);
+				theEnemyNet.retrainNetworks(true);
+			}
+			if(theEnemy.getRenderer().isTouching(projectile.getRenderer())) {
+				thePlayerNet.retrainNetworks(true);
+				theEnemyNet.retrainNetworks(false);
+			}
+		}
 		KeyPressUtils.checkUtils();		
 		KeyPressGameplay.checkGameActions(rooms);
 		
