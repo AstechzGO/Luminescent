@@ -4,6 +4,7 @@ import astechzgo.luminescent.coordinates.GameCoordinates;
 import astechzgo.luminescent.coordinates.WindowCoordinates;
 import astechzgo.luminescent.gameobject.Room;
 import astechzgo.luminescent.keypress.KeyPressGameplay;
+import astechzgo.luminescent.main.Luminescent;
 import astechzgo.luminescent.rendering.Camera;
 import astechzgo.luminescent.rendering.CircularObjectRenderer;
 import astechzgo.luminescent.rendering.IObjectRenderer;
@@ -55,17 +56,18 @@ public abstract class Player extends LivingEntity {
 
 	public void move(List<Room> rooms) {
 
+		MovementInfo move = getMove();
+		this.setRotation(move.rotation);
+
 	    updateRenderer();
 	    
 		double delta = ((GLFW.glfwGetTime() * 1000) - lastDelta);
 		lastDelta = GLFW.glfwGetTime() * 1000;
 
-		if(getMove().shooting && lastDelta - lastShot > 5) {
+		if(move.shooting && lastDelta - lastShot > 5) {
 			KeyPressGameplay.shoot(this);
 			lastShot = lastDelta;
 		}
-
-		MovementInfo move = getMove();
 
 		double speed = 0;
 		

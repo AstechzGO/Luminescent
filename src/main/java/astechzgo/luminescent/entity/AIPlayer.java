@@ -21,10 +21,12 @@ public class AIPlayer extends Player {
         double delta = ((GLFW.glfwGetTime() * 1000) - lastDelta);
         lastDelta = GLFW.glfwGetTime() * 1000;
 
-        MovementInfo move = new MovementInfo(movingForward, false, false, false, false, turning ? getRotation() + 0.5 * delta : getRotation(), false);
+        MovementInfo move = new MovementInfo(movingForward, false, false, false, false, turning ? getRotation() + 0.5 * delta : getRotation(), shooting);
+
+        movingForward = false;
         turning = false;
         shooting = false;
-        movingForward = false;
+
         return move;
     }
 

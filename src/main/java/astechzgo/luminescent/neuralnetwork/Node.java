@@ -36,22 +36,22 @@ public class Node {
     public void adjustToError(double timeTaken, boolean win) {
         double previousOutput = outputWeight;
         if(win) {
-            if(previousTimeTaken < timeTaken) {
-                if(previousAdjustment > 0) {
-                    outputWeight += timeTaken * learnRate * sigmoid_derivative(getOutput());
-                }
-                else {
-                    outputWeight -= timeTaken * learnRate * sigmoid_derivative(getOutput());
-                }
-            }
-            else {
-                if(previousAdjustment > 0) {
-                    outputWeight -= timeTaken * learnRate * sigmoid_derivative(getOutput());
-                }
-                else {
-                    outputWeight += timeTaken * learnRate * sigmoid_derivative(getOutput());
-                }
-            }
+//            if(previousTimeTaken < timeTaken) {
+//                if(previousAdjustment > 0) {
+//                    outputWeight += timeTaken * learnRate * sigmoid_derivative(getOutput());
+//                }
+//                else {
+//                    outputWeight -= timeTaken * learnRate * sigmoid_derivative(getOutput());
+//                }
+//            }
+//            else {
+//                if(previousAdjustment > 0) {
+//                    outputWeight -= timeTaken * learnRate * sigmoid_derivative(getOutput());
+//                }
+//                else {
+//                    outputWeight += timeTaken * learnRate * sigmoid_derivative(getOutput());
+//                }
+//            }
         }
         else {
             if(previousTimeTaken > timeTaken) {

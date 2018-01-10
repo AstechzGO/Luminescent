@@ -142,7 +142,7 @@ public class Luminescent
 		Key.updateKeys();
 		
 		Camera.setCameraCoordinates(thePlayer.getCoordinates());
-		
+
 		thePlayer.move(rooms);
 		theEnemy.move(rooms);
 
@@ -150,11 +150,11 @@ public class Luminescent
 		theEnemyNet.updateNetwork();
 
 		for(Projectile projectile : projectilePool) {
-			if(thePlayer.getRenderer().isTouching(projectile.getRenderer())) {
+			if(thePlayer.getRenderer().isTouching(projectile.getRenderer()) && projectile.source != thePlayer) {
 				thePlayerNet.retrainNetworks(false);
 				theEnemyNet.retrainNetworks(true);
 			}
-			if(theEnemy.getRenderer().isTouching(projectile.getRenderer())) {
+			if(theEnemy.getRenderer().isTouching(projectile.getRenderer()) && projectile.source != theEnemy) {
 				thePlayerNet.retrainNetworks(true);
 				theEnemyNet.retrainNetworks(false);
 			}

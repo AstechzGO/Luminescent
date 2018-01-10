@@ -21,7 +21,7 @@ public class KeyPressGameplay {
 	public static void shoot(Player thePlayer) {
 		// Creates Projectile and adds it to array list
 		Projectile projectile = getUnused();
-		projectile.init(thePlayer.getCoordinates());
+		projectile.init(thePlayer.getCoordinates(), thePlayer);
 		projectiles.add(projectile);
 	}
 
@@ -37,6 +37,11 @@ public class KeyPressGameplay {
 				// If the bullet is not it the room delete it
 				projectiles.remove(i);
 			}
+		}
+
+		if(Key.KEYS_NEURAL_LOOSE.isKeyDown()) {
+			Luminescent.thePlayerNet.retrainNetworks(false);
+			Luminescent.theEnemyNet.retrainNetworks(false);
 		}
 	}
 	

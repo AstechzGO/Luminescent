@@ -21,6 +21,8 @@ public class Constants
 	public static final String KEYS_MOVEMENT_LEFT = 							"keys.movement.left";
 	public static final String KEYS_MOVEMENT_DOWN =								"keys.movement.down";
 	public static final String KEYS_MOVEMENT_RIGHT = 							"keys.movement.right";
+
+	public static final String KEYS_NEURAL_LOSE =								"keys.neural.lose";
 	
 	public static final String KEYS_ACTION_SHOOT =								"keys.action.shoot";
 	
@@ -45,7 +47,9 @@ public class Constants
 		defaults.put(KEYS_MOVEMENT_LEFT, 										"{A}, {LEFT}");
 		defaults.put(KEYS_MOVEMENT_DOWN, 										"{S}, {DOWN}");
 		defaults.put(KEYS_MOVEMENT_RIGHT,										"{D}, {RIGHT}");
-		
+
+		defaults.put(KEYS_NEURAL_LOSE,											"{l}");
+
 		defaults.put(KEYS_ACTION_SHOOT,											"{SPACE}");
 		
 		defaults.put(KEYS_UTIL_SCREENSHOT, 										"{F2}");

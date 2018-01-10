@@ -163,11 +163,13 @@ public class Projectile extends LivingEntity {
 			this.model = new Matrix4f().translation(location).scale(isAlive ? (float) (1.0 / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)) : 0);
         }
 	}
-	
-	public void init(GameCoordinates coordinates) {
-	    rotation = Luminescent.thePlayer.getMove().rotation;
+
+	public Player source;
+
+	public void init(GameCoordinates coordinates, Player source) {
+	    rotation = source.getRotation();
 	    setAlive(true);
-	    
+	    this.source = source;
 	    this.coordinates = new GameCoordinates(coordinates.getGameCoordinatesX() + (22.5 + width / 2) * Math.cos(Math.toRadians(rotation - 270)), coordinates.getGameCoordinatesZ() + (22.5 + height / 2)  * Math.sin(Math.toRadians(rotation - 270)));
 	}
 }

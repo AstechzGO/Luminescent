@@ -2,6 +2,7 @@ package astechzgo.luminescent.neuralnetwork;
 
 import astechzgo.luminescent.entity.AIPlayer;
 import astechzgo.luminescent.entity.Entity;
+import astechzgo.luminescent.main.Luminescent;
 import astechzgo.luminescent.rendering.CircularObjectRenderer;
 import org.lwjgl.glfw.GLFW;
 
@@ -35,13 +36,15 @@ public class NeuralNet {
         }
     }
     public void useOutputs(Node[] outputNodes) {
-        if(outputNodes[0].getOutput() > 0.5) {
+        System.out.println((this == Luminescent.thePlayerNet ? "Player: " : "Enemy: ") + outputNodes[0].getOutput() * outputNodes[0].outputWeight + " " + outputNodes[1].getOutput() * outputNodes[1].outputWeight + " " +outputNodes[2].getOutput() * outputNodes[2].outputWeight);
+
+        if(outputNodes[0].getOutput() * outputNodes[0].outputWeight > 0) {
             player.turnRight();
         }
-        if(outputNodes[1].getOutput() > 0.5) {
+        if(outputNodes[1].getOutput() * outputNodes[1].outputWeight > 0) {
             player.shoot();
         }
-        if(outputNodes[2].getOutput() > 0.5) {
+        if(outputNodes[2].getOutput() * outputNodes[2].outputWeight > 0) {
             player.moveForward();
         }
     }
