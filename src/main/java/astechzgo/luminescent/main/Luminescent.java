@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
+import astechzgo.luminescent.entity.AIPlayer;
+import astechzgo.luminescent.entity.HumanPlayer;
 import org.joml.Matrix4f;
 import org.lwjgl.glfw.Callbacks;
 import org.lwjgl.glfw.GLFW;
@@ -60,13 +62,15 @@ public class Luminescent
 		
 		Sound.init();
 		
-		thePlayer = new Player();
+		thePlayer = new AIPlayer(new GameCoordinates(Camera.CAMERA_WIDTH / 3, Camera.CAMERA_HEIGHT / 2));
+		theEnemy = new AIPlayer(new GameCoordinates(Camera.CAMERA_WIDTH * 2 / 3, Camera.CAMERA_HEIGHT / 2));
 
 		rooms = JSONWorldLoader.loadRooms();
 		thePlayer.getRenderer().setTexture(new Animation("player.frame", 16));
+		theEnemy.getRenderer().setTexture(new Animation("player.frame", 16));
 		//darkness = new RectangularObjectRenderer(new WindowCoordinates(0, 0), Camera.CAMERA_WIDTH, Camera.CAMERA_HEIGHT, TextureList.findTexture("light.darkness"));
 		projectilePool = new ArrayList<>(32);
-		for(int i = 0; i < 32; i++) {
+		for(int i = 0; i < 1024; i++) {
 		    projectilePool.add(new Projectile(new GameCoordinates(0, 0)));
 		}
 		
@@ -94,6 +98,7 @@ public class Luminescent
 		    room.upload();
         
         thePlayer.upload();
+        theEnemy.upload();
          
         List<Supplier<Matrix4f>> projectileMatrices = new ArrayList<>(projectilePool.size());
         for(Projectile projectile : projectilePool) {
@@ -135,9 +140,10 @@ public class Luminescent
 		Camera.setCameraCoordinates(thePlayer.getCoordinates());
 		
 		thePlayer.move(rooms);
+		theEnemy.move(rooms);
 		
 		KeyPressUtils.checkUtils();		
-		KeyPressGameplay.checkGameActions(thePlayer, rooms);
+		KeyPressGameplay.checkGameActions(rooms);
 		
 		ControllerUtils.updateJoysticks();
 	}

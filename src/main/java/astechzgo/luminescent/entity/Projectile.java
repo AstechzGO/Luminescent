@@ -165,7 +165,7 @@ public class Projectile extends LivingEntity {
 	}
 	
 	public void init(GameCoordinates coordinates) {
-	    rotation = Luminescent.thePlayer.setRotation();
+	    rotation = Luminescent.thePlayer.getMove().rotation;
 	    setAlive(true);
 	    
 	    this.coordinates = new GameCoordinates(coordinates.getGameCoordinatesX() + (22.5 + width / 2) * Math.cos(Math.toRadians(rotation - 270)), coordinates.getGameCoordinatesZ() + (22.5 + height / 2)  * Math.sin(Math.toRadians(rotation - 270)));

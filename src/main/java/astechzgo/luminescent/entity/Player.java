@@ -1,56 +1,35 @@
 package astechzgo.luminescent.entity;
 
-import static astechzgo.luminescent.keypress.Key.KEYS_MOVEMENT_DOWN;
-import static astechzgo.luminescent.keypress.Key.KEYS_MOVEMENT_FASTER;
-import static astechzgo.luminescent.keypress.Key.KEYS_MOVEMENT_LEFT;
-import static astechzgo.luminescent.keypress.Key.KEYS_MOVEMENT_RIGHT;
-import static astechzgo.luminescent.keypress.Key.KEYS_MOVEMENT_UP;
-
-import java.nio.DoubleBuffer;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.joml.Matrix4f;
-import org.joml.Quaternionf;
-import org.joml.Vector3f;
-import org.lwjgl.glfw.GLFW;
-import org.lwjgl.system.MemoryStack;
-
 import astechzgo.luminescent.coordinates.GameCoordinates;
-import astechzgo.luminescent.coordinates.ScaledWindowCoordinates;
 import astechzgo.luminescent.coordinates.WindowCoordinates;
 import astechzgo.luminescent.gameobject.Room;
+import astechzgo.luminescent.keypress.KeyPressGameplay;
 import astechzgo.luminescent.rendering.Camera;
 import astechzgo.luminescent.rendering.CircularObjectRenderer;
 import astechzgo.luminescent.rendering.IObjectRenderer;
-import astechzgo.luminescent.textures.Texture;
-import astechzgo.luminescent.utils.Constants;
-import astechzgo.luminescent.utils.ControllerUtils;
-import astechzgo.luminescent.utils.DisplayUtils;
-import astechzgo.luminescent.utils.KeyboardUtils;
+import org.lwjgl.glfw.GLFW;
 
-public class Player extends LivingEntity {
+import java.util.ArrayList;
+import java.util.List;
+
+public abstract class Player extends LivingEntity {
 
 	private double radius;
 	private double rotation;
 	
-	private final PlayerRenderer renderer;
+	private final CircularObjectRenderer renderer;
 	
 	public static final double slowSpeed = 0.5;
 	public static final double fastSpeed = 0.88;
 
 	private double lastDelta;
-	
-	private double lastControllerDelta = 0;
-	private ScaledWindowCoordinates lastMouseCoords;
-	
-	public Player() {
-		renderer = new PlayerRenderer(new WindowCoordinates(new GameCoordinates(Camera.CAMERA_WIDTH / 2, Camera.CAMERA_HEIGHT / 2)), 40, 1);
-		lastDelta = GLFW.glfwGetTime() * 1000;
-		lastControllerDelta = GLFW.glfwGetTime() * 1000;
+
+	protected Player(CircularObjectRenderer renderer) {
+		this.renderer = renderer;
+		this.lastDelta = GLFW.glfwGetTime() * 1000;
 		
-		radius = 40;
-		coordinates = new GameCoordinates(Camera.CAMERA_WIDTH / 2, Camera.CAMERA_HEIGHT / 2);
+		this.radius = 40;
+		this.coordinates = new GameCoordinates(renderer.getCoordinates());
 	}
 	
 	@Override
@@ -69,78 +48,28 @@ public class Player extends LivingEntity {
 	public double getRadius() {
 		return radius;
 	}
-	
-	public double setRotation() {
-		double delta = ((GLFW.glfwGetTime() * 1000) - lastControllerDelta);
-		lastControllerDelta = GLFW.glfwGetTime() * 1000;
-		
-		if(ControllerUtils.isButtonPressed(Constants.CONTROLLER_MOVEMENT_ROTATION_CLOCKWISE)) {
-			rotation = rotation + 0.5 * delta;
-			
-			return rotation;
-		}
-		if(ControllerUtils.isButtonPressed(Constants.CONTROLLER_MOVEMENT_ROTATION_COUNTERCLOCKWISE)) {
-			rotation = rotation - 0.5 * delta;
-			return rotation;
-		}
 
-		ScaledWindowCoordinates mouseCoords = null;
-		
-		try(MemoryStack stack = MemoryStack.stackPush()) {	
-			DoubleBuffer mxpos = stack.mallocDouble(1);
-			DoubleBuffer mypos = stack.mallocDouble(1);
-		
-			GLFW.glfwGetCursorPos(DisplayUtils.getHandle(), mxpos, mypos);
-		
-			mouseCoords = new ScaledWindowCoordinates(mxpos.get(0) - DisplayUtils.widthOffset, mypos.get(0) - DisplayUtils.heightOffset);
-		
-			if(mouseCoords.equals(lastMouseCoords)) 
-				return rotation;
-		
-			lastMouseCoords = mouseCoords;
-		
-			mxpos.clear();
-			mypos.clear();
-		}
-		double m = (coordinates.getAbsoluteY() - mouseCoords.getAbsoluteY()) / (coordinates.getAbsoluteX() - mouseCoords.getAbsoluteX());
-		
-		if(m == Double.POSITIVE_INFINITY) {
-			rotation = 180;
-			return rotation;
-		}
-		
-		if(m == Double.NEGATIVE_INFINITY) {
-			rotation = 0;
-			return rotation;
-		}
-		if(mouseCoords.getAbsoluteX() == coordinates.getAbsoluteX() && mouseCoords.getAbsoluteY() == coordinates.getAbsoluteY()) {
-			return rotation;
-		}
+	public abstract MovementInfo getMove();
 
-		if(mouseCoords.getAbsoluteX() < coordinates.getAbsoluteX())
-	         if(90 + Math.toDegrees(Math.atan(m)) > 360)
-	                rotation = Math.toDegrees(Math.atan(m)) + 90 - 360;
-	         else
-	                rotation = Math.toDegrees(Math.atan(m)) + 90;
-		else {
-			if(Math.toDegrees(Math.atan(m)) - 90 > 360)
-				rotation = Math.toDegrees(Math.atan(m)) - 90 - 360;
-			else
-				rotation = Math.toDegrees(Math.atan(m)) - 90;
-		}
-		
-		return rotation;
-	}
+	private double lastShot = 0;
+
 	public void move(List<Room> rooms) {
 
 	    updateRenderer();
 	    
 		double delta = ((GLFW.glfwGetTime() * 1000) - lastDelta);
 		lastDelta = GLFW.glfwGetTime() * 1000;
-		
+
+		if(getMove().shooting && lastDelta - lastShot > 5) {
+			KeyPressGameplay.shoot(this);
+			lastShot = lastDelta;
+		}
+
+		MovementInfo move = getMove();
+
 		double speed = 0;
 		
-		if(KEYS_MOVEMENT_FASTER.isKeyDown()) {
+		if(move.fast) {
 			speed = Player.fastSpeed * delta;
 		}
 		else {
@@ -151,28 +80,28 @@ public class Player extends LivingEntity {
 		
 		double tempAngle = -1;
 		
-		if(!(KEYS_MOVEMENT_UP.isKeyDown()) == KEYS_MOVEMENT_DOWN.isKeyDown()) {
+		if(move.up != move.down) {
 			down = false;
 			
-			if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_UP))
+			if(move.up)
 				tempAngle = 90;
 			else
 				tempAngle = 270;
 		}
-		if(!(KEYS_MOVEMENT_LEFT.isKeyDown() == KEYS_MOVEMENT_RIGHT.isKeyDown())) {
+		if(move.left != move.right) {
 			down = false;
 			
-			if(KEYS_MOVEMENT_LEFT.isKeyDown())
+			if(move.left)
 				if(tempAngle == -1)
 					tempAngle =  180;
-				else if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_UP))
+				else if(move.up)
 					tempAngle = (tempAngle + 360 + 270);
 				else
 					tempAngle = (tempAngle + 180) / 2;
 			else
 				if(tempAngle == -1)
 					tempAngle =  0;
-				else if(KeyboardUtils.isKeyDown(Constants.KEYS_MOVEMENT_UP))
+				else if(move.up)
 					tempAngle = tempAngle / 2;
 				else
 					tempAngle = (tempAngle + 360) / 2;
@@ -183,7 +112,7 @@ public class Player extends LivingEntity {
 		
 		if(tempAngle == -1) tempAngle = 90;
 		
-		double angle = setRotation() + tempAngle;
+		double angle = move.rotation + tempAngle;
 		
 		List<Double> verticalEdges = getVerticalEdges(rooms);
 		List<Double> horizontalEdges = getHorizontalEdges(rooms);
@@ -340,48 +269,39 @@ public class Player extends LivingEntity {
 	public IObjectRenderer getRenderer() {
 		return renderer;
 	}
-	
-	private class PlayerRenderer extends CircularObjectRenderer {
-		
-		private PlayerRenderer(WindowCoordinates coordinates, double radius) {
-			super(coordinates, radius);
-		}
-		
-		private PlayerRenderer(WindowCoordinates coordinates, double radius, int pointSeperation) {
-			super(coordinates, radius, pointSeperation);
-		}
-		
-		private PlayerRenderer(WindowCoordinates coordinates, double radius, int pointSeperation, Texture texture) {
-			super(coordinates, radius, pointSeperation, texture);
-		}
-		
-		private PlayerRenderer(WindowCoordinates coordinates, double radius, Texture texture) {
-			super(coordinates, radius, texture);
-		}
-		
-		@Override
-		public void resize() {
-			coordinates = new WindowCoordinates(Camera.CAMERA_WIDTH / 2, Camera.CAMERA_HEIGHT / 2);
-
-			oldGameWidth = DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2;
-			oldGameHeight = DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2;
-			
-			ScaledWindowCoordinates loc = new ScaledWindowCoordinates(coordinates);
-			Vector3f location = new Vector3f((float)loc.getScaledWindowCoordinatesX() + DisplayUtils.widthOffset, (float)loc.getScaledWindowCoordinatesY()  + DisplayUtils.heightOffset, 0.0f);
-			
-			Quaternionf rotate = new Quaternionf().rotateZ((float) Math.toRadians(rotation));
-
-			this.model = new Matrix4f().translation(location).rotateAround(rotate, 0, 0, 0).scale((float) (1.0 / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)));
-		}
-		
-		private void setRotation(double rotation) {
-			this.rotation = rotation;
-		}
-	}
 
 	@Override
 	public void updateRenderer() {
 		renderer.setRotation(rotation);
 		renderer.setCoordinates(new WindowCoordinates(coordinates));
+	}
+
+	protected double getRotation() {
+		return rotation;
+	}
+
+	protected void setRotation(double rotation) {
+		this.rotation = rotation;
+	}
+
+	protected static class MovementInfo {
+
+		public final boolean up;
+		public final boolean down;
+		public final boolean right;
+		public final boolean left;
+		public final boolean fast;
+		public final double rotation;
+		public final boolean shooting;
+
+		public MovementInfo(boolean up, boolean down, boolean right, boolean left, boolean fast, double rotation, boolean shooting) {
+			this.up = up;
+			this.down = down;
+			this.right = right;
+			this.left = left;
+			this.fast = fast;
+			this.rotation = rotation;
+			this.shooting = shooting;
+		}
 	}
 }

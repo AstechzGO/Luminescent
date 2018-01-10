@@ -17,27 +17,22 @@ import astechzgo.luminescent.rendering.Vulkan;
 public class KeyPressGameplay {
 	
 	public static final ArrayList<Projectile> projectiles = new ArrayList<>();
-	private static double lastShot;
-	
-	public static void checkGameActions(Player thePlayer, List<Room> rooms) {
-		
-		double deltaShot = (GLFW.glfwGetTime() * 1000) - lastShot;
-		
-		if(KEYS_ACTION_SHOOT.isKeyDown() && deltaShot > 5) {
-			// Creates Projectile and adds it to array list
-			Projectile projectile = getUnused();
-			projectile.init(thePlayer.getCoordinates());
-			projectiles.add(projectile);
-			
-			lastShot = (GLFW.glfwGetTime() * 1000);
-		}
-		
+
+	public static void shoot(Player thePlayer) {
+		// Creates Projectile and adds it to array list
+		Projectile projectile = getUnused();
+		projectile.init(thePlayer.getCoordinates());
+		projectiles.add(projectile);
+	}
+
+	public static void checkGameActions(List<Room> rooms) {
 		// For every shot render it and keep shooting it forwards
 		for(int i = 0; i < projectiles.size(); i++) {
 			Projectile m = projectiles.get(i);
-			m.updateRenderer();
 			m.fireBullet(getVerticalEdges(rooms), getHorizontalEdges(rooms));
-			
+			m.updateRenderer();
+
+
 			if(!m.isAlive()) {
 				// If the bullet is not it the room delete it
 				projectiles.remove(i);
@@ -54,7 +49,7 @@ public class KeyPressGameplay {
 	    
 	    int first = Luminescent.projectilePool.size();
 	    
-	    for(int i = 0; i < 32; i++) {
+	    for(int i = 0; i < 1024; i++) {
 	        Projectile p = new Projectile(new GameCoordinates(0, 0));
 	        Luminescent.projectilePool.add(p);
 	        Vulkan.addMatrices(Luminescent.projectileIndex, p.getRenderer()::getModelMatrix);

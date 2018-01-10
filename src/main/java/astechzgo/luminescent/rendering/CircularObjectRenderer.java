@@ -197,4 +197,8 @@ public class CircularObjectRenderer implements IObjectRenderer {
     public void upload(List<Supplier<Matrix4f>> matrices) {
         RenderingUtils.createCircle(radius, pointSeperation, colour, texture, matrices);
     }
+
+    public void setRotation(double rotation) {
+    	this.rotation = rotation;
+	}
 }
