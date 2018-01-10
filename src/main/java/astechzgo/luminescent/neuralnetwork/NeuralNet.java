@@ -36,15 +36,21 @@ public class NeuralNet {
         }
     }
     public void useOutputs(Node[] outputNodes) {
-        System.out.println((this == Luminescent.thePlayerNet ? "Player: " : "Enemy: ") + outputNodes[0].getOutput() * outputNodes[0].outputWeight + " " + outputNodes[1].getOutput() * outputNodes[1].outputWeight + " " +outputNodes[2].getOutput() * outputNodes[2].outputWeight);
 
-        if(outputNodes[0].getOutput() * outputNodes[0].outputWeight > 0) {
+        outputNodes[0].output *= outputNodes[0].outputWeight;
+        outputNodes[1].output *= outputNodes[1].outputWeight;
+        outputNodes[2].output *= outputNodes[2].outputWeight;
+        outputNodes[0].output =  outputNodes[0].sigmoid(outputNodes[0].output);
+        outputNodes[1].output = outputNodes[1].sigmoid(outputNodes[1].output);
+        outputNodes[2].output =  outputNodes[2].sigmoid(outputNodes[2].output);
+        System.out.println((this == Luminescent.thePlayerNet ? outputNodes[0].getOutput() + " " + outputNodes[1].getOutput() + " " +outputNodes[2].getOutput() : ""));
+        if(outputNodes[0].getOutput() > 0.5) {
             player.turnRight();
         }
-        if(outputNodes[1].getOutput() * outputNodes[1].outputWeight > 0) {
+        if(outputNodes[1].getOutput() > 0.5) {
             player.shoot();
         }
-        if(outputNodes[2].getOutput() * outputNodes[2].outputWeight > 0) {
+        if(outputNodes[2].getOutput()> 0.5) {
             player.moveForward();
         }
     }

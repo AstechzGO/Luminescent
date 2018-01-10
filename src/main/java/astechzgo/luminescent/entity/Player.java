@@ -64,7 +64,7 @@ public abstract class Player extends LivingEntity {
 		double delta = ((GLFW.glfwGetTime() * 1000) - lastDelta);
 		lastDelta = GLFW.glfwGetTime() * 1000;
 
-		if(move.shooting && lastDelta - lastShot > 5) {
+		if(move.shooting && lastDelta - lastShot > 200) {
 			KeyPressGameplay.shoot(this);
 			lastShot = lastDelta;
 		}
