@@ -1,5 +1,6 @@
 package astechzgo.luminescent.rendering;
 
+import java.awt.*;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -144,6 +145,10 @@ public class Vulkan {
         blue = blueVal;
         alpha = alphaVal;
     }
+
+    public static Color getClearColour() {
+        return new Color(red, green, blue, alpha);
+    }
     
     public static long getShaderHandle(byte[] shaderCode) {
         try(MemoryStack stack = MemoryStack.stackPush()) {
@@ -158,7 +163,7 @@ public class Vulkan {
     public static byte[] readPixels(int x, int y, int width, int height) {
         return vulkanInstance.readPixelsToArray(x, y, width, height);
     }
-    
+
     private final String[] validationLayers = { 
         "VK_LAYER_LUNARG_standard_validation",
     };
@@ -1467,7 +1472,7 @@ public class Vulkan {
     }
     
     private void pickPhysicalDevice() {
-        physicalDevice = new VkPhysicalDevice(VK10.VK_NULL_HANDLE, instance);
+        physicalDevice = null;
         
         int[] deviceCount = new int[] { 0 };
         VK10.vkEnumeratePhysicalDevices(instance, deviceCount, null);
@@ -1497,7 +1502,7 @@ public class Vulkan {
                 physicalDevice = candidates.get(bestScore);
             }
             
-            if(physicalDevice.address() == VK10.VK_NULL_HANDLE) {
+            if(physicalDevice == null) {
                 throw new RuntimeException("failed to find suitable GPU!");
             }
             
@@ -1992,7 +1997,7 @@ public class Vulkan {
             VK10.vkUnmapMemory(device, uniformModelBufferMemory);
         }
     }
-    
+
     private void drawFrame() {
         int[] imageIndexAddress = new int[] { 0 };
         int result = KHRSwapchain.vkAcquireNextImageKHR(device, swapChain, Long.MAX_VALUE, VK10.VK_NULL_HANDLE, imageAvailableFence, imageIndexAddress);
@@ -2042,7 +2047,7 @@ public class Vulkan {
                 .pImageIndices(imageIndexBuffer)
                 .pResults(null)
                 .pNext(VK10.VK_NULL_HANDLE);
-            
+
             result = KHRSwapchain.vkQueuePresentKHR(presentQueue, presentInfo);
             
             if(result == KHRSwapchain.VK_ERROR_OUT_OF_DATE_KHR || result == KHRSwapchain.VK_SUBOPTIMAL_KHR) {

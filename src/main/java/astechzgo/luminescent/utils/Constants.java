@@ -49,7 +49,7 @@ public class Constants
 		defaults.put(KEYS_ACTION_SHOOT,											"{SPACE}");
 		
 		defaults.put(KEYS_UTIL_SCREENSHOT, 										"{F2}");
-		defaults.put(KEYS_UTIL_FULLSCREEN, 										"{F11}");
+		defaults.put(KEYS_UTIL_FULLSCREEN, 										"{F10}");
 		defaults.put(KEYS_UTIL_EXIT, 											"{TAB, ESCAPE}");
 		defaults.put(KEYS_UTIL_NEXTWINDOW,										"{F4}");
 		
