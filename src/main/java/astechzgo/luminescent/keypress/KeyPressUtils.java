@@ -1,9 +1,6 @@
 package astechzgo.luminescent.keypress;
 
-import static astechzgo.luminescent.keypress.Key.KEYS_UTIL_EXIT;
-import static astechzgo.luminescent.keypress.Key.KEYS_UTIL_FULLSCREEN;
-import static astechzgo.luminescent.keypress.Key.KEYS_UTIL_NEXTWINDOW;
-import static astechzgo.luminescent.keypress.Key.KEYS_UTIL_SCREENSHOT;
+import static astechzgo.luminescent.keypress.Key.*;
 import static astechzgo.luminescent.utils.DisplayUtils.setDisplayMode;
 import static astechzgo.luminescent.utils.SystemUtils.newFile;
 
@@ -69,6 +66,9 @@ public class KeyPressUtils {
 //				}
 //			}
 		    Vulkan.constructBuffers();
+		}
+		if(KEYS_UTIL_TOGGLELIGHTING.isKeyDownOnce()) {
+			Vulkan.setDoLighting(!Vulkan.getDoLighting());
 		}
 	}	
 }

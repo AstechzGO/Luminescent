@@ -121,6 +121,8 @@ public class Vulkan {
     private static float green = 0.4f;
     private static float blue = 0.6f;
     private static float alpha = 1.0f;
+
+    private static boolean lighting = true;
     
     public static void init() {
         vulkanInstance.initVulkan();
@@ -149,6 +151,14 @@ public class Vulkan {
 
     public static Color getClearColour() {
         return new Color(red, green, blue, alpha);
+    }
+
+    public static void setDoLighting(boolean lighting) {
+        Vulkan.lighting = lighting;
+    }
+
+    public static boolean getDoLighting() {
+        return lighting;
     }
     
     public static long getShaderHandle(byte[] shaderCode) {
@@ -2021,7 +2031,7 @@ public class Vulkan {
                         byteData.putInt((int) (idx * dynamicAlignment) + j * 4, currentFrames.get(i).get());
                         byteData.putInt((int) (idx * dynamicAlignment) + (j + 1) * 4, frameCount.get(i));
                         byteData.putFloat((int) (idx * dynamicAlignment) + (j + 2) * 4, tm.getTexWidth());
-                        byteData.putInt((int) (idx * dynamicAlignment) + (j + 3) * 4, doLighting.get(i).get() ? 1 : 0);
+                        byteData.putInt((int) (idx * dynamicAlignment) + (j + 3) * 4, doLighting.get(i).get() && lighting ? 1 : 0);
                         
                         idx++;
                     }
