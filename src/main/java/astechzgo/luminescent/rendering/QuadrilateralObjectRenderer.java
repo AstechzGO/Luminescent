@@ -30,6 +30,8 @@ public class QuadrilateralObjectRenderer implements IObjectRenderer {
 	
 	protected Matrix4f model = new Matrix4f();
 
+	protected boolean doLighting = true;
+
 	public QuadrilateralObjectRenderer(WindowCoordinates a,WindowCoordinates b, WindowCoordinates c, WindowCoordinates d, Texture texture) {
 		this.texture = texture;
 		
@@ -247,8 +249,18 @@ public class QuadrilateralObjectRenderer implements IObjectRenderer {
 	    return model;
 	}
 
-    @Override
+	@Override
+	public void setDoesLighting(boolean doLighting) {
+		this.doLighting = doLighting;
+	}
+
+	@Override
+	public boolean doesLighting() {
+		return doLighting;
+	}
+
+	@Override
     public void upload(List<Supplier<Matrix4f>> matrices) {
-        RenderingUtils.createQuad(a, b, c, d, colour, texture, matrices);
+        RenderingUtils.createQuad(a, b, c, d, colour, texture, this::doesLighting, matrices);
     }
 }

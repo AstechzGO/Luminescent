@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
+import astechzgo.luminescent.rendering.*;
 import org.joml.Matrix4f;
 import org.lwjgl.glfw.Callbacks;
 import org.lwjgl.glfw.GLFW;
@@ -19,13 +20,6 @@ import astechzgo.luminescent.gameobject.Room;
 import astechzgo.luminescent.keypress.Key;
 import astechzgo.luminescent.keypress.KeyPressGameplay;
 import astechzgo.luminescent.keypress.KeyPressUtils;
-import astechzgo.luminescent.rendering.Camera;
-import astechzgo.luminescent.rendering.FPSCalculator;
-import astechzgo.luminescent.rendering.QuadrilateralObjectRenderer;
-import astechzgo.luminescent.rendering.RectangularObjectRenderer;
-import astechzgo.luminescent.rendering.ResolutionBorderRenderer;
-import astechzgo.luminescent.rendering.TextLabelRenderer;
-import astechzgo.luminescent.rendering.Vulkan;
 import astechzgo.luminescent.sound.Sound;
 import astechzgo.luminescent.text.Font;
 import astechzgo.luminescent.textures.Animation;
@@ -37,7 +31,7 @@ import astechzgo.luminescent.worldloader.JSONWorldLoader;
 
 public class Luminescent
 {
-	public static final boolean DEBUG = true;
+	public static final boolean DEBUG = false;
     
 	public static Player thePlayer;
 	

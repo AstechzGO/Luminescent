@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
 
+import astechzgo.luminescent.coordinates.ScaledWindowCoordinates;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
@@ -227,6 +228,7 @@ public class Vulkan {
     private final List<Integer> frameCount = new ArrayList<>();
     private final List<List<Supplier<Matrix4f>>> matrices = new ArrayList<>();
     private final List<Supplier<Integer>> currentFrames = new ArrayList<>();
+    private final List<Supplier<Boolean>> doLighting = new ArrayList<>();
     
     private long vertexBuffer;
     private long vertexBufferMemory;
@@ -236,8 +238,11 @@ public class Vulkan {
     private long uniformViewBufferMemory;
     private long uniformModelBuffer;
     private long uniformModelBufferMemory;
+    private long uniformLightsBuffer;
+    private long uniformLightsBufferMemory;
     
     private long dynamicAlignment;
+    private long lightAlignment;
     
     private long descriptorPool;
     private long descriptorSet;
@@ -575,8 +580,13 @@ public class Vulkan {
                 .imageLayout(VK10.VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL)
                 .imageView(textureImageView)
                 .sampler(textureSampler);
-            
-            VkWriteDescriptorSet.Buffer descriptorWrites = VkWriteDescriptorSet.callocStack(3, stack);
+
+            VkDescriptorBufferInfo lightsBufferInfo = VkDescriptorBufferInfo.callocStack(stack)
+                .buffer(uniformLightsBuffer)
+                .offset(0)
+                .range(LightSource.LIGHTS * lightAlignment);
+
+            VkWriteDescriptorSet.Buffer descriptorWrites = VkWriteDescriptorSet.callocStack(4, stack);
             
             descriptorWrites.get(0)
                 .sType(VK10.VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET)
@@ -610,6 +620,17 @@ public class Vulkan {
                 .pImageInfo(VkDescriptorImageInfo.mallocStack(1, stack).put(imageInfo).flip())
                 .pTexelBufferView(null)
                 .pNext(VK10.VK_NULL_HANDLE);
+
+            descriptorWrites.get(3)
+                .sType(VK10.VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET)
+                .dstSet(descriptorSet)
+                .dstBinding(3)
+                .dstArrayElement(0)
+                .descriptorType(VK10.VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER)
+                .pBufferInfo(VkDescriptorBufferInfo.mallocStack(1, stack).put(lightsBufferInfo).flip())
+                .pImageInfo(null)
+                .pTexelBufferView(null)
+                .pNext(VK10.VK_NULL_HANDLE);
             
             VK10.vkUpdateDescriptorSets(device, descriptorWrites, null);
         }
@@ -617,7 +638,7 @@ public class Vulkan {
     
     private void createDescriptorPool() {
         try(MemoryStack stack = MemoryStack.stackPush()) {
-            VkDescriptorPoolSize.Buffer poolSizes = VkDescriptorPoolSize.mallocStack(3, stack);
+            VkDescriptorPoolSize.Buffer poolSizes = VkDescriptorPoolSize.mallocStack(4, stack);
             
             poolSizes.get(0)
                 .type(VK10.VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER)
@@ -627,6 +648,9 @@ public class Vulkan {
                 .descriptorCount(1);
             poolSizes.get(2)
                 .type(VK10.VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER)
+                .descriptorCount(1);
+            poolSizes.get(3)
+                .type(VK10.VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER)
                 .descriptorCount(1);
             
             VkDescriptorPoolCreateInfo poolInfo = VkDescriptorPoolCreateInfo.callocStack(stack)
@@ -662,12 +686,10 @@ public class Vulkan {
             uboAlignment = deviceProperties.limits().minUniformBufferOffsetAlignment();
         }
         
-        int instanceUBOSize = (4 * 4 * Float.BYTES) + (2 * Integer.BYTES) + (Float.BYTES);
-        
+        int instanceUBOSize = (4 * 4 * Float.BYTES) + (2 * Integer.BYTES) + (Float.BYTES) + 4;
         dynamicAlignment = (instanceUBOSize / uboAlignment) * uboAlignment + ((instanceUBOSize % uboAlignment) > 0 ? uboAlignment : 0);
-        
-        long modelBufferSize = flatSize(matrices) * dynamicAlignment; 
-        
+        long modelBufferSize = flatSize(matrices) * dynamicAlignment;
+
         long[] uniformModelBufferAddress = new long[] { 0 };
         long[] uniformModelBufferMemoryAddress = new long[] { 0 };
         
@@ -675,7 +697,19 @@ public class Vulkan {
         
         uniformModelBuffer = uniformModelBufferAddress[0];
         uniformModelBufferMemory = uniformModelBufferMemoryAddress[0];
-        
+
+        long[] uniformLightsBufferAddress = new long[] { 0 };
+        long[] uniformLightsBufferMemoryAddress = new long[] { 0 };
+
+        int lightUBOSize = 3 * Float.BYTES;
+        int lightUniformAlignment = 16;
+        lightAlignment = (lightUBOSize / lightUniformAlignment) * lightUniformAlignment + ((lightUBOSize % lightUniformAlignment) > 0 ? lightUniformAlignment : 0);
+        long lightsBufferSize = LightSource.LIGHTS * dynamicAlignment;
+
+        createBuffer(lightsBufferSize, VK10.VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK10.VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK10.VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, uniformLightsBufferAddress, uniformLightsBufferMemoryAddress);
+
+        uniformLightsBuffer = uniformLightsBufferAddress[0];
+        uniformLightsBufferMemory = uniformLightsBufferMemoryAddress[0];
     }
     
     private void createDescriptorSetLayout() {
@@ -700,11 +734,19 @@ public class Vulkan {
                 .descriptorType(VK10.VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER)
                 .pImmutableSamplers(null)
                 .stageFlags(VK10.VK_SHADER_STAGE_FRAGMENT_BIT);
-            
-            VkDescriptorSetLayoutBinding.Buffer bindings = VkDescriptorSetLayoutBinding.mallocStack(3, stack)
+
+            VkDescriptorSetLayoutBinding lightsUBOLayoutBinding = VkDescriptorSetLayoutBinding.mallocStack(stack)
+                .binding(3)
+                .descriptorCount(1)
+                .descriptorType(VK10.VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER)
+                .pImmutableSamplers(null)
+                .stageFlags(VK10.VK_SHADER_STAGE_FRAGMENT_BIT);
+
+            VkDescriptorSetLayoutBinding.Buffer bindings = VkDescriptorSetLayoutBinding.mallocStack(4, stack)
                 .put(viewUBOLayoutBinding)
                 .put(modelUBOLayoutBinding)
-                .put(samplerLayoutBinding).flip();
+                .put(samplerLayoutBinding)
+                .put(lightsUBOLayoutBinding).flip();
             
             VkDescriptorSetLayoutCreateInfo layoutInfo = VkDescriptorSetLayoutCreateInfo.callocStack(stack)
                 .sType(VK10.VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO)
@@ -1942,7 +1984,7 @@ public class Vulkan {
         viewUBO.projection = viewUBO.projection.ortho(0, DisplayUtils.getDisplayWidth(), 0, DisplayUtils.getDisplayHeight(), 1, -1, false);
         
         try(MemoryStack stack = MemoryStack.stackPush()) {
-            PointerBuffer data = stack.mallocPointer(2);
+            PointerBuffer data = stack.mallocPointer(3);
         
             VK10.vkMapMemory(device, uniformViewBufferMemory, 0, 2 * 4 * 4 * Float.BYTES, 0, data);
                 FloatBuffer floatData = data.getFloatBuffer(2 * 4 * 4);
@@ -1979,6 +2021,7 @@ public class Vulkan {
                         byteData.putInt((int) (idx * dynamicAlignment) + j * 4, currentFrames.get(i).get());
                         byteData.putInt((int) (idx * dynamicAlignment) + (j + 1) * 4, frameCount.get(i));
                         byteData.putFloat((int) (idx * dynamicAlignment) + (j + 2) * 4, tm.getTexWidth());
+                        byteData.putInt((int) (idx * dynamicAlignment) + (j + 3) * 4, doLighting.get(i).get() ? 1 : 0);
                         
                         idx++;
                     }
@@ -1995,6 +2038,25 @@ public class Vulkan {
                 
                 VK10.vkFlushMappedMemoryRanges(device, memoryRange);
             VK10.vkUnmapMemory(device, uniformModelBufferMemory);
+
+            VK10.vkMapMemory(device, uniformLightsBufferMemory, 0, LightSource.LIGHTS * lightAlignment, 0, data);
+                ByteBuffer lightData = data.getByteBuffer((int) (LightSource.LIGHTS * lightAlignment));
+                    for(int i = 0; i < LightSource.LIGHTS; i++) {
+                        float[] light;
+                        if(LightSource.get(i) == null || LightSource.get(i).getRadius() == 0) {
+                            light = new float[] { 0.0f, 0.0f, 0.0f };
+                        }
+                        else {
+                            ScaledWindowCoordinates coords = new ScaledWindowCoordinates(LightSource.get(i).getCoords());
+                            light = new float[]{LightSource.get(i).getScaledX(), LightSource.get(i).getScaledY(), LightSource.get(i).getScaledRadius()};
+                        }
+
+                        for(int j = 0; j < 3; j++) {
+                            lightData.putFloat((int) (i * lightAlignment) + j * Float.BYTES, light[j]);
+                        }
+                    }
+                lightData.flip();
+            VK10.vkUnmapMemory(device, uniformLightsBufferMemory);
         }
     }
 
@@ -2084,6 +2146,9 @@ public class Vulkan {
         
         VK10.vkDestroyBuffer(device, uniformViewBuffer, null);
         VK10.vkFreeMemory(device, uniformViewBufferMemory, null);
+
+        VK10.vkDestroyBuffer(device, uniformLightsBuffer, null);
+        VK10.vkFreeMemory(device, uniformLightsBufferMemory, null);
         
         VK10.vkDestroyBuffer(device, indexBuffer, null);
         VK10.vkFreeMemory(device, indexBufferMemory, null);
@@ -2304,11 +2369,11 @@ public class Vulkan {
         return count;
     }
     
-    public static void addObject(Vertex[] vertices, int[] indices, Texture texture, List<Supplier<Matrix4f>> matrices) {
-        addObject(vertices, indices, texture, texture == null ? () -> 0 : texture::getCurrentFrame, matrices);
+    public static void addObject(Vertex[] vertices, int[] indices, Texture texture, Supplier<Boolean> doLighting, List<Supplier<Matrix4f>> matrices) {
+        addObject(vertices, indices, texture, doLighting, texture == null ? () -> 0 : texture::getCurrentFrame, matrices);
     }
     
-    public static void addObject(Vertex[] vertices, int[] indices, Texture texture, Supplier<Integer> currentFrame, List<Supplier<Matrix4f>> matrices) {
+    public static void addObject(Vertex[] vertices, int[] indices, Texture texture, Supplier<Boolean> doLighting, Supplier<Integer> currentFrame, List<Supplier<Matrix4f>> matrices) {
         int offset = 0;
         for(List<Vertex> verts : vulkanInstance.vertices) {
             offset += verts.size();
@@ -2325,6 +2390,7 @@ public class Vulkan {
         vulkanInstance.frameCount.add(texture == null ? 1 : texture.count());
         vulkanInstance.matrices.add(matrices);
         vulkanInstance.currentFrames.add(currentFrame);
+        vulkanInstance.doLighting.add(doLighting);
     }
     
     public static void constructBuffers() {
@@ -2345,6 +2411,9 @@ public class Vulkan {
         
         VK10.vkDestroyBuffer(device, uniformViewBuffer, null);
         VK10.vkFreeMemory(device, uniformViewBufferMemory, null);
+
+        VK10.vkDestroyBuffer(device, uniformLightsBuffer, null);
+        VK10.vkFreeMemory(device, uniformLightsBufferMemory, null);
     }
     
     private void cleanupDescriptorPool() {
@@ -2368,6 +2437,9 @@ public class Vulkan {
     
     @SafeVarargs
     public static void addMatrices(int index, Supplier<Matrix4f>... matrices) {
-        vulkanInstance.matrices.get(index).addAll(new ArrayList<>(Arrays.asList(matrices)));
+        List<Supplier<Matrix4f>> copied = new ArrayList<>();
+        copied.addAll(vulkanInstance.matrices.get(index));
+        copied.addAll(new ArrayList<>(Arrays.asList(matrices)));
+        vulkanInstance.matrices.set(index, copied);
     }
 }

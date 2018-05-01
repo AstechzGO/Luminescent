@@ -16,8 +16,8 @@ import astechzgo.luminescent.textures.Texture;
 
 public class RenderingUtils {
 
-    public static void createQuad(WindowCoordinates a, WindowCoordinates b, WindowCoordinates c, WindowCoordinates d, Color color, Texture texture, List<Supplier<Matrix4f>> matrices) {
-        createQuad(a, b, c, d, color, texture, Optional.empty(), matrices);
+    public static void createQuad(WindowCoordinates a, WindowCoordinates b, WindowCoordinates c, WindowCoordinates d, Color color, Texture texture, Supplier<Boolean> doLighting, List<Supplier<Matrix4f>> matrices) {
+        createQuad(a, b, c, d, color, texture, doLighting, Optional.empty(), matrices);
     }
     
     /*
@@ -25,7 +25,7 @@ public class RenderingUtils {
 	 * |QD|
 	 * D--C
 	 */
-    public static void createQuad(WindowCoordinates a, WindowCoordinates b, WindowCoordinates c, WindowCoordinates d, Color color, Texture texture, Optional<Supplier<Integer>> currentFrame, List<Supplier<Matrix4f>> matrices) {
+    public static void createQuad(WindowCoordinates a, WindowCoordinates b, WindowCoordinates c, WindowCoordinates d, Color color, Texture texture, Supplier<Boolean> doLighting, Optional<Supplier<Integer>> currentFrame, List<Supplier<Matrix4f>> matrices) {
         int vAX = ((int) a.getWindowCoordinatesX())
                 - ((int) a.getWindowCoordinatesX());
         int vAY = ((int) a.getWindowCoordinatesY())
@@ -69,17 +69,17 @@ public class RenderingUtils {
         int[] indices = new int[] { 0, 2, 1, 3, 2, 0 };
         
         if(currentFrame.isPresent())
-            Vulkan.addObject(vertices, indices, texture, currentFrame.get(), matrices);
+            Vulkan.addObject(vertices, indices, texture, doLighting, currentFrame.get(), matrices);
         else {
-            Vulkan.addObject(vertices, indices, texture, matrices);
+            Vulkan.addObject(vertices, indices, texture, doLighting, matrices);
         }
     }
 
-    public static void createCircle(double radius, double pointSeperation, Color color, Texture texture, List<Supplier<Matrix4f>> matrices) {
-        createCircle(radius, pointSeperation, color, texture, Optional.empty(), matrices);
+    public static void createCircle(double radius, double pointSeperation, Color color, Texture texture, Supplier<Boolean> doLighting, List<Supplier<Matrix4f>> matrices) {
+        createCircle(radius, pointSeperation, color, texture, doLighting, Optional.empty(), matrices);
     }
     
-    public static void createCircle(double radius, double pointSeperation, Color color, Texture texture, Optional<Supplier<Integer>> currentFrame, List<Supplier<Matrix4f>> matrices) {
+    public static void createCircle(double radius, double pointSeperation, Color color, Texture texture, Supplier<Boolean> doLighting, Optional<Supplier<Integer>> currentFrame, List<Supplier<Matrix4f>> matrices) {
 		int loops = (int) (360 / pointSeperation);
 		
 		Vertex[] vertices = new Vertex[loops + 1];
@@ -118,9 +118,9 @@ public class RenderingUtils {
 		}
 		
         if(currentFrame.isPresent())
-            Vulkan.addObject(vertices, indices, texture, currentFrame.get(), matrices);
+            Vulkan.addObject(vertices, indices, texture, doLighting, currentFrame.get(), matrices);
         else {
-            Vulkan.addObject(vertices, indices, texture, matrices);
+            Vulkan.addObject(vertices, indices, texture, doLighting, matrices);
         }
 	}
 }
