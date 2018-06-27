@@ -73,17 +73,6 @@ public class Luminescent
 		    new ResolutionBorderRenderer(ResolutionBorderRenderer.TOP_RECTANGLE),
 		    new ResolutionBorderRenderer(ResolutionBorderRenderer.BOTTOM_RECTANGLE),
 		};
-		
-		if(Constants.getConstantAsBoolean(Constants.WINDOW_FULLSCREEN)) 
-		{	
-			setDisplayMode(DisplayUtils.vidmode.width(),
-					DisplayUtils.vidmode.height(), true);
-		}
-		else 
-		{
-			setDisplayMode(848, 477, false);
-		}
-		
 
 		background.upload();
 
@@ -109,12 +98,24 @@ public class Luminescent
         }
         
         Vulkan.constructBuffers();
+
+
+		if(Constants.getConstantAsBoolean(Constants.WINDOW_FULLSCREEN))
+		{
+			setDisplayMode(DisplayUtils.vidmode.width(),
+					DisplayUtils.vidmode.height(), true);
+		}
+		else
+		{
+			setDisplayMode(848, 477, false);
+		}
 	}
 	
 	public static void Shutdown()
 	{
 	    DisplayUtils.setIcons(null);
 		Callbacks.glfwFreeCallbacks(DisplayUtils.getHandle());
+		DisplayUtils.freeErrorCallback();
 		GLFW.glfwDestroyWindow(DisplayUtils.getHandle());
 		Sound.cleanup();
 		TextureList.cleanup();

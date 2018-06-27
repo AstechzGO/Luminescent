@@ -1,18 +1,6 @@
 package astechzgo.luminescent.utils;
 
-import static org.lwjgl.glfw.GLFW.GLFW_RESIZABLE;
-import static org.lwjgl.glfw.GLFW.GLFW_VISIBLE;
-import static org.lwjgl.glfw.GLFW.glfwCreateWindow;
-import static org.lwjgl.glfw.GLFW.glfwDefaultWindowHints;
-import static org.lwjgl.glfw.GLFW.glfwDestroyWindow;
-import static org.lwjgl.glfw.GLFW.glfwGetPrimaryMonitor;
-import static org.lwjgl.glfw.GLFW.glfwGetVideoMode;
-import static org.lwjgl.glfw.GLFW.glfwInit;
-import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
-import static org.lwjgl.glfw.GLFW.glfwSetWindowPos;
-import static org.lwjgl.glfw.GLFW.glfwShowWindow;
-import static org.lwjgl.glfw.GLFW.glfwSwapInterval;
-import static org.lwjgl.glfw.GLFW.glfwWindowHint;
+import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 import java.awt.Graphics2D;
@@ -26,12 +14,9 @@ import java.nio.IntBuffer;
 
 import javax.imageio.ImageIO;
 
-import org.lwjgl.glfw.GLFW;
-import org.lwjgl.glfw.GLFWImage;
-import org.lwjgl.glfw.GLFWVidMode;
+import astechzgo.luminescent.main.Luminescent;
+import org.lwjgl.glfw.*;
 import org.lwjgl.glfw.GLFWVidMode.Buffer;
-import org.lwjgl.glfw.GLFWWindowPosCallback;
-import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.MemoryUtil;
 
@@ -77,7 +62,7 @@ public class DisplayUtils {
 			throw new IllegalStateException("Unable to initialize glfw");
 		
 		monitor = glfwGetPrimaryMonitor();
-		vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+		vidmode = glfwGetVideoMode(monitor);
 	
 		monitorWidth = vidmode.width();
 		monitorHeight = vidmode.height();
@@ -102,128 +87,13 @@ public class DisplayUtils {
 	 *            True if we want fullscreen mode
 	 */
 	public static void setDisplayMode(int width, int height, boolean fullscreen) {
+		DisplayUtils.displayFullscreen = fullscreen;
+		displayWidth = width;
+		displayHeight = height;
+		displayX = (DisplayUtils.monitorWidth / 2) - (displayWidth / 2);
+		displayY = (DisplayUtils.monitorHeight / 2) - (displayHeight / 2);
 
-		// return if requested DisplayMode is already set
-		if ((displayWidth == width)
-				&& (displayHeight == height)
-				&& (displayFullscreen == fullscreen)) {
-			return;
-		}
-
-		try {
-			DisplayMode targetDisplayMode = null;
-
-			if (fullscreen) {
-				Buffer modes = GLFW.glfwGetVideoModes(monitor);
-
-				DisplayMode[] displayModes = new DisplayMode[modes.capacity()];
-
-				for (int i = 0; i < modes.capacity(); i++) {
-					GLFWVidMode mode = modes.get();
-					
-					int w = mode.width();
-					int h = mode.height();
-					int b = mode.redBits() + mode.greenBits()
-							+ mode.blueBits();
-					int r = mode.refreshRate();
-					
-					displayModes[i] = new DisplayMode(w, h, b, r);
-				}
-				
-				int freq = 0;
-
-				for (DisplayMode current : displayModes) {
-					if ((current.WIDTH == width)
-							&& (current.HEIGHT == height)) {
-						if ((targetDisplayMode == null)
-								|| (current.FREQ >= freq)) {
-							if ((targetDisplayMode == null)
-									|| (current.BPP > targetDisplayMode
-									.BPP)) {
-								targetDisplayMode = current;
-								freq = targetDisplayMode.FREQ;
-							}
-						}
-
-						// if we've found a match for bpp and frequence against
-						// the
-						// original display mode then it's probably best to go
-						// for this one
-						// since it's most likely compatible with the monitor
-						if ((current.BPP == desktopDisplayMode.BPP)
-								&& (current.FREQ == desktopDisplayMode.FREQ)) {
-							targetDisplayMode = current;
-							break;
-						}
-					}
-				}
-			} else {
-				targetDisplayMode = new DisplayMode(width, height);
-			}
-
-			if (targetDisplayMode == null) {
-				System.out.println("Failed to find value mode: " + width + "x"
-						+ height + " fs=" + fullscreen);
-				return;
-			}
-
-			if (fullscreen == displayFullscreen)
-		        return;
-
-			mode = targetDisplayMode;
-			
-		 long newWindow;
-	        displayFullscreen = fullscreen;
-	        if(displayFullscreen){
-	            newWindow = glfwCreateWindow(mode.WIDTH, mode.HEIGHT, displayTitle, monitor, NULL);
-	            glfwMakeContextCurrent( newWindow );	            
-	        }else{
-	            newWindow = glfwCreateWindow(mode.WIDTH, mode.HEIGHT, displayTitle, NULL, NULL);
-	            
-	            int monitorWidthOffset = getMonitorOffsetWidth(DisplayUtils.monitor);
-	    		int monitorHeightOffset = getMonitorOffsetHeight(DisplayUtils.monitor);
-	            
-	    		displayX = ((monitorWidth - mode.WIDTH) / 2) + monitorWidthOffset;
-	    		displayY = ((monitorHeight - mode.HEIGHT) / 2) + monitorHeightOffset;
-	    		
-	    		glfwSetWindowPos(
-	    				newWindow,
-	    				displayX,
-	    				displayY
-	    			);
-	    		
-	            glfwMakeContextCurrent( newWindow );
-	        }
-	        glfwDestroyWindow(handle);
-	        handle = newWindow;
-
-	        displayWidth = mode.WIDTH;
-	        displayHeight = mode.HEIGHT;
-	        
-	        widthOffset = Math.max(0, (displayWidth - (displayHeight / 9 * 16)) / 2);
-			if(widthOffset == 0) heightOffset = Math.max(0, (displayHeight - (displayWidth / 16 * 9)) / 2);
-	        
-	        glfwSwapInterval(1);
-	        
-	        Vulkan.createWindowSurface();
-	        
-	        Vulkan.recreate();
-
-			GLFW.glfwSetKeyCallback(handle, KeyboardUtils.KEY_CALLBACK);
-			GLFW.glfwSetWindowSizeCallback(handle, RESIZED_CALLBACK);
-			GLFW.glfwSetWindowPosCallback(handle, REPOSITIONED_CALLBACK);
-			
-			GLFW.glfwSetWindowIcon(handle, icons);
-			
-			GLFW.glfwSetWindowAspectRatio(handle, 16, 9);
-			
-			GLFW.glfwShowWindow(handle);
-			
-		} catch (Exception e) {
-			System.out.println("Unable to setup mode " + width + "x" + height
-					+ " fullscreen=" + fullscreen + e);
-			e.printStackTrace();
-		}
+		GLFW.glfwSetWindowMonitor(handle, fullscreen ? monitor : NULL, displayX, displayY, width, height, monitorRefreshRate);
 	}
 
 	/**
@@ -390,10 +260,14 @@ public class DisplayUtils {
 		
 		GLFW.glfwSetWindowSizeCallback(handle, RESIZED_CALLBACK);
 		GLFW.glfwSetWindowPosCallback(handle, REPOSITIONED_CALLBACK);
-		
+
+		if(Luminescent.DEBUG) {
+			GLFW.glfwSetErrorCallback(ERROR_CALLBACK);
+		}
+
+
 		GLFW.glfwSetWindowAspectRatio(handle, 16, 9);
-		
-		glfwSwapInterval(1);
+
 		glfwShowWindow(handle);
 	}
 	
@@ -547,6 +421,15 @@ public class DisplayUtils {
 		}
 		
 	};
+
+	public static final GLFWErrorCallback ERROR_CALLBACK = new GLFWErrorCallback() {
+
+		@Override
+		public void invoke(int error, long description) {
+			System.out.println("GLFW error code " + error + " - " + MemoryUtil.memUTF8(description));
+		}
+
+	};
 	
 	public static void changeSize() {
 		int width = 0;
@@ -591,5 +474,9 @@ public class DisplayUtils {
 	
 	public static int getDisplayY() {
 		return displayY;
+	}
+
+	public static void freeErrorCallback() {
+		ERROR_CALLBACK.free();
 	}
 }
