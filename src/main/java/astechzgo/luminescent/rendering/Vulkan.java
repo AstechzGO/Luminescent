@@ -1395,7 +1395,7 @@ public class Vulkan {
             VkExtent2D extent = chooseSwapExtent(swapChainSupport.capabilities);
             
             int imageCount = swapChainSupport.capabilities.minImageCount() + 1;
-            if(swapChainSupport.capabilities.maxImageCount() > 0 && imageCount > swapChainSupport.capabilities.minImageCount()) {
+            if(swapChainSupport.capabilities.maxImageCount() > 0 && imageCount > swapChainSupport.capabilities.maxImageCount()) {
                 imageCount = swapChainSupport.capabilities.maxImageCount();
             }
         
@@ -1751,7 +1751,7 @@ public class Vulkan {
         }
         else {
             int width = DisplayUtils.getDisplayWidth(), height = DisplayUtils.getDisplayHeight();
-            try(MemoryStack stack = MemoryStack.stackGet()) {
+            try(MemoryStack stack = MemoryStack.stackPush()) {
                 return VkExtent2D.mallocStack(stack)
                     .width(Math.max(capabilities.minImageExtent().width(), Math.min(capabilities.maxImageExtent().width(), width)))
                     .height(Math.max(capabilities.minImageExtent().height(), Math.min(capabilities.maxImageExtent().height(), height)));
@@ -2451,5 +2451,10 @@ public class Vulkan {
         copied.addAll(vulkanInstance.matrices.get(index));
         copied.addAll(new ArrayList<>(Arrays.asList(matrices)));
         vulkanInstance.matrices.set(index, copied);
+    }
+
+    public static void redraw() {
+        vulkanInstance.updateUniformBuffer();
+        vulkanInstance.drawFrame();
     }
 }

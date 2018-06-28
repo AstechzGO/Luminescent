@@ -71,7 +71,10 @@ public class DisplayUtils {
 		monitorRefreshRate = vidmode.refreshRate();
 	
 		widthOffset = Math.max(0, (displayWidth - (displayHeight / 9 * 16)) / 2);
-		if(widthOffset == 0) heightOffset = Math.max(0, (displayHeight - (displayWidth / 16 * 9)) / 2);
+		if(widthOffset == 0)
+			heightOffset = Math.max(0, (displayHeight - (displayWidth / 16 * 9)) / 2);
+		else
+			heightOffset = 0;
 	}
 	public static String displayTitle = "Luminescent";
 	
@@ -260,6 +263,7 @@ public class DisplayUtils {
 		
 		GLFW.glfwSetWindowSizeCallback(handle, RESIZED_CALLBACK);
 		GLFW.glfwSetWindowPosCallback(handle, REPOSITIONED_CALLBACK);
+		GLFW.glfwSetWindowRefreshCallback(handle, REFRESHED_CALLBACK);
 
 		if(Luminescent.DEBUG) {
 			GLFW.glfwSetErrorCallback(ERROR_CALLBACK);
@@ -306,7 +310,10 @@ public class DisplayUtils {
 		monitorRefreshRate = vidmode.refreshRate();
 	
 		widthOffset = Math.max(0, (displayWidth - (displayHeight / 9 * 16)) / 2);
-		if(widthOffset == 0) heightOffset = Math.max(0, (displayHeight - (displayWidth / 16 * 9)) / 2);
+		if(widthOffset == 0)
+			heightOffset = Math.max(0, (displayHeight - (displayWidth / 16 * 9)) / 2);
+		else
+			heightOffset = 0;
 	}
 	
 	public static long getWindow() {
@@ -422,6 +429,15 @@ public class DisplayUtils {
 		
 	};
 
+	public static final GLFWWindowRefreshCallback REFRESHED_CALLBACK = new GLFWWindowRefreshCallback() {
+
+		@Override
+		public void invoke(long window) {
+			Vulkan.redraw();
+		}
+
+	};
+
 	public static final GLFWErrorCallback ERROR_CALLBACK = new GLFWErrorCallback() {
 
 		@Override
@@ -457,7 +473,10 @@ public class DisplayUtils {
 	        displayHeight = mode.HEIGHT;
 	        
 	        widthOffset = Math.max(0, (displayWidth - (displayHeight / 9 * 16)) / 2);
-			if(widthOffset == 0) heightOffset = Math.max(0, (displayHeight - (displayWidth / 16 * 9)) / 2);
+			if(widthOffset == 0)
+				heightOffset = Math.max(0, (displayHeight - (displayWidth / 16 * 9)) / 2);
+			else
+				heightOffset = 0;
 
 			Vulkan.recreate();
 			

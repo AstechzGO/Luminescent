@@ -72,11 +72,14 @@ public class QuadrilateralObjectRenderer implements IObjectRenderer {
 	public void resize() {
 		oldGameWidth = DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2;
 		oldGameHeight = DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2;
-		
+
         ScaledWindowCoordinates loc = new ScaledWindowCoordinates(this.getCoordinates());
         Vector3f location = new Vector3f((float)loc.getScaledWindowCoordinatesX() + DisplayUtils.widthOffset, (float)loc.getScaledWindowCoordinatesY()  + DisplayUtils.heightOffset, 0.0f);
 
-		this.model = new Matrix4f().translation(location).scale((float) (1.0 / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)));
+        Vector3f scale = new Vector3f((((float)DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2) / (float)Camera.CAMERA_WIDTH),
+			(((float)DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2) / (float)Camera.CAMERA_HEIGHT), 1.0f);
+
+		this.model = new Matrix4f().translation(location).scale(scale);
 	}
 
 	@Override

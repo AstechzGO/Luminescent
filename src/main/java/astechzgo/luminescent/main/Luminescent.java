@@ -2,6 +2,7 @@ package astechzgo.luminescent.main;
 
 import static astechzgo.luminescent.utils.DisplayUtils.setDisplayMode;
 
+import java.awt.*;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +55,7 @@ public class Luminescent
 		Sound.init();
 
 		background = new RectangularObjectRenderer(new WindowCoordinates(0, 0), Camera.CAMERA_WIDTH, Camera.CAMERA_HEIGHT);
-		background.setColour(Vulkan.getClearColour());
+		background.setColour(new Color(0.0f, Vulkan.getClearColour().getGreen()/255.0f, Vulkan.getClearColour().getBlue()/255.0f));
 
 		thePlayer = new Player();
 		rooms = JSONWorldLoader.loadRooms();
@@ -117,6 +118,7 @@ public class Luminescent
 		Callbacks.glfwFreeCallbacks(DisplayUtils.getHandle());
 		DisplayUtils.freeErrorCallback();
 		GLFW.glfwDestroyWindow(DisplayUtils.getHandle());
+		GLFW.glfwTerminate();
 		Sound.cleanup();
 		TextureList.cleanup();
 		Animation.cleanup();
