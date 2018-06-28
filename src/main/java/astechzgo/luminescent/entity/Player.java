@@ -10,6 +10,7 @@ import java.nio.DoubleBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
+import astechzgo.luminescent.rendering.LightSource;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -43,6 +44,8 @@ public class Player extends LivingEntity {
 	
 	private double lastControllerDelta = 0;
 	private ScaledWindowCoordinates lastMouseCoords;
+
+	private final LightSource light;
 	
 	public Player() {
 		renderer = new PlayerRenderer(new WindowCoordinates(new GameCoordinates(Camera.CAMERA_WIDTH / 2, Camera.CAMERA_HEIGHT / 2)), 40, 1);
@@ -51,6 +54,9 @@ public class Player extends LivingEntity {
 		
 		radius = 40;
 		coordinates = new GameCoordinates(Camera.CAMERA_WIDTH / 2, Camera.CAMERA_HEIGHT / 2);
+
+		light = new LightSource(coordinates, 500);
+		LightSource.addSource(light);
 	}
 	
 	@Override
@@ -383,5 +389,6 @@ public class Player extends LivingEntity {
 	public void updateRenderer() {
 		renderer.setRotation(rotation);
 		renderer.setCoordinates(new WindowCoordinates(coordinates));
+		light.setCoords(coordinates);
 	}
 }

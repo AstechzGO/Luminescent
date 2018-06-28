@@ -413,7 +413,7 @@ public class Font {
             WindowCoordinates d = new WindowCoordinates(drawX, drawY + g.height);
             
             final Supplier<Character> character = characters[i]::getCharacter;
-            RenderingUtils.createQuad(a, b, c, d, colour, texture, Optional.of(() -> texture.getCurrentFrame(character)), List.of(characters[i]::getModelMatrix));
+            RenderingUtils.createQuad(a, b, c, d, colour, texture, Boolean.valueOf(false)::booleanValue, Optional.of(() -> texture.getCurrentFrame(character)), List.of(characters[i]::getModelMatrix));
             
             drawX += g.width;
         }

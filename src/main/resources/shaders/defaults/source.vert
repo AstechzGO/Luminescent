@@ -11,6 +11,7 @@ layout (binding = 1) uniform UboInstance {
 	int frameIdx;
 	int frameCount;
 	float width;
+	bool doLighting;
 } uboInstance;
 
 layout(location = 0) in vec2 inPosition;
@@ -19,6 +20,7 @@ layout(location = 2) in vec2 inTexCoord;
 
 layout(location = 0) out vec4 fragColor;
 layout(location = 1) out vec2 fragTexCoord;
+layout(location = 2) out float fragUseLighting;
 
 out gl_PerVertex {
 	vec4 gl_Position;
@@ -29,4 +31,5 @@ void main() {
 	fragColor = inColor;
 	
 	fragTexCoord = vec2(inTexCoord.s + uboInstance.width * float(uboInstance.frameIdx) / uboInstance.frameCount, inTexCoord.t);
+	fragUseLighting = uboInstance.doLighting ? 1.0f : 0.0f;
 }

@@ -71,7 +71,6 @@ public class Main
 	 */
 	public void Tick()
 	{
-		GLFW.glfwSwapBuffers(DisplayUtils.getHandle());
 		glfwPollEvents();
 		
 		Vulkan.tick();

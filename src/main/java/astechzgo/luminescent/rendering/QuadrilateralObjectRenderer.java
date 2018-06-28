@@ -30,6 +30,8 @@ public class QuadrilateralObjectRenderer implements IObjectRenderer {
 	
 	protected Matrix4f model = new Matrix4f();
 
+	protected boolean doLighting = true;
+
 	public QuadrilateralObjectRenderer(WindowCoordinates a,WindowCoordinates b, WindowCoordinates c, WindowCoordinates d, Texture texture) {
 		this.texture = texture;
 		
@@ -70,11 +72,14 @@ public class QuadrilateralObjectRenderer implements IObjectRenderer {
 	public void resize() {
 		oldGameWidth = DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2;
 		oldGameHeight = DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2;
-		
+
         ScaledWindowCoordinates loc = new ScaledWindowCoordinates(this.getCoordinates());
         Vector3f location = new Vector3f((float)loc.getScaledWindowCoordinatesX() + DisplayUtils.widthOffset, (float)loc.getScaledWindowCoordinatesY()  + DisplayUtils.heightOffset, 0.0f);
 
-		this.model = new Matrix4f().translation(location).scale((float) (1.0 / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)));
+        Vector3f scale = new Vector3f((((float)DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2) / (float)Camera.CAMERA_WIDTH),
+			(((float)DisplayUtils.getDisplayHeight() - DisplayUtils.heightOffset * 2) / (float)Camera.CAMERA_HEIGHT), 1.0f);
+
+		this.model = new Matrix4f().translation(location).scale(scale);
 	}
 
 	@Override
@@ -247,8 +252,18 @@ public class QuadrilateralObjectRenderer implements IObjectRenderer {
 	    return model;
 	}
 
-    @Override
+	@Override
+	public void setDoesLighting(boolean doLighting) {
+		this.doLighting = doLighting;
+	}
+
+	@Override
+	public boolean doesLighting() {
+		return doLighting;
+	}
+
+	@Override
     public void upload(List<Supplier<Matrix4f>> matrices) {
-        RenderingUtils.createQuad(a, b, c, d, colour, texture, matrices);
+        RenderingUtils.createQuad(a, b, c, d, colour, texture, this::doesLighting, matrices);
     }
 }

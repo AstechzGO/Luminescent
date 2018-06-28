@@ -2,11 +2,13 @@ package astechzgo.luminescent.main;
 
 import static astechzgo.luminescent.utils.DisplayUtils.setDisplayMode;
 
+import java.awt.*;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
+import astechzgo.luminescent.rendering.*;
 import org.joml.Matrix4f;
 import org.lwjgl.glfw.Callbacks;
 import org.lwjgl.glfw.GLFW;
@@ -19,13 +21,6 @@ import astechzgo.luminescent.gameobject.Room;
 import astechzgo.luminescent.keypress.Key;
 import astechzgo.luminescent.keypress.KeyPressGameplay;
 import astechzgo.luminescent.keypress.KeyPressUtils;
-import astechzgo.luminescent.rendering.Camera;
-import astechzgo.luminescent.rendering.FPSCalculator;
-import astechzgo.luminescent.rendering.QuadrilateralObjectRenderer;
-import astechzgo.luminescent.rendering.RectangularObjectRenderer;
-import astechzgo.luminescent.rendering.ResolutionBorderRenderer;
-import astechzgo.luminescent.rendering.TextLabelRenderer;
-import astechzgo.luminescent.rendering.Vulkan;
 import astechzgo.luminescent.sound.Sound;
 import astechzgo.luminescent.text.Font;
 import astechzgo.luminescent.textures.Animation;
@@ -43,7 +38,7 @@ public class Luminescent
 	
 	public static List<Room> rooms;
 	
-	public static RectangularObjectRenderer darkness;
+	public static RectangularObjectRenderer background;
 	
 	public static List<Projectile> projectilePool;
 	public static int projectileIndex;
@@ -58,11 +53,13 @@ public class Luminescent
 		TextureList.loadSlickTextures();
 		
 		Sound.init();
-		
+
+		background = new RectangularObjectRenderer(new WindowCoordinates(0, 0), Camera.CAMERA_WIDTH, Camera.CAMERA_HEIGHT);
+		background.setColour(new Color(0.0f, Vulkan.getClearColour().getGreen()/255.0f, Vulkan.getClearColour().getBlue()/255.0f));
+
 		thePlayer = new Player();
 		rooms = JSONWorldLoader.loadRooms();
 		thePlayer.getRenderer().setTexture(new Animation("player.frame", 16));
-		darkness = new RectangularObjectRenderer(new WindowCoordinates(0, 0), Camera.CAMERA_WIDTH, Camera.CAMERA_HEIGHT, TextureList.findTexture("light.darkness"));
 		projectilePool = new ArrayList<>(32);
 		for(int i = 0; i < 32; i++) {
 		    projectilePool.add(new Projectile(new GameCoordinates(0, 0)));
@@ -77,17 +74,9 @@ public class Luminescent
 		    new ResolutionBorderRenderer(ResolutionBorderRenderer.TOP_RECTANGLE),
 		    new ResolutionBorderRenderer(ResolutionBorderRenderer.BOTTOM_RECTANGLE),
 		};
-		
-		if(Constants.getConstantAsBoolean(Constants.WINDOW_FULLSCREEN)) 
-		{	
-			setDisplayMode(DisplayUtils.vidmode.width(),
-					DisplayUtils.vidmode.height(), true);
-		}
-		else 
-		{
-			setDisplayMode(848, 477, false);
-		}
-		
+
+		background.upload();
+
 		for(Room room : rooms)
 		    room.upload();
         
@@ -103,8 +92,6 @@ public class Luminescent
         projectilePool.get(0).upload(List.of(projectileMatricesArray));
         projectileIndex = Vulkan.getInstances() - 1;
         
-        darkness.upload();
-        
         fpsText.upload();
         
         for(QuadrilateralObjectRenderer resBorder : resBorders) {
@@ -112,13 +99,26 @@ public class Luminescent
         }
         
         Vulkan.constructBuffers();
+
+
+		if(Constants.getConstantAsBoolean(Constants.WINDOW_FULLSCREEN))
+		{
+			setDisplayMode(DisplayUtils.vidmode.width(),
+					DisplayUtils.vidmode.height(), true);
+		}
+		else
+		{
+			setDisplayMode(848, 477, false);
+		}
 	}
 	
 	public static void Shutdown()
 	{
 	    DisplayUtils.setIcons(null);
 		Callbacks.glfwFreeCallbacks(DisplayUtils.getHandle());
+		DisplayUtils.freeErrorCallback();
 		GLFW.glfwDestroyWindow(DisplayUtils.getHandle());
+		GLFW.glfwTerminate();
 		Sound.cleanup();
 		TextureList.cleanup();
 		Animation.cleanup();

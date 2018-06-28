@@ -3,6 +3,8 @@ package astechzgo.luminescent.entity;
 import java.awt.Color;
 import java.util.List;
 
+import astechzgo.luminescent.rendering.LightSource;
+import javafx.scene.effect.Light;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
@@ -30,6 +32,8 @@ public class Projectile extends LivingEntity {
 	
 	private final RectangularObjectRenderer renderer;
 
+	private final LightSource light;
+
 	// The Class
 	// Constructor for projectile
 	public Projectile(GameCoordinates coordinates) {
@@ -40,6 +44,9 @@ public class Projectile extends LivingEntity {
 		
 		this.width = 5;
 		this.height = 5;
+
+		light = new LightSource(coordinates, 0);
+		LightSource.addSource(light);
 	}
 
 	// Called every tick from Luminescent class, shoots bullet in direction
@@ -137,6 +144,7 @@ public class Projectile extends LivingEntity {
 
 	@Override
 	public void updateRenderer() {
+		light.setCoords(coordinates);
 		renderer.setCoordinates(new WindowCoordinates(coordinates));
 	}
 	
@@ -161,13 +169,22 @@ public class Projectile extends LivingEntity {
             Vector3f location = new Vector3f((float)loc.getScaledWindowCoordinatesX() + DisplayUtils.widthOffset, (float)loc.getScaledWindowCoordinatesY()  + DisplayUtils.heightOffset, 0.0f);
 
 			this.model = new Matrix4f().translation(location).scale(isAlive ? (float) (1.0 / Camera.CAMERA_WIDTH * (DisplayUtils.getDisplayWidth() - DisplayUtils.widthOffset * 2)) : 0);
+
+			if(isAlive) {
+      			light.setRadius(50);
+			}
+			else {
+      			light.setRadius(0);
+			}
         }
 	}
 	
 	public void init(GameCoordinates coordinates) {
+		lastDelta = GLFW.glfwGetTime() * 1000;
 	    rotation = Luminescent.thePlayer.setRotation();
 	    setAlive(true);
 	    
 	    this.coordinates = new GameCoordinates(coordinates.getGameCoordinatesX() + (22.5 + width / 2) * Math.cos(Math.toRadians(rotation - 270)), coordinates.getGameCoordinatesZ() + (22.5 + height / 2)  * Math.sin(Math.toRadians(rotation - 270)));
+
 	}
 }

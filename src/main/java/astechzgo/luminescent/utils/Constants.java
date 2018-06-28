@@ -28,6 +28,7 @@ public class Constants
 	public static final String KEYS_UTIL_FULLSCREEN = 							"keys.util.fullscreen";
 	public static final String KEYS_UTIL_EXIT = 								"keys.util.exit";
 	public static final String KEYS_UTIL_NEXTWINDOW = 							"keys.utils.nextwindow";
+	public static final String KEYS_UTIL_TOGGLELIGHTING = 						"keys.utils.togglelighting";
 	
 	public static final String CONTROLLER_MOVEMENT_ROTATION_CLOCKWISE = 		"controller.movement.rotation.clockwise"; 
 	public static final String CONTROLLER_MOVEMENT_ROTATION_COUNTERCLOCKWISE = 	"controller.movement.rotation.counterclockwise"; 
@@ -49,9 +50,10 @@ public class Constants
 		defaults.put(KEYS_ACTION_SHOOT,											"{SPACE}");
 		
 		defaults.put(KEYS_UTIL_SCREENSHOT, 										"{F2}");
-		defaults.put(KEYS_UTIL_FULLSCREEN, 										"{F11}");
+		defaults.put(KEYS_UTIL_FULLSCREEN, 										"{F10}");
 		defaults.put(KEYS_UTIL_EXIT, 											"{TAB, ESCAPE}");
 		defaults.put(KEYS_UTIL_NEXTWINDOW,										"{F4}");
+		defaults.put(KEYS_UTIL_TOGGLELIGHTING,									"{L}");
 		
 		defaults.put(CONTROLLER_MOVEMENT_ROTATION_CLOCKWISE,					"{{-1}},{{-1}},{{-1}}");
 		defaults.put(CONTROLLER_MOVEMENT_ROTATION_COUNTERCLOCKWISE,				"{{-1}},{{-1}},{{-1}}");

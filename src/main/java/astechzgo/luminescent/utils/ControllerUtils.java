@@ -27,7 +27,7 @@ public class ControllerUtils {
 	
 	public static final List<Integer> joysticks = new ArrayList<>();
 	
-	public static final Map<Integer, String> JOYSTICK_SLOT_VALUES = APIUtil.apiClassTokens((field, value) -> field.getName().startsWith("GLFW_JOYSTICK_"), null, GLFW.class);
+	public static final Map<Integer, String> JOYSTICK_SLOT_VALUES = APIUtil.apiClassTokens((field, value) -> field.getName().matches("^GLFW_JOYSTICK_*\\d\\d?$"), null, GLFW.class);
 	
 	public static void updateJoysticks() {
 		for(Entry<Integer, String> joystickEntry : JOYSTICK_SLOT_VALUES.entrySet()) {

@@ -31,23 +31,17 @@ public class KeyPressGameplay {
 			
 			lastShot = (GLFW.glfwGetTime() * 1000);
 		}
-		
-		// For every shot render it and keep shooting it forwards
-		for(int i = 0; i < projectiles.size(); i++) {
-			Projectile m = projectiles.get(i);
-			m.updateRenderer();
-			m.fireBullet(getVerticalEdges(rooms), getHorizontalEdges(rooms));
-			
-			if(!m.isAlive()) {
-				// If the bullet is not it the room delete it
-				projectiles.remove(i);
-			}
-		}
+
+		projectiles.removeIf((projectile) -> !projectile.isAlive());
+		projectiles.forEach((projectile) -> {
+			projectile.updateRenderer();
+			projectile.fireBullet(getVerticalEdges(rooms), getHorizontalEdges(rooms));
+		});
 	}
 	
 	private static Projectile getUnused() {
 	    for(Projectile p : Luminescent.projectilePool) {
-	        if(!p.isAlive()) {
+	        if(!p.isAlive() && !projectiles.contains(p)) {
 	            return p;
 	        }
 	    }

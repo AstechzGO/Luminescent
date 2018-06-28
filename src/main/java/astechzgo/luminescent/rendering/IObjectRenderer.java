@@ -38,4 +38,7 @@ public interface IObjectRenderer
 	void setCoordinates(WindowCoordinates coordinates);
 	
 	Matrix4f getModelMatrix();
+
+	void setDoesLighting(boolean doLighting);
+	boolean doesLighting();
 }

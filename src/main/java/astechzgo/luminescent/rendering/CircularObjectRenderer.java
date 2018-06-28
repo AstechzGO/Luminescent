@@ -33,6 +33,8 @@ public class CircularObjectRenderer implements IObjectRenderer {
 	
 	protected Matrix4f model = new Matrix4f();
 
+	protected boolean doLighting = true;
+
     public CircularObjectRenderer(WindowCoordinates coordinates, double radius) {
 		this(coordinates, radius, 1);
 	}
@@ -193,8 +195,18 @@ public class CircularObjectRenderer implements IObjectRenderer {
 	    return model;
 	}
 
-    @Override
+	@Override
+	public void setDoesLighting(boolean doLighting) {
+		this.doLighting = doLighting;
+	}
+
+	@Override
+	public boolean doesLighting() {
+		return doLighting;
+	}
+
+	@Override
     public void upload(List<Supplier<Matrix4f>> matrices) {
-        RenderingUtils.createCircle(radius, pointSeperation, colour, texture, matrices);
+        RenderingUtils.createCircle(radius, pointSeperation, colour, texture, this::doesLighting, matrices);
     }
 }
