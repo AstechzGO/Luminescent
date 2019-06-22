@@ -71,7 +71,7 @@ public class SystemUtils {
     }
 	
 	public static File newFile(String relativeLoc) {
-		return new File(new File(relativeLoc).getAbsolutePath());
+		return new File(System.getProperty("user.dir"), relativeLoc);
 	}
 	
 	public static URL getResourceAsURL(String relativeLoc) {

@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.util.List;
 
 import astechzgo.luminescent.rendering.LightSource;
-import javafx.scene.effect.Light;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
