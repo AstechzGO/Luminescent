@@ -2193,8 +2193,8 @@ public class Vulkan {
         try(MemoryStack stack = MemoryStack.stackPush()) {
             long[] imageAddress = new long[] { 0 };
             long[] imageMemoryAddress = new long[] { 0 };
-            createImage(width, height, VK10.VK_FORMAT_B8G8R8A8_UNORM, VK10.VK_IMAGE_TILING_OPTIMAL, VK10.VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK10.VK_IMAGE_USAGE_TRANSFER_SRC_BIT, VK10.VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, imageAddress, imageMemoryAddress);
-            long imageSourceView = createImageView(imageAddress[0], VK10.VK_FORMAT_B8G8R8A8_UNORM);
+            createImage(width, height, VK10.VK_FORMAT_R8G8B8A8_UNORM, VK10.VK_IMAGE_TILING_OPTIMAL, VK10.VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK10.VK_IMAGE_USAGE_TRANSFER_SRC_BIT, VK10.VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, imageAddress, imageMemoryAddress);
+            long imageSourceView = createImageView(imageAddress[0], VK10.VK_FORMAT_R8G8B8A8_UNORM);
             
             
             VkFramebufferCreateInfo framebufferInfo = VkFramebufferCreateInfo.mallocStack(stack)
@@ -2357,14 +2357,6 @@ public class Vulkan {
             VK10.vkDestroyImage( device, imageAddress[0], null );
             VK10.vkDestroyBuffer(device, stagingBufferAddress[0], null);
             VK10.vkFreeMemory(device, stagingBufferMemoryAddress[0], null);
-            
-            for(int i = 0; i < raw.length; i += 4) {
-                byte r = raw[i + 2];
-                byte b = raw[i];
-                
-                raw[i] = r;
-                raw[i + 2] = b;
-            }
             
             return raw;
         }
