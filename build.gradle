@@ -95,8 +95,8 @@ task run(dependsOn:deploy) {
 }
 
 compileJava {
-	sourceCompatibility = 12
-	targetCompatibility = 12
+	sourceCompatibility = 11
+	targetCompatibility = 11
 }
 
 wrapper {
