@@ -6,7 +6,7 @@ import astechzgo.luminescent.gameobject.Room;
 import java.util.*;
 import java.util.stream.Collectors;
 
-class PolySimplifier {
+public class PolySimplifier {
 
     public static List<Edge> simplify(List<Room> rooms) {
         Rectangle[] rectangles = new Rectangle[rooms.size()];
