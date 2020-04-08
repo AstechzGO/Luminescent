@@ -2,8 +2,8 @@
 apply plugin: "java"
 apply plugin: "idea"
 
-project.ext.lwjglVersion = "3.2.2"
-project.ext.jomlVersion = "1.9.15"
+project.ext.lwjglVersion = "3.2.3"
+project.ext.jomlVersion = "1.9.24"
 
 // In this section you declare where to find the dependencies of your project
 repositories {
@@ -52,7 +52,7 @@ jar {
 	}
 }
 
-// Don"t add resources to JAR again
+// Don't add resources to JAR again
 sourceSets {
 	main {
 		resources {
@@ -100,5 +100,5 @@ compileJava {
 }
 
 wrapper {
-	gradleVersion = '5.4.1'
+	gradleVersion = '6.3'
 }
