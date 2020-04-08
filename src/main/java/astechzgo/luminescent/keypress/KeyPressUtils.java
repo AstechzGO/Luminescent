@@ -55,16 +55,9 @@ public class KeyPressUtils {
 			cameraClick.restart();
 		}
 		if(KEYS_UTIL_NEXTWINDOW.isKeyDownOnce()) {
-//			if(GLFW.glfwGetMonitors().capacity() > 1) {
-//				if(DisplayUtils.isFullscreen()) {
-//					setDisplayMode(848, 477, false);
-//					DisplayUtils.nextMonitor();
-//					setDisplayMode(DisplayUtils.monitorWidth, DisplayUtils.monitorHeight, true);
-//				}
-//				else {
-//					DisplayUtils.nextMonitor();
-//				}
-//			}
+			if(GLFW.glfwGetMonitors().capacity() > 1) {
+				DisplayUtils.nextMonitor();
+			}
 		    Vulkan.constructBuffers();
 		}
 		if(KEYS_UTIL_TOGGLELIGHTING.isKeyDownOnce()) {

@@ -90,12 +90,24 @@ public class DisplayUtils {
 	 *            True if we want fullscreen mode
 	 */
 	public static void setDisplayMode(int width, int height, boolean fullscreen) {
-		DisplayUtils.displayFullscreen = fullscreen;
+		if(fullscreen && !displayFullscreen) {
+			long[] monitors = getMonitors();
+			long actualMonitor = monitors[currentMonitorIdx(monitors)];
+
+			if(actualMonitor != monitor) {
+				changeMonitor(actualMonitor);
+			}
+		}
+
+		int monitorWidthOffset = getMonitorOffsetWidth(DisplayUtils.monitor);
+		int monitorHeightOffset = getMonitorOffsetHeight(DisplayUtils.monitor);
+
 		displayWidth = width;
 		displayHeight = height;
-		displayX = (DisplayUtils.monitorWidth / 2) - (displayWidth / 2);
-		displayY = (DisplayUtils.monitorHeight / 2) - (displayHeight / 2);
+		displayX = (DisplayUtils.monitorWidth / 2) - (displayWidth / 2) + monitorWidthOffset;
+		displayY = (DisplayUtils.monitorHeight / 2) - (displayHeight / 2) + monitorHeightOffset;
 
+		DisplayUtils.displayFullscreen = fullscreen;
 		GLFW.glfwSetWindowMonitor(handle, fullscreen ? monitor : NULL, displayX, displayY, width, height, monitorRefreshRate);
 	}
 
@@ -341,52 +353,78 @@ public class DisplayUtils {
 			return ypos.get();
 		}
 	}
-	
-	public static void nextMonitor() {
+
+	private static long[] getMonitors() {
 		//Pointer to array
 		long[] monitors = new long[GLFW.glfwGetMonitors().capacity()];
 		int q = 0;
 		while(q < GLFW.glfwGetMonitors().capacity()) {
 			monitors[q] = GLFW.glfwGetMonitors().get(q);
 			q++;
-		}		
-		
-		
-		int nextMonitorIdx = 0;
-		int currentMonitorIdx = 0;
-		
+		}
+		return monitors;
+	}
+
+	private static int currentMonitorIdx(long[] monitors) {
+		if(displayFullscreen) {
+			for(int i = 0; i < monitors.length; i++) {
+				if(monitors[i] == monitor) {
+					return i;
+				}
+			}
+		}
+
 		int monitorOffsetWidth = 0;
 		int monitorOffsetHeight = 0;
-		
+
 		int secondMonitorWidth = 0;
 		int secondMonitorHeight = 0;
 
 		for(int i = 0; i < monitors.length; i++) {
-				
+
 			monitorOffsetWidth = getMonitorOffsetWidth(monitors[i]);
 			monitorOffsetHeight = getMonitorOffsetHeight(monitors[i]);
 
 			GLFWVidMode mode = GLFW.glfwGetVideoMode(monitors[i]);
-				
+
 			secondMonitorWidth = mode.width();
-				
+
 			secondMonitorHeight = mode.height();
-				
+
 			Rectangle r = new Rectangle(monitorOffsetWidth, monitorOffsetHeight, secondMonitorWidth, secondMonitorHeight);
-				
-			if(r.contains(displayX, displayY)) {
-				currentMonitorIdx = i;
-				if(currentMonitorIdx != (monitors.length - 1))
-					nextMonitorIdx = currentMonitorIdx + 1;
-				else
-					nextMonitorIdx = 0;
-				break;
+
+			if (r.contains(displayX, displayY)) {
+				return i;
 			}
 		}
-		
-		changeMonitor(monitors[nextMonitorIdx]);
-		
 
+		for(int i = 0; i < monitors.length; i++) {
+			if(monitors[i] == monitor) {
+				return i;
+			}
+		}
+		return 0;
+	}
+
+	public static void nextMonitor() {
+		long[] monitors = getMonitors();
+
+		int currentMonitorIdx = currentMonitorIdx(monitors);
+
+		int nextMonitorIdx;
+		if(currentMonitorIdx != (monitors.length - 1))
+			nextMonitorIdx = currentMonitorIdx + 1;
+		else
+			nextMonitorIdx = 0;
+
+		changeMonitor(monitors[nextMonitorIdx]);
+
+		if(displayFullscreen) {
+			setDisplayMode(DisplayUtils.vidmode.width(),
+					DisplayUtils.vidmode.height(), true);
+		}
+
+		int monitorOffsetWidth, monitorOffsetHeight;
 		try(MemoryStack stack = MemoryStack.stackPush()) {
 			IntBuffer xpos = stack.mallocInt(1);
 			IntBuffer ypos = stack.mallocInt(1);
