@@ -35,17 +35,17 @@ public class KeyPressUtils {
 				KeyboardUtils.resetKeys();
 			}
 		}
-		if(KEYS_UTIL_SCREENSHOT.isKeyDownOnce()) {			
+		if(KEYS_UTIL_SCREENSHOT.isKeyDownOnce()) {
 			File dir = newFile("screenshots/");
-			
+
 			if(!dir.exists() || !dir.isDirectory()) {
 				dir.mkdir();
 			}
-			
+
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
 			Date dt = new Date();
 			String S = sdf.format(dt);
-			
+
 			try {
 				DisplayUtils.takeScreenshot(newFile("screenshots/" + S + ".png"));
 			} catch (Exception e) {

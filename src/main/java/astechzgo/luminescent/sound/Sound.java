@@ -11,7 +11,7 @@ public class Sound {
 	}
 	
 	public static void cleanup() {
-		soundManager.getSoundSystem().cleanup();
+		soundManager.cleanup();
 	}
 	
 	private final String sourcename;
@@ -24,7 +24,7 @@ public class Sound {
 		this.uniquename = getUniqueName(sourcename);
 	}
 	
-	private String getUniqueName(String sourcename) {
+	private static String getUniqueName(String sourcename) {
 		String uniquename = sourcename + new UID();
 		
 		soundManager.addUniqueSource(sourcename, uniquename);
@@ -42,7 +42,7 @@ public class Sound {
 			return;
 		}
 		
-		soundManager.getSoundSystem().play(uniquename);
+		soundManager.play(uniquename);
 	}
 	
 	public void stop() {
@@ -51,8 +51,8 @@ public class Sound {
 			return;
 		}
 		
-		if(soundManager.getSoundSystem().playing(uniquename))
-			soundManager.getSoundSystem().stop(uniquename);
+		if(soundManager.playing(uniquename))
+			soundManager.stop(uniquename);
 	}
 	
 	public void restart() {
@@ -66,7 +66,7 @@ public class Sound {
 			return;
 		}
 		
-		soundManager.getSoundSystem().pause(uniquename);
+		soundManager.pause(uniquename);
 	}
 	
 	public void playDestroy() {
@@ -80,7 +80,7 @@ public class Sound {
 			return;
 		}
 		
-		soundManager.getSoundSystem().unloadSound(uniquename);
+		soundManager.unloadSound(uniquename);
 		destroyed = true;
 	}
 }

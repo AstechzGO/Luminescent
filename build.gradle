@@ -8,14 +8,11 @@ project.ext.jomlVersion = "1.9.24"
 // In this section you declare where to find the dependencies of your project
 repositories {
 	mavenCentral()
-	flatDir {
-		dirs "libs/paulscode"
-	}
 }
 
 // In this section you declare the dependencies for your production and test code
 dependencies {
-	compile "com.google.code.gson:gson:2.8.5"
+	compile "com.google.code.gson:gson:2.8.6"
 
 	compile "org.lwjgl:lwjgl:${lwjglVersion}"
 	compile "org.lwjgl:lwjgl-glfw:${lwjglVersion}"
@@ -39,10 +36,6 @@ dependencies {
 	compile "org.lwjgl:lwjgl-stb:${lwjglVersion}:natives-linux"
 	compile "org.lwjgl:lwjgl-stb:${lwjglVersion}:natives-macos"
 	compile "org.joml:joml:${jomlVersion}"
-	
-	compile name: "SoundSystem"
-	compile name: "CodecMP3"
-	compile name: "LibraryLWJGL3OpenAL"
 }
 
 // Workaround for putting resources in resources folder
