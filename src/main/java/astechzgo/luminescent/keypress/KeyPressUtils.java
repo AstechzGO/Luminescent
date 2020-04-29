@@ -51,7 +51,7 @@ public class KeyPressUtils {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
+
 			cameraClick.restart();
 		}
 		if(KEYS_UTIL_NEXTWINDOW.isKeyDownOnce()) {

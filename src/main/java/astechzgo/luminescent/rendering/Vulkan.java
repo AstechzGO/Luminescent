@@ -91,9 +91,42 @@ public class Vulkan {
     public static void createWindowSurface() {
         vulkanInstance.createSurface();
     }
-    
-    public static byte[] readPixels(int x, int y, int width, int height) {
-        return vulkanInstance.readPixelsToArray(x, y, width, height);
+
+    public final class RawImage {
+        private final int width, height;
+        private final int colourFormat;
+        private final ByteBuffer data;
+
+        private RawImage(int width, int height, int colourFormat, ByteBuffer data) {
+            this.width = width;
+            this.height = height;
+            this.colourFormat = colourFormat;
+            this.data = data;
+        }
+
+        public int getWidth() {
+            return width;
+        }
+
+        public int getHeight() {
+            return height;
+        }
+
+        public int getColourFormat() {
+            return colourFormat;
+        }
+
+        public ByteBuffer getData() {
+            return data;
+        }
+
+        public void free() {
+            MemoryUtil.memFree(data);
+        }
+    }
+
+    public static RawImage readPixels() {
+        return vulkanInstance.readPixelsToArray();
     }
 
     private final String[] validationLayers = { 
@@ -2160,7 +2193,7 @@ public class Vulkan {
         }
     }
 
-    private byte[] readPixelsToArray(int x, int y, int width, int height) {
+    private RawImage readPixelsToArray() {
         boolean supportsBlit = true;
 
         try(MemoryStack stack = MemoryStack.stackPush()) {
@@ -2301,18 +2334,21 @@ public class Vulkan {
 
             ByteBuffer buffer = MemoryUtil.memByteBuffer(data.get() + subResourceLayout.offset(), 4*swapChainExtent.width()*swapChainExtent.height());
 
-            byte[] readData = new byte[4*swapChainExtent.width()*swapChainExtent.height()];
-            buffer.get(readData);
+            ByteBuffer bufferData = MemoryUtil.memAlloc(buffer.limit());
+            bufferData.put(buffer);
+            bufferData.flip();
 
             // TODO: More robust approach
             switch (swapChainImageFormat) {
                 case VK10.VK_FORMAT_B8G8R8A8_SRGB:
                 case VK10.VK_FORMAT_B8G8R8A8_UNORM:
                 case VK10.VK_FORMAT_B8G8R8A8_SNORM:
-                    for(int i = 0; i < readData.length; i += 4) {
-                        byte temp = readData[i];
-                        readData[i] = readData[i + 2];
-                        readData[i + 2] = temp;
+                    for(int i = 0; i < bufferData.limit(); i += 4) {
+                        byte temp = bufferData.get(i);
+                        bufferData.put(i, bufferData.get(i + 2));
+                        bufferData.put(i + 2, temp);
+                        // Effectively remove all transparency
+                        bufferData.put(i + 3, (byte) 0xff);
                     }
             }
 
@@ -2320,7 +2356,7 @@ public class Vulkan {
             VK10.vkFreeMemory(device, dstImageMemory[0], null);
             VK10.vkDestroyImage(device, dstImage[0], null);
 
-            return readData;
+            return new RawImage(swapChainExtent.width(), swapChainExtent.height(), swapChainImageFormat, bufferData);
         }
     }
     

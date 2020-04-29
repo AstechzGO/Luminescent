@@ -8,17 +8,14 @@ import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
-import javax.imageio.ImageIO;
-
 import astechzgo.luminescent.main.Luminescent;
 import org.lwjgl.glfw.*;
-import org.lwjgl.glfw.GLFWVidMode.Buffer;
 import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.MemoryUtil;
+import org.lwjgl.stb.STBImageWrite;
 
 import astechzgo.luminescent.rendering.Vulkan;
 import astechzgo.luminescent.textures.TextureList;
@@ -139,73 +136,14 @@ public class DisplayUtils {
 	}
 
 	public static void takeScreenshot(File file) {
-		//GL11.glReadBuffer(GL11.GL_FRONT);
-		int width = displayWidth;
-		int height= displayHeight;
-		int bpp = (monitorBitPerPixel / 8) + 1;  //For alpha
-		
-		ByteBuffer buffer = MemoryUtil.memAlloc((width - DisplayUtils.widthOffset) * (height - DisplayUtils.heightOffset) * bpp);
-		buffer.put(Vulkan.readPixels(DisplayUtils.widthOffset, DisplayUtils.heightOffset, width - DisplayUtils.widthOffset, height - DisplayUtils.heightOffset));
-		String format = "png";
-		BufferedImage image = new BufferedImage(width - DisplayUtils.widthOffset * 2, height - DisplayUtils.heightOffset * 2, BufferedImage.TYPE_INT_RGB);
-		
-		for(int x = 0; x < width - DisplayUtils.widthOffset * 2; x++) 
-		{
-		    for(int y = 0; y < height - DisplayUtils.heightOffset * 2; y++)
-		    {
-		        int i = (x + ((width - DisplayUtils.widthOffset) * y)) * bpp;
-		        int r = buffer.get(i) & 0xFF;
-		        int g = buffer.get(i + 1) & 0xFF;
-		        int b = buffer.get(i + 2) & 0xFF;
-		        image.setRGB(width - DisplayUtils.widthOffset * 2 - (x + 1), height - DisplayUtils.heightOffset * 2 - (y + 1), (0xFF << 24) | (r << 16) | (g << 8) | b);
-		    }
-		}
-		   
-		MemoryUtil.memFree(buffer);
-		
-		image = getFlippedImage(image);
-		
-		try {
-		    ImageIO.write(image, format, file);
-		} 
-		catch (IOException e) { 
-			e.printStackTrace();
-		}
+		final Vulkan.RawImage raw = Vulkan.readPixels();
+		Thread saveThread = new Thread(() -> {
+			STBImageWrite.stbi_write_png(file.getAbsolutePath(), raw.getWidth(), raw.getHeight(), 4, raw.getData(), 0);
+			raw.free();
+		});
+		saveThread.setDaemon(true);
+		saveThread.start();
 	}
-	
-    public static BufferedImage getFlippedImage(BufferedImage bi) {
-        BufferedImage flipped = new BufferedImage(
-                bi.getWidth(),
-                bi.getHeight(),
-                bi.getType());
-        AffineTransform tran = AffineTransform.getTranslateInstance(bi.getWidth(), 0);
-        AffineTransform flip = AffineTransform.getScaleInstance(-1d, 1d);
-        tran.concatenate(flip);
-
-        Graphics2D g = flipped.createGraphics();
-        g.setTransform(tran);
-        g.drawImage(bi, 0, 0, null);
-        g.dispose();
-
-        return getFlipped2Image(flipped);
-    }
-	
-    private static BufferedImage getFlipped2Image(BufferedImage bi) {
-        BufferedImage flipped = new BufferedImage(
-                bi.getWidth(),
-                bi.getHeight(),
-                bi.getType());
-        AffineTransform tran = AffineTransform.getTranslateInstance(0, bi.getHeight());
-        AffineTransform flip = AffineTransform.getScaleInstance(1d, -1d);
-        tran.concatenate(flip);
-
-        Graphics2D g = flipped.createGraphics();
-        g.setTransform(tran);
-        g.drawImage(bi, 0, 0, null);
-        g.dispose();
-
-        return flipped;
-    }
     
 	private static class DisplayMode {
 		private final int WIDTH, HEIGHT, BPP, FREQ;
