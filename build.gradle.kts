@@ -80,7 +80,7 @@ task("copyToRoot") {
 		copy {
 			duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 			from("build/libs/Luminescent.jar")
-			into("/")
+			into(".")
 		}
 	}
 }
