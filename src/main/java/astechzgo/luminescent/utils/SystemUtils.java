@@ -35,7 +35,6 @@ public class SystemUtils {
 	 * Windows, Linux, or OS X
 	 */
 	public static void doOSSetUp() {
-		
 		if(Platform.get() == Platform.LINUX) {
 			workingDirectory = new File(userHome, ".luminescent/");
 		}
@@ -89,24 +88,13 @@ public class SystemUtils {
 	}
 	
     public static byte[] readFile(String file) {
-        InputStream is = null;
-        
-        try {
-            is = getResourceAsURL(file).openStream();
+        try(InputStream is = getResourceAsURL(file).openStream()) {
+            return is.readAllBytes();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        byte[] bytes = new byte[0];
-        try {
-            bytes = new byte[is.available()];
-            is.read(bytes);
-            is.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        
-        return bytes;
+        return null;
     }
 	
 	public static boolean isJar() {

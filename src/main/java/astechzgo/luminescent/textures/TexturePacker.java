@@ -57,7 +57,7 @@ public class TexturePacker {
             byWidth.remove(th);
             byHeight.remove(th);
             
-            // XXX: Texture bleed if width doesn't have an extra space
+            // FIXME: Texture bleed if width doesn't have an extra space
             int levelX = th.getAsBufferedImage().getWidth() + 1;
             int i = 0;
             while(byWidth.size() != i) {

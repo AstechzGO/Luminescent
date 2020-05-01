@@ -55,7 +55,11 @@ astechzgo.luminescent:
 		CircularObjectRenderer:
 			isTouching():
 				http://www.java-gaming.org/index.php/topic,10265.
+		FPSCalculator:
+			(Nothing)
 		IObjectRenderer:
+			(Nothing)
+		LightSource:
 			(Nothing)
 		Options:
 			(Nothing)
@@ -75,11 +79,13 @@ astechzgo.luminescent:
 			(Nothing)	
 		ResolutionBorderRenderer:
 			(Nothing)
+		TextLabelRenderer:
+			(Nothing)
 		Vulkan:
 			Based on tutorial at https://vulkan-tutorial.com/.
 			Dynamic uniform buffers based on tutorial at https://github.com/SaschaWillems/Vulkan/tree/master/dynamicuniformbuffer
 			readPixelsToArray():
-				https://forums.khronos.org/showthread.php/13008-quot-readPixels-quot-on-vulkan
+				https://github.com/SaschaWillems/Vulkan/blob/master/examples/screenshot/screenshot.cpp
 	shader:
 		Shader:
 			(Nothing)
@@ -91,10 +97,9 @@ astechzgo.luminescent:
 		SoundList:
 			(Nothing)
 		SoundManager:
-			SoundManager():
-				http://www.paulscode.com/tutorials/SoundSystem/SoundSystem.pdf
-			loadSound():
-				http://www.paulscode.com/tutorials/SoundSystem/SoundSystem.pdf
+			Based on tutorial at https://github.com/LWJGL/lwjgl3-wiki/wiki/2.1.-OpenAL
+		Source:
+			(Nothing)
 	text:
 		Font:
 			https://github.com/SilverTiger/lwjgl3-tutorial/blob/master/src/silvertiger/tutorial/lwjgl/text/Font.java
@@ -132,6 +137,8 @@ astechzgo.luminescent:
 				http://www.java-gaming.org/index.php?topic=25516.0
 		TextureList:
 			(Nothing)
+		TexturePacker:
+			(Nothing)
 	utils:
 		Constants:
 			https://github.com/FRC2994/FRC-2015/blob/master/src/ca/team2994/frc/utils/Constants.java
@@ -144,15 +151,6 @@ astechzgo.luminescent:
 			setDisplayMode():
 				http://wiki.lwjgl.org/wiki/LWJGL_Basics_5_(Fullscreen)#Convenience_method_to_Switch_Resolution
 				https://github.com/kappaOne/lwjglx/blob/master/src/org/lwjglx/opengl/Display.java
-			takeScreenshot():
-				http://wiki.lwjgl.org/wiki/Taking_Screen_Shots
-			getFlippedImage():
-				StackOverflow:
-					http://stackoverflow.com/questions/13742365/how-do-i-flip-an-image-horizontally-flip-with-glreadpixels-bufferedimage-and-o:
-						Question:
-							Rose Blax					(http://stackoverflow.com/users/1878494/rose-blax)
-						Answer:
-							Andrew Thompson				(http://stackoverflow.com/users/418556/andrew-thompson)
 			DisplayMode:
 				https://github.com/kappaOne/lwjglx/blob/master/src/org/lwjglx/opengl/DisplayMode.java
 			create():
@@ -196,9 +194,9 @@ astechzgo.luminescent:
 			printException():
 				http://www.rgagnon.com/javadetails/java-0537.html
 		RenderingUtils:
-			RenderQuad():
+			createQuad():
 				http://wiki.lwjgl.org/wiki/The_Quad_textured
-			RenderCircle():
+			createCircle():
 				StackOverflow:
 					http://stackoverflow.com/questions/8762826/texture-mapping-a-circle-made-using-gl-polygon:
 						Question:
@@ -208,8 +206,6 @@ astechzgo.luminescent:
 							ClickerMonkey				(http://stackoverflow.com/users/914155/clickermonkey)
 							Christian Rau				(http://stackoverflow.com/users/743214/christian-rau)
 				http://wiki.lwjgl.org/wiki/The_Quad_textured
-			DrawTextureRegion():
-				https://github.com/SilverTiger/lwjgl3-tutorial/blob/master/src/silvertiger/tutorial/lwjgl/graphic/Renderer.java#L351
 		SystemUtils:
 			setWorkingDirectory():
 				StackOverflow:
@@ -219,6 +215,12 @@ astechzgo.luminescent:
 						Answer:
 							Steve K						(http://stackoverflow.com/users/1864131/steve-k)
 	worldloader:
+		ConstantNode:
+			(Nothing)
+		EquationInterpreter:
+			(Nothing)
+		EquationNode:
+			(Nothing)
 		JSONWorldLoader:
 			loadRoom():
 				StackOverflow:
@@ -236,10 +238,23 @@ astechzgo.luminescent:
 							Mark Rotteveel				(http://stackoverflow.com/users/466862/mark-rotteveel)
 						Answer:
 							Abdennour TOUMI				(http://stackoverflow.com/users/747579/abdennour-toumi)
+		OperationNode:
+			(Nothing)
+		PolySimplifier:
+			(Nothing)
+		SignNode:
+			(Nothing)
 resources:
 	shaders:
 		defaults:
-			source.frag:
+			defaultFragShader.glsl:
 				https://vulkan-tutorial.com/
-			source.vert:
+			defaultVertShader.glsl:
 				https://vulkan-tutorial.com/
+build.gradle.kts:
+	(Nothing)
+shaders.gradle.kts
+	processResources:
+		https://github.com/google/shaderc/blob/master/libshaderc/src/shaderc_c_smoke_test.c
+		http://www.java2s.com/Tutorials/Java/IO_How_to/nio_Buffer/Save_ByteBuffer_to_a_file.htm
+		http://www.java2s.com/Tutorials/Java/IO_How_to/nio_Buffer/Save_ByteBuffer_to_a_file.htm
