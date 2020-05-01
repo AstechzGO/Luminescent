@@ -1,21 +1,22 @@
-import org.gradle.internal.os.OperatingSystem
-
 // Apply the java plugin to add support for Java & add IntelliJ plugin
 plugins {
 	java
 	idea
 }
 
-val lwjglVersion = "3.2.3"
-val jomlVersion = "1.9.24"
+buildscript {
+	extra["lwjglVersion"] = "3.2.3"
+	extra["jomlVersion"] = "1.9.24"
+	extra["gsonVersion"] = "2.8.6"
+}
 
 repositories {
 	mavenCentral()
 }
 
 dependencies {
-	implementation("com.google.code.gson:gson:2.8.6")
-	implementation(platform("org.lwjgl:lwjgl-bom:$lwjglVersion"))
+	implementation("com.google.code.gson:gson:${project.extra["gsonVersion"]}")
+	implementation(platform("org.lwjgl:lwjgl-bom:${project.extra["lwjglVersion"]}"))
 
 	implementation("org.lwjgl", "lwjgl")
 	implementation("org.lwjgl", "lwjgl-glfw")
@@ -39,8 +40,21 @@ dependencies {
 	runtimeOnly("org.lwjgl", "lwjgl-stb", classifier = "natives-macos")
 	runtimeOnly("org.lwjgl", "lwjgl-stb", classifier = "natives-windows")
 	runtimeOnly("org.lwjgl", "lwjgl-vulkan", classifier = "natives-macos")
-	implementation("org.joml", "joml", jomlVersion)
+	implementation("org.joml", "joml", project.extra["jomlVersion"] as String)
 }
+
+//create a single Jar with all dependencies
+task<Jar>("deploy") {
+	manifest {
+		attributes(Pair("Main-Class", "astechzgo.luminescent.main.Main"))
+	}
+
+	from({
+		duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+		configurations.runtimeClasspath.get().map { if(it.isDirectory) it else zipTree(it) }
+	})
+	with(tasks["jar"] as CopySpec)
+}.finalizedBy("copyToRoot")
 
 // Don't add resources to JAR again
 sourceSets {
@@ -51,26 +65,20 @@ sourceSets {
 	}
 }
 
-//create a single Jar with all dependencies
-task<Jar>("deploy") {
-	manifest {
-		attributes(Pair("Main-Class", "astechzgo.luminescent.main.Main"))
-	}
-
-	from("src/main/resources"){
+tasks.processResources {
+	from("src/main/resources") {
+		duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 		into ("resources")
 	}
+}
 
-	from({
-		configurations.runtimeClasspath.get().map { if(it.isDirectory) it else zipTree(it) }
-	})
-	with(tasks["jar"] as CopySpec)
-}.finalizedBy("copyToRoot")
+apply(from = "shaders.gradle.kts")
 
 // Copy to base directory
 task("copyToRoot") {
 	doLast {
 		copy {
+			duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 			from("build/libs/Luminescent.jar")
 			into("/")
 		}
