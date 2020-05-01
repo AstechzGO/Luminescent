@@ -22,12 +22,22 @@ jobs:
       run: chmod +x gradlew
     - name: Deploy with Gradle
       run: ./gradlew deploy
-    - uses: ncipollo/release-action@v1
+    - name: Tag Repo
+      uses: richardsimko/update-tag@master
+      with:
+        tag_name: major-update-snapshot
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Extract branch name
+      shell: bash
+      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+      id: extract_branch
+    - uses: ncipollo/release-action@v1.6.1
       with:
         artifacts: "Luminescent.jar"
         allowUpdates: true
         name: "Major Update Snapshot"
-        commit: ${{ github.sha }}
+        commit: ${{ steps.extract_branch.outputs.branch }}
         prerelease: true
         replaceArtifacts: true
         tag: "major-update-snapshot"
