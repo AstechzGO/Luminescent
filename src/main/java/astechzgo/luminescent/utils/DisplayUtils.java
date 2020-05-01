@@ -8,17 +8,14 @@ import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
-import javax.imageio.ImageIO;
-
 import astechzgo.luminescent.main.Luminescent;
 import org.lwjgl.glfw.*;
-import org.lwjgl.glfw.GLFWVidMode.Buffer;
 import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.MemoryUtil;
+import org.lwjgl.stb.STBImageWrite;
 
 import astechzgo.luminescent.rendering.Vulkan;
 import astechzgo.luminescent.textures.TextureList;
@@ -90,12 +87,24 @@ public class DisplayUtils {
 	 *            True if we want fullscreen mode
 	 */
 	public static void setDisplayMode(int width, int height, boolean fullscreen) {
-		DisplayUtils.displayFullscreen = fullscreen;
+		if(fullscreen && !displayFullscreen) {
+			long[] monitors = getMonitors();
+			long actualMonitor = monitors[currentMonitorIdx(monitors)];
+
+			if(actualMonitor != monitor) {
+				changeMonitor(actualMonitor);
+			}
+		}
+
+		int monitorWidthOffset = getMonitorOffsetWidth(DisplayUtils.monitor);
+		int monitorHeightOffset = getMonitorOffsetHeight(DisplayUtils.monitor);
+
 		displayWidth = width;
 		displayHeight = height;
-		displayX = (DisplayUtils.monitorWidth / 2) - (displayWidth / 2);
-		displayY = (DisplayUtils.monitorHeight / 2) - (displayHeight / 2);
+		displayX = (DisplayUtils.monitorWidth / 2) - (displayWidth / 2) + monitorWidthOffset;
+		displayY = (DisplayUtils.monitorHeight / 2) - (displayHeight / 2) + monitorHeightOffset;
 
+		DisplayUtils.displayFullscreen = fullscreen;
 		GLFW.glfwSetWindowMonitor(handle, fullscreen ? monitor : NULL, displayX, displayY, width, height, monitorRefreshRate);
 	}
 
@@ -127,73 +136,14 @@ public class DisplayUtils {
 	}
 
 	public static void takeScreenshot(File file) {
-		//GL11.glReadBuffer(GL11.GL_FRONT);
-		int width = displayWidth;
-		int height= displayHeight;
-		int bpp = (monitorBitPerPixel / 8) + 1;  //For alpha
-		
-		ByteBuffer buffer = MemoryUtil.memAlloc((width - DisplayUtils.widthOffset) * (height - DisplayUtils.heightOffset) * bpp);
-		buffer.put(Vulkan.readPixels(DisplayUtils.widthOffset, DisplayUtils.heightOffset, width - DisplayUtils.widthOffset, height - DisplayUtils.heightOffset));
-		String format = "png";
-		BufferedImage image = new BufferedImage(width - DisplayUtils.widthOffset * 2, height - DisplayUtils.heightOffset * 2, BufferedImage.TYPE_INT_RGB);
-		
-		for(int x = 0; x < width - DisplayUtils.widthOffset * 2; x++) 
-		{
-		    for(int y = 0; y < height - DisplayUtils.heightOffset * 2; y++)
-		    {
-		        int i = (x + ((width - DisplayUtils.widthOffset) * y)) * bpp;
-		        int r = buffer.get(i) & 0xFF;
-		        int g = buffer.get(i + 1) & 0xFF;
-		        int b = buffer.get(i + 2) & 0xFF;
-		        image.setRGB(width - DisplayUtils.widthOffset * 2 - (x + 1), height - DisplayUtils.heightOffset * 2 - (y + 1), (0xFF << 24) | (r << 16) | (g << 8) | b);
-		    }
-		}
-		   
-		MemoryUtil.memFree(buffer);
-		
-		image = getFlippedImage(image);
-		
-		try {
-		    ImageIO.write(image, format, file);
-		} 
-		catch (IOException e) { 
-			e.printStackTrace();
-		}
+		final Vulkan.RawImage raw = Vulkan.readPixels();
+		Thread saveThread = new Thread(() -> {
+			STBImageWrite.stbi_write_png(file.getAbsolutePath(), raw.getWidth(), raw.getHeight(), 4, raw.getData(), 0);
+			raw.free();
+		});
+		saveThread.setDaemon(true);
+		saveThread.start();
 	}
-	
-    public static BufferedImage getFlippedImage(BufferedImage bi) {
-        BufferedImage flipped = new BufferedImage(
-                bi.getWidth(),
-                bi.getHeight(),
-                bi.getType());
-        AffineTransform tran = AffineTransform.getTranslateInstance(bi.getWidth(), 0);
-        AffineTransform flip = AffineTransform.getScaleInstance(-1d, 1d);
-        tran.concatenate(flip);
-
-        Graphics2D g = flipped.createGraphics();
-        g.setTransform(tran);
-        g.drawImage(bi, 0, 0, null);
-        g.dispose();
-
-        return getFlipped2Image(flipped);
-    }
-	
-    private static BufferedImage getFlipped2Image(BufferedImage bi) {
-        BufferedImage flipped = new BufferedImage(
-                bi.getWidth(),
-                bi.getHeight(),
-                bi.getType());
-        AffineTransform tran = AffineTransform.getTranslateInstance(0, bi.getHeight());
-        AffineTransform flip = AffineTransform.getScaleInstance(1d, -1d);
-        tran.concatenate(flip);
-
-        Graphics2D g = flipped.createGraphics();
-        g.setTransform(tran);
-        g.drawImage(bi, 0, 0, null);
-        g.dispose();
-
-        return flipped;
-    }
     
 	private static class DisplayMode {
 		private final int WIDTH, HEIGHT, BPP, FREQ;
@@ -341,52 +291,78 @@ public class DisplayUtils {
 			return ypos.get();
 		}
 	}
-	
-	public static void nextMonitor() {
+
+	private static long[] getMonitors() {
 		//Pointer to array
 		long[] monitors = new long[GLFW.glfwGetMonitors().capacity()];
 		int q = 0;
 		while(q < GLFW.glfwGetMonitors().capacity()) {
 			monitors[q] = GLFW.glfwGetMonitors().get(q);
 			q++;
-		}		
-		
-		
-		int nextMonitorIdx = 0;
-		int currentMonitorIdx = 0;
-		
+		}
+		return monitors;
+	}
+
+	private static int currentMonitorIdx(long[] monitors) {
+		if(displayFullscreen) {
+			for(int i = 0; i < monitors.length; i++) {
+				if(monitors[i] == monitor) {
+					return i;
+				}
+			}
+		}
+
 		int monitorOffsetWidth = 0;
 		int monitorOffsetHeight = 0;
-		
+
 		int secondMonitorWidth = 0;
 		int secondMonitorHeight = 0;
 
 		for(int i = 0; i < monitors.length; i++) {
-				
+
 			monitorOffsetWidth = getMonitorOffsetWidth(monitors[i]);
 			monitorOffsetHeight = getMonitorOffsetHeight(monitors[i]);
 
 			GLFWVidMode mode = GLFW.glfwGetVideoMode(monitors[i]);
-				
+
 			secondMonitorWidth = mode.width();
-				
+
 			secondMonitorHeight = mode.height();
-				
+
 			Rectangle r = new Rectangle(monitorOffsetWidth, monitorOffsetHeight, secondMonitorWidth, secondMonitorHeight);
-				
-			if(r.contains(displayX, displayY)) {
-				currentMonitorIdx = i;
-				if(currentMonitorIdx != (monitors.length - 1))
-					nextMonitorIdx = currentMonitorIdx + 1;
-				else
-					nextMonitorIdx = 0;
-				break;
+
+			if (r.contains(displayX, displayY)) {
+				return i;
 			}
 		}
-		
-		changeMonitor(monitors[nextMonitorIdx]);
-		
 
+		for(int i = 0; i < monitors.length; i++) {
+			if(monitors[i] == monitor) {
+				return i;
+			}
+		}
+		return 0;
+	}
+
+	public static void nextMonitor() {
+		long[] monitors = getMonitors();
+
+		int currentMonitorIdx = currentMonitorIdx(monitors);
+
+		int nextMonitorIdx;
+		if(currentMonitorIdx != (monitors.length - 1))
+			nextMonitorIdx = currentMonitorIdx + 1;
+		else
+			nextMonitorIdx = 0;
+
+		changeMonitor(monitors[nextMonitorIdx]);
+
+		if(displayFullscreen) {
+			setDisplayMode(DisplayUtils.vidmode.width(),
+					DisplayUtils.vidmode.height(), true);
+		}
+
+		int monitorOffsetWidth, monitorOffsetHeight;
 		try(MemoryStack stack = MemoryStack.stackPush()) {
 			IntBuffer xpos = stack.mallocInt(1);
 			IntBuffer ypos = stack.mallocInt(1);

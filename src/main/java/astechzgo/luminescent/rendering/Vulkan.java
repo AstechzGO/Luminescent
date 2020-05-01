@@ -25,86 +25,7 @@ import org.lwjgl.glfw.GLFWVulkan;
 import org.lwjgl.system.APIUtil;
 import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.MemoryUtil;
-import org.lwjgl.vulkan.EXTDebugReport;
-import org.lwjgl.vulkan.KHRSurface;
-import org.lwjgl.vulkan.KHRSwapchain;
-import org.lwjgl.vulkan.VK10;
-import org.lwjgl.vulkan.VkApplicationInfo;
-import org.lwjgl.vulkan.VkAttachmentDescription;
-import org.lwjgl.vulkan.VkAttachmentReference;
-import org.lwjgl.vulkan.VkBufferCopy;
-import org.lwjgl.vulkan.VkBufferCreateInfo;
-import org.lwjgl.vulkan.VkBufferImageCopy;
-import org.lwjgl.vulkan.VkClearColorValue;
-import org.lwjgl.vulkan.VkClearValue;
-import org.lwjgl.vulkan.VkCommandBuffer;
-import org.lwjgl.vulkan.VkCommandBufferAllocateInfo;
-import org.lwjgl.vulkan.VkCommandBufferBeginInfo;
-import org.lwjgl.vulkan.VkCommandPoolCreateInfo;
-import org.lwjgl.vulkan.VkDebugReportCallbackCreateInfoEXT;
-import org.lwjgl.vulkan.VkDebugReportCallbackEXT;
-import org.lwjgl.vulkan.VkDescriptorBufferInfo;
-import org.lwjgl.vulkan.VkDescriptorImageInfo;
-import org.lwjgl.vulkan.VkDescriptorPoolCreateInfo;
-import org.lwjgl.vulkan.VkDescriptorPoolSize;
-import org.lwjgl.vulkan.VkDescriptorSetAllocateInfo;
-import org.lwjgl.vulkan.VkDescriptorSetLayoutBinding;
-import org.lwjgl.vulkan.VkDescriptorSetLayoutCreateInfo;
-import org.lwjgl.vulkan.VkDevice;
-import org.lwjgl.vulkan.VkDeviceCreateInfo;
-import org.lwjgl.vulkan.VkDeviceQueueCreateInfo;
-import org.lwjgl.vulkan.VkExtensionProperties;
-import org.lwjgl.vulkan.VkExtent2D;
-import org.lwjgl.vulkan.VkExtent3D;
-import org.lwjgl.vulkan.VkFenceCreateInfo;
-import org.lwjgl.vulkan.VkFramebufferCreateInfo;
-import org.lwjgl.vulkan.VkGraphicsPipelineCreateInfo;
-import org.lwjgl.vulkan.VkImageCreateInfo;
-import org.lwjgl.vulkan.VkImageMemoryBarrier;
-import org.lwjgl.vulkan.VkImageSubresourceLayers;
-import org.lwjgl.vulkan.VkImageSubresourceRange;
-import org.lwjgl.vulkan.VkImageViewCreateInfo;
-import org.lwjgl.vulkan.VkInstance;
-import org.lwjgl.vulkan.VkInstanceCreateInfo;
-import org.lwjgl.vulkan.VkLayerProperties;
-import org.lwjgl.vulkan.VkMappedMemoryRange;
-import org.lwjgl.vulkan.VkMemoryAllocateInfo;
-import org.lwjgl.vulkan.VkMemoryRequirements;
-import org.lwjgl.vulkan.VkOffset2D;
-import org.lwjgl.vulkan.VkOffset3D;
-import org.lwjgl.vulkan.VkPhysicalDevice;
-import org.lwjgl.vulkan.VkPhysicalDeviceFeatures;
-import org.lwjgl.vulkan.VkPhysicalDeviceMemoryProperties;
-import org.lwjgl.vulkan.VkPhysicalDeviceProperties;
-import org.lwjgl.vulkan.VkPipelineColorBlendAttachmentState;
-import org.lwjgl.vulkan.VkPipelineColorBlendStateCreateInfo;
-import org.lwjgl.vulkan.VkPipelineDynamicStateCreateInfo;
-import org.lwjgl.vulkan.VkPipelineInputAssemblyStateCreateInfo;
-import org.lwjgl.vulkan.VkPipelineLayoutCreateInfo;
-import org.lwjgl.vulkan.VkPipelineMultisampleStateCreateInfo;
-import org.lwjgl.vulkan.VkPipelineRasterizationStateCreateInfo;
-import org.lwjgl.vulkan.VkPipelineShaderStageCreateInfo;
-import org.lwjgl.vulkan.VkPipelineVertexInputStateCreateInfo;
-import org.lwjgl.vulkan.VkPipelineViewportStateCreateInfo;
-import org.lwjgl.vulkan.VkPresentInfoKHR;
-import org.lwjgl.vulkan.VkQueue;
-import org.lwjgl.vulkan.VkQueueFamilyProperties;
-import org.lwjgl.vulkan.VkRect2D;
-import org.lwjgl.vulkan.VkRenderPassBeginInfo;
-import org.lwjgl.vulkan.VkRenderPassCreateInfo;
-import org.lwjgl.vulkan.VkSamplerCreateInfo;
-import org.lwjgl.vulkan.VkSemaphoreCreateInfo;
-import org.lwjgl.vulkan.VkShaderModuleCreateInfo;
-import org.lwjgl.vulkan.VkSubmitInfo;
-import org.lwjgl.vulkan.VkSubpassDependency;
-import org.lwjgl.vulkan.VkSubpassDescription;
-import org.lwjgl.vulkan.VkSurfaceCapabilitiesKHR;
-import org.lwjgl.vulkan.VkSurfaceFormatKHR;
-import org.lwjgl.vulkan.VkSwapchainCreateInfoKHR;
-import org.lwjgl.vulkan.VkVertexInputAttributeDescription;
-import org.lwjgl.vulkan.VkVertexInputBindingDescription;
-import org.lwjgl.vulkan.VkViewport;
-import org.lwjgl.vulkan.VkWriteDescriptorSet;
+import org.lwjgl.vulkan.*;
 
 import astechzgo.luminescent.main.Luminescent;
 import astechzgo.luminescent.shader.ShaderList;
@@ -170,9 +91,42 @@ public class Vulkan {
     public static void createWindowSurface() {
         vulkanInstance.createSurface();
     }
-    
-    public static byte[] readPixels(int x, int y, int width, int height) {
-        return vulkanInstance.readPixelsToArray(x, y, width, height);
+
+    public final class RawImage {
+        private final int width, height;
+        private final int colourFormat;
+        private final ByteBuffer data;
+
+        private RawImage(int width, int height, int colourFormat, ByteBuffer data) {
+            this.width = width;
+            this.height = height;
+            this.colourFormat = colourFormat;
+            this.data = data;
+        }
+
+        public int getWidth() {
+            return width;
+        }
+
+        public int getHeight() {
+            return height;
+        }
+
+        public int getColourFormat() {
+            return colourFormat;
+        }
+
+        public ByteBuffer getData() {
+            return data;
+        }
+
+        public void free() {
+            MemoryUtil.memFree(data);
+        }
+    }
+
+    public static RawImage readPixels() {
+        return vulkanInstance.readPixelsToArray();
     }
 
     private final String[] validationLayers = { 
@@ -263,6 +217,8 @@ public class Vulkan {
     
     private long textureImageView;
     private long textureSampler;
+
+    private int imageIndex;
 
     private void initVulkan() {
         createInstance();
@@ -391,21 +347,23 @@ public class Vulkan {
                             textureImageAddress, textureImageMemoryAddress);
             textureImage = textureImageAddress[0];
             textureImageMemory = textureImageMemoryAddress[0];
-            
-            transitionImageLayout(textureImage, VK10.VK_FORMAT_R8G8B8A8_UNORM, VK10.VK_IMAGE_LAYOUT_PREINITIALIZED,
-                VK10.VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+
+            VkCommandBuffer commandBuffer = beginSingleTimeCommands();
+            transitionImageLayout(commandBuffer, textureImage, VK10.VK_ACCESS_HOST_WRITE_BIT, VK10.VK_ACCESS_TRANSFER_WRITE_BIT, VK10.VK_IMAGE_LAYOUT_PREINITIALIZED,
+                VK10.VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK10.VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK10.VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT);
+            endSingleTimeCommands(commandBuffer);
             copyBufferToImage(stagingBufferAddress[0], textureImage, width, height);
-            transitionImageLayout(textureImage, VK10.VK_FORMAT_R8G8B8A8_UNORM, VK10.VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-                VK10.VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+            commandBuffer = beginSingleTimeCommands();
+            transitionImageLayout(commandBuffer, textureImage, VK10.VK_ACCESS_TRANSFER_WRITE_BIT, VK10.VK_ACCESS_SHADER_READ_BIT, VK10.VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                VK10.VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, VK10.VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK10.VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT);
+            endSingleTimeCommands(commandBuffer);
             
             VK10.vkDestroyBuffer(device, stagingBufferAddress[0], null);
             VK10.vkFreeMemory(device, stagingBufferMemoryAddress[0], null);
         }
     }
     
-    private void transitionImageLayout(long image, int format, int oldLayout, int newLayout) {
-        VkCommandBuffer commandBuffer = beginSingleTimeCommands();
-        
+    private void transitionImageLayout(VkCommandBuffer cmdBuffer, long image, int srcAccessMask, int dstAccessMask, int oldLayout, int newLayout, int srcStageMask, int dstStageMask) {
         try(MemoryStack stack = MemoryStack.stackPush()) {
             VkImageMemoryBarrier barrier = VkImageMemoryBarrier.callocStack(stack)
                 .sType(VK10.VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER)
@@ -420,26 +378,11 @@ public class Vulkan {
                     .levelCount(1)
                     .baseArrayLayer(0)
                     .layerCount(1))
-                .srcAccessMask(0)
-                .dstAccessMask(0);
-            
-            if(oldLayout == VK10.VK_IMAGE_LAYOUT_PREINITIALIZED && newLayout == VK10.VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL) {
-                barrier
-                    .srcAccessMask(VK10.VK_ACCESS_HOST_WRITE_BIT)
-                    .dstAccessMask(VK10.VK_ACCESS_TRANSFER_WRITE_BIT);
-            }
-            else if(oldLayout == VK10.VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-                && newLayout == VK10.VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL) {
-                barrier
-                    .srcAccessMask(VK10.VK_ACCESS_TRANSFER_WRITE_BIT)
-                    .dstAccessMask(VK10.VK_ACCESS_SHADER_READ_BIT);
-            }
-            else {
-                throw new RuntimeException("unsupported layout transition!");
-            }
-            
+                .srcAccessMask(srcAccessMask)
+                .dstAccessMask(dstAccessMask);
+
             VK10.vkCmdPipelineBarrier(
-                commandBuffer, 
+                    cmdBuffer,
                 VK10.VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK10.VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
                 0,
                 null,
@@ -447,8 +390,6 @@ public class Vulkan {
                 VkImageMemoryBarrier.mallocStack(1, stack).put(barrier).flip()
             );
         }
-        
-        endSingleTimeCommands(commandBuffer);
     }
     
     private void copyBufferToImage(long buffer, long image, int width, int height) {
@@ -2073,7 +2014,7 @@ public class Vulkan {
     private void drawFrame() {
         int[] imageIndexAddress = new int[] { 0 };
         int result = KHRSwapchain.vkAcquireNextImageKHR(device, swapChain, Long.MAX_VALUE, VK10.VK_NULL_HANDLE, imageAvailableFence, imageIndexAddress);
-        int imageIndex = imageIndexAddress[0];
+        imageIndex = imageIndexAddress[0];
         
         if(result == KHRSwapchain.VK_ERROR_OUT_OF_DATE_KHR) {
             recreateSwapChain();
@@ -2183,190 +2124,239 @@ public class Vulkan {
     // uint32_t width;    uint32_t height;    uint32_t layers;
 
 
-    
-    
-    
-    
-    
 
-    private byte[] readPixelsToArray(int x, int y, int width, int height) {
+
+
+
+    /**
+     * Translates a Vulkan {@code VkResult} value to a String describing the result.
+     *
+     * @param result
+     *            the {@code VkResult} value
+     *
+     * @return the result description
+     */
+    public static String translateVulkanResult(int result) {
+        switch (result) {
+            // Success codes
+            case VK10.VK_SUCCESS:
+                return "Command successfully completed.";
+            case VK10.VK_NOT_READY:
+                return "A fence or query has not yet completed.";
+            case VK10.VK_TIMEOUT:
+                return "A wait operation has not completed in the specified time.";
+            case VK10.VK_EVENT_SET:
+                return "An event is signaled.";
+            case VK10.VK_EVENT_RESET:
+                return "An event is unsignaled.";
+            case VK10.VK_INCOMPLETE:
+                return "A return array was too small for the result.";
+            case KHRSwapchain.VK_SUBOPTIMAL_KHR:
+                return "A swapchain no longer matches the surface properties exactly, but can still be used to present to the surface successfully.";
+
+            // Error codes
+            case VK10.VK_ERROR_OUT_OF_HOST_MEMORY:
+                return "A host memory allocation has failed.";
+            case VK10.VK_ERROR_OUT_OF_DEVICE_MEMORY:
+                return "A device memory allocation has failed.";
+            case VK10.VK_ERROR_INITIALIZATION_FAILED:
+                return "Initialization of an object could not be completed for implementation-specific reasons.";
+            case VK10.VK_ERROR_DEVICE_LOST:
+                return "The logical or physical device has been lost.";
+            case VK10.VK_ERROR_MEMORY_MAP_FAILED:
+                return "Mapping of a memory object has failed.";
+            case VK10.VK_ERROR_LAYER_NOT_PRESENT:
+                return "A requested layer is not present or could not be loaded.";
+            case VK10.VK_ERROR_EXTENSION_NOT_PRESENT:
+                return "A requested extension is not supported.";
+            case VK10.VK_ERROR_FEATURE_NOT_PRESENT:
+                return "A requested feature is not supported.";
+            case VK10.VK_ERROR_INCOMPATIBLE_DRIVER:
+                return "The requested version of Vulkan is not supported by the driver or is otherwise incompatible for implementation-specific reasons.";
+            case VK10.VK_ERROR_TOO_MANY_OBJECTS:
+                return "Too many objects of the type have already been created.";
+            case VK10.VK_ERROR_FORMAT_NOT_SUPPORTED:
+                return "A requested format is not supported on this device.";
+            case KHRSurface.VK_ERROR_SURFACE_LOST_KHR:
+                return "A surface is no longer available.";
+            case KHRSurface.VK_ERROR_NATIVE_WINDOW_IN_USE_KHR:
+                return "The requested window is already connected to a VkSurfaceKHR, or to some other non-Vulkan API.";
+            case KHRSwapchain.VK_ERROR_OUT_OF_DATE_KHR:
+                return "A surface has changed in such a way that it is no longer compatible with the swapchain, and further presentation requests using the "
+                        + "swapchain will fail. Applications must query the new surface properties and recreate their swapchain if they wish to continue" + "presenting to the surface.";
+            case KHRDisplaySwapchain.VK_ERROR_INCOMPATIBLE_DISPLAY_KHR:
+                return "The display used by a swapchain does not use the same presentable image layout, or is incompatible in a way that prevents sharing an" + " image.";
+            case EXTDebugReport.VK_ERROR_VALIDATION_FAILED_EXT:
+                return "A validation layer found an error.";
+            default:
+                return String.format("%s [%d]", "Unknown", Integer.valueOf(result));
+        }
+    }
+
+    private RawImage readPixelsToArray() {
+        boolean supportsBlit = true;
+
         try(MemoryStack stack = MemoryStack.stackPush()) {
-            long[] imageAddress = new long[] { 0 };
-            long[] imageMemoryAddress = new long[] { 0 };
-            createImage(width, height, VK10.VK_FORMAT_B8G8R8A8_UNORM, VK10.VK_IMAGE_TILING_OPTIMAL, VK10.VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK10.VK_IMAGE_USAGE_TRANSFER_SRC_BIT, VK10.VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, imageAddress, imageMemoryAddress);
-            long imageSourceView = createImageView(imageAddress[0], VK10.VK_FORMAT_B8G8R8A8_UNORM);
-            
-            
-            VkFramebufferCreateInfo framebufferInfo = VkFramebufferCreateInfo.mallocStack(stack)
-                .sType(VK10.VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO)
-                .pNext(VK10.VK_NULL_HANDLE)
-                .flags(0)
-                .renderPass(renderPass)
-                .pAttachments(stack.mallocLong(1).put(imageSourceView).flip())
-                .width(width)
-                .height(height)
-                .layers(1);
-                            
-            long[] framebufferSourceAddress = new long[] { 0 };
-            if(VK10.vkCreateFramebuffer(device, framebufferInfo, null, framebufferSourceAddress) != VK10.VK_SUCCESS) {
-                throw new RuntimeException("failed to create framebuffer source!");
-            }
-////         
-//            VkImageAspectFlags aspectMask;
-//            uint32_t baseMipLevel;
-//            uint32_t levelCount;
-//            uint32_t baseArrayLayer;
-//            uint32_t layerCount;
-////         
-//            VkCommandBuffer renderCommandBuffer;
-//            VkCommandBufferAllocateInfo rcbai{ VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO, nullptr, commandPool, VK_COMMAND_BUFFER_LEVEL_PRIMARY, 1 };
-//            errorCode = vkAllocateCommandBuffers( device, &rcbai, &renderCommandBuffer ); RESULT_HANDLER( errorCode, "vkAllocateCommandBuffers" );
-//         
-           VkCommandBuffer commandBuffer = beginSingleTimeCommands();     
-                VkImageMemoryBarrier predrawBarrier = VkImageMemoryBarrier.mallocStack(stack)
-                    .sType(VK10.VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER)
-                    .pNext(VK10.VK_NULL_HANDLE)
-                    .srcAccessMask(0)
-                    .dstAccessMask(VK10.VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT)
-                    .oldLayout(VK10.VK_IMAGE_LAYOUT_PREINITIALIZED)
-                    .newLayout(VK10.VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL)
-                    .srcQueueFamilyIndex(VK10.VK_QUEUE_FAMILY_IGNORED)
-                    .dstQueueFamilyIndex(VK10.VK_QUEUE_FAMILY_IGNORED)
-                    .image(imageAddress[0])
-                    .subresourceRange(VkImageSubresourceRange.mallocStack(stack)
-                        .aspectMask(VK10.VK_IMAGE_ASPECT_COLOR_BIT)
-                        .baseMipLevel(0)
-                        .levelCount(1)
-                        .baseArrayLayer(0)
-                        .layerCount(1));
-                
-                VK10.vkCmdPipelineBarrier( commandBuffer, VK10.VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK10.VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, 0, null, null, VkImageMemoryBarrier.mallocStack(1, stack).put(predrawBarrier).flip() );
-         
-//                VkStructureType sType;
-//                const void * pNext;
-//                VkRenderPass renderPass;
-//                VkFramebuffer framebuffer;
-//                VkRect2D renderArea;
-//                uint32_t clearValueCount;
-//                const VkClearValue * pClearValues;
-                
-                VkRenderPassBeginInfo renderPassInfo = VkRenderPassBeginInfo.mallocStack(stack)
-                    .sType(VK10.VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO)
-                    .pNext(VK10.VK_NULL_HANDLE)
-                    .renderPass(renderPass)
-                    .framebuffer(framebufferSourceAddress[0])
-                    .renderArea(VkRect2D.mallocStack()
-                        .offset(VkOffset2D.mallocStack().set(x, y))
-                        .extent(VkExtent2D.mallocStack(stack)
-                            .set(width, height)))
-                    .pClearValues(VkClearValue.mallocStack(1).put(VkClearValue.mallocStack(stack)
-                        .color(VkClearColorValue.mallocStack(stack)
-                            .float32(0, red)
-                            .float32(1, green)
-                            .float32(2, blue)
-                            .float32(3, alpha))).flip());
-                VK10.vkCmdBeginRenderPass( commandBuffer, renderPassInfo, VK10.VK_SUBPASS_CONTENTS_INLINE );
-         
-                VK10.vkCmdBindPipeline(commandBuffer, VK10.VK_PIPELINE_BIND_POINT_GRAPHICS, graphicsPipeline);
-                
-                LongBuffer vertexBuffers = stack.mallocLong(1).put(vertexBuffer);
-                vertexBuffers.flip();
-                
-                LongBuffer offsets = stack.mallocLong(1).put(0);
-                offsets.flip();
-                
-                
-                VK10.vkCmdBindVertexBuffers(commandBuffer, 0, vertexBuffers, offsets);
-                
-                VK10.vkCmdBindIndexBuffer(commandBuffer, indexBuffer, 0, VK10.VK_INDEX_TYPE_UINT32);
-                
-                int index = 0;
-                for(int k = 0; k < matrices.size(); k++) {
-                    int listOffset = 0;
-                    for(int l = 0; l < k; l++) {
-                        listOffset += matrices.get(l).size();
-                    }
-                    
-                    for(int l = 0; l < matrices.get(k).size(); l++) {
-                        int dynamicOffset = (listOffset + l) * (int)dynamicAlignment;
-                        
-                        VK10.vkCmdBindDescriptorSets(commandBuffer, VK10.VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, new long[] { descriptorSet }, new int[] { dynamicOffset });
-                        
-                        VK10.vkCmdDrawIndexed(commandBuffer, indices.get(k).size(), 1, index, 0, 0);
-                    }
-                    
-                    index += indices.get(k).size();
-                }
-                
-                VK10.vkCmdEndRenderPass( commandBuffer );
-         
-//     VkStructureType sType;
-//     const void * pNext;
-//     VkAccessFlags srcAccessMask;
-//     VkAccessFlags dstAccessMask;
-//     VkImageLayout oldLayout;
-//     VkImageLayout newLayout;
-//     uint32_t srcQueueFamilyIndex;
-//     uint32_t dstQueueFamilyIndex;
-//     VkImage image;
-//     VkImageSubresourceRange subresourceRange;
-                
-                VkImageMemoryBarrier premapBarrier = VkImageMemoryBarrier.mallocStack(stack)
-                    .sType(VK10.VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER)
-                    .pNext(VK10.VK_NULL_HANDLE)
-                    .srcAccessMask(VK10.VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT)
-                    .dstAccessMask(VK10.VK_ACCESS_TRANSFER_READ_BIT)
-                    .oldLayout(KHRSwapchain.VK_IMAGE_LAYOUT_PRESENT_SRC_KHR)
-                    .newLayout(VK10.VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL)
-                    .srcQueueFamilyIndex(VK10.VK_QUEUE_FAMILY_IGNORED)
-                    .dstQueueFamilyIndex(VK10.VK_QUEUE_FAMILY_IGNORED)
-                    .image(imageAddress[0])
-                    .subresourceRange(VkImageSubresourceRange.mallocStack(stack)
-                        .aspectMask(VK10.VK_IMAGE_ASPECT_COLOR_BIT)
-                        .baseMipLevel(0)
-                        .levelCount(1)
-                        .baseArrayLayer(0)
-                        .layerCount(1));
-                                
-                VK10.vkCmdPipelineBarrier( commandBuffer, VK10.VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK10.VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, 0, null, null, VkImageMemoryBarrier.mallocStack(1, stack).put(premapBarrier).flip());
-            endSingleTimeCommands(commandBuffer);
+            VkFormatProperties formatProps = VkFormatProperties.mallocStack(stack);
 
-            long[] stagingBufferAddress = { 0 };
-            long[] stagingBufferMemoryAddress = { 0 };
-            
-            int imageSize = width * height * 4;
-            
-            createBuffer(imageSize, VK10.VK_BUFFER_USAGE_TRANSFER_DST_BIT, VK10.VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK10.VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBufferAddress, stagingBufferMemoryAddress);
-            
-            copyImageToBuffer(stagingBufferAddress[0], imageAddress[0], width, height);
-            
-            PointerBuffer data = stack.mallocPointer(1);
-            VK10.vkMapMemory( device, stagingBufferMemoryAddress[0], 0, VK10.VK_WHOLE_SIZE, 0, data );
-                byte[] raw = new byte[imageSize];
-                ByteBuffer rawBuffer = data.getByteBuffer(imageSize);
-                while(rawBuffer.hasRemaining()) {
-                    raw[rawBuffer.position()] = rawBuffer.get();
-                }
-            VK10.vkUnmapMemory( device, stagingBufferMemoryAddress[0]);
-         
-            
-            
-            VK10.vkDestroyFramebuffer( device, framebufferSourceAddress[0], null);
-            VK10.vkDestroyImageView( device, imageSourceView, null );
-            VK10.vkFreeMemory( device, imageMemoryAddress[0], null );
-            VK10.vkDestroyImage( device, imageAddress[0], null );
-            VK10.vkDestroyBuffer(device, stagingBufferAddress[0], null);
-            VK10.vkFreeMemory(device, stagingBufferMemoryAddress[0], null);
-            
-            for(int i = 0; i < raw.length; i += 4) {
-                byte r = raw[i + 2];
-                byte b = raw[i];
-                
-                raw[i] = r;
-                raw[i + 2] = b;
+            VK10.vkGetPhysicalDeviceFormatProperties(physicalDevice, swapChainImageFormat, formatProps);
+            if((formatProps.optimalTilingFeatures() & VK10.VK_FORMAT_FEATURE_BLIT_SRC_BIT) == 0) {
+                supportsBlit = false;
             }
-            
-            return raw;
+
+            VK10.vkGetPhysicalDeviceFormatProperties(physicalDevice, VK10.VK_FORMAT_R8G8B8A8_UNORM, formatProps);
+            if((formatProps.linearTilingFeatures() & VK10.VK_FORMAT_FEATURE_BLIT_DST_BIT) == 0) {
+                supportsBlit = false;
+            }
+
+            long srcImage = swapChainImages[imageIndex];
+            VkImageCreateInfo imageCreateCI = VkImageCreateInfo.callocStack(stack)
+                    .sType(VK10.VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO)
+                    .imageType(VK10.VK_IMAGE_TYPE_2D)
+                    .format(VK10.VK_FORMAT_R8G8B8A8_UNORM)
+                    .extent(VkExtent3D.mallocStack(stack)
+                            .width(swapChainExtent.width())
+                            .height(swapChainExtent.height())
+                            .depth(1))
+                    .arrayLayers(1)
+                    .mipLevels(1)
+                    .initialLayout(VK10.VK_IMAGE_LAYOUT_UNDEFINED)
+                    .samples(VK10.VK_SAMPLE_COUNT_1_BIT)
+                    .tiling(VK10.VK_IMAGE_TILING_LINEAR)
+                    .usage(VK10.VK_IMAGE_USAGE_TRANSFER_DST_BIT);
+
+            long[] dstImage = new long[] { 0 };
+            VK10.vkCreateImage(device, imageCreateCI, null, dstImage);
+            VkMemoryRequirements memRequirements = VkMemoryRequirements.mallocStack(stack);
+            VkMemoryAllocateInfo memAllocInfo = VkMemoryAllocateInfo.callocStack(stack)
+                    .sType(VK10.VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO);
+            long[] dstImageMemory = new long[] { 0 };
+            VK10.vkGetImageMemoryRequirements(device, dstImage[0], memRequirements);
+            memAllocInfo.allocationSize(memRequirements.size())
+                    .memoryTypeIndex(findMemoryType(memRequirements.memoryTypeBits(), VK10.VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK10.VK_MEMORY_PROPERTY_HOST_COHERENT_BIT));
+            VK10.vkAllocateMemory(device, memAllocInfo, null, dstImageMemory);
+            VK10.vkBindImageMemory(device, dstImage[0], dstImageMemory[0], 0);
+
+            VkCommandBuffer copyCmd = beginSingleTimeCommands();
+
+            transitionImageLayout(copyCmd,
+                    dstImage[0],
+                    0,
+                    VK10.VK_ACCESS_TRANSFER_WRITE_BIT,
+                    VK10.VK_IMAGE_LAYOUT_UNDEFINED,
+                    VK10.VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                    VK10.VK_PIPELINE_STAGE_TRANSFER_BIT,
+                    VK10.VK_PIPELINE_STAGE_TRANSFER_BIT);
+
+            transitionImageLayout(copyCmd,
+                    srcImage,
+                    VK10.VK_ACCESS_MEMORY_READ_BIT,
+                    VK10.VK_ACCESS_TRANSFER_READ_BIT,
+                    KHRSwapchain.VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
+                    VK10.VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                    VK10.VK_PIPELINE_STAGE_TRANSFER_BIT,
+                    VK10.VK_PIPELINE_STAGE_TRANSFER_BIT);
+
+            if(supportsBlit) {
+                VkOffset3D blitSize = VkOffset3D.mallocStack(stack)
+                        .x(swapChainExtent.width())
+                        .y(swapChainExtent.height())
+                        .z(1);
+                VkImageBlit.Buffer imageBlitRegion = VkImageBlit.callocStack(1, stack)
+                        .srcSubresource(VkImageSubresourceLayers.callocStack(stack)
+                            .aspectMask(VK10.VK_IMAGE_ASPECT_COLOR_BIT)
+                            .layerCount(1))
+                        .srcOffsets(1, blitSize)
+                        .dstSubresource(VkImageSubresourceLayers.callocStack(stack)
+                                .aspectMask(VK10.VK_IMAGE_ASPECT_COLOR_BIT)
+                                .layerCount(1))
+                        .dstOffsets(1, blitSize);
+
+                VK10.vkCmdBlitImage(
+                    copyCmd,
+                        srcImage, VK10.VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                        dstImage[0], VK10.VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                        imageBlitRegion,
+                        VK10.VK_FILTER_NEAREST
+                );
+            }
+            else {
+                VkImageCopy.Buffer imageCopyRegion = VkImageCopy.callocStack(1, stack)
+                        .srcSubresource(VkImageSubresourceLayers.callocStack(stack)
+                                .aspectMask(VK10.VK_IMAGE_ASPECT_COLOR_BIT)
+                                .layerCount(1))
+                        .dstSubresource(VkImageSubresourceLayers.callocStack(stack)
+                                .aspectMask(VK10.VK_IMAGE_ASPECT_COLOR_BIT)
+                                .layerCount(1))
+                        .extent(VkExtent3D.mallocStack(stack)
+                                .width(swapChainExtent.width())
+                                .height(swapChainExtent.height())
+                                .depth(1));
+
+                VK10.vkCmdCopyImage(
+                        copyCmd,
+                        srcImage, VK10.VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                        dstImage[0], VK10.VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                        imageCopyRegion
+                );
+            }
+
+            transitionImageLayout(copyCmd,
+                    dstImage[0],
+                    VK10.VK_ACCESS_TRANSFER_WRITE_BIT,
+                    VK10.VK_ACCESS_MEMORY_READ_BIT,
+                    VK10.VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                    VK10.VK_IMAGE_LAYOUT_GENERAL,
+                    VK10.VK_PIPELINE_STAGE_TRANSFER_BIT,
+                    VK10.VK_PIPELINE_STAGE_TRANSFER_BIT);
+
+            transitionImageLayout(copyCmd,
+                    srcImage,
+                    VK10.VK_ACCESS_TRANSFER_READ_BIT,
+                    VK10.VK_ACCESS_MEMORY_READ_BIT,
+                    VK10.VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                    KHRSwapchain.VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
+                    VK10.VK_PIPELINE_STAGE_TRANSFER_BIT,
+                    VK10.VK_PIPELINE_STAGE_TRANSFER_BIT);
+
+            endSingleTimeCommands(copyCmd);
+
+            VkImageSubresource subResource = VkImageSubresource.mallocStack(stack)
+                    .aspectMask(VK10.VK_IMAGE_ASPECT_COLOR_BIT)
+                    .arrayLayer(0)
+                    .mipLevel(0);
+
+            VkSubresourceLayout subResourceLayout = VkSubresourceLayout.mallocStack(stack);
+            VK10.vkGetImageSubresourceLayout(device, dstImage[0], subResource, subResourceLayout);
+
+            PointerBuffer data = stack.pointers(0);
+            VK10.vkMapMemory(device, dstImageMemory[0], 0, VK10.VK_WHOLE_SIZE, 0, data);
+
+            ByteBuffer buffer = MemoryUtil.memByteBuffer(data.get() + subResourceLayout.offset(), 4*swapChainExtent.width()*swapChainExtent.height());
+
+            ByteBuffer bufferData = MemoryUtil.memAlloc(buffer.limit());
+            bufferData.put(buffer);
+            bufferData.flip();
+
+            // TODO: More robust approach
+            switch (swapChainImageFormat) {
+                case VK10.VK_FORMAT_B8G8R8A8_SRGB:
+                case VK10.VK_FORMAT_B8G8R8A8_UNORM:
+                case VK10.VK_FORMAT_B8G8R8A8_SNORM:
+                    for(int i = 0; i < bufferData.limit(); i += 4) {
+                        byte temp = bufferData.get(i);
+                        bufferData.put(i, bufferData.get(i + 2));
+                        bufferData.put(i + 2, temp);
+                        // Effectively remove all transparency
+                        bufferData.put(i + 3, (byte) 0xff);
+                    }
+            }
+
+            VK10.vkUnmapMemory(device, dstImageMemory[0]);
+            VK10.vkFreeMemory(device, dstImageMemory[0], null);
+            VK10.vkDestroyImage(device, dstImage[0], null);
+
+            return new RawImage(swapChainExtent.width(), swapChainExtent.height(), swapChainImageFormat, bufferData);
         }
     }
     

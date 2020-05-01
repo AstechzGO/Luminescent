@@ -26,22 +26,14 @@ public class RenderingUtils {
 	 * D--C
 	 */
     public static void createQuad(WindowCoordinates a, WindowCoordinates b, WindowCoordinates c, WindowCoordinates d, Color color, Texture texture, Supplier<Boolean> doLighting, Optional<Supplier<Integer>> currentFrame, List<Supplier<Matrix4f>> matrices) {
-        int vAX = ((int) a.getWindowCoordinatesX())
-                - ((int) a.getWindowCoordinatesX());
-        int vAY = ((int) a.getWindowCoordinatesY())
-                - ((int) a.getWindowCoordinatesY());
-        int vBX = ((int) b.getWindowCoordinatesX())
-                - ((int) a.getWindowCoordinatesX());
-        int vBY = ((int) b.getWindowCoordinatesY())
-                - ((int) a.getWindowCoordinatesY());
-        int vCX = ((int) c.getWindowCoordinatesX())
-                - ((int) a.getWindowCoordinatesX());
-        int vCY = ((int) c.getWindowCoordinatesY())
-                - ((int) a.getWindowCoordinatesY());
-        int vDX = ((int) d.getWindowCoordinatesX())
-                - ((int) a.getWindowCoordinatesX());
-        int vDY = ((int) d.getWindowCoordinatesY())
-                - ((int) a.getWindowCoordinatesY());
+        float vAX = (float)(a.getWindowCoordinatesX() - a.getWindowCoordinatesX());
+        float vAY = (float)(a.getWindowCoordinatesY() - a.getWindowCoordinatesY());
+        float vBX = (float)(b.getWindowCoordinatesX() - a.getWindowCoordinatesX());
+        float vBY = (float)(b.getWindowCoordinatesY() - a.getWindowCoordinatesY());
+        float vCX = (float)(c.getWindowCoordinatesX() - a.getWindowCoordinatesX());
+        float vCY = (float)(c.getWindowCoordinatesY() - a.getWindowCoordinatesY());
+        float vDX = (float)(d.getWindowCoordinatesX() - a.getWindowCoordinatesX());
+        float vDY = (float)(d.getWindowCoordinatesY() - a.getWindowCoordinatesY());
         
         int count = texture == null ? 1 : texture.count();
         

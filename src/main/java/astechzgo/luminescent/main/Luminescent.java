@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import astechzgo.luminescent.rendering.*;
+import astechzgo.luminescent.worldloader.PolySimplifier;
 import org.joml.Matrix4f;
 import org.lwjgl.glfw.Callbacks;
 import org.lwjgl.glfw.GLFW;
@@ -42,7 +43,9 @@ public class Luminescent
 	
 	public static List<Projectile> projectilePool;
 	public static int projectileIndex;
-	
+
+	public static List<RectangularObjectRenderer> roomEdges;
+
 	private static TextLabelRenderer fpsText;
 	private static FPSCalculator fpsCalc;
 	
@@ -64,7 +67,15 @@ public class Luminescent
 		for(int i = 0; i < 32; i++) {
 		    projectilePool.add(new Projectile(new GameCoordinates(0, 0)));
 		}
-		
+
+		roomEdges = new ArrayList<>();
+		for(PolySimplifier.Edge e : PolySimplifier.simplify(rooms)) {
+			RectangularObjectRenderer rect = new RectangularObjectRenderer(new WindowCoordinates(new GameCoordinates(e.getX(), e.getY())), e.getHorizontal() ? e.getLength() : 8, !e.getHorizontal() ? e.getLength() : 8);
+			rect.setColour(new Color((int)(Math.random() * 256), (int)(Math.random() * 256), (int)(Math.random() * 256)));
+			rect.setDoesLighting(false);
+			roomEdges.add(rect);
+		}
+
 		fpsText = new TextLabelRenderer(new WindowCoordinates(0, 0), new Font(45), "FPS: #####");
 		fpsCalc = new FPSCalculator(new DecimalFormat("#####"), 1);
 		
@@ -91,9 +102,13 @@ public class Luminescent
         Supplier<Matrix4f>[] projectileMatricesArray = (Supplier<Matrix4f>[]) projectileMatrices.toArray(new Supplier<?>[0]);
         projectilePool.get(0).upload(List.of(projectileMatricesArray));
         projectileIndex = Vulkan.getInstances() - 1;
-        
+
+//        for(RectangularObjectRenderer roomEdge : roomEdges) {
+//        	roomEdge.upload();
+//		}
+
         fpsText.upload();
-        
+
         for(QuadrilateralObjectRenderer resBorder : resBorders) {
             resBorder.upload();
         }
