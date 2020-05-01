@@ -22,8 +22,13 @@ jobs:
       run: chmod +x gradlew
     - name: Deploy with Gradle
       run: ./gradlew deploy
-    - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v2
+    - uses: ncipollo/release-action@v1
       with:
-        name: ${{ github.head_ref }}
-        path: Luminescent.jar
+        artifact: "Luminescent.jar"
+        allowUpdates: true
+        name: "Major Update Snapshot"
+        commit: ${{ GITHUB_SHA }}
+        prerelease: true
+        replaceArtifacts: true
+        tag: "major-update-snapshot"
+        token: ${{ secrets.GITHUB_TOKEN }}
