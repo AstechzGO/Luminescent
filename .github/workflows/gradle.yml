@@ -27,7 +27,7 @@ jobs:
         artifact: "Luminescent.jar"
         allowUpdates: true
         name: "Major Update Snapshot"
-        commit: ${{ GITHUB_SHA }}
+        commit: ${{ github.sha }}
         prerelease: true
         replaceArtifacts: true
         tag: "major-update-snapshot"
