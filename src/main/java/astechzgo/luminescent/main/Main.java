@@ -14,6 +14,7 @@ public class Main
 {
 	public static void main(String[] args)
 	{
+		LoggingUtils.configureLogger();
 		SystemUtils.doOSSetUp();
 		SystemUtils.setUpDebug();
 		
@@ -35,7 +36,6 @@ public class Main
 	public void Init()
 	{
 		Constants.readConstantPropertiesFromFile();
-		LoggingUtils.configureLogger();
 
 		TextureList.loadTextures();
 		try
@@ -62,6 +62,7 @@ public class Main
 	{
 		Luminescent.Shutdown();
 		Vulkan.shutdown();
+		LoggingUtils.cleanupLogger();
 	}
 	
 	/**
