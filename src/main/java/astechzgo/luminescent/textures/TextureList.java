@@ -10,15 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TextureList {
-	private static List<String> nonSlickTextures = new ArrayList<>();
-	private static List<String> slickTextures = new ArrayList<>();
-	
 	private static List<Texture> textures = new ArrayList<>();
 	
-	public static void getAllTextures() {
-		List<String> nonSlick = new ArrayList<>();
-		List<String> slick = new ArrayList<>();
-		
+	public static void loadTextures() {
 		InputStream in = null;
 		
         try {
@@ -32,16 +26,10 @@ public class TextureList {
 		try {
 			while((line = input.readLine()) != null) {
 				if(line.startsWith("#")) {
-					slick.add(line.replaceFirst("#", ""));
-				}
-				else if(line.startsWith("$")) {
-					nonSlick.add(line.replaceFirst("\\$", ""));
+					// Creating a texture adds it to the texture list
+					new Texture(line.replaceFirst("#", ""));
 				}
 			}
-			
-			nonSlickTextures = nonSlick;
-			slickTextures = slick;
-			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -54,14 +42,6 @@ public class TextureList {
 			}
 		}
 		return null;
-	}
-	
-	public static List<String> getSlickTextureNames() {
-		return slickTextures;
-	}
-	
-	public static List<String> getNonSlickTextureNames() {
-		return nonSlickTextures;
 	}
 	
 	public static void setTextures(List<Texture> textures) {
@@ -79,28 +59,10 @@ public class TextureList {
 	public static void removeTexture(Texture texture) {
 	    TextureList.textures.remove(texture);
 	}
-	
-	public static void loadNonSlickTextures() {
-		TextureList.getAllTextures();
-		
-		List<Texture> textures = new ArrayList<>();
-		
-		for(String f : TextureList.getNonSlickTextureNames()) {
-			textures.add(new Texture(f, false));
-		}
-	}
-	
-	public static void loadSlickTextures() {
-		List<Texture> textures = new ArrayList<>();
-		
-		for(String f : getSlickTextureNames()) {
-			textures.add(new Texture(f, true));
-		}
-	}
-	
+
 	public static void cleanup() {
-		while(textures.size() > 0) {
-			textures.get(0).dispose();
+		for(Texture texture : textures) {
+			texture.dispose();
 		}
 	}
 }

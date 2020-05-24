@@ -30,6 +30,7 @@ import astechzgo.luminescent.utils.Constants;
 import astechzgo.luminescent.utils.ControllerUtils;
 import astechzgo.luminescent.utils.DisplayUtils;
 import astechzgo.luminescent.worldloader.JSONWorldLoader;
+import org.lwjgl.system.MemoryUtil;
 
 public class Luminescent
 {
@@ -52,9 +53,7 @@ public class Luminescent
 	public static QuadrilateralObjectRenderer[] resBorders;
 	
 	public static void Init()
-	{	
-		TextureList.loadSlickTextures();
-		
+	{
 		Sound.init();
 
 		background = new RectangularObjectRenderer(new WindowCoordinates(0, 0), Camera.CAMERA_WIDTH, Camera.CAMERA_HEIGHT);

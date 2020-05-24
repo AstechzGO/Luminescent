@@ -19,21 +19,15 @@ public class Texture {
 	
 	private final String name;
 	
-	public Texture(String textureName, boolean slick) {
-		this(textureName, slick, toImage(textureName));
+	public Texture(String textureName) {
+		this(textureName, toImage(textureName));
 	}
 	
-	public Texture(String textureName, boolean slick, Image asImage) {
+	public Texture(String textureName, Image asImage) {
 		name = textureName;
-		
-		if(!slick) {
-			asBufferedImage = toBufferedImage(asImage);
-			asByteBuffer = toByteBuffer(asBufferedImage);
-		}
-		else {
-			asBufferedImage = toBufferedImage(asImage);
-			asByteBuffer = toByteBuffer(asBufferedImage);
-		}
+
+		asBufferedImage = toBufferedImage(asImage);
+		asByteBuffer = toByteBuffer(asBufferedImage);
 		
 		TextureList.addTexture(this);
 	}
@@ -48,9 +42,8 @@ public class Texture {
 	private ByteBuffer toByteBuffer(BufferedImage image) {
 		int[] pixels = new int[image.getWidth() * image.getHeight()];
         image.getRGB(0, 0, image.getWidth(), image.getHeight(), pixels, 0, image.getWidth());
-        
         ByteBuffer buffer = MemoryUtil.memAlloc(image.getWidth() * image.getHeight() * 4); //4 for RGBA, 3 for RGB
-        
+
         for(int y = 0; y < image.getHeight(); y++){
             for(int x = 0; x < image.getWidth(); x++){
                 int pixel = pixels[y * image.getWidth() + x];
@@ -117,7 +110,6 @@ public class Texture {
     
     void dispose() {
     	MemoryUtil.memFree(asByteBuffer);
-    	TextureList.removeTexture(this);
     }
     
     public int getCurrentFrame() {
