@@ -24,6 +24,7 @@ dependencies {
 	implementation("org.lwjgl", "lwjgl-openal")
 	implementation("org.lwjgl", "lwjgl-stb")
 	implementation("org.lwjgl", "lwjgl-vulkan")
+	implementation("org.lwjgl", "lwjgl-vma")
 	runtimeOnly("org.lwjgl", "lwjgl", classifier = "natives-linux")
 	runtimeOnly("org.lwjgl", "lwjgl", classifier = "natives-macos")
 	runtimeOnly("org.lwjgl", "lwjgl", classifier = "natives-windows")
@@ -40,6 +41,10 @@ dependencies {
 	runtimeOnly("org.lwjgl", "lwjgl-stb", classifier = "natives-macos")
 	runtimeOnly("org.lwjgl", "lwjgl-stb", classifier = "natives-windows")
 	runtimeOnly("org.lwjgl", "lwjgl-vulkan", classifier = "natives-macos")
+	runtimeOnly("org.lwjgl", "lwjgl-vma", classifier = "natives-linux")
+	runtimeOnly("org.lwjgl", "lwjgl-vma", classifier = "natives-windows")
+	runtimeOnly("org.lwjgl", "lwjgl-vma", classifier = "natives-macos")
+
 	implementation("org.joml", "joml", project.extra["jomlVersion"] as String)
 }
 
