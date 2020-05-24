@@ -25,10 +25,7 @@ import org.lwjgl.glfw.GLFWVulkan;
 import org.lwjgl.system.APIUtil;
 import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.MemoryUtil;
-import org.lwjgl.util.vma.Vma;
-import org.lwjgl.util.vma.VmaAllocationCreateInfo;
-import org.lwjgl.util.vma.VmaAllocatorCreateInfo;
-import org.lwjgl.util.vma.VmaVulkanFunctions;
+import org.lwjgl.util.vma.*;
 import org.lwjgl.vulkan.*;
 
 import astechzgo.luminescent.main.Luminescent;
@@ -1380,7 +1377,7 @@ public class Vulkan {
             
             swapChainImageFormat = surfaceFormat.format();
             swapChainExtent = extent;
-            
+
             swapChainSupport.free();
         }
     }
@@ -2085,7 +2082,7 @@ public class Vulkan {
         
         VK10.vkDestroyCommandPool(device, commandPool, null);
 
-        Vma.vmaDestroyAllocator(allocator);
+        cleanupAllocator();
 
         VK10.vkDestroyDevice(device, null);
         if(Luminescent.DEBUG) {
@@ -2357,7 +2354,22 @@ public class Vulkan {
         vulkanInstance.createCommandBuffers();
         vulkanInstance.recreateSwapChain();
     }
-    
+
+    private void cleanupAllocator() {
+        if(Luminescent.DEBUG) {
+            try(MemoryStack stack = MemoryStack.stackPush()) {
+                VmaStats stats = VmaStats.mallocStack(stack);
+                Vma.vmaCalculateStats(allocator, stats);
+                if(stats.total().allocationCount() != 0) {
+                    System.out.println("VMA Error: " + stats.total().allocationCount() + " unfreed buffers/image(s)");
+                }
+
+            }
+        }
+
+        Vma.vmaDestroyAllocator(allocator);
+    }
+
     private void cleanupUniformBuffers() {
         Vma.vmaDestroyBuffer(allocator, uniformModelBuffer, uniformModelBufferAllocation);
         Vma.vmaDestroyBuffer(allocator, uniformViewBuffer, uniformViewBufferAllocation);
