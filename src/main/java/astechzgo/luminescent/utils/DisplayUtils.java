@@ -138,7 +138,7 @@ public class DisplayUtils {
 	public static void takeScreenshot(File file) {
 		final Vulkan.RawImage raw = Vulkan.readPixels();
 		Thread saveThread = new Thread(() -> {
-			STBImageWrite.stbi_write_png(file.getAbsolutePath(), raw.getWidth(), raw.getHeight(), 4, raw.getData(), 0);
+			STBImageWrite.stbi_write_png(file.getAbsolutePath(), raw.getWidth(), raw.getHeight(), 3, raw.getData(), 0);
 			raw.free();
 		});
 		saveThread.setDaemon(true);
