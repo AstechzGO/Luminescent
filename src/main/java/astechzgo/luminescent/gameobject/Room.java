@@ -10,7 +10,7 @@ public class Room extends RectangularObjectRenderer {
 
 	public Room(JSONWorldLoader loader) {
 		super(new WindowCoordinates(loader.getCoordinates()), loader.getWidth(), loader.getHeight());
-		super.setColour(new Color(0.15f, 0.15f, 0.15f));
+		super.setColour(new Color(0.08f, 0.08f, 0.08f));
 	}
 
 	public void setSize(int width, int height) {

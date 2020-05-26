@@ -123,6 +123,8 @@ public class Vulkan {
         return vulkanInstance.readPixelsToArray();
     }
 
+    private static final int MAX_FRAMES_IN_FLIGHT = 2;
+
     private final String[] validationLayers = { 
         "VK_LAYER_KHRONOS_validation"
     };
@@ -180,8 +182,10 @@ public class Vulkan {
     
     private VkCommandBuffer[] commandBuffers;
     
-    private long imageAvailableFence;
-    private long renderFinishedSemaphore;
+    private long[] imageAvailableSemaphores;
+    private long[] renderFinishedSemaphores;
+    private long[] inFlightFences;
+    private long[] imagesInFlight;
     
     private final List<List<Vertex>> vertices = new ArrayList<>();
     private final List<List<Integer>> indices = new ArrayList<>();
@@ -216,6 +220,7 @@ public class Vulkan {
     private long textureSampler;
 
     private int imageIndex;
+    private int currentFrame;
 
     private void initVulkan() {
         createInstance();
@@ -233,7 +238,7 @@ public class Vulkan {
         createFramebuffers();
         createCommandPool();
         createTextureSampler();
-        createSynchronizationPrimitives();
+        createSyncObjects();
     }
 
     private void createMemoryAllocator() {
@@ -284,7 +289,7 @@ public class Vulkan {
     }
     
     private void createTextureImageView() {
-        textureImageView = createImageView(textureImage, VK10.VK_FORMAT_R8G8B8A8_UNORM);
+        textureImageView = createImageView(textureImage, VK10.VK_FORMAT_R8G8B8A8_SRGB);
     }
     
     private long createImageView(long image, int format) {
@@ -319,21 +324,6 @@ public class Vulkan {
         }
         
         try(MemoryStack stack = MemoryStack.stackPush()) {
-//            int[] texWidth = new int[] { 0 };
-//            int[] texHeight = new int[] { 0 };
-//            int[] texChannels = new int[] { 0 };
-//            
-//            ByteBuffer file = stack.bytes(SystemUtils.readFile("textures/player/texture.png"));
-//            
-//            ByteBuffer pixels
-//                = STBImage.stbi_load_from_memory(file, texWidth, texHeight, texChannels, STBImage.STBI_rgb_alpha);
-//            int imageSize = texWidth[0] * texHeight[0] * STBImage.STBI_rgb_alpha;
-//            
-//            if(pixels == null) {
-//                throw new RuntimeException("failed to load texture image!");
-//            }
-//            
-//            
             Texture texture = texturePacker.getAtlas();
             
             ByteBuffer pixels = texture.getAsByteBuffer();
@@ -352,12 +342,9 @@ public class Vulkan {
                 buffer.flip();
             Vma.vmaUnmapMemory(allocator, stagingBufferAllocationAddress[0]);
             
-//            pixels.flip();
-//            STBImage.stbi_image_free(pixels);
-            
             long[] textureImageAddress = new long[] { 0 };
             long[] textureImageAllocationAddress = new long[] { 0 };
-            createImage(width, height, VK10.VK_FORMAT_R8G8B8A8_UNORM, VK10.VK_IMAGE_TILING_OPTIMAL,
+            createImage(width, height, VK10.VK_FORMAT_R8G8B8A8_SRGB, VK10.VK_IMAGE_TILING_OPTIMAL,
                     VK10.VK_IMAGE_LAYOUT_UNDEFINED,
                     VK10.VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK10.VK_IMAGE_USAGE_SAMPLED_BIT, VK10.VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
                     textureImageAddress, textureImageAllocationAddress);
@@ -942,26 +929,34 @@ public class Vulkan {
         }
     }
 
-    // TODO: IN_FLIGHT
-    private void createSynchronizationPrimitives() {
+    private void createSyncObjects() {
         try(MemoryStack stack = MemoryStack.stackPush()) {
-            VkFenceCreateInfo fenceInfo = VkFenceCreateInfo.callocStack(stack)
-                .sType(VK10.VK_STRUCTURE_TYPE_FENCE_CREATE_INFO);
-            
-            long[] imageAvailableFenceAddress = new long[] { 0 };
-            if(VK10.vkCreateFence(device, fenceInfo, null, imageAvailableFenceAddress) != VK10.VK_SUCCESS) {
-                throw new RuntimeException("failed to create fence!");
-            }
-            imageAvailableFence = imageAvailableFenceAddress[0];
+            imageAvailableSemaphores = new long[MAX_FRAMES_IN_FLIGHT];
+            renderFinishedSemaphores = new long[MAX_FRAMES_IN_FLIGHT];
+            inFlightFences = new long[MAX_FRAMES_IN_FLIGHT];
+            imagesInFlight = new long[swapChainImages.length];
+            Arrays.fill(imagesInFlight, VK10.VK_NULL_HANDLE);
             
             VkSemaphoreCreateInfo semaphoreInfo = VkSemaphoreCreateInfo.callocStack(stack)
                 .sType(VK10.VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO);
-            
-            long[] renderFinishedSemaphoreAddress = new long[] { 0 };
-            if(VK10.vkCreateSemaphore(device, semaphoreInfo, null, renderFinishedSemaphoreAddress) != VK10.VK_SUCCESS) {
-                throw new RuntimeException("failed to create semaphore!");
+
+            VkFenceCreateInfo fenceInfo = VkFenceCreateInfo.callocStack(stack)
+                .sType(VK10.VK_STRUCTURE_TYPE_FENCE_CREATE_INFO)
+                .flags(VK10.VK_FENCE_CREATE_SIGNALED_BIT);
+
+            for(int i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
+                long[] imageAvailableSemaphoreAddress = new long[] { 0 };
+                long[] renderFinishedSemaphoreAddress = new long[] { 0 };
+                long[] inFlightFencesAddress = new long[] { 0 };
+                if (VK10.vkCreateSemaphore(device, semaphoreInfo, null, imageAvailableSemaphoreAddress) != VK10.VK_SUCCESS
+                    || VK10.vkCreateSemaphore(device, semaphoreInfo, null, renderFinishedSemaphoreAddress) != VK10.VK_SUCCESS
+                    || VK10.vkCreateFence(device, fenceInfo, null, inFlightFencesAddress) != VK10.VK_SUCCESS) {
+                    throw new RuntimeException("failed to create synchonization objects for a frame!");
+                }
+                imageAvailableSemaphores[i] = imageAvailableSemaphoreAddress[0];
+                renderFinishedSemaphores[i] = renderFinishedSemaphoreAddress[0];
+                inFlightFences[i] = inFlightFencesAddress[0];
             }
-            renderFinishedSemaphore = renderFinishedSemaphoreAddress[0];
         }
     }
     
@@ -1600,22 +1595,11 @@ public class Vulkan {
         }
     }
 
-    // TODO: Switch to SRGB
     private VkSurfaceFormatKHR chooseSwapSurfaceFormat(VkSurfaceFormatKHR[] availableFormats) {
-        if(availableFormats.length == 1 && availableFormats[0].format() == VK10.VK_FORMAT_UNDEFINED) {
-            VkSurfaceFormatKHR format = VkSurfaceFormatKHR.malloc();
-            
-            MemoryUtil.memPutInt(format.address() + VkSurfaceFormatKHR.FORMAT, VK10.VK_FORMAT_B8G8R8A8_UNORM);
-            MemoryUtil.memPutInt(format.address() + VkSurfaceFormatKHR.COLORSPACE, KHRSurface.VK_COLOR_SPACE_SRGB_NONLINEAR_KHR);
-            
-            return format;
-        }
-        else {
-            for(VkSurfaceFormatKHR availableFormat : availableFormats) {
-                if(availableFormat.format() == VK10.VK_FORMAT_B8G8R8A8_UNORM
+        for(VkSurfaceFormatKHR availableFormat : availableFormats) {
+            if (availableFormat.format() == VK10.VK_FORMAT_B8G8R8A8_SRGB
                     && availableFormat.colorSpace() == KHRSurface.VK_COLOR_SPACE_SRGB_NONLINEAR_KHR) {
-                    return availableFormat;
-                }
+                return availableFormat;
             }
         }
         
@@ -1991,10 +1975,12 @@ public class Vulkan {
     }
 
     private void drawFrame() {
+        VK10.vkWaitForFences(device, inFlightFences[currentFrame], true, Long.MAX_VALUE);
+
         int[] imageIndexAddress = new int[] { 0 };
-        int result = KHRSwapchain.vkAcquireNextImageKHR(device, swapChain, Long.MAX_VALUE, VK10.VK_NULL_HANDLE, imageAvailableFence, imageIndexAddress);
+        int result = KHRSwapchain.vkAcquireNextImageKHR(device, swapChain, Long.MAX_VALUE, imageAvailableSemaphores[currentFrame], VK10.VK_NULL_HANDLE, imageIndexAddress);
         imageIndex = imageIndexAddress[0];
-        
+
         if(result == KHRSwapchain.VK_ERROR_OUT_OF_DATE_KHR) {
             recreateSwapChain();
             return;
@@ -2002,26 +1988,35 @@ public class Vulkan {
         else if(result != VK10.VK_SUCCESS && result != KHRSwapchain.VK_SUBOPTIMAL_KHR) {
             throw new RuntimeException("failed to aquire swap chain image!");
         }
-        
-        VK10.vkWaitForFences(device, imageAvailableFence, true, Long.MAX_VALUE);
-        VK10.vkResetFences(device, imageAvailableFence);
-        
+
+        if(imagesInFlight[imageIndex] != VK10.VK_NULL_HANDLE) {
+            VK10.vkWaitForFences(device, imagesInFlight[imageIndex], true, Long.MAX_VALUE);
+        }
+
+        imagesInFlight[imageIndex] = inFlightFences[currentFrame];
+
+
         try(MemoryStack stack = MemoryStack.stackPush()) {
-            LongBuffer signalSemaphores = stack.mallocLong(1).put(renderFinishedSemaphore);
+            LongBuffer waitSemaphores = stack.mallocLong(1).put(imageAvailableSemaphores[currentFrame]);
+            waitSemaphores.flip();
+
+            LongBuffer signalSemaphores = stack.mallocLong(1).put(renderFinishedSemaphores[currentFrame]);
             signalSemaphores.flip();
             
             PointerBuffer commandBufferAddresses = stack.mallocPointer(1).put(commandBuffers[imageIndex].address()).flip();
             
             VkSubmitInfo submitInfo  = VkSubmitInfo.mallocStack(stack)
                 .sType(VK10.VK_STRUCTURE_TYPE_SUBMIT_INFO)
-                .waitSemaphoreCount(0)
-                .pWaitSemaphores(null)
-                .pWaitDstStageMask(null)
+                .waitSemaphoreCount(1)
+                .pWaitSemaphores(waitSemaphores)
+                .pWaitDstStageMask(stack.ints(VK10.VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT))
                 .pCommandBuffers(commandBufferAddresses)
                 .pSignalSemaphores(signalSemaphores)
                 .pNext(VK10.VK_NULL_HANDLE);
-            
-            if(VK10.vkQueueSubmit(graphicsQueue, submitInfo, VK10.VK_NULL_HANDLE) != VK10.VK_SUCCESS) {
+
+            VK10.vkResetFences(device, inFlightFences[currentFrame]);
+
+            if(VK10.vkQueueSubmit(graphicsQueue, submitInfo, inFlightFences[currentFrame]) != VK10.VK_SUCCESS) {
                 throw new RuntimeException("failed to submit draw command buffer!");
             }
             
@@ -2048,6 +2043,8 @@ public class Vulkan {
             else if(result != VK10.VK_SUCCESS) {
                 throw new RuntimeException("failed to present swap chain image!");
             }
+
+            currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
         }
     }
     
@@ -2073,9 +2070,12 @@ public class Vulkan {
 
         Vma.vmaDestroyBuffer(allocator, indexBuffer, indexBufferAllocation);
         Vma.vmaDestroyBuffer(allocator, vertexBuffer, vertexBufferAllocation);
-        
-        VK10.vkDestroySemaphore(device, renderFinishedSemaphore, null);
-        VK10.vkDestroyFence(device, imageAvailableFence, null);
+
+        for(int i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
+            VK10.vkDestroySemaphore(device, imageAvailableSemaphores[i], null);
+            VK10.vkDestroySemaphore(device, renderFinishedSemaphores[i], null);
+            VK10.vkDestroyFence(device, inFlightFences[i], null);
+        }
         
         VK10.vkDestroyCommandPool(device, commandPool, null);
 
@@ -2089,13 +2089,6 @@ public class Vulkan {
         KHRSurface.vkDestroySurfaceKHR(instance, surface, null);
         VK10.vkDestroyInstance(instance, null);
     }
-    //  width, height, 1 };
-    // uint32_t width;    uint32_t height;    uint32_t layers;
-
-
-
-
-
 
     /**
      * Translates a Vulkan {@code VkResult} value to a String describing the result.
@@ -2167,9 +2160,9 @@ public class Vulkan {
             boolean twoSteps, copyOnly;
 
             VkFormatProperties targetFormatProps = VkFormatProperties.mallocStack(stack);
-            VK10.vkGetPhysicalDeviceFormatProperties(physicalDevice, VK10.VK_FORMAT_R8G8B8A8_UNORM, targetFormatProps);
+            VK10.vkGetPhysicalDeviceFormatProperties(physicalDevice, VK10.VK_FORMAT_R8G8B8A8_SRGB, targetFormatProps);
 
-            if(swapChainImageFormat == VK10.VK_FORMAT_R8G8B8A8_UNORM) {
+            if(swapChainImageFormat == VK10.VK_FORMAT_R8G8B8A8_SRGB) {
                 twoSteps = false;
                 copyOnly = true;
             }
@@ -2200,16 +2193,16 @@ public class Vulkan {
             long srcImage = swapChainImages[imageIndex];
 
             if(twoSteps) {
-                createImage(swapChainExtent.width(), swapChainExtent.height(), VK10.VK_FORMAT_R8G8B8A8_UNORM,
+                createImage(swapChainExtent.width(), swapChainExtent.height(), VK10.VK_FORMAT_R8G8B8A8_SRGB,
                         VK10.VK_IMAGE_TILING_OPTIMAL, VK10.VK_IMAGE_LAYOUT_UNDEFINED, VK10.VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK10.VK_IMAGE_USAGE_TRANSFER_DST_BIT,
                         VK10.VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, firstImageAddress, firstImageAllocationAddress);
 
-                createImage(swapChainExtent.width(), swapChainExtent.height(), VK10.VK_FORMAT_R8G8B8A8_UNORM,
+                createImage(swapChainExtent.width(), swapChainExtent.height(), VK10.VK_FORMAT_R8G8B8A8_SRGB,
                         VK10.VK_IMAGE_TILING_LINEAR, VK10.VK_IMAGE_LAYOUT_UNDEFINED, VK10.VK_IMAGE_USAGE_TRANSFER_DST_BIT,
                         VK10.VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, secondImageAddress, secondImageAllocationAddress);
             }
             else {
-                createImage(swapChainExtent.width(), swapChainExtent.height(), VK10.VK_FORMAT_R8G8B8A8_UNORM,
+                createImage(swapChainExtent.width(), swapChainExtent.height(), VK10.VK_FORMAT_R8G8B8A8_SRGB,
                         VK10.VK_IMAGE_TILING_LINEAR, VK10.VK_IMAGE_LAYOUT_UNDEFINED, VK10.VK_IMAGE_USAGE_TRANSFER_DST_BIT,
                         VK10.VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, firstImageAddress, firstImageAllocationAddress);
             }

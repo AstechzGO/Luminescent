@@ -6,3 +6,4 @@
 .gradle/
 Luminescent.iws
 Luminescent.jar
+*.log
