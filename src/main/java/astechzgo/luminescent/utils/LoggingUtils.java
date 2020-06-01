@@ -83,7 +83,6 @@ public class LoggingUtils {
                 ch.close();
 
                 cleanupLogFilename();
-				System.err.println("Test");
             }));
 
 			open.set(true);
