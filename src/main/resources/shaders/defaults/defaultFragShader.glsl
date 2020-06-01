@@ -28,7 +28,7 @@ void main() {
 				
 				float distance = min(sqrt((x*x)+(y*y)), r);
 			
-				sumLight += sqrt((r-distance)/r);
+				sumLight += (r-distance)/r;
 			}
 		}
 	}
@@ -37,5 +37,5 @@ void main() {
 	}
 	
 
-	outColor = vec4((texture.rgb + fragColor.rgb * (1 - texture.a)) * sumLight, texture.a + fragColor.a * (1 - texture.a));
+	outColor = vec4((texture.rgb + fragColor.rgb * (1 - texture.a)) * min(sumLight, 1), texture.a + fragColor.a * (1 - texture.a));
 }

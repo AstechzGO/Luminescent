@@ -85,7 +85,7 @@ astechzgo.luminescent:
 			Based on tutorial at https://vulkan-tutorial.com/.
 			Dynamic uniform buffers based on tutorial at https://github.com/SaschaWillems/Vulkan/tree/master/dynamicuniformbuffer
 			readPixelsToArray():
-				https://github.com/SaschaWillems/Vulkan/blob/master/examples/screenshot/screenshot.cpp
+				https://github.com/LunarG/VulkanTools/blob/master/layersvt/screenshot.cpp#L522
 	shader:
 		Shader:
 			(Nothing)

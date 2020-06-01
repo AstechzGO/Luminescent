@@ -97,7 +97,7 @@ public class TexturePacker {
         }
         g2.dispose();
         
-        atlas = new Texture("texture-atlas", true, newImage);
+        atlas = new Texture("texture-atlas", newImage);
     }
     
     public Texture getAtlas() {

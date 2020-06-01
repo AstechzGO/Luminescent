@@ -1,5 +1,7 @@
 package astechzgo.luminescent.utils;
 
+import org.lwjgl.system.Configuration;
+
 import static astechzgo.luminescent.utils.SystemUtils.newFile;
 
 import java.io.File;
@@ -7,6 +9,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.FileHandler;
 import java.util.logging.Formatter;
 import java.util.logging.Level;
@@ -19,6 +22,8 @@ public class LoggingUtils {
 	public static final Logger LOGGER = Logger.getLogger(LOGGER_NAME);
 	
 	public static final File LOG_FILE = newFile("logs/latest.log");
+
+	private static final AtomicBoolean open = new AtomicBoolean(false);
 	
 	private static final Formatter FORMATTER = new Formatter() {
 
@@ -53,7 +58,7 @@ public class LoggingUtils {
 			newFile("logs").mkdir();
 		
 		try {
-			LOGGER.setUseParentHandlers(false);			
+			LOGGER.setUseParentHandlers(false);
 			final FileHandler fh = new FileHandler(LOG_FILE.getAbsolutePath(), true);
 			final EConsoleHandler ch = new EConsoleHandler();
 			
@@ -69,7 +74,7 @@ public class LoggingUtils {
 			if(Constants.getConstantAsBoolean(Constants.LOG_CONFIG)) {
 				LOGGER.setLevel(Level.CONFIG);
 			}
-			
+
 			Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                 fh.flush();
                 fh.close();
@@ -79,30 +84,44 @@ public class LoggingUtils {
 
                 cleanupLogFilename();
             }));
-			
+
+			open.set(true);
 		} catch (SecurityException | IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static void cleanupLogger() {
+		open.set(false);
 	}
 	
 	private static PrintStream createLoggingProxy(final PrintStream realPrintStream, Level level) {
 		return new PrintStream(realPrintStream) {
 			public void write(byte[] b) throws IOException {
-			    String string = new String(b);
-			    if (!string.trim().isEmpty())
-			        LOGGER.log(level, string);
+				if(!open.get()) realPrintStream.write(b);
+			    else {
+					String string = new String(b);
+					if (!string.trim().isEmpty())
+						LOGGER.log(level, string);
+				}
 			}
 
 			public void write(byte[] b, int off, int len) {
-			    String string = new String(b, off, len);
-			    if (!string.trim().isEmpty())
-			        LOGGER.log(level, string);
+				if(!open.get()) realPrintStream.write(b, off, len);
+				else {
+					String string = new String(b, off, len);
+					if (!string.trim().isEmpty())
+						LOGGER.log(level, string);
+				}
 			}
 
 			public void write(int b) {
-			    String string = String.valueOf((char) b);
-			    if (!string.trim().isEmpty())
-			        LOGGER.log(level, string);
+				if(!open.get()) realPrintStream.write(b);
+				else {
+					String string = String.valueOf((char) b);
+					if (!string.trim().isEmpty())
+						LOGGER.log(level, string);
+				}
 			}
 		};
 	}

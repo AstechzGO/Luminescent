@@ -3,8 +3,6 @@ package astechzgo.luminescent.main;
 import static org.lwjgl.glfw.GLFW.glfwPollEvents;
 import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
 
-import org.lwjgl.glfw.GLFW;
-
 import astechzgo.luminescent.utils.Constants;
 import astechzgo.luminescent.rendering.Vulkan;
 import astechzgo.luminescent.textures.TextureList;
@@ -16,6 +14,7 @@ public class Main
 {
 	public static void main(String[] args)
 	{
+		LoggingUtils.configureLogger();
 		SystemUtils.doOSSetUp();
 		SystemUtils.setUpDebug();
 		
@@ -37,9 +36,8 @@ public class Main
 	public void Init()
 	{
 		Constants.readConstantPropertiesFromFile();
-		LoggingUtils.configureLogger();
 
-		TextureList.loadNonSlickTextures();
+		TextureList.loadTextures();
 		try
 		{
 			DisplayUtils.setIcons(
@@ -64,6 +62,7 @@ public class Main
 	{
 		Luminescent.Shutdown();
 		Vulkan.shutdown();
+		LoggingUtils.cleanupLogger();
 	}
 	
 	/**

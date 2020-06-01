@@ -268,7 +268,7 @@ public class Font {
 //        /* Do not forget to flip the buffer! */
 //        buffer.flip();
 
-        return new CharTexture(TEXTURE_NAME, true, image);
+        return new CharTexture(TEXTURE_NAME, image);
         
     }
 
@@ -445,12 +445,12 @@ public class Font {
     
     private class CharTexture extends Texture {
         
-        public CharTexture(String textureName, boolean slick) {
-            super(textureName, slick);
+        public CharTexture(String textureName) {
+            super(textureName);
         }
         
-        public CharTexture(String textureName, boolean slick, Image image) {
-            super(textureName, slick, image);
+        public CharTexture(String textureName, Image image) {
+            super(textureName, image);
         }
         
         public int getCurrentFrame(Supplier<Character> character) {

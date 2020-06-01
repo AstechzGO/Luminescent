@@ -19,6 +19,7 @@ public class SystemUtils {
 	private static File workingDirectory;
 	
 	public static void setUpDebug() {
+		Configuration.DEBUG_STREAM.set(System.out);
         if(Luminescent.DEBUG) {
             Configuration.DEBUG.set(true);
             Configuration.DEBUG_FUNCTIONS.set(true);

@@ -38,7 +38,7 @@ public class Animation extends Texture {
 	private final List<Texture> frames = new ArrayList<>();
 	
 	public Animation(String textureName, int count) {
-		super(textureName, true, toCombinedImage(textureName, count));
+		super(textureName, toCombinedImage(textureName, count));
 
 		for(int i = 0; i < count; i++) {
 			frames.add(TextureList.findTexture(textureName + "$" + i));
