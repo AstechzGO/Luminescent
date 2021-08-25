@@ -260,6 +260,9 @@ public class Vulkan {
     
     private void createTextureSampler() {
         try(MemoryStack stack = MemoryStack.stackPush()) {
+            VkPhysicalDeviceProperties properties = VkPhysicalDeviceProperties.callocStack(stack);
+            VK10.vkGetPhysicalDeviceProperties(physicalDevice, properties);
+
             VkSamplerCreateInfo samplerInfo = VkSamplerCreateInfo.callocStack(stack)
                 .sType(VK10.VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO)
                 .magFilter(VK10.VK_FILTER_NEAREST)
@@ -268,7 +271,7 @@ public class Vulkan {
                 .addressModeV(VK10.VK_SAMPLER_ADDRESS_MODE_REPEAT)
                 .addressModeW(VK10.VK_SAMPLER_ADDRESS_MODE_REPEAT)
                 .anisotropyEnable(true)
-                .maxAnisotropy(16)
+                .maxAnisotropy(properties.limits().maxSamplerAnisotropy())
                 .borderColor(VK10.VK_BORDER_COLOR_INT_OPAQUE_BLACK)
                 .unnormalizedCoordinates(false)
                 .compareEnable(false)
@@ -912,6 +915,12 @@ public class Vulkan {
         createGraphicsPipeline();
         createFramebuffers();
         createCommandBuffers();
+
+        int oldSize = imagesInFlight.length;
+        imagesInFlight = Arrays.copyOf(imagesInFlight, swapChainImages.length);
+        if (oldSize < imagesInFlight.length) {
+            Arrays.fill(imagesInFlight, oldSize, imagesInFlight.length, VK10.VK_NULL_HANDLE);
+        }
     }
     
     private void cleanupCommandBuffers() {
@@ -1115,10 +1124,10 @@ public class Vulkan {
             VkSubpassDependency dependency = VkSubpassDependency.callocStack(stack)
                 .srcSubpass(VK10.VK_SUBPASS_EXTERNAL)
                 .dstSubpass(0)
-                .srcStageMask(VK10.VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT)
+                .srcStageMask(VK10.VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK10.VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT)
                 .srcAccessMask(0)
-                .dstStageMask(VK10.VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT)
-                .dstAccessMask(VK10.VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK10.VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT);
+                .dstStageMask(VK10.VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK10.VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT)
+                .dstAccessMask(VK10.VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK10.VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT);
             
             VkRenderPassCreateInfo renderPassInfo = VkRenderPassCreateInfo.callocStack(stack)
                 .sType(VK10.VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO)
@@ -2084,10 +2093,12 @@ public class Vulkan {
         VK10.vkDestroyDevice(device, null);
         if(Luminescent.DEBUG) {
             EXTDebugUtils.vkDestroyDebugUtilsMessengerEXT(instance, debugMessenger, null);
-            debugCallback.free();
         }
         KHRSurface.vkDestroySurfaceKHR(instance, surface, null);
         VK10.vkDestroyInstance(instance, null);
+        if(Luminescent.DEBUG) {
+            debugCallback.free();
+        }
     }
 
     /**

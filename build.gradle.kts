@@ -6,8 +6,8 @@ plugins {
 
 buildscript {
 	extra["lwjglVersion"] = "3.2.3"
-	extra["jomlVersion"] = "1.9.24"
-	extra["gsonVersion"] = "2.8.6"
+	extra["jomlVersion"] = "1.10.1"
+	extra["gsonVersion"] = "2.8.8"
 }
 
 repositories {
@@ -105,5 +105,5 @@ tasks.compileJava {
 }
 
 tasks.wrapper {
-	gradleVersion = "6.3"
+	gradleVersion = "7.2"
 }
