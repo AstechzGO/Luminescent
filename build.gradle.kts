@@ -93,7 +93,6 @@ task("copyToRoot") {
 task("run") {
 	doLast {
 		javaexec {
-			main="-jar"
 			args = listOf("Luminescent.jar")
 		}
 	}
