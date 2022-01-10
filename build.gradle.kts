@@ -5,9 +5,9 @@ plugins {
 }
 
 buildscript {
-	extra["lwjglVersion"] = "3.2.3"
-	extra["jomlVersion"] = "1.10.1"
-	extra["gsonVersion"] = "2.8.8"
+	extra["lwjglVersion"] = "3.3.0"
+	extra["jomlVersion"] = "1.10.3"
+	extra["gsonVersion"] = "2.8.9"
 }
 
 repositories {
@@ -100,10 +100,10 @@ task("run") {
 }.dependsOn("deploy")
 
 tasks.compileJava {
-	sourceCompatibility = "11"
-	targetCompatibility = "11"
+	sourceCompatibility = "17"
+	targetCompatibility = "17"
 }
 
 tasks.wrapper {
-	gradleVersion = "7.2"
+	gradleVersion = "7.3.3"
 }

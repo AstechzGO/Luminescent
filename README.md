@@ -1,5 +1,5 @@
 # Luminescent
-To run in IntelliJ IDEA, the Java version that is used must be JDK 11+, and the Java and Gradle plugins installed
+To run in IntelliJ IDEA, the Java version that is used must be JDK 17+, and the Java and Gradle plugins installed
 
 [View and Download Latest Release](/../../releases/latest)
 

@@ -62,7 +62,7 @@ public class Vulkan {
     public static void shutdown() {
         vulkanInstance.cleanup();
     }
-    
+
     public static void setClearColour(float redVal, float greenVal, float blueVal, float alphaVal) {
         red = redVal;
         green = greenVal;
@@ -243,11 +243,13 @@ public class Vulkan {
 
     private void createMemoryAllocator() {
         try(MemoryStack stack = MemoryStack.stackPush()) {
-            VmaAllocatorCreateInfo allocatorCreateInfo = VmaAllocatorCreateInfo.callocStack(stack)
+            VmaAllocatorCreateInfo allocatorCreateInfo = VmaAllocatorCreateInfo.calloc(stack)
                 .flags(device.getCapabilities().VK_KHR_dedicated_allocation ? Vma.VMA_ALLOCATOR_CREATE_KHR_DEDICATED_ALLOCATION_BIT : 0)
                 .physicalDevice(physicalDevice)
                 .device(device)
-                .pVulkanFunctions(VmaVulkanFunctions.callocStack(stack).set(instance, device));
+                .pVulkanFunctions(VmaVulkanFunctions.calloc(stack).set(instance, device))
+                .instance(instance)
+                .vulkanApiVersion(VK12.VK_API_VERSION_1_2);
 
             PointerBuffer allocatorAddress = stack.mallocPointer(1);
             if(Vma.vmaCreateAllocator(allocatorCreateInfo, allocatorAddress) != VK10.VK_SUCCESS) {
@@ -260,11 +262,11 @@ public class Vulkan {
     
     private void createTextureSampler() {
         try(MemoryStack stack = MemoryStack.stackPush()) {
-            VkPhysicalDeviceProperties properties = VkPhysicalDeviceProperties.callocStack(stack);
+            VkPhysicalDeviceProperties properties = VkPhysicalDeviceProperties.calloc(stack);
             VK10.vkGetPhysicalDeviceProperties(physicalDevice, properties);
 
-            VkSamplerCreateInfo samplerInfo = VkSamplerCreateInfo.callocStack(stack)
-                .sType(VK10.VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO)
+            VkSamplerCreateInfo samplerInfo = VkSamplerCreateInfo.calloc(stack)
+                .sType$Default()
                 .magFilter(VK10.VK_FILTER_NEAREST)
                 .minFilter(VK10.VK_FILTER_NEAREST)
                 .addressModeU(VK10.VK_SAMPLER_MIPMAP_MODE_NEAREST)
@@ -297,12 +299,12 @@ public class Vulkan {
     
     private long createImageView(long image, int format) {
         try(MemoryStack stack = MemoryStack.stackPush()) {
-            VkImageViewCreateInfo viewInfo = VkImageViewCreateInfo.callocStack(stack)
-                .sType(VK10.VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO)
+            VkImageViewCreateInfo viewInfo = VkImageViewCreateInfo.calloc(stack)
+                .sType$Default()
                 .image(image)
                 .viewType(VK10.VK_IMAGE_VIEW_TYPE_2D)
                 .format(format)
-                .subresourceRange(VkImageSubresourceRange.callocStack(stack)
+                .subresourceRange(VkImageSubresourceRange.calloc(stack)
                     .aspectMask(VK10.VK_IMAGE_ASPECT_COLOR_BIT)
                     .baseMipLevel(0)
                     .levelCount(1)
@@ -370,14 +372,14 @@ public class Vulkan {
     
     private void transitionImageLayout(VkCommandBuffer cmdBuffer, long image, int srcAccessMask, int dstAccessMask, int oldLayout, int newLayout, int srcStageMask, int dstStageMask) {
         try(MemoryStack stack = MemoryStack.stackPush()) {
-            VkImageMemoryBarrier barrier = VkImageMemoryBarrier.callocStack(stack)
-                .sType(VK10.VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER)
+            VkImageMemoryBarrier barrier = VkImageMemoryBarrier.calloc(stack)
+                .sType$Default()
                 .oldLayout(oldLayout)
                 .newLayout(newLayout)
                 .srcQueueFamilyIndex(VK10.VK_QUEUE_FAMILY_IGNORED)
                 .dstQueueFamilyIndex(VK10.VK_QUEUE_FAMILY_IGNORED)
                 .image(image)
-                .subresourceRange(VkImageSubresourceRange.callocStack(stack)
+                .subresourceRange(VkImageSubresourceRange.calloc(stack)
                     .aspectMask(VK10.VK_IMAGE_ASPECT_COLOR_BIT)
                     .baseMipLevel(0)
                     .levelCount(1)
@@ -392,7 +394,7 @@ public class Vulkan {
                 0,
                 null,
                 null,
-                VkImageMemoryBarrier.mallocStack(1, stack).put(barrier).flip()
+                VkImageMemoryBarrier.malloc(1, stack).put(barrier).flip()
             );
         }
     }
@@ -401,19 +403,19 @@ public class Vulkan {
         VkCommandBuffer commandBuffer = beginSingleTimeCommands();
         
         try(MemoryStack stack = MemoryStack.stackPush()) {
-            VkBufferImageCopy region = VkBufferImageCopy.callocStack(stack)
+            VkBufferImageCopy region = VkBufferImageCopy.calloc(stack)
                 .bufferOffset(0)
                 .bufferRowLength(0)
                 .bufferImageHeight(0)
                 
-                .imageSubresource(VkImageSubresourceLayers.callocStack(stack)
+                .imageSubresource(VkImageSubresourceLayers.calloc(stack)
                    .aspectMask(VK10.VK_IMAGE_ASPECT_COLOR_BIT)
                    .mipLevel(0)
                    .baseArrayLayer(0)
                    .layerCount(1))
                 
-                .imageOffset(VkOffset3D.callocStack(stack).set(0, 0, 0))
-                .imageExtent(VkExtent3D.callocStack(stack).set(
+                .imageOffset(VkOffset3D.calloc(stack).set(0, 0, 0))
+                .imageExtent(VkExtent3D.calloc(stack).set(
                     width,
                     height,
                     1
@@ -424,7 +426,7 @@ public class Vulkan {
                 buffer,
                 image,
                 VK10.VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-                VkBufferImageCopy.callocStack(1, stack).put(region).flip()
+                VkBufferImageCopy.calloc(1, stack).put(region).flip()
             );
         }
         
@@ -435,19 +437,19 @@ public class Vulkan {
         VkCommandBuffer commandBuffer = beginSingleTimeCommands();
         
         try(MemoryStack stack = MemoryStack.stackPush()) {
-            VkBufferImageCopy region = VkBufferImageCopy.callocStack(stack)
+            VkBufferImageCopy region = VkBufferImageCopy.calloc(stack)
                 .bufferOffset(0)
                 .bufferRowLength(0)
                 .bufferImageHeight(0)
                 
-                .imageSubresource(VkImageSubresourceLayers.callocStack(stack)
+                .imageSubresource(VkImageSubresourceLayers.calloc(stack)
                    .aspectMask(VK10.VK_IMAGE_ASPECT_COLOR_BIT)
                    .mipLevel(0)
                    .baseArrayLayer(0)
                    .layerCount(1))
                 
-                .imageOffset(VkOffset3D.callocStack(stack).set(0, 0, 0))
-                .imageExtent(VkExtent3D.callocStack(stack).set(
+                .imageOffset(VkOffset3D.calloc(stack).set(0, 0, 0))
+                .imageExtent(VkExtent3D.calloc(stack).set(
                     width,
                     height,
                     1
@@ -458,7 +460,7 @@ public class Vulkan {
                 image,
                 VK10.VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
                 buffer,
-                VkBufferImageCopy.callocStack(1, stack).put(region).flip()
+                VkBufferImageCopy.calloc(1, stack).put(region).flip()
             );
 
         }
@@ -468,10 +470,10 @@ public class Vulkan {
     
     private void createImage(int width, int height, int format, int tiling, int initialLayout, int usage, int properties, long[] imageAddress, long[] imageAllocationAddress) {
         try(MemoryStack stack = MemoryStack.stackPush()) {
-            VkImageCreateInfo imageInfo = VkImageCreateInfo.callocStack(stack)
-                .sType(VK10.VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO)
+            VkImageCreateInfo imageInfo = VkImageCreateInfo.calloc(stack)
+                .sType$Default()
                 .imageType(VK10.VK_IMAGE_TYPE_2D)
-                .extent(VkExtent3D.callocStack(stack)
+                .extent(VkExtent3D.calloc(stack)
                     .width(width)
                     .height(height)
                     .depth(1))
@@ -485,7 +487,7 @@ public class Vulkan {
                 .sharingMode(VK10.VK_SHARING_MODE_EXCLUSIVE)
                 .flags(0);
 
-            VmaAllocationCreateInfo allocationCreateInfo = VmaAllocationCreateInfo.callocStack(stack)
+            VmaAllocationCreateInfo allocationCreateInfo = VmaAllocationCreateInfo.calloc(stack)
                     .requiredFlags(properties);
 
             LongBuffer wrappedImage = stack.mallocLong(1);
@@ -504,8 +506,8 @@ public class Vulkan {
             Arrays.fill(layoutVals, descriptorSetLayout);
             LongBuffer layouts = stack.longs(layoutVals);
             
-            VkDescriptorSetAllocateInfo allocInfo = VkDescriptorSetAllocateInfo.callocStack(stack)
-                .sType(VK10.VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO)
+            VkDescriptorSetAllocateInfo allocInfo = VkDescriptorSetAllocateInfo.calloc(stack)
+                .sType$Default()
                 .descriptorPool(descriptorPool)
                 .pSetLayouts(layouts);
             
@@ -515,30 +517,30 @@ public class Vulkan {
             }
 
             for(int i = 0; i < swapChainImages.length; i++) {
-                VkDescriptorBufferInfo.Buffer viewBufferInfo = VkDescriptorBufferInfo.callocStack(1, stack)
+                VkDescriptorBufferInfo.Buffer viewBufferInfo = VkDescriptorBufferInfo.calloc(1, stack)
                         .buffer(uniformViewBuffers[i])
                         .offset(0)
                         .range(2 * 4 * 4 * Float.BYTES);
 
-                VkDescriptorBufferInfo.Buffer modelBufferInfo = VkDescriptorBufferInfo.callocStack(1, stack)
+                VkDescriptorBufferInfo.Buffer modelBufferInfo = VkDescriptorBufferInfo.calloc(1, stack)
                         .buffer(uniformModelBuffers[i])
                         .offset(0)
                         .range(dynamicAlignment);
 
-                VkDescriptorImageInfo.Buffer imageInfo = VkDescriptorImageInfo.callocStack(1, stack)
+                VkDescriptorImageInfo.Buffer imageInfo = VkDescriptorImageInfo.calloc(1, stack)
                         .imageLayout(VK10.VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL)
                         .imageView(textureImageView)
                         .sampler(textureSampler);
 
-                VkDescriptorBufferInfo.Buffer lightsBufferInfo = VkDescriptorBufferInfo.callocStack(1, stack)
+                VkDescriptorBufferInfo.Buffer lightsBufferInfo = VkDescriptorBufferInfo.calloc(1, stack)
                         .buffer(uniformLightsBuffers[i])
                         .offset(0)
                         .range(LightSource.LIGHTS * lightAlignment);
 
-                VkWriteDescriptorSet.Buffer descriptorWrites = VkWriteDescriptorSet.callocStack(4, stack);
+                VkWriteDescriptorSet.Buffer descriptorWrites = VkWriteDescriptorSet.calloc(4, stack);
 
                 descriptorWrites.get(0)
-                        .sType(VK10.VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET)
+                        .sType$Default()
                         .dstSet(descriptorSets[i])
                         .dstBinding(0)
                         .dstArrayElement(0)
@@ -550,7 +552,7 @@ public class Vulkan {
                         .pNext(VK10.VK_NULL_HANDLE);
 
                 descriptorWrites.get(1)
-                        .sType(VK10.VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET)
+                        .sType$Default()
                         .dstSet(descriptorSets[i])
                         .dstBinding(1)
                         .dstArrayElement(0)
@@ -562,7 +564,7 @@ public class Vulkan {
                         .pNext(VK10.VK_NULL_HANDLE);
 
                 descriptorWrites.get(2)
-                        .sType(VK10.VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET)
+                        .sType$Default()
                         .dstSet(descriptorSets[i])
                         .dstBinding(2)
                         .dstArrayElement(0)
@@ -575,7 +577,7 @@ public class Vulkan {
                         .pNext(VK10.VK_NULL_HANDLE);
 
                 descriptorWrites.get(3)
-                        .sType(VK10.VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET)
+                        .sType$Default()
                         .dstSet(descriptorSets[i])
                         .dstBinding(3)
                         .dstArrayElement(0)
@@ -593,7 +595,7 @@ public class Vulkan {
     
     private void createDescriptorPool() {
         try(MemoryStack stack = MemoryStack.stackPush()) {
-            VkDescriptorPoolSize.Buffer poolSizes = VkDescriptorPoolSize.mallocStack(4, stack);
+            VkDescriptorPoolSize.Buffer poolSizes = VkDescriptorPoolSize.malloc(4, stack);
             
             poolSizes.get(0)
                 .type(VK10.VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER)
@@ -608,8 +610,8 @@ public class Vulkan {
                 .type(VK10.VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER)
                 .descriptorCount(swapChainImages.length);
             
-            VkDescriptorPoolCreateInfo poolInfo = VkDescriptorPoolCreateInfo.callocStack(stack)
-                .sType(VK10.VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO)
+            VkDescriptorPoolCreateInfo poolInfo = VkDescriptorPoolCreateInfo.calloc(stack)
+                .sType$Default()
                 .pPoolSizes(poolSizes)
                 .maxSets(swapChainImages.length);
             
@@ -635,7 +637,7 @@ public class Vulkan {
         long uboAlignment = 0;
 
         try(MemoryStack stack = MemoryStack.stackPush()) {
-            VkPhysicalDeviceProperties deviceProperties = VkPhysicalDeviceProperties.mallocStack(stack);
+            VkPhysicalDeviceProperties deviceProperties = VkPhysicalDeviceProperties.malloc(stack);
             VK10.vkGetPhysicalDeviceProperties(physicalDevice, deviceProperties);
 
             uboAlignment = deviceProperties.limits().minUniformBufferOffsetAlignment();
@@ -659,42 +661,42 @@ public class Vulkan {
     
     private void createDescriptorSetLayout() {
         try(MemoryStack stack = MemoryStack.stackPush()) {
-            VkDescriptorSetLayoutBinding viewUBOLayoutBinding = VkDescriptorSetLayoutBinding.mallocStack(stack)
+            VkDescriptorSetLayoutBinding viewUBOLayoutBinding = VkDescriptorSetLayoutBinding.malloc(stack)
                 .binding(0)
                 .descriptorCount(1)
                 .descriptorType(VK10.VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER)
                 .pImmutableSamplers(null)
                 .stageFlags(VK10.VK_SHADER_STAGE_VERTEX_BIT);
             
-            VkDescriptorSetLayoutBinding modelUBOLayoutBinding = VkDescriptorSetLayoutBinding.mallocStack(stack)
+            VkDescriptorSetLayoutBinding modelUBOLayoutBinding = VkDescriptorSetLayoutBinding.malloc(stack)
                 .binding(1)
                 .descriptorCount(1)
                 .descriptorType(VK10.VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC)
                 .pImmutableSamplers(null)
                 .stageFlags(VK10.VK_SHADER_STAGE_VERTEX_BIT);
             
-            VkDescriptorSetLayoutBinding samplerLayoutBinding = VkDescriptorSetLayoutBinding.mallocStack(stack)
+            VkDescriptorSetLayoutBinding samplerLayoutBinding = VkDescriptorSetLayoutBinding.malloc(stack)
                 .binding(2)
                 .descriptorCount(1)
                 .descriptorType(VK10.VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER)
                 .pImmutableSamplers(null)
                 .stageFlags(VK10.VK_SHADER_STAGE_FRAGMENT_BIT);
 
-            VkDescriptorSetLayoutBinding lightsUBOLayoutBinding = VkDescriptorSetLayoutBinding.mallocStack(stack)
+            VkDescriptorSetLayoutBinding lightsUBOLayoutBinding = VkDescriptorSetLayoutBinding.malloc(stack)
                 .binding(3)
                 .descriptorCount(1)
                 .descriptorType(VK10.VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER)
                 .pImmutableSamplers(null)
                 .stageFlags(VK10.VK_SHADER_STAGE_FRAGMENT_BIT);
 
-            VkDescriptorSetLayoutBinding.Buffer bindings = VkDescriptorSetLayoutBinding.mallocStack(4, stack)
+            VkDescriptorSetLayoutBinding.Buffer bindings = VkDescriptorSetLayoutBinding.malloc(4, stack)
                 .put(viewUBOLayoutBinding)
                 .put(modelUBOLayoutBinding)
                 .put(samplerLayoutBinding)
                 .put(lightsUBOLayoutBinding).flip();
             
-            VkDescriptorSetLayoutCreateInfo layoutInfo = VkDescriptorSetLayoutCreateInfo.callocStack(stack)
-                .sType(VK10.VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO)
+            VkDescriptorSetLayoutCreateInfo layoutInfo = VkDescriptorSetLayoutCreateInfo.calloc(stack)
+                .sType$Default()
                 .pBindings(bindings);
             
             long[] descriptorSetLayoutAddress = new long[] { 0 };
@@ -803,11 +805,11 @@ public class Vulkan {
         VkCommandBuffer commandBuffer = beginSingleTimeCommands();
         
         try(MemoryStack stack = MemoryStack.stackPush()) {
-            VkBufferCopy copyRegion = VkBufferCopy.mallocStack(stack)
+            VkBufferCopy copyRegion = VkBufferCopy.malloc(stack)
                 .srcOffset(0)
                 .dstOffset(0)
                 .size(size);
-            VK10.vkCmdCopyBuffer(commandBuffer, srcBuffer, dstBuffer, VkBufferCopy.mallocStack(1, stack).put(copyRegion).flip());
+            VK10.vkCmdCopyBuffer(commandBuffer, srcBuffer, dstBuffer, VkBufferCopy.malloc(1, stack).put(copyRegion).flip());
         }
         
         endSingleTimeCommands(commandBuffer);
@@ -816,8 +818,8 @@ public class Vulkan {
     
     private VkCommandBuffer beginSingleTimeCommands() {
         try(MemoryStack stack = MemoryStack.stackPush()) {
-            VkCommandBufferAllocateInfo allocInfo = VkCommandBufferAllocateInfo.callocStack(stack)
-                .sType(VK10.VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO)
+            VkCommandBufferAllocateInfo allocInfo = VkCommandBufferAllocateInfo.calloc(stack)
+                .sType$Default()
                 .level(VK10.VK_COMMAND_BUFFER_LEVEL_PRIMARY)
                 .commandPool(commandPool)
                 .commandBufferCount(1);
@@ -834,8 +836,8 @@ public class Vulkan {
             
             VkCommandBuffer commandBuffer = commandBuffers[0];
             
-            VkCommandBufferBeginInfo beginInfo = VkCommandBufferBeginInfo.callocStack(stack)
-                .sType(VK10.VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO)
+            VkCommandBufferBeginInfo beginInfo = VkCommandBufferBeginInfo.calloc(stack)
+                .sType$Default()
                 .flags(VK10.VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
             
             VK10.vkBeginCommandBuffer(commandBuffer, beginInfo);
@@ -850,8 +852,8 @@ public class Vulkan {
             
             PointerBuffer commandBufferBuffer = stack.mallocPointer(1).put(commandBuffer.address()).flip();
             
-            VkSubmitInfo submitInfo = VkSubmitInfo.callocStack(stack)
-                .sType(VK10.VK_STRUCTURE_TYPE_SUBMIT_INFO)
+            VkSubmitInfo submitInfo = VkSubmitInfo.calloc(stack)
+                .sType$Default()
                 .pCommandBuffers(commandBufferBuffer);
             
             VK10.vkQueueSubmit(graphicsQueue, submitInfo, VK10.VK_NULL_HANDLE);
@@ -863,12 +865,12 @@ public class Vulkan {
 
     private void createBuffer(long size, int usage, int memoryProperties, long[] bufferAddress, int bufferIdx, long[] allocationAddress, int allocationIdx) {
         try(MemoryStack stack = MemoryStack.stackPush()) {
-            VkBufferCreateInfo bufferInfo = VkBufferCreateInfo.callocStack(stack)
-                    .sType(VK10.VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO)
+            VkBufferCreateInfo bufferInfo = VkBufferCreateInfo.calloc(stack)
+                    .sType$Default()
                     .size(size)
                     .usage(usage);
 
-            VmaAllocationCreateInfo allocInfo = VmaAllocationCreateInfo.callocStack(stack)
+            VmaAllocationCreateInfo allocInfo = VmaAllocationCreateInfo.calloc(stack)
                     .requiredFlags(memoryProperties);
 
             LongBuffer wrappedBuffer = stack.mallocLong(1);
@@ -946,11 +948,11 @@ public class Vulkan {
             imagesInFlight = new long[swapChainImages.length];
             Arrays.fill(imagesInFlight, VK10.VK_NULL_HANDLE);
             
-            VkSemaphoreCreateInfo semaphoreInfo = VkSemaphoreCreateInfo.callocStack(stack)
-                .sType(VK10.VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO);
+            VkSemaphoreCreateInfo semaphoreInfo = VkSemaphoreCreateInfo.calloc(stack)
+                .sType$Default();
 
-            VkFenceCreateInfo fenceInfo = VkFenceCreateInfo.callocStack(stack)
-                .sType(VK10.VK_STRUCTURE_TYPE_FENCE_CREATE_INFO)
+            VkFenceCreateInfo fenceInfo = VkFenceCreateInfo.calloc(stack)
+                .sType$Default()
                 .flags(VK10.VK_FENCE_CREATE_SIGNALED_BIT);
 
             for(int i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
@@ -973,8 +975,8 @@ public class Vulkan {
         try(MemoryStack stack = MemoryStack.stackPush()) {
             commandBuffers = new VkCommandBuffer[swapChainFramebuffers.length];
             
-            VkCommandBufferAllocateInfo allocInfo = VkCommandBufferAllocateInfo.callocStack(stack)
-                .sType(VK10.VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO)
+            VkCommandBufferAllocateInfo allocInfo = VkCommandBufferAllocateInfo.calloc(stack)
+                .sType$Default()
                 .commandPool(commandPool)
                 .level(VK10.VK_COMMAND_BUFFER_LEVEL_PRIMARY)
                 .commandBufferCount(commandBuffers.length);
@@ -990,29 +992,29 @@ public class Vulkan {
             }
             
             for(int j = 0; j < commandBuffers.length; j++) {
-                VkCommandBufferBeginInfo beginInfo = VkCommandBufferBeginInfo.callocStack(stack)
-                    .sType(VK10.VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO)
+                VkCommandBufferBeginInfo beginInfo = VkCommandBufferBeginInfo.calloc(stack)
+                    .sType$Default()
                     .flags(VK10.VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT)
                     .pInheritanceInfo(null);
                 
                 VK10.vkBeginCommandBuffer(commandBuffers[j], beginInfo);
                 
-                VkRenderPassBeginInfo renderPassInfo = VkRenderPassBeginInfo.callocStack(stack)
-                    .sType(VK10.VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO)
+                VkRenderPassBeginInfo renderPassInfo = VkRenderPassBeginInfo.calloc(stack)
+                    .sType$Default()
                     .renderPass(renderPass)
                     .framebuffer(swapChainFramebuffers[j])
-                    .renderArea(VkRect2D.mallocStack(stack)
-                        .offset(VkOffset2D.callocStack(stack).set(0, 0))
+                    .renderArea(VkRect2D.malloc(stack)
+                        .offset(VkOffset2D.calloc(stack).set(0, 0))
                         .extent(swapChainExtent));
                 
-                VkClearValue clearColor = VkClearValue.mallocStack(stack)
-                    .color(VkClearColorValue.mallocStack(stack)
+                VkClearValue clearColor = VkClearValue.malloc(stack)
+                    .color(VkClearColorValue.malloc(stack)
                         .float32(0, red)
                         .float32(1, green)
                         .float32(2, blue)
                         .float32(3, alpha));
                 
-                renderPassInfo.pClearValues(VkClearValue.mallocStack(1, stack).put(clearColor).flip());
+                renderPassInfo.pClearValues(VkClearValue.malloc(1, stack).put(clearColor).flip());
                 
                 VK10.vkCmdBeginRenderPass(commandBuffers[j], renderPassInfo, VK10.VK_SUBPASS_CONTENTS_INLINE);
                 
@@ -1059,8 +1061,8 @@ public class Vulkan {
         QueueFamilyIndices queueFamilyIndices = findQueueFamilies(physicalDevice);
         
         try(MemoryStack stack = MemoryStack.stackPush()) {
-            VkCommandPoolCreateInfo poolInfo = VkCommandPoolCreateInfo.callocStack(stack)
-                .sType(VK10.VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO)
+            VkCommandPoolCreateInfo poolInfo = VkCommandPoolCreateInfo.calloc(stack)
+                .sType$Default()
                 .queueFamilyIndex(queueFamilyIndices.graphicsFamily)
                 .flags(0);
             
@@ -1083,8 +1085,8 @@ public class Vulkan {
                 
                 attachments.flip();
                 
-                VkFramebufferCreateInfo framebufferInfo = VkFramebufferCreateInfo.callocStack(stack)
-                    .sType(VK10.VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO)
+                VkFramebufferCreateInfo framebufferInfo = VkFramebufferCreateInfo.calloc(stack)
+                    .sType$Default()
                     .renderPass(renderPass)
                     .pAttachments(attachments)
                     .width(swapChainExtent.width())
@@ -1102,7 +1104,7 @@ public class Vulkan {
     
     private void createRenderPass() {
         try(MemoryStack stack = MemoryStack.stackPush()) {
-            VkAttachmentDescription colorAttachment = VkAttachmentDescription.callocStack(stack)
+            VkAttachmentDescription colorAttachment = VkAttachmentDescription.calloc(stack)
                 .format(swapChainImageFormat)
                 .samples(VK10.VK_SAMPLE_COUNT_1_BIT)
                 .loadOp(VK10.VK_ATTACHMENT_LOAD_OP_CLEAR)
@@ -1112,16 +1114,16 @@ public class Vulkan {
                 .initialLayout(VK10.VK_IMAGE_LAYOUT_UNDEFINED)
                 .finalLayout(KHRSwapchain.VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
             
-            VkAttachmentReference colorAttachmentRef = VkAttachmentReference.callocStack(stack)
+            VkAttachmentReference colorAttachmentRef = VkAttachmentReference.calloc(stack)
                 .attachment(0)
                 .layout(VK10.VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
             
-            VkSubpassDescription subpass = VkSubpassDescription.callocStack(stack)
+            VkSubpassDescription subpass = VkSubpassDescription.calloc(stack)
                 .pipelineBindPoint(VK10.VK_PIPELINE_BIND_POINT_GRAPHICS)
                 .colorAttachmentCount(1)
-                .pColorAttachments(VkAttachmentReference.mallocStack(1, stack).put(colorAttachmentRef).flip());
+                .pColorAttachments(VkAttachmentReference.malloc(1, stack).put(colorAttachmentRef).flip());
             
-            VkSubpassDependency dependency = VkSubpassDependency.callocStack(stack)
+            VkSubpassDependency dependency = VkSubpassDependency.calloc(stack)
                 .srcSubpass(VK10.VK_SUBPASS_EXTERNAL)
                 .dstSubpass(0)
                 .srcStageMask(VK10.VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK10.VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT)
@@ -1129,11 +1131,11 @@ public class Vulkan {
                 .dstStageMask(VK10.VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK10.VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT)
                 .dstAccessMask(VK10.VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK10.VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT);
             
-            VkRenderPassCreateInfo renderPassInfo = VkRenderPassCreateInfo.callocStack(stack)
-                .sType(VK10.VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO)
-                .pAttachments(VkAttachmentDescription.mallocStack(1, stack).put(colorAttachment).flip())
-                .pSubpasses(VkSubpassDescription.mallocStack(1, stack).put(subpass).flip())
-                .pDependencies(VkSubpassDependency.mallocStack(1, stack).put(dependency).flip());
+            VkRenderPassCreateInfo renderPassInfo = VkRenderPassCreateInfo.calloc(stack)
+                .sType$Default()
+                .pAttachments(VkAttachmentDescription.malloc(1, stack).put(colorAttachment).flip())
+                .pSubpasses(VkSubpassDescription.malloc(1, stack).put(subpass).flip())
+                .pDependencies(VkSubpassDependency.malloc(1, stack).put(dependency).flip());
             
             long[] renderPassAddress = new long[] { 0 };
             if(VK10.vkCreateRenderPass(device, renderPassInfo, null, renderPassAddress) != VK10.VK_SUCCESS) {
@@ -1148,14 +1150,14 @@ public class Vulkan {
             vertShaderModule = ShaderList.findShader("defaults.defaultVertShader").getShaderAddress();
             fragShaderModule = ShaderList.findShader("defaults.defaultFragShader").getShaderAddress();
             
-            VkPipelineShaderStageCreateInfo vertShaderStageInfo = VkPipelineShaderStageCreateInfo.callocStack(stack)
-               .sType(VK10.VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO)
+            VkPipelineShaderStageCreateInfo vertShaderStageInfo = VkPipelineShaderStageCreateInfo.calloc(stack)
+               .sType$Default()
                .stage(VK10.VK_SHADER_STAGE_VERTEX_BIT)
                .module(vertShaderModule)
                .pName(stack.UTF8("main"));
             
-            VkPipelineShaderStageCreateInfo fragShaderStageInfo = VkPipelineShaderStageCreateInfo.callocStack(stack)
-                .sType(VK10.VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO)
+            VkPipelineShaderStageCreateInfo fragShaderStageInfo = VkPipelineShaderStageCreateInfo.calloc(stack)
+                .sType$Default()
                 .stage(VK10.VK_SHADER_STAGE_FRAGMENT_BIT)
                 .module(fragShaderModule)
                 .pName(stack.UTF8("main"));
@@ -1165,23 +1167,23 @@ public class Vulkan {
             };
             
             VkVertexInputAttributeDescription[] attributeArray = Vertex.getAttributeDescriptions(stack);
-            VkVertexInputAttributeDescription.Buffer attributeBuffer = VkVertexInputAttributeDescription.callocStack(attributeArray.length, stack);
+            VkVertexInputAttributeDescription.Buffer attributeBuffer = VkVertexInputAttributeDescription.calloc(attributeArray.length, stack);
             for(VkVertexInputAttributeDescription attribute : attributeArray) {
                 attributeBuffer.put(attribute);
             }
             attributeBuffer.flip();
             
-            VkPipelineVertexInputStateCreateInfo vertexInputInfo = VkPipelineVertexInputStateCreateInfo.callocStack(stack)
-                .sType(VK10.VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO)
-                .pVertexBindingDescriptions(VkVertexInputBindingDescription.callocStack(1, stack).put(Vertex.getBindingDescription(stack)).flip())
+            VkPipelineVertexInputStateCreateInfo vertexInputInfo = VkPipelineVertexInputStateCreateInfo.calloc(stack)
+                .sType$Default()
+                .pVertexBindingDescriptions(VkVertexInputBindingDescription.calloc(1, stack).put(Vertex.getBindingDescription(stack)).flip())
                 .pVertexAttributeDescriptions(attributeBuffer);
             
-            VkPipelineInputAssemblyStateCreateInfo inputAssembly = VkPipelineInputAssemblyStateCreateInfo.callocStack(stack)
-                .sType(VK10.VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO)
+            VkPipelineInputAssemblyStateCreateInfo inputAssembly = VkPipelineInputAssemblyStateCreateInfo.calloc(stack)
+                .sType$Default()
                 .topology(VK10.VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST)
                 .primitiveRestartEnable(false);
             
-            VkViewport viewport = VkViewport.mallocStack(stack)
+            VkViewport viewport = VkViewport.malloc(stack)
                 .x(0.0f)
                 .y(0.0f)
                 .width(swapChainExtent.width())
@@ -1189,17 +1191,17 @@ public class Vulkan {
                 .minDepth(0.0f)
                 .maxDepth(1.0f);
             
-            VkRect2D sissor = VkRect2D.mallocStack(stack)
-                .offset(VkOffset2D.mallocStack(stack).set(0, 0))
+            VkRect2D sissor = VkRect2D.malloc(stack)
+                .offset(VkOffset2D.malloc(stack).set(0, 0))
                 .extent(swapChainExtent);
             
-            VkPipelineViewportStateCreateInfo viewportState = VkPipelineViewportStateCreateInfo.callocStack(stack)
-                .sType(VK10.VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO)
-                .pViewports(VkViewport.mallocStack(1, stack).put(viewport).flip())
-                .pScissors(VkRect2D.mallocStack(1, stack).put(sissor).flip());
+            VkPipelineViewportStateCreateInfo viewportState = VkPipelineViewportStateCreateInfo.calloc(stack)
+                .sType$Default()
+                .pViewports(VkViewport.malloc(1, stack).put(viewport).flip())
+                .pScissors(VkRect2D.malloc(1, stack).put(sissor).flip());
             
-            VkPipelineRasterizationStateCreateInfo rasterizer = VkPipelineRasterizationStateCreateInfo.callocStack(stack)
-                .sType(VK10.VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO)
+            VkPipelineRasterizationStateCreateInfo rasterizer = VkPipelineRasterizationStateCreateInfo.calloc(stack)
+                .sType$Default()
                 .depthClampEnable(false)
                 .rasterizerDiscardEnable(false)
                 .polygonMode(VK10.VK_POLYGON_MODE_FILL)
@@ -1211,8 +1213,8 @@ public class Vulkan {
                 .depthBiasClamp(0.0f)
                 .depthBiasSlopeFactor(0.0f);
             
-            VkPipelineMultisampleStateCreateInfo multisampling = VkPipelineMultisampleStateCreateInfo.callocStack(stack)
-                .sType(VK10.VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO)
+            VkPipelineMultisampleStateCreateInfo multisampling = VkPipelineMultisampleStateCreateInfo.calloc(stack)
+                .sType$Default()
                 .sampleShadingEnable(false)
                 .rasterizationSamples(VK10.VK_SAMPLE_COUNT_1_BIT)
                 .minSampleShading(1.0f)
@@ -1220,7 +1222,7 @@ public class Vulkan {
                 .alphaToCoverageEnable(false)
                 .alphaToOneEnable(false);
             
-            VkPipelineColorBlendAttachmentState colorBlendAttachmentState = VkPipelineColorBlendAttachmentState.mallocStack(stack)
+            VkPipelineColorBlendAttachmentState colorBlendAttachmentState = VkPipelineColorBlendAttachmentState.malloc(stack)
                 .colorWriteMask(VK10.VK_COLOR_COMPONENT_R_BIT | VK10.VK_COLOR_COMPONENT_G_BIT | VK10.VK_COLOR_COMPONENT_B_BIT | VK10.VK_COLOR_COMPONENT_A_BIT)
                 .blendEnable(true)
                 .srcColorBlendFactor(VK10.VK_BLEND_FACTOR_SRC_ALPHA)
@@ -1230,11 +1232,11 @@ public class Vulkan {
                 .dstAlphaBlendFactor(VK10.VK_BLEND_FACTOR_ZERO)
                 .alphaBlendOp(VK10.VK_BLEND_OP_ADD);
             
-            VkPipelineColorBlendStateCreateInfo colorBlending = VkPipelineColorBlendStateCreateInfo.callocStack(stack)
-                .sType(VK10.VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO)
+            VkPipelineColorBlendStateCreateInfo colorBlending = VkPipelineColorBlendStateCreateInfo.calloc(stack)
+                .sType$Default()
                 .logicOpEnable(false)
                 .logicOp(VK10.VK_LOGIC_OP_COPY)
-                .pAttachments(VkPipelineColorBlendAttachmentState.mallocStack(1, stack).put(colorBlendAttachmentState).flip())
+                .pAttachments(VkPipelineColorBlendAttachmentState.malloc(1, stack).put(colorBlendAttachmentState).flip())
                 .blendConstants(0, 0.0f)
                 .blendConstants(1, 0.0f)
                 .blendConstants(2, 0.0f)
@@ -1243,15 +1245,15 @@ public class Vulkan {
             IntBuffer dynamicStates = stack.mallocInt(2).put(new int[] { VK10.VK_DYNAMIC_STATE_STENCIL_WRITE_MASK, VK10.VK_DYNAMIC_STATE_LINE_WIDTH });
             dynamicStates.flip();
             
-            VkPipelineDynamicStateCreateInfo dynamicState = VkPipelineDynamicStateCreateInfo.callocStack(stack)
-                .sType(VK10.VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO)
+            VkPipelineDynamicStateCreateInfo dynamicState = VkPipelineDynamicStateCreateInfo.calloc(stack)
+                .sType$Default()
                 .pDynamicStates(dynamicStates);
             
             LongBuffer layouts = stack.mallocLong(1).put(descriptorSetLayout);
             layouts.flip();
             
-            VkPipelineLayoutCreateInfo pipelineLayoutInfo = VkPipelineLayoutCreateInfo.callocStack(stack)
-                .sType(VK10.VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO)
+            VkPipelineLayoutCreateInfo pipelineLayoutInfo = VkPipelineLayoutCreateInfo.calloc(stack)
+                .sType$Default()
                 .pSetLayouts(layouts)
                 .pPushConstantRanges(null);
             
@@ -1261,14 +1263,14 @@ public class Vulkan {
             }
             pipelineLayout = pipelineLayoutAddress[0];
             
-            VkPipelineShaderStageCreateInfo.Buffer shaderStagesBuffer =  VkPipelineShaderStageCreateInfo.mallocStack(shaderStages.length, stack);
+            VkPipelineShaderStageCreateInfo.Buffer shaderStagesBuffer =  VkPipelineShaderStageCreateInfo.malloc(shaderStages.length, stack);
             for(VkPipelineShaderStageCreateInfo shaderStage : shaderStages) {
                 shaderStagesBuffer.put(shaderStage);
             }
             shaderStagesBuffer.flip();
             
-            VkGraphicsPipelineCreateInfo pipelineInfo = VkGraphicsPipelineCreateInfo.callocStack(stack)
-                .sType(VK10.VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO)
+            VkGraphicsPipelineCreateInfo pipelineInfo = VkGraphicsPipelineCreateInfo.calloc(stack)
+                .sType$Default()
                 .pStages(shaderStagesBuffer)
                 .pVertexInputState(vertexInputInfo)
                 .pInputAssemblyState(inputAssembly)
@@ -1285,7 +1287,7 @@ public class Vulkan {
                 .basePipelineIndex(-1);
             
             long[] graphicsPipelineAddress = new long[] { 0 };
-            if(VK10.vkCreateGraphicsPipelines(device, VK10.VK_NULL_HANDLE, VkGraphicsPipelineCreateInfo.mallocStack(1, stack).put(pipelineInfo).flip(), null, graphicsPipelineAddress) != VK10.VK_SUCCESS) {
+            if(VK10.vkCreateGraphicsPipelines(device, VK10.VK_NULL_HANDLE, VkGraphicsPipelineCreateInfo.malloc(1, stack).put(pipelineInfo).flip(), null, graphicsPipelineAddress) != VK10.VK_SUCCESS) {
                 throw new RuntimeException("failed to create graphics pipeline!");
             }
             graphicsPipeline = graphicsPipelineAddress[0];
@@ -1294,8 +1296,8 @@ public class Vulkan {
 
     private long createShaderModule(ByteBuffer code) {
         try(MemoryStack stack = MemoryStack.stackPush()) {
-            VkShaderModuleCreateInfo createInfo = VkShaderModuleCreateInfo.callocStack(stack)
-                .sType(VK10.VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO)
+            VkShaderModuleCreateInfo createInfo = VkShaderModuleCreateInfo.calloc(stack)
+                .sType$Default()
                 .pCode(code);
             
             long[] shaderModuleAddress = new long[] { 0 };
@@ -1328,8 +1330,8 @@ public class Vulkan {
                 imageCount = swapChainSupport.capabilities.maxImageCount();
             }
         
-            VkSwapchainCreateInfoKHR createInfo = VkSwapchainCreateInfoKHR.callocStack(stack)
-                .sType(KHRSwapchain.VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR)
+            VkSwapchainCreateInfoKHR createInfo = VkSwapchainCreateInfoKHR.calloc(stack)
+                .sType$Default()
                 .surface(surface)
                 .minImageCount(imageCount)
                 .imageFormat(surfaceFormat.format())
@@ -1394,14 +1396,14 @@ public class Vulkan {
             FloatBuffer queuePriority = stack.mallocFloat(1).put(1.0f);
             queuePriority.flip();
             
-            VkPhysicalDeviceFeatures deviceFeatures = VkPhysicalDeviceFeatures.callocStack(stack)
+            VkPhysicalDeviceFeatures deviceFeatures = VkPhysicalDeviceFeatures.calloc(stack)
                 .samplerAnisotropy(true);
             
-            VkDeviceQueueCreateInfo.Buffer queueCreateInfoBuffer = VkDeviceQueueCreateInfo.mallocStack(uniqueFamilies.length, stack);
+            VkDeviceQueueCreateInfo.Buffer queueCreateInfoBuffer = VkDeviceQueueCreateInfo.malloc(uniqueFamilies.length, stack);
             
             for(int queueFamily : uniqueFamilies) {
-                VkDeviceQueueCreateInfo queueCreateInfo = VkDeviceQueueCreateInfo.callocStack(stack)
-                    .sType(VK10.VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO)
+                VkDeviceQueueCreateInfo queueCreateInfo = VkDeviceQueueCreateInfo.calloc(stack)
+                    .sType$Default()
                     .queueFamilyIndex(queueFamily)
                     .pQueuePriorities(queuePriority);
                 
@@ -1416,8 +1418,8 @@ public class Vulkan {
             }
             deviceExtensionsBuffer.flip();
             
-            VkDeviceCreateInfo deviceCreateInfo = VkDeviceCreateInfo.callocStack(stack)
-                .sType(VK10.VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO)
+            VkDeviceCreateInfo deviceCreateInfo = VkDeviceCreateInfo.calloc(stack)
+                .sType$Default()
                 .pQueueCreateInfos(queueCreateInfoBuffer)
                 .pEnabledFeatures(deviceFeatures)
                 .ppEnabledExtensionNames(deviceExtensionsBuffer);
@@ -1487,7 +1489,7 @@ public class Vulkan {
                 throw new RuntimeException("failed to find suitable GPU!");
             }
             
-            VkPhysicalDeviceProperties deviceProperties = VkPhysicalDeviceProperties.mallocStack(stack);
+            VkPhysicalDeviceProperties deviceProperties = VkPhysicalDeviceProperties.malloc(stack);
             VK10.vkGetPhysicalDeviceProperties(physicalDevice, deviceProperties);
             
             if(Luminescent.DEBUG) {
@@ -1498,8 +1500,8 @@ public class Vulkan {
     
     private int rateSuitability(VkPhysicalDevice device) {
         try(MemoryStack stack = MemoryStack.stackPush()) {
-            VkPhysicalDeviceProperties deviceProperties = VkPhysicalDeviceProperties.mallocStack(stack);
-            VkPhysicalDeviceFeatures deviceFeatures = VkPhysicalDeviceFeatures.mallocStack(stack);
+            VkPhysicalDeviceProperties deviceProperties = VkPhysicalDeviceProperties.malloc(stack);
+            VkPhysicalDeviceFeatures deviceFeatures = VkPhysicalDeviceFeatures.malloc(stack);
             VK10.vkGetPhysicalDeviceProperties(device, deviceProperties);
             VK10.vkGetPhysicalDeviceFeatures(device, deviceFeatures);
             
@@ -1549,7 +1551,7 @@ public class Vulkan {
             int[] extensionCount = new int[] { 0 };
             VK10.vkEnumerateDeviceExtensionProperties(device, (ByteBuffer)null, extensionCount, null);
             
-            VkExtensionProperties.Buffer availableExtensions = VkExtensionProperties.mallocStack(extensionCount[0], stack);
+            VkExtensionProperties.Buffer availableExtensions = VkExtensionProperties.malloc(extensionCount[0], stack);
             VK10.vkEnumerateDeviceExtensionProperties(device, (ByteBuffer)null, extensionCount, availableExtensions);
             
             Set<String> requiredExtensions = new HashSet<>(extensionCount[0]);
@@ -1570,7 +1572,7 @@ public class Vulkan {
         VK10.vkGetPhysicalDeviceQueueFamilyProperties(device, queueFamilyCount, null);
         
         try(MemoryStack stack = MemoryStack.stackPush()) {
-            VkQueueFamilyProperties.Buffer queueFamiliesBuffer = VkQueueFamilyProperties.mallocStack(queueFamilyCount[0], stack);
+            VkQueueFamilyProperties.Buffer queueFamiliesBuffer = VkQueueFamilyProperties.malloc(queueFamilyCount[0], stack);
             VK10.vkGetPhysicalDeviceQueueFamilyProperties(device, queueFamilyCount, queueFamiliesBuffer);
             
             VkQueueFamilyProperties[] queueFamilies = new VkQueueFamilyProperties[queueFamilyCount[0]];
@@ -1634,7 +1636,7 @@ public class Vulkan {
         KHRSurface.vkGetPhysicalDeviceSurfaceFormatsKHR(device, surface, formatCount, null);
         
         if(formatCount[0] != 0) {
-            VkSurfaceFormatKHR.Buffer formatsBuffer = VkSurfaceFormatKHR.mallocStack(formatCount[0], stack);
+            VkSurfaceFormatKHR.Buffer formatsBuffer = VkSurfaceFormatKHR.malloc(formatCount[0], stack);
             KHRSurface.vkGetPhysicalDeviceSurfaceFormatsKHR(device, surface, formatCount, formatsBuffer);
             
             details.formats = new VkSurfaceFormatKHR[formatCount[0]];
@@ -1663,7 +1665,7 @@ public class Vulkan {
         else {
             int width = DisplayUtils.getDisplayWidth(), height = DisplayUtils.getDisplayHeight();
             try(MemoryStack stack = MemoryStack.stackPush()) {
-                return VkExtent2D.mallocStack(stack)
+                return VkExtent2D.malloc(stack)
                     .width(Math.max(capabilities.minImageExtent().width(), Math.min(capabilities.maxImageExtent().width(), width)))
                     .height(Math.max(capabilities.minImageExtent().height(), Math.min(capabilities.maxImageExtent().height(), height)));
             }
@@ -1707,7 +1709,7 @@ public class Vulkan {
         
         private static VkVertexInputBindingDescription getBindingDescription(MemoryStack stack) {
 
-            return VkVertexInputBindingDescription.mallocStack(stack)
+            return VkVertexInputBindingDescription.malloc(stack)
                 .binding(0)
                  // Vertex = (Vector2<float>, Vector4<float>, Vector2<float>)
                 .stride(Float.BYTES * 2 + Float.BYTES * 4 + Float.BYTES * 2)
@@ -1717,19 +1719,19 @@ public class Vulkan {
         private static VkVertexInputAttributeDescription[] getAttributeDescriptions(MemoryStack stack) {
             VkVertexInputAttributeDescription[] attributeDescriptions = new VkVertexInputAttributeDescription[3];
             
-            attributeDescriptions[0] = VkVertexInputAttributeDescription.mallocStack(stack)
+            attributeDescriptions[0] = VkVertexInputAttributeDescription.malloc(stack)
                 .binding(0)
                 .location(0)
                 .format(VK10.VK_FORMAT_R32G32_SFLOAT)
                 .offset(0);
             
-            attributeDescriptions[1] = VkVertexInputAttributeDescription.mallocStack(stack)
+            attributeDescriptions[1] = VkVertexInputAttributeDescription.malloc(stack)
                 .binding(0)
                 .location(1)
                 .format(VK10.VK_FORMAT_R32G32B32A32_SFLOAT)
                 .offset(Float.BYTES * 2);
             
-            attributeDescriptions[2] = VkVertexInputAttributeDescription.mallocStack(stack)
+            attributeDescriptions[2] = VkVertexInputAttributeDescription.malloc(stack)
                 .binding(0)
                 .location(2)
                 .format(VK10.VK_FORMAT_R32G32_SFLOAT)
@@ -1754,16 +1756,16 @@ public class Vulkan {
             throw new RuntimeException("validation layers requested, but not available!");
         
         try(MemoryStack stack = MemoryStack.stackPush()) {
-            VkApplicationInfo appInfo = VkApplicationInfo.callocStack(stack)
-                .sType(VK10.VK_STRUCTURE_TYPE_APPLICATION_INFO)
+            VkApplicationInfo appInfo = VkApplicationInfo.calloc(stack)
+                .sType$Default()
                 .pApplicationName(stack.UTF8("Luminescent"))
                 .applicationVersion(VK10.VK_MAKE_VERSION(1, 0, 0))
                 .pEngineName(stack.UTF8("No Engine"))
                 .engineVersion(VK10.VK_MAKE_VERSION(1, 0, 0))
-                .apiVersion(VK11.VK_API_VERSION_1_1);
+                .apiVersion(VK12.VK_API_VERSION_1_2);
 
-            VkInstanceCreateInfo createInfo = VkInstanceCreateInfo.callocStack(stack)
-                .sType(VK10.VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO)
+            VkInstanceCreateInfo createInfo = VkInstanceCreateInfo.calloc(stack)
+                .sType$Default()
                 .pApplicationInfo(appInfo)
                 .ppEnabledExtensionNames(getRequiredExtensions(stack));
             
@@ -1777,7 +1779,7 @@ public class Vulkan {
 
                 createInfo.ppEnabledLayerNames(validationLayerNamesBuffer);
 
-                VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo = VkDebugUtilsMessengerCreateInfoEXT.callocStack(stack);
+                VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo = VkDebugUtilsMessengerCreateInfoEXT.calloc(stack);
                 populateDebugMessengerCreateInfo(debugCreateInfo);
                 createInfo.pNext(debugCreateInfo.address());
             }
@@ -1810,7 +1812,7 @@ public class Vulkan {
     }
 
     private void populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT createInfo) {
-        createInfo.sType(EXTDebugUtils.VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT)
+        createInfo.sType$Default()
                 .messageSeverity(EXTDebugUtils.VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT
                         | EXTDebugUtils.VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT | EXTDebugUtils.VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT)
                 .messageType(EXTDebugUtils.VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT
@@ -1822,7 +1824,7 @@ public class Vulkan {
         if(!Luminescent.DEBUG) return;
         
         try(MemoryStack stack = MemoryStack.stackPush()) {
-            VkDebugUtilsMessengerCreateInfoEXT createInfo = VkDebugUtilsMessengerCreateInfoEXT.callocStack(stack);
+            VkDebugUtilsMessengerCreateInfoEXT createInfo = VkDebugUtilsMessengerCreateInfoEXT.calloc(stack);
             populateDebugMessengerCreateInfo(createInfo);
             
             long[] cb = new long[] { 0 };
@@ -2014,8 +2016,8 @@ public class Vulkan {
             
             PointerBuffer commandBufferAddresses = stack.mallocPointer(1).put(commandBuffers[imageIndex].address()).flip();
             
-            VkSubmitInfo submitInfo  = VkSubmitInfo.mallocStack(stack)
-                .sType(VK10.VK_STRUCTURE_TYPE_SUBMIT_INFO)
+            VkSubmitInfo submitInfo  = VkSubmitInfo.malloc(stack)
+                .sType$Default()
                 .waitSemaphoreCount(1)
                 .pWaitSemaphores(waitSemaphores)
                 .pWaitDstStageMask(stack.ints(VK10.VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT))
@@ -2035,8 +2037,8 @@ public class Vulkan {
             IntBuffer imageIndexBuffer = stack.mallocInt(1).put(imageIndex);
             imageIndexBuffer.flip();
             
-            VkPresentInfoKHR presentInfo = VkPresentInfoKHR.mallocStack(stack)
-                .sType(KHRSwapchain.VK_STRUCTURE_TYPE_PRESENT_INFO_KHR)
+            VkPresentInfoKHR presentInfo = VkPresentInfoKHR.malloc(stack)
+                .sType$Default()
                 .pWaitSemaphores(signalSemaphores)
                 .swapchainCount(1)
                 .pSwapchains(swapChains)
@@ -2170,7 +2172,7 @@ public class Vulkan {
         try(MemoryStack stack = MemoryStack.stackPush()) {
             boolean twoSteps, copyOnly;
 
-            VkFormatProperties targetFormatProps = VkFormatProperties.mallocStack(stack);
+            VkFormatProperties targetFormatProps = VkFormatProperties.malloc(stack);
             VK10.vkGetPhysicalDeviceFormatProperties(physicalDevice, VK10.VK_FORMAT_R8G8B8A8_SRGB, targetFormatProps);
 
             if(swapChainImageFormat == VK10.VK_FORMAT_R8G8B8A8_SRGB) {
@@ -2229,26 +2231,26 @@ public class Vulkan {
                     VK10.VK_PIPELINE_STAGE_TRANSFER_BIT, VK10.VK_PIPELINE_STAGE_TRANSFER_BIT);
 
 
-            VkImageCopy.Buffer imageCopyRegion = VkImageCopy.mallocStack(1, stack)
-                    .srcSubresource(VkImageSubresourceLayers.mallocStack(stack)
+            VkImageCopy.Buffer imageCopyRegion = VkImageCopy.malloc(1, stack)
+                    .srcSubresource(VkImageSubresourceLayers.malloc(stack)
                         .aspectMask(VK10.VK_IMAGE_ASPECT_COLOR_BIT)
                         .mipLevel(0)
                         .baseArrayLayer(0)
                         .layerCount(1))
-                    .srcOffset(VkOffset3D.mallocStack(stack)
+                    .srcOffset(VkOffset3D.malloc(stack)
                         .x(0)
                         .y(0)
                         .z(0))
-                    .dstSubresource(VkImageSubresourceLayers.mallocStack(stack)
+                    .dstSubresource(VkImageSubresourceLayers.malloc(stack)
                         .aspectMask(VK10.VK_IMAGE_ASPECT_COLOR_BIT)
                         .mipLevel(0)
                         .baseArrayLayer(0)
                         .layerCount(1))
-                    .dstOffset(VkOffset3D.mallocStack(stack)
+                    .dstOffset(VkOffset3D.malloc(stack)
                         .x(0)
                         .y(0)
                         .z(0))
-                    .extent(VkExtent3D.mallocStack(stack)
+                    .extent(VkExtent3D.malloc(stack)
                         .width(swapChainExtent.width())
                         .height(swapChainExtent.height())
                         .depth(1));
@@ -2258,22 +2260,22 @@ public class Vulkan {
                         VK10.VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, imageCopyRegion);
             }
             else {
-                VkImageBlit.Buffer imageBlitRegion = VkImageBlit.callocStack(1, stack)
-                        .srcSubresource(VkImageSubresourceLayers.mallocStack(stack)
+                VkImageBlit.Buffer imageBlitRegion = VkImageBlit.calloc(1, stack)
+                        .srcSubresource(VkImageSubresourceLayers.malloc(stack)
                             .aspectMask(VK10.VK_IMAGE_ASPECT_COLOR_BIT)
                             .baseArrayLayer(0)
                             .mipLevel(0)
                             .layerCount(1))
-                        .srcOffsets(VkOffset3D.callocStack(2, stack).position(1)
+                        .srcOffsets(VkOffset3D.calloc(2, stack).position(1)
                                 .x(swapChainExtent.width())
                                 .y(swapChainExtent.height())
                                 .z(1).position(0))
-                        .dstSubresource(VkImageSubresourceLayers.mallocStack(stack)
+                        .dstSubresource(VkImageSubresourceLayers.malloc(stack)
                                 .aspectMask(VK10.VK_IMAGE_ASPECT_COLOR_BIT)
                                 .mipLevel(0)
                                 .baseArrayLayer(0)
                                 .layerCount(1))
-                        .dstOffsets(VkOffset3D.callocStack(2, stack).position(1)
+                        .dstOffsets(VkOffset3D.calloc(2, stack).position(1)
                                 .x(swapChainExtent.width())
                                 .y(swapChainExtent.height())
                                 .z(1).position(0));
@@ -2312,11 +2314,11 @@ public class Vulkan {
 
             endSingleTimeCommands(commandBuffer);
 
-            VkImageSubresource subresource = VkImageSubresource.mallocStack(stack)
+            VkImageSubresource subresource = VkImageSubresource.malloc(stack)
                     .aspectMask(VK10.VK_IMAGE_ASPECT_COLOR_BIT)
                     .mipLevel(0)
                     .arrayLayer(0);
-            VkSubresourceLayout subresourceLayout = VkSubresourceLayout.callocStack(stack);
+            VkSubresourceLayout subresourceLayout = VkSubresourceLayout.calloc(stack);
 
             PointerBuffer data = stack.mallocPointer(1);
             if(twoSteps) {
@@ -2403,7 +2405,7 @@ public class Vulkan {
     private void cleanupAllocator() {
         if(Luminescent.DEBUG) {
             try(MemoryStack stack = MemoryStack.stackPush()) {
-                VmaStats stats = VmaStats.mallocStack(stack);
+                VmaStats stats = VmaStats.malloc(stack);
                 Vma.vmaCalculateStats(allocator, stats);
                 if(stats.total().allocationCount() != 0) {
                     System.out.println("VMA Error: " + stats.total().allocationCount() + " unfreed buffers/image(s)");
