@@ -5,9 +5,9 @@ plugins {
 }
 
 buildscript {
-	extra["lwjglVersion"] = "3.2.3"
-	extra["jomlVersion"] = "1.9.24"
-	extra["gsonVersion"] = "2.8.6"
+	extra["lwjglVersion"] = "3.3.0"
+	extra["jomlVersion"] = "1.10.3"
+	extra["gsonVersion"] = "2.8.9"
 }
 
 repositories {
@@ -93,17 +93,16 @@ task("copyToRoot") {
 task("run") {
 	doLast {
 		javaexec {
-			main="-jar"
 			args = listOf("Luminescent.jar")
 		}
 	}
 }.dependsOn("deploy")
 
 tasks.compileJava {
-	sourceCompatibility = "11"
-	targetCompatibility = "11"
+	sourceCompatibility = "17"
+	targetCompatibility = "17"
 }
 
 tasks.wrapper {
-	gradleVersion = "6.3"
+	gradleVersion = "7.3.3"
 }

@@ -65,6 +65,8 @@ public class ControllerUtils {
 		}
 
 		ByteBuffer GLFWButtons = GLFW.glfwGetJoystickButtons(joystick);
+		// Joystick was disconnected while processing inputs
+		if (GLFWButtons == null) return false;
 		
 		for(List<Double> rButtons : buttons) {
 			boolean areAllDown = true;
@@ -91,6 +93,8 @@ public class ControllerUtils {
 					if(value == 0) value = -1;	// Because 0 means nothing
 
 					FloatBuffer GLFWAxis = GLFW.glfwGetJoystickAxes(joystick);
+					// Joystick was disconnected while processing inputs
+					if (GLFWAxis == null) return false;
 
 					double actualValue = GLFWAxis.get(axis);
 
